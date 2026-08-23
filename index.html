@@ -18,7 +18,6 @@
             --konv-bg: rgba(234, 179, 8, 0.2);
             --konv-border: rgba(234, 179, 8, 0.45);
             --konv-text: #854d0e;
-            --primary-gradient: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
         }
         * { box-sizing: border-box; }
         body {
@@ -32,7 +31,6 @@
         }
         .container { max-width: 440px; margin: 0 auto; }
         
-        /* Search Box */
         .search-box {
             width: 100%; padding: 14px 18px; background: var(--glass-bg);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -46,7 +44,6 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
         
-        /* Capsule Cards */
         .capsule-list { display: flex; flex-direction: column; gap: 14px; }
         .capsule-card {
             height: 78px; border-radius: 39px; padding: 0 24px;
@@ -65,7 +62,6 @@
         .card-yummy { background: linear-gradient(135deg, rgba(220, 252, 231, 0.6), rgba(134, 239, 172, 0.3)); color: #14532d; }
         .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
         
-        /* Detail View */
         #detail-view { display: none; }
         .detail-header {
             display: flex; justify-content: space-between; align-items: center;
@@ -88,7 +84,6 @@
         .bg-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
         .bg-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
         
-        /* Brand Title */
         .brand-title {
             font-size: 1.3rem; font-weight: 800; margin-bottom: 12px;
             background: var(--glass-bg); padding: 10px 16px;
@@ -96,19 +91,18 @@
             backdrop-filter: blur(8px);
         }
         
-        /* Breadcrumb */
         .breadcrumb {
             font-size: 0.72rem; color: var(--text-muted);
             margin-bottom: 12px; padding: 6px 14px;
             background: var(--glass-bg); border-radius: 20px;
             border: 1px solid var(--glass-border);
             display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+            min-height: 32px;
         }
         .breadcrumb span { opacity: 0.6; }
         .breadcrumb .active-bread { opacity: 1; font-weight: 700; color: var(--text-main); }
         .breadcrumb .sep { opacity: 0.3; margin: 0 2px; }
         
-        /* Sub Pills - Level 1 (Primary) */
         .sub-pills-primary {
             display: flex; gap: 8px; margin-bottom: 4px;
             overflow-x: auto; padding-bottom: 12px;
@@ -117,24 +111,25 @@
         }
         .sub-pills-primary::-webkit-scrollbar { display: none; }
         
-        /* Sub Pills - Level 2 (Secondary/Kategori) */
         .sub-pills-secondary {
             display: flex; gap: 8px; margin-bottom: 14px;
             overflow-x: auto; padding: 10px 4px 4px 4px;
             flex-wrap: wrap;
-            animation: slideDown 0.35s ease-out;
             background: rgba(255,255,255,0.15);
             border-radius: 16px;
             border: 1px dashed rgba(255,255,255,0.2);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            padding: 0 4px;
         }
-        .sub-pills-secondary::-webkit-scrollbar { display: none; }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-12px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .sub-pills-secondary.open {
+            max-height: 300px;
+            opacity: 1;
+            padding: 10px 4px 4px 4px;
         }
         
-        /* Sub Pill General */
         .sub-pill {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             padding: 8px 16px; border-radius: 20px;
@@ -150,6 +145,7 @@
         }
         .sub-pill.has-children::after {
             content: " ▼"; font-size: 0.55rem; opacity: 0.5;
+            transition: transform 0.3s ease;
         }
         .sub-pill.has-children.active::after {
             content: " ▲";
@@ -161,9 +157,9 @@
         .sub-pill.kategori-pill.active {
             background: #6366f1; border-color: #6366f1;
             border-style: solid;
+            color: white;
         }
         
-        /* Grid Items */
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
         .grid-item {
             background: var(--glass-card); backdrop-filter: blur(12px);
@@ -187,7 +183,6 @@
         .plu-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); color: var(--raw-text); }
         .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
         
-        /* Toast */
         .toast {
             position: fixed; bottom: 24px; left: 50%;
             transform: translateX(-50%) translateY(100px);
@@ -200,7 +195,6 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
         
-        /* Empty State */
         .empty-state {
             text-align: center; padding: 40px 20px;
             color: var(--text-muted); font-size: 0.85rem;
@@ -253,7 +247,7 @@
             
             <div class="sub-pills-primary" id="subPillsContainer"></div>
             
-            <div id="kategoriContainer"></div>
+            <div class="sub-pills-secondary" id="kategoriContainer"></div>
             
             <div class="grid-container" id="productGrid"></div>
         </div>
@@ -302,6 +296,7 @@
         let currentBrand = '';
         let currentSub = '';
         let currentKategori = 'all';
+        let isKategoriOpen = false;
 
         fetch('data.json')
             .then(res => res.json())
@@ -314,6 +309,7 @@
             currentBrand = key;
             currentSub = '';
             currentKategori = 'all';
+            isKategoriOpen = false;
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
             
@@ -344,9 +340,13 @@
             
             subs.forEach(s => {
                 const el = document.createElement('div');
-                el.className = `sub-pill ${s.id === currentSub ? 'active' : ''}`;
+                el.className = `sub-pill ${s.id === currentSub && isKategoriOpen ? 'active' : ''}`;
                 if (hasChildren && (s.id === 'bkl' || s.id === 'dcf')) {
                     el.classList.add('has-children');
+                    // Toggle indicator: aktif jika sub ini yang dipilih
+                    if (s.id === currentSub && isKategoriOpen) {
+                        el.classList.add('active');
+                    }
                 }
                 el.innerText = s.label;
                 el.onclick = () => filterSub(s.id);
@@ -357,8 +357,11 @@
         function renderKategoriPills() {
             const container = document.getElementById('kategoriContainer');
             container.innerHTML = '';
+            container.classList.remove('open');
 
-            if (!currentSub) return;
+            if (!currentSub || !isKategoriOpen) {
+                return;
+            }
 
             let categories = [];
             let labelMap = {};
@@ -374,25 +377,25 @@
             }
 
             if (categories.length === 0) return;
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'sub-pills-secondary';
             
             const allEl = document.createElement('div');
             allEl.className = `sub-pill kategori-pill ${currentKategori === 'all' ? 'active' : ''}`;
             allEl.innerText = '📋 Semua';
             allEl.onclick = () => filterKategori('all');
-            wrapper.appendChild(allEl);
+            container.appendChild(allEl);
 
             categories.forEach(kat => {
                 const el = document.createElement('div');
                 el.className = `sub-pill kategori-pill ${kat === currentKategori ? 'active' : ''}`;
                 el.innerText = labelMap[kat] || kat;
                 el.onclick = () => filterKategori(kat);
-                wrapper.appendChild(el);
+                container.appendChild(el);
             });
             
-            container.appendChild(wrapper);
+            // Buka dengan animasi
+            requestAnimationFrame(() => {
+                container.classList.add('open');
+            });
         }
 
         function renderBreadcrumb() {
@@ -406,7 +409,7 @@
             
             let html = `<span>🏠</span> <span class="sep">›</span> <span>${brandNames[currentBrand] || ''}</span>`;
             
-            if (currentSub) {
+            if (currentSub && isKategoriOpen) {
                 const subConfig = SUB_CONFIG[currentBrand] || [];
                 const found = subConfig.find(s => s.id === currentSub);
                 if (found) {
@@ -414,7 +417,7 @@
                 }
             }
             
-            if (currentKategori !== 'all') {
+            if (currentKategori !== 'all' && isKategoriOpen) {
                 const labelMap = currentBrand === 'yummychoice' ? KATEGORI_LABEL : KATEGORI_LABEL_COFFEE;
                 const label = labelMap[currentKategori] || currentKategori;
                 html += ` <span class="sep">›</span> <span class="active-bread">${label}</span>`;
@@ -427,6 +430,7 @@
             currentBrand = '';
             currentSub = '';
             currentKategori = 'all';
+            isKategoriOpen = false;
             document.getElementById('home-view').style.display = 'block';
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('searchInput').value = '';
@@ -434,25 +438,49 @@
         }
 
         function filterSub(sub) {
-            currentKategori = 'all';
+            const hasChildren = ['yummychoice', 'yummycoffee'].includes(currentBrand);
+            const isChildSub = hasChildren && (sub === 'bkl' || sub === 'dcf');
             
+            // Toggle logic: jika klik sub yang sama dan dia punya anak, toggle buka/tutup
+            if (isChildSub && currentSub === sub) {
+                isKategoriOpen = !isKategoriOpen;
+                // Reset kategori ke 'all' saat tutup
+                if (!isKategoriOpen) {
+                    currentKategori = 'all';
+                }
+            } else {
+                // Ganti ke sub baru
+                currentSub = sub;
+                if (isChildSub) {
+                    isKategoriOpen = true;
+                } else {
+                    isKategoriOpen = false;
+                }
+                currentKategori = 'all';
+            }
+            
+            // Bersihkan semua active state dulu
             document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
+            
+            // Aktifkan pill yang sesuai
             document.querySelectorAll('.sub-pill:not(.kategori-pill)').forEach(p => {
                 const subConfig = SUB_CONFIG[currentBrand] || [];
-                const found = subConfig.find(s => s.id === sub);
-                if (found && p.innerText === found.label) {
+                const found = subConfig.find(s => s.id === currentSub);
+                if (found && p.innerText === found.label && isKategoriOpen) {
                     p.classList.add('active');
                 }
             });
             
-            currentSub = sub;
             renderAll();
         }
 
         function filterKategori(kat) {
             document.querySelectorAll('.kategori-pill').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.kategori-pill').forEach(p => {
-                if (p.innerText === kat || (kat === 'all' && p.innerText === '📋 Semua')) {
+                const label = p.innerText;
+                if (kat === 'all' && label === '📋 Semua') {
+                    p.classList.add('active');
+                } else if (label === kat || label === KATEGORI_LABEL[kat] || label === KATEGORI_LABEL_COFFEE[kat]) {
                     p.classList.add('active');
                 }
             });
@@ -485,6 +513,13 @@
                 if (currentBrand === '') return query !== '' && matchQuery;
                 return matchBrand && matchSub && matchKategori && matchQuery;
             });
+
+            // Tampilkan sub-kategori hanya jika isKategoriOpen true
+            const kategoriContainer = document.getElementById('kategoriContainer');
+            if (!isKategoriOpen) {
+                kategoriContainer.classList.remove('open');
+                kategoriContainer.innerHTML = '';
+            }
 
             if (currentBrand === '' && query !== '') {
                 document.getElementById('home-view').style.display = 'none';
