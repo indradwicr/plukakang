@@ -18,6 +18,8 @@
             --konv-bg: rgba(234, 179, 8, 0.2);
             --konv-border: rgba(234, 179, 8, 0.45);
             --konv-text: #854d0e;
+            --active-primary: #0f172a;
+            --active-secondary: #6366f1;
         }
         * { box-sizing: border-box; }
         body {
@@ -140,8 +142,10 @@
         }
         .sub-pill:active { transform: scale(0.95); }
         .sub-pill.active {
-            background: #0f172a; color: white; border-color: #0f172a;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+            background: var(--active-primary);
+            color: white;
+            border-color: var(--active-primary);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
         }
         .sub-pill.has-children::after {
             content: " ▼"; font-size: 0.55rem; opacity: 0.5;
@@ -155,9 +159,11 @@
             border-style: dotted;
         }
         .sub-pill.kategori-pill.active {
-            background: #6366f1; border-color: #6366f1;
+            background: var(--active-secondary);
+            border-color: var(--active-secondary);
             border-style: solid;
             color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
@@ -214,6 +220,251 @@
         <div id="home-view">
             <div class="capsule-list">
                 <div class="capsule-card card-bread" onclick="openBrand('saybread')">
+                    <div class="capsule-info"><span>Bakery & Pastry</span><h3>Say Bread</h3></div>
+                    <div class="capsule-icon">🍞</div>
+                </div>
+                <div class="capsule-card card-burger" onclick="openBrand('sayburger')">
+                    <div class="capsule-info"><span>Burger & Hotdog</span><h3>Say Burger</h3></div>
+                    <div class="capsule-icon">🍔</div>
+                </div>
+                <div class="capsule-card card-yummy" onclick="openBrand('yummychoice')">
+                    <div class="capsule-info"><span>Ready to Eat</span><h3>Yummy Choice</h3></div>
+                    <div class="capsule-icon">🍱</div>
+                </div>
+                <div class="capsule-card card-coffee" onclick="openBrand('yummycoffee')">
+                    <div class="capsule-info"><span>Beverages</span><h3>Yummy Coffee Gold</h3></div>
+                    <div class="capsule-icon">☕</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="detail-view">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goBack()">← Kembali</button>
+                <div class="legend-bar">
+                    <div class="legend-item"><span class="box bg-raw"></span> RAW</div>
+                    <div class="legend-item"><span class="box bg-konv"></span> KONV</div>
+                </div>
+            </div>
+            
+            <div class="brand-title" id="brandTitle"></div>
+            
+            <div class="breadcrumb" id="breadcrumb"></div>
+            
+            <div class="sub-pills-primary" id="subPillsContainer"></div>
+            
+            <div class="sub-pills-secondary" id="kategoriContainer"></div>
+            
+            <div class="grid-container" id="productGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUB_CONFIG = {
+            'saybread': [
+                { id: 'dcf', label: '❄️ Frozen Dough' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ],
+            'sayburger': [
+                { id: 'bkl', label: 'Bahan Baku' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'yummychoice': [
+                { id: 'bkl', label: '🍽️ Menu Utama' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ],
+            'yummycoffee': [
+                { id: 'bkl', label: '🧪 Bahan Utama' },
+                { id: 'dcf', label: '🧂 Bahan Tambahan' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ]
+        };
+
+        const KATEGORI_LABEL = {
+            'snack_rte': '🍿 Snack RTE',
+            'dimsum': '🥟 Dimsum',
+            'pao': '🫓 Pao',
+            'fried_chicken': '🍗 Fried Chicken',
+            'frozen_fc': '❄️ Frozen FC',
+            'sosis': '🌭 Sosis',
+            'pizza': '🍕 Pizza'
+        };
+
+        const KATEGORI_LABEL_COFFEE = {
+            'jelly': '🍮 Jelly',
+            'syrup': '🍯 Syrup',
+            'powder': '🍵 Powder',
+            'other': '🧂 Other'
+        };
+
+        let DATABASE = [];
+        let currentBrand = '';
+        let currentSub = '';
+        let currentKategori = 'all';
+        let isKategoriOpen = false;
+
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                DATABASE = data;
+            })
+            .catch(err => console.error('Gagal mengambil data.json:', err));
+
+        function openBrand(key) {
+            currentBrand = key;
+            currentSub = '';
+            currentKategori = 'all';
+            isKategoriOpen = false;
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
+            
+            const brandNames = {
+                'saybread': '🍞 Say Bread',
+                'sayburger': '🍔 Say Burger',
+                'yummychoice': '🍱 Yummy Choice',
+                'yummycoffee': '☕ Yummy Coffee Gold'
+            };
+            document.getElementById('brandTitle').textContent = brandNames[key] || key;
+            
+            renderAll();
+        }
+
+        function renderAll() {
+            renderSubPills();
+            renderKategoriPills();
+            renderBreadcrumb();
+            renderData();
+        }
+
+        function renderSubPills() {
+            const container = document.getElementById('subPillsContainer');
+            container.innerHTML = '';
+            
+            const subs = SUB_CONFIG[currentBrand] || [];
+            const hasChildren = ['yummychoice', 'yummycoffee'].includes(currentBrand);
+            
+            subs.forEach(s => {
+                const el = document.createElement('div');
+                el.className = `sub-pill ${s.id === currentSub && isKategoriOpen ? 'active' : ''}`;
+                if (hasChildren && (s.id === 'bkl' || s.id === 'dcf')) {
+                    el.classList.add('has-children');
+                    if (s.id === currentSub && isKategoriOpen) {
+                        el.classList.add('active');
+                    }
+                }
+                el.innerText = s.label;
+                el.onclick = () => filterSub(s.id);
+                container.appendChild(el);
+            });
+        }
+
+        function renderKategoriPills() {
+            const container = document.getElementById('kategoriContainer');
+            container.innerHTML = '';
+            container.classList.remove('open');
+
+            if (!currentSub || !isKategoriOpen) {
+                return;
+            }
+
+            let categories = [];
+            let labelMap = {};
+
+            if (currentBrand === 'yummychoice' && currentSub === 'bkl') {
+                categories = ['snack_rte', 'dimsum', 'pao', 'fried_chicken', 'frozen_fc', 'sosis', 'pizza'];
+                labelMap = KATEGORI_LABEL;
+            } else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') {
+                categories = ['jelly', 'syrup', 'powder'];
+                labelMap = KATEGORI_LABEL_COFFEE;
+            } else {
+                return;
+            }
+
+            if (categories.length === 0) return;
+            
+            const allEl = document.createElement('div');
+            allEl.className = `sub-pill kategori-pill ${currentKategori === 'all' ? 'active' : ''}`;
+            allEl.innerText = '📋 Semua';
+            allEl.onclick = () => filterKategori('all');
+            container.appendChild(allEl);
+
+            categories.forEach(kat => {
+                const el = document.createElement('div');
+                el.className = `sub-pill kategori-pill ${kat === currentKategori ? 'active' : ''}`;
+                el.innerText = labelMap[kat] || kat;
+                el.onclick = () => filterKategori(kat);
+                container.appendChild(el);
+            });
+            
+            requestAnimationFrame(() => {
+                container.classList.add('open');
+            });
+        }
+
+        function renderBreadcrumb() {
+            const container = document.getElementById('breadcrumb');
+            const brandNames = {
+                'saybread': '🍞 Say Bread',
+                'sayburger': '🍔 Say Burger',
+                'yummychoice': '🍱 Yummy Choice',
+                'yummycoffee': '☕ Yummy Coffee Gold'
+            };
+            
+            let html = `<span>🏠</span> <span class="sep">›</span> <span>${brandNames[currentBrand] || ''}</span>`;
+            
+            if (currentSub && isKategoriOpen) {
+                const subConfig = SUB_CONFIG[currentBrand] || [];
+                const found = subConfig.find(s => s.id === currentSub);
+                if (found) {
+                    html += ` <span class="sep">›</span> <span class="active-bread">${found.label.replace(/[^\w\s]/g, '').trim()}</span>`;
+                }
+            }
+            
+            if (currentKategori !== 'all' && isKategoriOpen) {
+                const labelMap = currentBrand === 'yummychoice' ? KATEGORI_LABEL : KATEGORI_LABEL_COFFEE;
+                const label = labelMap[currentKategori] || currentKategori;
+                html += ` <span class="sep">›</span> <span class="active-bread">${label}</span>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function goBack() {
+            currentBrand = '';
+            currentSub = '';
+            currentKategori = 'all';
+            isKategoriOpen = false;
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            renderData();
+        }
+
+        function filterSub(sub) {
+            const hasChildren = ['yummychoice', 'yummycoffee'].includes(currentBrand);
+            const isChildSub = hasChildren && (sub === 'bkl' || sub === 'dcf');
+            
+            if (isChildSub && currentSub === sub) {
+                isKategoriOpen = !isKategoriOpen;
+                if (!isKategoriOpen) {
+                    currentKategori = 'all';
+                }
+            } else {
+                currentSub = sub;
+                if (isChildSub) {
+                    isKategoriOpen = true;
+                } else {
+                    isKategoriOpen = false;
+                }
+                currentKategori = 'all';
+            }
+            
+            document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
+            
+            document.querySelectorAll('.sub-pill:not(.kategori-pill)').forEach(p => {
+                const subConfig = SUB_CONFIG[currentBrand] || [];
+                const found = subConfig.find(s => s.id === currentSub);
+                if (fo onclick="openBrand('saybread')">
                     <div class="capsule-info"><span>Bakery & Pastry</span><h3>Say Bread</h3></div>
                     <div class="capsule-icon">🍞</div>
                 </div>
