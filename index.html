@@ -18,8 +18,6 @@
             --konv-bg: rgba(234, 179, 8, 0.2);
             --konv-border: rgba(234, 179, 8, 0.45);
             --konv-text: #854d0e;
-            --active-primary: #0f172a;
-            --active-secondary: #6366f1;
         }
         * { box-sizing: border-box; }
         body {
@@ -32,7 +30,6 @@
             min-height: 100vh;
         }
         .container { max-width: 440px; margin: 0 auto; }
-        
         .search-box {
             width: 100%; padding: 14px 18px; background: var(--glass-bg);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -40,11 +37,6 @@
             font-size: 0.9rem; outline: none; margin-bottom: 16px;
             box-shadow: var(--glass-shadow); color: var(--text-main);
         }
-        .search-box:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-        
         .capsule-list { display: flex; flex-direction: column; gap: 14px; }
         .capsule-card {
             height: 78px; border-radius: 39px; padding: 0 24px;
@@ -52,9 +44,7 @@
             cursor: pointer; background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
         }
-        .capsule-card:active { transform: scale(0.97); }
         .capsule-info span { font-size: 0.68rem; text-transform: uppercase; font-weight: 700; opacity: 0.75; display: block; }
         .capsule-info h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
         .capsule-icon { font-size: 1.6rem; background: rgba(255, 255, 255, 0.6); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -62,141 +52,28 @@
         .card-burger { background: linear-gradient(135deg, rgba(254, 226, 226, 0.6), rgba(252, 165, 165, 0.3)); color: #7f1d1d; }
         .card-yummy { background: linear-gradient(135deg, rgba(220, 252, 231, 0.6), rgba(134, 239, 172, 0.3)); color: #14532d; }
         .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
-        
         #detail-view { display: none; }
-        .detail-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
-        }
-        .back-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-main); font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; padding: 8px 16px; border-radius: 12px;
-        }
-        .back-btn:active { transform: scale(0.95); }
-        .legend-bar {
-            display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700;
-            color: var(--text-muted); background: var(--glass-bg);
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border);
-        }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; }
+        .legend-bar { display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); background: var(--glass-bg); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .box { width: 10px; height: 10px; border-radius: 3px; }
         .bg-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
         .bg-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
-        
-        .brand-title {
-            font-size: 1.3rem; font-weight: 800; margin-bottom: 12px;
-            background: var(--glass-bg); padding: 10px 16px;
-            border-radius: 14px; border: 1px solid var(--glass-border);
-            backdrop-filter: blur(8px);
-        }
-        
-        .breadcrumb {
-            font-size: 0.72rem; color: var(--text-muted);
-            margin-bottom: 12px; padding: 6px 14px;
-            background: var(--glass-bg); border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-            min-height: 32px;
-        }
-        .breadcrumb span { opacity: 0.6; }
-        .breadcrumb .active-bread { opacity: 1; font-weight: 700; color: var(--text-main); }
-        .breadcrumb .sep { opacity: 0.3; margin: 0 2px; }
-        
-        .sub-pills-primary {
-            display: flex; gap: 8px; margin-bottom: 4px;
-            overflow-x: auto; padding-bottom: 12px;
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            flex-wrap: wrap;
-        }
-        .sub-pills-primary::-webkit-scrollbar { display: none; }
-        
-        .sub-pills-secondary {
-            display: flex; gap: 8px; margin-bottom: 14px;
-            overflow-x: auto; padding: 10px 4px 4px 4px;
-            flex-wrap: wrap;
-            background: rgba(255,255,255,0.15);
-            border-radius: 16px;
-            border: 1px dashed rgba(255,255,255,0.2);
-            margin-top: 8px;
-        }
-        .sub-pills-secondary::-webkit-scrollbar { display: none; }
-        .sub-pills-secondary.hidden { display: none; }
-        
-        .sub-pill {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 8px 16px; border-radius: 20px;
-            font-size: 0.78rem; font-weight: 700;
-            color: var(--text-muted); cursor: pointer;
-            white-space: nowrap; transition: all 0.2s ease;
-            user-select: none;
-        }
-        .sub-pill:active { transform: scale(0.95); }
-        .sub-pill.active {
-            background: var(--active-primary);
-            color: white;
-            border-color: var(--active-primary);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
-        }
-        .sub-pill.has-children::after {
-            content: " ▼"; font-size: 0.55rem; opacity: 0.5;
-        }
-        .sub-pill.has-children.active::after {
-            content: " ▲";
-        }
-        .sub-pill.kategori-pill {
-            background: rgba(255,255,255,0.3);
-            border-style: dotted;
-        }
-        .sub-pill.kategori-pill.active {
-            background: var(--active-secondary);
-            border-color: var(--active-secondary);
-            border-style: solid;
-            color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-        
+        .sub-pills { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; flex-wrap: wrap; }
+        .sub-pills::-webkit-scrollbar { display: none; }
+        .sub-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
+        .sub-pill.active { background: #0f172a; color: white; border-color: #0f172a; }
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
-        .grid-item {
-            background: var(--glass-card); backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border); border-radius: 14px;
-            padding: 12px 14px;
-            display: grid; grid-template-columns: 1fr auto;
-            align-items: center; gap: 12px;
-            box-shadow: var(--glass-shadow);
-        }
-        .grid-item:active { transform: scale(0.98); }
+        .grid-item { background: var(--glass-card); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; box-shadow: var(--glass-shadow); }
         .item-title { font-size: 0.85rem; font-weight: 700; line-height: 1.35; }
         .plu-stack { display: flex; flex-direction: column; gap: 6px; }
-        .plu-badge {
-            padding: 5px 12px; border-radius: 8px;
-            font-family: monospace; font-size: 0.8rem;
-            font-weight: 700; text-align: center;
-            cursor: pointer; transition: all 0.2s ease;
-        }
-        .plu-badge:active { transform: scale(0.95); }
+        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; }
         .plu-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); color: var(--raw-text); }
         .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
-        
-        .toast {
-            position: fixed; bottom: 24px; left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);
-            color: white; padding: 10px 20px; border-radius: 30px;
-            font-size: 0.8rem; font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 999;
-        }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.2); transition: transform 0.3s; z-index: 999; }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        
-        .empty-state {
-            text-align: center; padding: 40px 20px;
-            color: var(--text-muted); font-size: 0.85rem;
-            background: var(--glass-bg); border-radius: 16px;
-            border: 1px dashed var(--glass-border);
-        }
-        .empty-state .emoji { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+        .brand-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -204,12 +81,274 @@
     <div id="toast" class="toast">Kode Disalin! ✓</div>
 
     <div class="container">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cari nama barang atau PLU...">
+        <input type="text" id="searchInput" class="search-box" placeholder="Cari nama barang atau PLU...">
 
         <div id="home-view">
             <div class="capsule-list">
                 <div class="capsule-card card-bread" onclick="openBrand('saybread')">
                     <div class="capsule-info"><span>Bakery & Pastry</span><h3>Say Bread</h3></div>
+                    <div class="capsule-icon">🍞</div>
+                </div>
+                <div class="capsule-card card-burger" onclick="openBrand('sayburger')">
+                    <div class="capsule-info"><span>Burger & Hotdog</span><h3>Say Burger</h3></div>
+                    <div class="capsule-icon">🍔</div>
+                </div>
+                <div class="capsule-card card-yummy" onclick="openBrand('yummychoice')">
+                    <div class="capsule-info"><span>Ready to Eat</span><h3>Yummy Choice</h3></div>
+                    <div class="capsule-icon">🍱</div>
+                </div>
+                <div class="capsule-card card-coffee" onclick="openBrand('yummycoffee')">
+                    <div class="capsule-info"><span>Beverages</span><h3>Yummy Coffee Gold</h3></div>
+                    <div class="capsule-icon">☕</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="detail-view">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goBack()">← Kembali</button>
+                <div class="legend-bar">
+                    <div class="legend-item"><span class="box bg-raw"></span> RAW</div>
+                    <div class="legend-item"><span class="box bg-konv"></span> KONV</div>
+                </div>
+            </div>
+            <div class="brand-title" id="brandTitle"></div>
+            <div class="sub-pills" id="subPillsContainer"></div>
+            <div class="grid-container" id="productGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUB_CONFIG = {
+            'saybread': [
+                { id: 'dcf', label: 'Frozen Dough' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'sayburger': [
+                { id: 'bkl', label: 'Bahan Baku' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'yummychoice': [
+                { id: 'bkl', label: '🍽️ Menu Utama' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ],
+            'yummycoffee': [
+                { id: 'bkl', label: '🧪 Bahan Utama' },
+                { id: 'dcf', label: '🧂 Bahan Tambahan' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ]
+        };
+
+        const KATEGORI_LABEL = {
+            'snack_rte': '🍿 Snack RTE',
+            'dimsum': '🥟 Dimsum',
+            'pao': '🫓 Pao',
+            'fried_chicken': '🍗 Fried Chicken',
+            'frozen_fc': '❄️ Frozen FC',
+            'sosis': '🌭 Sosis',
+            'pizza': '🍕 Pizza',
+            'sarana': '📦 Sarana'
+        };
+
+        const KATEGORI_LABEL_COFFEE = {
+            'jelly': '🍮 Jelly',
+            'syrup': '🍯 Syrup',
+            'powder': '🍵 Powder',
+            'other': '🧂 Other',
+            'sarana': '📦 Sarana'
+        };
+
+        let DATABASE = [];
+        let currentBrand = '';
+        let currentSub = '';
+        let currentKategori = 'all';
+        let filteredItems = [];
+
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                DATABASE = data;
+            })
+            .catch(err => console.error('Gagal mengambil data.json:', err));
+
+        function openBrand(key) {
+            currentBrand = key;
+            currentSub = '';
+            currentKategori = 'all';
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
+            
+            const brandNames = {
+                'saybread': '🍞 Say Bread',
+                'sayburger': '🍔 Say Burger',
+                'yummychoice': '🍱 Yummy Choice',
+                'yummycoffee': '☕ Yummy Coffee Gold'
+            };
+            document.getElementById('brandTitle').textContent = brandNames[key] || key;
+            
+            renderSubPills();
+            renderData();
+        }
+
+        function renderSubPills() {
+            const container = document.getElementById('subPillsContainer');
+            container.innerHTML = '';
+            
+            const subs = SUB_CONFIG[currentBrand] || [];
+            subs.forEach(s => {
+                const el = document.createElement('div');
+                el.className = `sub-pill ${s.id === currentSub ? 'active' : ''}`;
+                el.innerText = s.label;
+                el.onclick = () => filterSub(s.id);
+                container.appendChild(el);
+            });
+
+            renderKategoriPills();
+        }
+
+        function renderKategoriPills() {
+            const container = document.getElementById('subPillsContainer');
+            
+            document.querySelectorAll('.kategori-pill').forEach(el => el.remove());
+
+            if (!currentSub) return;
+
+            let categories = [];
+            let labelMap = {};
+
+            if (currentBrand === 'yummychoice' && currentSub === 'bkl') {
+                categories = ['snack_rte', 'dimsum', 'pao', 'fried_chicken', 'frozen_fc', 'sosis', 'pizza'];
+                labelMap = KATEGORI_LABEL;
+            } else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') {
+                categories = ['jelly', 'syrup', 'powder'];
+                labelMap = KATEGORI_LABEL_COFFEE;
+            } else {
+                return;
+            }
+
+            if (categories.length === 0) return;
+
+            const allEl = document.createElement('div');
+            allEl.className = `sub-pill kategori-pill ${currentKategori === 'all' ? 'active' : ''}`;
+            allEl.innerText = '📋 Semua';
+            allEl.onclick = () => filterKategori('all');
+            container.appendChild(allEl);
+
+            categories.forEach(kat => {
+                const el = document.createElement('div');
+                el.className = `sub-pill kategori-pill ${kat === currentKategori ? 'active' : ''}`;
+                el.innerText = labelMap[kat] || kat;
+                el.onclick = () => filterKategori(kat);
+                container.appendChild(el);
+            });
+        }
+
+        function goBack() {
+            currentBrand = '';
+            currentSub = '';
+            currentKategori = 'all';
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            renderData();
+        }
+
+        function filterSub(sub) {
+            currentKategori = 'all';
+            
+            document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sub-pill:not(.kategori-pill)').forEach(p => {
+                const subConfig = SUB_CONFIG[currentBrand] || [];
+                const found = subConfig.find(s => s.id === sub);
+                if (found && p.innerText === found.label) {
+                    p.classList.add('active');
+                }
+            });
+            
+            currentSub = sub;
+            renderKategoriPills();
+            renderData();
+        }
+
+        function filterKategori(kat) {
+            document.querySelectorAll('.kategori-pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.kategori-pill').forEach(p => {
+                if (p.innerText === kat || (kat === 'all' && p.innerText === '📋 Semua')) {
+                    p.classList.add('active');
+                }
+            });
+            currentKategori = kat;
+            renderData();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', renderData);
+
+        function renderData() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const gridContainer = document.getElementById('productGrid');
+            gridContainer.innerHTML = '';
+
+            let filtered = DATABASE.filter(item => {
+                let matchBrand = currentBrand === '' || item.brand === currentBrand;
+                let matchSub = currentSub === '' || item.sub === currentSub;
+                
+                let matchKategori = true;
+                if (currentKategori !== 'all' && item.kategori) {
+                    matchKategori = item.kategori === currentKategori;
+                } else if (currentKategori !== 'all' && !item.kategori) {
+                    matchKategori = false;
+                }
+                
+                let searchString = `${item.nama} ${item.raw || ''} ${item.konv || ''}`.toLowerCase();
+                let matchQuery = query === '' || searchString.includes(query);
+
+                if (currentBrand === '') return query !== '' && matchQuery;
+                return matchBrand && matchSub && matchKategori && matchQuery;
+            });
+
+            filteredItems = filtered;
+
+            if (currentBrand === '' && query !== '') {
+                document.getElementById('home-view').style.display = 'none';
+                document.getElementById('detail-view').style.display = 'block';
+            } else if (currentBrand === '' && query === '') {
+                document.getElementById('detail-view').style.display = 'none';
+                document.getElementById('home-view').style.display = 'block';
+            }
+
+            if (filtered.length === 0 && (currentBrand !== '' || query !== '')) {
+                gridContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.85rem;">Barang tidak ditemukan.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'grid-item';
+                let badgesHtml = '';
+                if (item.raw && item.konv) {
+                    badgesHtml = `<div class="plu-badge plu-raw" onclick="copyPLU('${item.raw}')">${item.raw}</div><div class="plu-badge plu-konv" onclick="copyPLU('${item.konv}')">${item.konv}</div>`;
+                } else if (item.raw) {
+                    badgesHtml = `<div class="plu-badge plu-raw" onclick="copyPLU('${item.raw}')">${item.raw}</div>`;
+                } else if (item.konv) {
+                    badgesHtml = `<div class="plu-badge plu-konv" onclick="copyPLU('${item.konv}')">${item.konv}</div>`;
+                }
+
+                card.innerHTML = `<div class="item-title">${item.nama}</div><div class="plu-stack">${badgesHtml}</div>`;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        function copyPLU(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('toast');
+                toast.innerText = `PLU ${code} Disalin! ✓`;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 1200);
+            });
+        }
+    </script>
+</body>
+</html><h3>Say Bread</h3></div>
                     <div class="capsule-icon">🍞</div>
                 </div>
                 <div class="capsule-card card-burger" onclick="openBrand('sayburger')">
