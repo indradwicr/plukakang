@@ -82,7 +82,6 @@
     { "brand": "sayburger", "sub": "sarana", "nama": "Paper Bag Say Burger", "raw": "20123156", "konv": null },
     { "brand": "sayburger", "sub": "sarana", "nama": "Paper Wrap Say Burger (500s)", "raw": "20120870", "konv": null },
 
-[
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Bakso Goreng", "raw": "20137325", "konv": null },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Boneless Chicken (5 pcs)", "raw": "20122602", "konv": "20107657" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "French Fries (10 pcs)", "raw": "20039823", "konv": "20115652" },
@@ -97,39 +96,32 @@
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Spicy Wings (5 pcs)", "raw": "20137497", "konv": null },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Telur Matang", "raw": "20093675", "konv": null },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Thai Chicken Popcorn", "raw": "20139788", "konv": "20139851" },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "dimsum", "nama": "Dimsum Ayam (48 pcs)", "raw": "20110796", "konv": "20115735" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "dimsum", "nama": "Dimsum Bayam (48 pcs)", "raw": "20110797", "konv": "20115738" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "dimsum", "nama": "Dimsum Jamur (48 pcs)", "raw": "20122939", "konv": "20122941" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "dimsum", "nama": "Dimsum Pedas (48 pcs)", "raw": "20122940", "konv": "20122942" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "dimsum", "nama": "Dimsum Udang (48 pcs)", "raw": "20110798", "konv": "20115736" },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Ayam Kecap (12 pcs)", "raw": "20130617", "konv": "20130616" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Ayam Panggang (12 pcs)", "raw": "20130615", "konv": "20130614" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Coklat Kacang (12 pcs)", "raw": "20132113", "konv": "20132134" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Kacang Merah (12 pcs)", "raw": "20133557", "konv": "20133555" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Salted Egg (12 pcs)", "raw": "20133558", "konv": "20133559" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pao", "nama": "Pao Wijen Hitam (12 pcs)", "raw": "20122595", "konv": null },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "fried_chicken", "nama": "Dada (4 pcs)", "raw": "20107545", "konv": "20115322" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "fried_chicken", "nama": "Sayap (2 pcs)", "raw": "20107546", "konv": "20112323" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "fried_chicken", "nama": "Paha Atas (2 pcs)", "raw": "20107506", "konv": "20115320" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "fried_chicken", "nama": "Paha Bawah (2pcs)", "raw": "20107507", "konv": "20115321" },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "frozen_fc", "nama": "Dada (8 pcs)", "raw": "20139474", "konv": "20139475" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "frozen_fc", "nama": "Sayap (4 pcs)", "raw": "20139477", "konv": "20139472" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "frozen_fc", "nama": "Paha Atas (4 pcs)", "raw": "20139478", "konv": "20139476" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "frozen_fc", "nama": "Paha Bawah (4 pcs)", "raw": "20139479", "konv": "20139473" },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "sosis", "nama": "Sosis Keju (12 pcs/60 pcs)", "raw": "20096065", "konv": "20099631" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "sosis", "nama": "Sosis Sapi (12 pcs/60 pcs)", "raw": "20079902", "konv": "20078651" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "sosis", "nama": "Sosis Keju Spicy (12 pcs/60 pcs)", "raw": "20139548", "konv": "20139540" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "sosis", "nama": "Sosis Happy (12 pcs)", "raw": "20142158", "konv": "20142158" },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "sosis", "nama": "Sosis Bockwurst (6 pcs)", "raw": "20109807", "konv": null },
-    
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pizza", "nama": "Pizza Beef Olive & Pepperoni (10 pcs)", "raw": "20132810", "konv": null },
     { "brand": "yummychoice", "sub": "bkl", "kategori": "pizza", "nama": "Pizza 4 Cheese (10 pcs)", "raw": "20132812", "konv": null },
-    
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Minyak (1 Chamber 4000)", "raw": "20112384", "konv": null },
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Minyak Sosis", "raw": "20127618", "konv": null },
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Frozen Rice (24s/36s)", "raw": "20133942", "konv": null },
@@ -157,8 +149,7 @@
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "PC Puding Spoon (50/100s)", "raw": "20092879", "konv": null },
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Sendok Garpu (100s/50s)", "raw": "20119970", "konv": "20120590" },
     { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Tray Buah Potong (250s/1000s)", "raw": "20094407", "konv": null },
-    { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Y/C Paper Bowl 16oz (50s/300s)", "raw": "20115550", "konv": "20128437" }
-]
+    { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Y/C Paper Bowl 16oz (50s/300s)", "raw": "20115550", "konv": "20128437" },
 
     { "brand": "yummycoffee", "sub": "bkl", "kategori": "jelly", "nama": "Brown Sugar Konyaku", "raw": "20134357", "konv": "20096725" },
     { "brand": "yummycoffee", "sub": "bkl", "kategori": "jelly", "nama": "Cendol", "raw": "20112042", "konv": "20124212" },
