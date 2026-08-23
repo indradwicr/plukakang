@@ -53,14 +53,15 @@
         .card-yummy { background: linear-gradient(135deg, rgba(220, 252, 231, 0.6), rgba(134, 239, 172, 0.3)); color: #14532d; }
         .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
         #detail-view { display: none; }
-        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
         .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; }
         .legend-bar { display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); background: var(--glass-bg); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .box { width: 10px; height: 10px; border-radius: 3px; }
         .bg-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
         .bg-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
-        .sub-pills { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .sub-pills { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; flex-wrap: wrap; }
+        .sub-pills::-webkit-scrollbar { display: none; }
         .sub-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
         .sub-pill.active { background: #0f172a; color: white; border-color: #0f172a; }
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
@@ -72,6 +73,7 @@
         .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
         .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.2); transition: transform 0.3s; z-index: 999; }
         .toast.show { transform: translateX(-50%) translateY(0); }
+        .brand-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -110,6 +112,7 @@
                     <div class="legend-item"><span class="box bg-konv"></span> KONV</div>
                 </div>
             </div>
+            <div class="brand-title" id="brandTitle"></div>
             <div class="sub-pills" id="subPillsContainer"></div>
             <div class="grid-container" id="productGrid"></div>
         </div>
@@ -117,15 +120,52 @@
 
     <script>
         const SUB_CONFIG = {
-            'saybread': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'BKL' }, { id: 'dcf', label: 'DCF' }, { id: 'sarana', label: 'Sarana' }],
-            'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
-            'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'RTE / Dimsum' }, { id: 'sarana', label: 'Sarana' }],
-            'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Syrup & Powder' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }]
+            'saybread': [
+                { id: 'bkl', label: 'BKL' },
+                { id: 'dcf', label: 'DCF' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'sayburger': [
+                { id: 'bkl', label: 'Bahan Baku' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'yummychoice': [
+                { id: 'bkl', label: 'RTE / Dimsum' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'yummycoffee': [
+                { id: 'bkl', label: 'Syrup & Powder' },
+                { id: 'dcf', label: 'Bahan Tambahan' },
+                { id: 'sarana', label: 'Sarana' }
+            ]
+        };
+
+        // Mapping kategori ke label untuk Yummy Choice
+        const KATEGORI_LABEL = {
+            'snack_rte': '🍿 Snack RTE',
+            'dimsum': '🥟 Dimsum',
+            'pao': '🫓 Pao',
+            'fried_chicken': '🍗 Fried Chicken',
+            'frozen_fc': '❄️ Frozen FC',
+            'sosis': '🌭 Sosis',
+            'pizza': '🍕 Pizza',
+            'sarana': '📦 Sarana'
+        };
+
+        // Mapping kategori ke label untuk Yummy Coffee
+        const KATEGORI_LABEL_COFFEE = {
+            'jelly': '🍮 Jelly',
+            'syrup': '🍯 Syrup',
+            'powder': '🍵 Powder',
+            'other': '🧂 Other',
+            'sarana': '📦 Sarana'
         };
 
         let DATABASE = [];
         let currentBrand = '';
-        let currentSub = 'all';
+        let currentSub = '';
+        let currentKategori = 'all';
+        let filteredItems = [];
 
         fetch('data.json')
             .then(res => res.json())
@@ -136,9 +176,20 @@
 
         function openBrand(key) {
             currentBrand = key;
-            currentSub = 'all';
+            currentSub = '';
+            currentKategori = 'all';
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
+            
+            // Set brand title
+            const brandNames = {
+                'saybread': '🍞 Say Bread',
+                'sayburger': '🍔 Say Burger',
+                'yummychoice': '🍱 Yummy Choice',
+                'yummycoffee': '☕ Yummy Coffee Gold'
+            };
+            document.getElementById('brandTitle').textContent = brandNames[key] || key;
+            
             renderSubPills();
             renderData();
         }
@@ -146,28 +197,85 @@
         function renderSubPills() {
             const container = document.getElementById('subPillsContainer');
             container.innerHTML = '';
-            const pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
-            pills.forEach(p => {
+            
+            // Tampilkan sub pills (BKL/DCF/Sarana)
+            const subs = SUB_CONFIG[currentBrand] || [];
+            subs.forEach(s => {
                 const el = document.createElement('div');
-                el.className = `sub-pill ${p.id === currentSub ? 'active' : ''}`;
-                el.innerText = p.label;
-                el.onclick = () => filterSub(p.id, el);
+                el.className = `sub-pill ${s.id === currentSub ? 'active' : ''}`;
+                el.innerText = s.label;
+                el.onclick = () => filterSub(s.id);
+                container.appendChild(el);
+            });
+
+            // Tambahkan kategori pills jika ada
+            renderKategoriPills();
+        }
+
+        function renderKategoriPills() {
+            const container = document.getElementById('subPillsContainer');
+            
+            // Hapus kategori pills sebelumnya
+            document.querySelectorAll('.kategori-pill').forEach(el => el.remove());
+
+            if (!currentSub) return;
+
+            let categories = [];
+            if (currentBrand === 'yummychoice') {
+                categories = ['snack_rte', 'dimsum', 'pao', 'fried_chicken', 'frozen_fc', 'sosis', 'pizza'];
+            } else if (currentBrand === 'yummycoffee') {
+                categories = ['jelly', 'syrup', 'powder', 'other'];
+            }
+
+            // Tambahkan "Semua" pill
+            const allEl = document.createElement('div');
+            allEl.className = `sub-pill kategori-pill ${currentKategori === 'all' ? 'active' : ''}`;
+            allEl.innerText = '📋 Semua';
+            allEl.onclick = () => filterKategori('all');
+            container.appendChild(allEl);
+
+            categories.forEach(kat => {
+                const el = document.createElement('div');
+                el.className = `sub-pill kategori-pill ${kat === currentKategori ? 'active' : ''}`;
+                const labelMap = currentBrand === 'yummychoice' ? KATEGORI_LABEL : KATEGORI_LABEL_COFFEE;
+                el.innerText = labelMap[kat] || kat;
+                el.onclick = () => filterKategori(kat);
                 container.appendChild(el);
             });
         }
 
         function goBack() {
             currentBrand = '';
+            currentSub = '';
+            currentKategori = 'all';
             document.getElementById('home-view').style.display = 'block';
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('searchInput').value = '';
             renderData();
         }
 
-        function filterSub(sub, el) {
+        function filterSub(sub) {
             document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
-            if (el) el.classList.add('active');
+            // Mark sub pill
+            document.querySelectorAll('.sub-pill:not(.kategori-pill)').forEach(p => {
+                if (p.innerText === SUB_CONFIG[currentBrand].find(s => s.id === sub)?.label) {
+                    p.classList.add('active');
+                }
+            });
             currentSub = sub;
+            currentKategori = 'all';
+            renderKategoriPills();
+            renderData();
+        }
+
+        function filterKategori(kat) {
+            document.querySelectorAll('.kategori-pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.kategori-pill').forEach(p => {
+                if (p.innerText === kat || (kat === 'all' && p.innerText === '📋 Semua')) {
+                    p.classList.add('active');
+                }
+            });
+            currentKategori = kat;
             renderData();
         }
 
@@ -180,13 +288,16 @@
 
             let filtered = DATABASE.filter(item => {
                 let matchBrand = currentBrand === '' || item.brand === currentBrand;
-                let matchSub = currentSub === 'all' || item.sub === currentSub;
+                let matchSub = currentSub === '' || item.sub === currentSub;
+                let matchKategori = currentKategori === 'all' || item.kategori === currentKategori;
                 let searchString = `${item.nama} ${item.raw || ''} ${item.konv || ''}`.toLowerCase();
                 let matchQuery = query === '' || searchString.includes(query);
 
                 if (currentBrand === '') return query !== '' && matchQuery;
-                return matchBrand && matchSub && matchQuery;
+                return matchBrand && matchSub && matchKategori && matchQuery;
             });
+
+            filteredItems = filtered;
 
             if (currentBrand === '' && query !== '') {
                 document.getElementById('home-view').style.display = 'none';
