@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLU Reference Hub</title>
+    <style>
+        :root {
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-card: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.65);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --raw-bg: rgba(59, 130, 246, 0.15);
+            --raw-border: rgba(59, 130, 246, 0.35);
+            --raw-text: #1d4ed8;
+            --konv-bg: rgba(234, 179, 8, 0.2);
+            --konv-border: rgba(234, 179, 8, 0.45);
+            --konv-text: #854d0e;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(224, 231, 255, 0.9) 0%, rgba(241, 245, 249, 1) 90%),
+                        radial-gradient(circle at 90% 80%, rgba(254, 243, 199, 0.6) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0; padding: 16px 12px 40px 12px;
+            min-height: 100vh;
+        }
+        .container { max-width: 440px; margin: 0 auto; }
+        .search-box {
+            width: 100%; padding: 14px 18px; background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            font-size: 0.9rem; outline: none; margin-bottom: 16px;
+            box-shadow: var(--glass-shadow); color: var(--text-main);
+        }
+        .capsule-list { display: flex; flex-direction: column; gap: 14px; }
+        .capsule-card {
+            height: 78px; border-radius: 39px; padding: 0 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+        }
+        .capsule-info span { font-size: 0.68rem; text-transform: uppercase; font-weight: 700; opacity: 0.75; display: block; }
+        .capsule-info h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
+        .capsule-icon { font-size: 1.6rem; background: rgba(255, 255, 255, 0.6); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .card-bread { background: linear-gradient(135deg, rgba(254, 243, 199, 0.6), rgba(253, 230, 138, 0.3)); color: #78350f; }
+        .card-burger { background: linear-gradient(135deg, rgba(254, 226, 226, 0.6), rgba(252, 165, 165, 0.3)); color: #7f1d1d; }
+        .card-yummy { background: linear-gradient(135deg, rgba(220, 252, 231, 0.6), rgba(134, 239, 172, 0.3)); color: #14532d; }
+        .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
+        #detail-view { display: none; }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; }
+        .legend-bar { display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); background: var(--glass-bg); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .box { width: 10px; height: 10px; border-radius: 3px; }
+        .bg-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
+        .bg-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
+        .sub-pills { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .sub-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
+        .sub-pill.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .grid-container { display: flex; flex-direction: column; gap: 10px; }
+        .grid-item { background: var(--glass-card); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; box-shadow: var(--glass-shadow); }
+        .item-title { font-size: 0.85rem; font-weight: 700; line-height: 1.35; }
+        .plu-stack { display: flex; flex-direction: column; gap: 6px; }
+        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; }
+        .plu-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); color: var(--raw-text); }
+        .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.2); transition: transform 0.3s; z-index: 999; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast">Kode Disalin! ✓</div>
+
+    <div class="container">
+        <input type="text" id="searchInput" class="search-box" placeholder="Cari nama barang atau PLU...">
+
+        <div id="home-view">
+            <div class="capsule-list">
+                <div class="capsule-card card-bread" onclick="openBrand('saybread')">
+                    <div class="capsule-info"><span>Bakery & Pastry</span><h3>Say Bread</h3></div>
+                    <div class="capsule-icon">🍞</div>
+                </div>
+                <div class="capsule-card card-burger" onclick="openBrand('sayburger')">
+                    <div class="capsule-info"><span>Burger & Hotdog</span><h3>Say Burger</h3></div>
+                    <div class="capsule-icon">🍔</div>
+                </div>
+                <div class="capsule-card card-yummy" onclick="openBrand('yummychoice')">
+                    <div class="capsule-info"><span>Ready to Eat</span><h3>Yummy Choice</h3></div>
+                    <div class="capsule-icon">🍱</div>
+                </div>
+                <div class="capsule-card card-coffee" onclick="openBrand('yummycoffee')">
+                    <div class="capsule-info"><span>Beverages</span><h3>Yummy Coffee Gold</h3></div>
+                    <div class="capsule-icon">☕</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="detail-view">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goBack()">← Kembali</button>
+                <div class="legend-bar">
+                    <div class="legend-item"><span class="box bg-raw"></span> RAW</div>
+                    <div class="legend-item"><span class="box bg-konv"></span> KONV</div>
+                </div>
+            </div>
+            <div class="sub-pills" id="subPillsContainer"></div>
+            <div class="grid-container" id="productGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUB_CONFIG = {
+            'saybread': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'BKL' }, { id: 'dcf', label: 'DCF' }, { id: 'sarana', label: 'Sarana' }],
+            'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
+            'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'RTE / Dimsum' }, { id: 'sarana', label: 'Sarana' }],
+            'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Syrup & Powder' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }]
+        };
+
+        let DATABASE = [];
+        let currentBrand = '';
+        let currentSub = 'all';
+
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                DATABASE = data;
+            })
+            .catch(err => console.error('Gagal mengambil data.json:', err));
+
+        function openBrand(key) {
+            currentBrand = key;
+            currentSub = 'all';
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
+            renderSubPills();
+            renderData();
+        }
+
+        function renderSubPills() {
+            const container = document.getElementById('subPillsContainer');
+            container.innerHTML = '';
+            const pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
+            pills.forEach(p => {
+                const el = document.createElement('div');
+                el.className = `sub-pill ${p.id === currentSub ? 'active' : ''}`;
+                el.innerText = p.label;
+                el.onclick = () => filterSub(p.id, el);
+                container.appendChild(el);
+            });
+        }
+
+        function goBack() {
+            currentBrand = '';
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            renderData();
+        }
+
+        function filterSub(sub, el) {
+            document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
+            if (el) el.classList.add('active');
+            currentSub = sub;
+            renderData();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', renderData);
+
+        function renderData() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const gridContainer = document.getElementById('productGrid');
+            gridContainer.innerHTML = '';
+
+            let filtered = DATABASE.filter(item => {
+                let matchBrand = currentBrand === '' || item.brand === currentBrand;
+                let matchSub = currentSub === 'all' || item.sub === currentSub;
+                let searchString = `${item.nama} ${item.raw || ''} ${item.konv || ''}`.toLowerCase();
+                let matchQuery = query === '' || searchString.includes(query);
+
+                if (currentBrand === '') return query !== '' && matchQuery;
+                return matchBrand && matchSub && matchQuery;
+            });
+
+            if (currentBrand === '' && query !== '') {
+                document.getElementById('home-view').style.display = 'none';
+                document.getElementById('detail-view').style.display = 'block';
+            } else if (currentBrand === '' && query === '') {
+                document.getElementById('detail-view').style.display = 'none';
+                document.getElementById('home-view').style.display = 'block';
+            }
+
+            if (filtered.length === 0 && (currentBrand !== '' || query !== '')) {
+                gridContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.85rem;">Barang tidak ditemukan.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'grid-item';
+                let badgesHtml = '';
+                if (item.raw && item.konv) {
+                    badgesHtml = `<div class="plu-badge plu-raw" onclick="copyPLU('${item.raw}')">${item.raw}</div><div class="plu-badge plu-konv" onclick="copyPLU('${item.konv}')">${item.konv}</div>`;
+                } else if (item.raw) {
+                    badgesHtml = `<div class="plu-badge plu-raw" onclick="copyPLU('${item.raw}')">${item.raw}</div>`;
+                } else if (item.konv) {
+                    badgesHtml = `<div class="plu-badge plu-konv" onclick="copyPLU('${item.konv}')">${item.konv}</div>`;
+                }
+
+                card.innerHTML = `<div class="item-title">${item.nama}</div><div class="plu-stack">${badgesHtml}</div>`;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        function copyPLU(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('toast');
+                toast.innerText = `PLU ${code} Disalin! ✓`;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 1200);
+            });
+        }
+    </script>
+</body>
+</html>
