@@ -64,4 +64,25 @@
     { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Croissant (100/250s)", "raw": "20122435", "konv": null },
     { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Panjang (100/250s)", "raw": "20120852", "konv": null },
     { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Variety (100s)", "raw": "20120854", "konv": null }
+    [
+    { "brand": "sayburger", "sub": "bkl", "nama": "Beef Patty Burger", "raw": "20113628", "konv": "20123299" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Beef Rasher", "raw": null, "konv": "20123300" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Blackpepper Sauce", "raw": null, "konv": "20123304" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Bun Burger", "raw": "20113627", "konv": "20113634" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Caramelized Onion", "raw": "20113633", "konv": "20128826" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Cheese Slice", "raw": "20113632", "konv": "20123302" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Chicken Patty", "raw": "20120505", "konv": "20123301" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Mayonaise Burger", "raw": "20117227", "konv": "20123298" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Pickle Timun Burger", "raw": "20118295", "konv": null },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Saus Sambal Delmonte", "raw": "20115034", "konv": "20115036" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Saus Tomat Delmonte", "raw": "20115035", "konv": "20115037" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Signature Mayo", "raw": "20113631", "konv": "20128827" },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Sosis Bockwurst", "raw": "20109807", "konv": null },
+    { "brand": "sayburger", "sub": "bkl", "nama": "Vegetables", "raw": "20113630", "konv": "20123303" },
+
+    { "brand": "sayburger", "sub": "sarana", "nama": "Box Grilled Sausage", "raw": "20128824", "konv": null },
+    { "brand": "sayburger", "sub": "sarana", "nama": "Mika Say Burger (50s)", "raw": "20135077", "konv": null },
+    { "brand": "sayburger", "sub": "sarana", "nama": "Paper Bag Say Burger", "raw": "20123156", "konv": null },
+    { "brand": "sayburger", "sub": "sarana", "nama": "Paper Wrap Say Burger (500s)", "raw": "20120870", "konv": null }
+]
 ]
