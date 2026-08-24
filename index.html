@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PLU Reference Hub</title>
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Google Font Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
@@ -30,18 +28,10 @@
             --active-secondary: #6366f1;
             --table-hover: rgba(255, 255, 255, 0.3);
             
-            /* ===== BRAND COLORS ===== */
             --bread-primary: #4E3325;
-            --bread-secondary: #FCFCFA;
-            
             --burger-primary: #DF2E29;
-            --burger-secondary: #FFFEFB;
-            
             --yummy-primary: #E61E3D;
-            --yummy-secondary: #FFFEFE;
-            
             --coffee-primary: #62412C;
-            --coffee-secondary: #F5D96C;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -59,7 +49,6 @@
 
         .container { max-width: 440px; margin: 0 auto; }
         
-        /* ===== STICKY TOP BAR ===== */
         .top-bar-sticky {
             position: sticky;
             top: 0;
@@ -98,7 +87,7 @@
             box-shadow: 0 4px 16px rgba(31, 38, 135, 0.05);
             transition: all 0.25s ease;
         }
-        .search-box:focus { border-color: #6366f1; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15); }
+        .search-box:focus { border-color: #6366f1; }
         .search-box::placeholder { color: var(--text-light); }
 
         .clear-btn {
@@ -143,7 +132,6 @@
         }
         .toggle-btn:active { transform: scale(0.95); }
         
-        /* ===== CAPSULE LIST ===== */
         .capsule-list { display: flex; flex-direction: column; gap: 12px; }
         
         .capsule-card {
@@ -176,7 +164,6 @@
         }
         .capsule-icon i { font-size: 1.35rem; }
         
-        /* Brand Themes */
         .card-bread {
             background: linear-gradient(135deg, #FCFCFA, #E8DCD4);
             border-color: var(--bread-primary);
@@ -205,7 +192,6 @@
         }
         .card-coffee .capsule-icon { background: var(--coffee-primary); color: #F5D96C; }
         
-        /* ===== DETAIL VIEW ===== */
         #detail-view { display: none; }
         
         .detail-header {
@@ -270,7 +256,6 @@
             border-radius: 12px;
         }
         
-        /* ===== SUB PILLS ===== */
         .sub-pills-group {
             display: flex;
             flex-direction: column;
@@ -315,7 +300,6 @@
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
         }
         
-        /* ===== CARD VIEW ===== */
         .grid-container { display: flex; flex-direction: column; gap: 8px; }
 
         .grid-item {
@@ -355,7 +339,6 @@
             color: #15803d !important;
         }
         
-        /* ===== TABLE VIEW ===== */
         .table-wrapper {
             background: var(--glass-card);
             backdrop-filter: blur(16px);
@@ -414,7 +397,6 @@
             text-align: center;
         }
         
-        /* ===== OTHERS ===== */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -446,6 +428,18 @@
         }
         .empty-state i { font-size: 2.2rem; display: block; margin-bottom: 10px; opacity: 0.6; }
         .hidden { display: none !important; }
+        
+        /* Debug error box */
+        .error-box {
+            background: #fee2e2;
+            border: 2px solid #fecaca;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .error-box h3 { color: #991b1b; font-size: 1rem; }
+        .error-box p { color: #991b1b; font-size: 0.85rem; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -453,7 +447,6 @@
     <div id="toast" class="toast">Kode Disalin! ✓</div>
 
     <div class="container">
-        <!-- ===== STICKY TOP BAR ===== -->
         <div class="top-bar-sticky">
             <div class="top-bar">
                 <div class="search-wrapper">
@@ -470,48 +463,21 @@
         <!-- ===== HOME VIEW ===== -->
         <div id="home-view">
             <div class="capsule-list">
-                <!-- Say Bread -->
                 <div class="capsule-card card-bread" onclick="openBrand('saybread')">
-                    <div class="capsule-info">
-                        <span>Bakery & Pastry</span>
-                        <h3>Say Bread</h3>
-                    </div>
-                    <div class="capsule-icon">
-                        <i class="fas fa-bread-slice"></i>
-                    </div>
+                    <div class="capsule-info"><span>Bakery & Pastry</span><h3>Say Bread</h3></div>
+                    <div class="capsule-icon"><i class="fas fa-bread-slice"></i></div>
                 </div>
-                
-                <!-- Say Burger -->
                 <div class="capsule-card card-burger" onclick="openBrand('sayburger')">
-                    <div class="capsule-info">
-                        <span>Burger & Hotdog</span>
-                        <h3>Say Burger</h3>
-                    </div>
-                    <div class="capsule-icon">
-                        <i class="fas fa-hamburger"></i>
-                    </div>
+                    <div class="capsule-info"><span>Burger & Hotdog</span><h3>Say Burger</h3></div>
+                    <div class="capsule-icon"><i class="fas fa-hamburger"></i></div>
                 </div>
-                
-                <!-- Yummy Choice -->
                 <div class="capsule-card card-yummy" onclick="openBrand('yummychoice')">
-                    <div class="capsule-info">
-                        <span>Ready to Eat</span>
-                        <h3>Yummy Choice</h3>
-                    </div>
-                    <div class="capsule-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
+                    <div class="capsule-info"><span>Ready to Eat</span><h3>Yummy Choice</h3></div>
+                    <div class="capsule-icon"><i class="fas fa-utensils"></i></div>
                 </div>
-                
-                <!-- Yummy Coffee Gold -->
                 <div class="capsule-card card-coffee" onclick="openBrand('yummycoffee')">
-                    <div class="capsule-info">
-                        <span>Beverages</span>
-                        <h3>Yummy Coffee Gold</h3>
-                    </div>
-                    <div class="capsule-icon">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
+                    <div class="capsule-info"><span>Beverages</span><h3>Yummy Coffee Gold</h3></div>
+                    <div class="capsule-icon"><i class="fas fa-mug-hot"></i></div>
                 </div>
             </div>
         </div>
@@ -536,15 +502,40 @@
                 <div class="sub-pills hidden" id="kategoriPillsContainer"></div>
             </div>
 
-            <!-- CARD VIEW -->
             <div id="cardView" class="grid-container"></div>
-
-            <!-- TABLE VIEW -->
             <div id="tableView" class="table-wrapper hidden">
                 <div class="table-scroll">
                     <table>
-                        <thead>
-                            <tr>
-                                <th style="width:28px;text-align:center;">#</th>
-                                <th>Nama Barang</th>
-              
+                        <thead><tr><th style="width:28px;text-align:center;">#</th><th>Nama Barang</th><th>PLU RAW</th><th>PLU KONV</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // KONFIGURASI
+        // ================================================================
+        var BRAND_NAMES = {
+            'saybread': 'Say Bread',
+            'sayburger': 'Say Burger',
+            'yummychoice': 'Yummy Choice',
+            'yummycoffee': 'Yummy Coffee Gold'
+        };
+
+        var SUB_CONFIG = {
+            'saybread': [
+                { id: 'all', label: 'Semua' },
+                { id: 'dcf', label: '❄️ Frozen Dough' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ],
+            'sayburger': [
+                { id: 'all', label: 'Semua' },
+                { id: 'bkl', label: '🍔 Bahan Baku' },
+                { id: 'sarana', label: '📦 Sarana' }
+            ],
+            'yummychoice': [
+                { id: 'all', label: 'Semua' },
+                { id: 'bkl', label: '🍽️ Menu U
