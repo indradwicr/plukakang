@@ -18,6 +18,8 @@
             --konv-bg: rgba(234, 179, 8, 0.2);
             --konv-border: rgba(234, 179, 8, 0.45);
             --konv-text: #854d0e;
+            --active-primary: #0f172a;
+            --active-secondary: #6366f1;
         }
         * { box-sizing: border-box; }
         body {
@@ -36,6 +38,11 @@
             border: 1px solid var(--glass-border); border-radius: 16px;
             font-size: 0.9rem; outline: none; margin-bottom: 16px;
             box-shadow: var(--glass-shadow); color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        .search-box:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
         .capsule-list { display: flex; flex-direction: column; gap: 14px; }
         .capsule-card {
@@ -44,7 +51,9 @@
             cursor: pointer; background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
         }
+        .capsule-card:active { transform: scale(0.97); }
         .capsule-info span { font-size: 0.68rem; text-transform: uppercase; font-weight: 700; opacity: 0.75; display: block; }
         .capsule-info h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
         .capsule-icon { font-size: 1.6rem; background: rgba(255, 255, 255, 0.6); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -54,26 +63,54 @@
         .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
         #detail-view { display: none; }
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; }
+        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; transition: all 0.2s ease; }
+        .back-btn:active { transform: scale(0.95); }
         .legend-bar { display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); background: var(--glass-bg); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .box { width: 10px; height: 10px; border-radius: 3px; }
         .bg-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
         .bg-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
+        .brand-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; background: var(--glass-bg); padding: 10px 16px; border-radius: 14px; border: 1px solid var(--glass-border); backdrop-filter: blur(8px); }
         .sub-pills { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; flex-wrap: wrap; }
         .sub-pills::-webkit-scrollbar { display: none; }
-        .sub-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
-        .sub-pill.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .sub-pill {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 700;
+            color: var(--text-muted); cursor: pointer;
+            white-space: nowrap; transition: all 0.25s ease;
+            user-select: none;
+        }
+        .sub-pill:active { transform: scale(0.95); }
+        .sub-pill.active {
+            background: var(--active-primary);
+            color: white;
+            border-color: var(--active-primary);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+        }
+        .sub-pill.kategori-pill {
+            background: rgba(255,255,255,0.3);
+            border-style: dotted;
+        }
+        .sub-pill.kategori-pill.active {
+            background: var(--active-secondary);
+            border-color: var(--active-secondary);
+            border-style: solid;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
         .grid-item { background: var(--glass-card); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; box-shadow: var(--glass-shadow); }
         .item-title { font-size: 0.85rem; font-weight: 700; line-height: 1.35; }
         .plu-stack { display: flex; flex-direction: column; gap: 6px; }
-        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; }
+        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .plu-badge:active { transform: scale(0.95); }
         .plu-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); color: var(--raw-text); }
         .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
         .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.2); transition: transform 0.3s; z-index: 999; }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        .brand-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.85rem; background: var(--glass-bg); border-radius: 16px; border: 1px dashed var(--glass-border); }
+        .empty-state .emoji { font-size: 2.5rem; display: block; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -81,7 +118,7 @@
     <div id="toast" class="toast">Kode Disalin! ✓</div>
 
     <div class="container">
-        <input type="text" id="searchInput" class="search-box" placeholder="Cari nama barang atau PLU...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cari nama barang atau PLU...">
 
         <div id="home-view">
             <div class="capsule-list">
@@ -119,16 +156,14 @@
     </div>
 
     <script>
-        // ===== KONFIGURASI SUB KATEGORI =====
         const SUB_CONFIG = {
             'saybread': [
-                { id: 'bkl', label: 'BKL' },
-                { id: 'dcf', label: 'DCF' },
-                { id: 'sarana', label: 'Sarana' }
+                { id: 'dcf', label: '❄️ Frozen Dough' },
+                { id: 'sarana', label: '📦 Sarana' }
             ],
             'sayburger': [
-                { id: 'bkl', label: 'Bahan Baku' },
-                { id: 'sarana', label: 'Sarana' }
+                { id: 'bkl', label: '🍔 Bahan Baku' },
+                { id: 'sarana', label: '📦 Sarana' }
             ],
             'yummychoice': [
                 { id: 'bkl', label: '🍽️ Menu Utama' },
@@ -141,7 +176,6 @@
             ]
         };
 
-        // ===== KATEGORI LABEL UNTUK SUB-KATEGORI (Yummy Choice & Coffee) =====
         const KATEGORI_LABEL = {
             'snack_rte': '🍿 Snack RTE',
             'dimsum': '🥟 Dimsum',
@@ -163,9 +197,7 @@
         let currentBrand = '';
         let currentSub = '';
         let currentKategori = 'all';
-        let filteredItems = [];
 
-        // ===== AMBIL DATA =====
         fetch('data.json')
             .then(res => res.json())
             .then(data => {
@@ -174,7 +206,6 @@
             })
             .catch(err => console.error('❌ Gagal:', err));
 
-        // ===== BUKA BRAND =====
         function openBrand(key) {
             currentBrand = key;
             currentSub = '';
@@ -194,7 +225,6 @@
             renderData();
         }
 
-        // ===== RENDER SUB PILLS =====
         function renderSubPills() {
             const container = document.getElementById('subPillsContainer');
             container.innerHTML = '';
@@ -211,7 +241,6 @@
             renderKategoriPills();
         }
 
-        // ===== RENDER KATEGORI PILLS (untuk Yummy Choice & Coffee) =====
         function renderKategoriPills() {
             const container = document.getElementById('subPillsContainer');
             
@@ -249,7 +278,6 @@
             });
         }
 
-        // ===== BACK =====
         function goBack() {
             currentBrand = '';
             currentSub = '';
@@ -260,7 +288,6 @@
             renderData();
         }
 
-        // ===== FILTER SUB =====
         function filterSub(sub) {
             currentKategori = 'all';
             
@@ -278,7 +305,6 @@
             renderData();
         }
 
-        // ===== FILTER KATEGORI =====
         function filterKategori(kat) {
             document.querySelectorAll('.kategori-pill').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.kategori-pill').forEach(p => {
@@ -290,10 +316,8 @@
             renderData();
         }
 
-        // ===== SEARCH =====
         document.getElementById('searchInput').addEventListener('input', renderData);
 
-        // ===== RENDER DATA =====
         function renderData() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const gridContainer = document.getElementById('productGrid');
@@ -317,8 +341,6 @@
                 return matchBrand && matchSub && matchKategori && matchQuery;
             });
 
-            filteredItems = filtered;
-
             if (currentBrand === '' && query !== '') {
                 document.getElementById('home-view').style.display = 'none';
                 document.getElementById('detail-view').style.display = 'block';
@@ -328,7 +350,7 @@
             }
 
             if (filtered.length === 0 && (currentBrand !== '' || query !== '')) {
-                gridContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.85rem;">Barang tidak ditemukan.</div>`;
+                gridContainer.innerHTML = `<div class="empty-state"><span class="emoji">🔍</span>Barang tidak ditemukan.<br><span style="font-size:0.75rem;opacity:0.6;">Coba kata kunci lain</span></div>`;
                 return;
             }
 
@@ -349,7 +371,6 @@
             });
         }
 
-        // ===== COPY PLU =====
         function copyPLU(code) {
             navigator.clipboard.writeText(code).then(() => {
                 const toast = document.getElementById('toast');
@@ -360,4 +381,4 @@
         }
     </script>
 </body>
-</html>
+                                                             </html>
