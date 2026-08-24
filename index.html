@@ -11,7 +11,6 @@
             --glass-bg: rgba(255, 255, 255, 0.45);
             --glass-card: rgba(255, 255, 255, 0.55);
             --glass-border: rgba(255, 255, 255, 0.65);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
             --raw-bg: rgba(59, 130, 246, 0.15);
             --raw-border: rgba(59, 130, 246, 0.35);
             --raw-text: #1d4ed8;
@@ -37,21 +36,16 @@
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 16px;
             font-size: 0.9rem; outline: none; margin-bottom: 16px;
-            box-shadow: var(--glass-shadow); color: var(--text-main);
-            transition: all 0.3s ease;
+            color: var(--text-main);
         }
-        .search-box:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
+        .search-box:focus { border-color: #6366f1; }
         .capsule-list { display: flex; flex-direction: column; gap: 14px; }
         .capsule-card {
             height: 78px; border-radius: 39px; padding: 0 24px;
             display: flex; justify-content: space-between; align-items: center;
             cursor: pointer; background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
         }
         .capsule-card:active { transform: scale(0.97); }
         .capsule-info span { font-size: 0.68rem; text-transform: uppercase; font-weight: 700; opacity: 0.75; display: block; }
@@ -63,7 +57,7 @@
         .card-coffee { background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(165, 180, 252, 0.3)); color: #312e81; }
         #detail-view { display: none; }
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; transition: all 0.2s ease; }
+        .back-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer; padding: 8px 16px; border-radius: 12px; }
         .back-btn:active { transform: scale(0.95); }
         .legend-bar { display: flex; gap: 10px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); background: var(--glass-bg); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .legend-item { display: flex; align-items: center; gap: 5px; }
@@ -78,7 +72,7 @@
             padding: 8px 16px; border-radius: 20px;
             font-size: 0.78rem; font-weight: 700;
             color: var(--text-muted); cursor: pointer;
-            white-space: nowrap; transition: all 0.25s ease;
+            white-space: nowrap; transition: all 0.2s ease;
             user-select: none;
         }
         .sub-pill:active { transform: scale(0.95); }
@@ -86,7 +80,6 @@
             background: var(--active-primary);
             color: white;
             border-color: var(--active-primary);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
         }
         .sub-pill.kategori-pill {
             background: rgba(255,255,255,0.3);
@@ -97,13 +90,12 @@
             border-color: var(--active-secondary);
             border-style: solid;
             color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         .grid-container { display: flex; flex-direction: column; gap: 10px; }
-        .grid-item { background: var(--glass-card); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; box-shadow: var(--glass-shadow); }
+        .grid-item { background: var(--glass-card); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; }
         .item-title { font-size: 0.85rem; font-weight: 700; line-height: 1.35; }
         .plu-stack { display: flex; flex-direction: column; gap: 6px; }
-        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .plu-badge { padding: 5px 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; font-weight: 700; text-align: center; cursor: pointer; }
         .plu-badge:active { transform: scale(0.95); }
         .plu-raw { background: var(--raw-bg); border: 1px solid var(--raw-border); color: var(--raw-text); }
         .plu-konv { background: var(--konv-bg); border: 1px solid var(--konv-border); color: var(--konv-text); }
@@ -202,9 +194,8 @@
             .then(res => res.json())
             .then(data => {
                 DATABASE = data;
-                console.log('✅ Data loaded:', DATABASE.length);
             })
-            .catch(err => console.error('❌ Gagal:', err));
+            .catch(err => console.error('Gagal mengambil data.json:', err));
 
         function openBrand(key) {
             currentBrand = key;
@@ -291,7 +282,10 @@
         function filterSub(sub) {
             currentKategori = 'all';
             
+            // Reset semua active
             document.querySelectorAll('.sub-pill').forEach(p => p.classList.remove('active'));
+            
+            // Aktifkan yang dipilih (hanya sub pill, bukan kategori pill)
             document.querySelectorAll('.sub-pill:not(.kategori-pill)').forEach(p => {
                 const subConfig = SUB_CONFIG[currentBrand] || [];
                 const found = subConfig.find(s => s.id === sub);
@@ -306,7 +300,10 @@
         }
 
         function filterKategori(kat) {
+            // Reset semua kategori pill
             document.querySelectorAll('.kategori-pill').forEach(p => p.classList.remove('active'));
+            
+            // Aktifkan yang dipilih
             document.querySelectorAll('.kategori-pill').forEach(p => {
                 if (p.innerText === kat || (kat === 'all' && p.innerText === '📋 Semua')) {
                     p.classList.add('active');
@@ -381,4 +378,4 @@
         }
     </script>
 </body>
-                                                             </html>
+    </html>
