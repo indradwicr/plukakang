@@ -190,7 +190,7 @@
             font-size: 1.4rem;
         }
 
-        /* ===== STICKY SEARCH - FIX BLUR ===== */
+        /* ===== STICKY SEARCH ===== */
         .sticky-search-bar {
             position: sticky;
             top: 0;
@@ -204,6 +204,8 @@
             -webkit-backdrop-filter: blur(16px);
             margin-bottom: 0;
             will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
             pointer-events: auto;
         }
 
@@ -333,6 +335,7 @@
             border-color: var(--primary-blue);
         }
 
+        /* ===== BRAND GRID - RAPIH ===== */
         .brand-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -349,7 +352,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 120px;
+            height: 130px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -359,6 +362,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 10px;
         }
 
         .brand-card-icon {
@@ -369,12 +373,20 @@
             align-items: center;
             justify-content: center;
             font-size: 1.3rem;
+            flex-shrink: 0;
         }
 
         .card-saybread { background: #fdf6f0; color: #8c5332; }
         .card-sayburger { background: #fff1f2; color: #e11d48; }
         .card-yummychoice { background: #ecfdf5; color: #059669; }
         .card-yummycoffee { background: #fffbeb; color: #d97706; }
+
+        .brand-card-bottom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
 
         .brand-card-bottom h3 {
             font-size: 0.98rem;
@@ -562,6 +574,7 @@
         }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
 
+        /* ===== KATALOG ACCORDION ===== */
         .accordion-section {
             background: var(--card-white);
             border-radius: 16px;
@@ -605,7 +618,10 @@
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
-        .accordion-body.open { max-height: 2000px; }
+        .accordion-body.open {
+            max-height: 9999px;
+            overflow-y: auto;
+        }
         .accordion-body .products-grid { padding: 0 12px 12px 12px; }
         .accordion-body .table-wrapper { margin: 0 12px 12px 12px; }
 
@@ -725,6 +741,7 @@
                 <span class="section-title">Kategori Brand</span>
             </div>
             <section class="brand-grid">
+                <!-- Say Bread -->
                 <div class="brand-card" onclick="openBrandCategory('saybread')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-saybread"><i class="fas fa-bread-slice"></i></div>
@@ -735,6 +752,8 @@
                         <p>Bakery & Pastry</p>
                     </div>
                 </div>
+
+                <!-- Say Burger -->
                 <div class="brand-card" onclick="openBrandCategory('sayburger')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-sayburger"><i class="fas fa-hamburger"></i></div>
@@ -745,6 +764,8 @@
                         <p>Burger & Hotdog</p>
                     </div>
                 </div>
+
+                <!-- Yummy Choice -->
                 <div class="brand-card" onclick="openBrandCategory('yummychoice')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummychoice"><i class="fas fa-utensils"></i></div>
@@ -755,6 +776,8 @@
                         <p>Ready to Eat</p>
                     </div>
                 </div>
+
+                <!-- Yummy Coffee Gold -->
                 <div class="brand-card" onclick="openBrandCategory('yummycoffee')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummycoffee"><i class="fas fa-mug-hot"></i></div>
@@ -1134,7 +1157,7 @@
 
                 var header = document.createElement('div');
                 header.className = 'accordion-header';
-                var isOpen = (b === 0);
+                var isOpen = false;
                 header.innerHTML = 
                     '<div class="brand-label">' +
                         '<span class="brand-color-icon" style="background:' + BRAND_COLORS[brand] + ';color:#fff;"><i class="fas ' + BRAND_ICONS[brand] + '"></i></span>' +
