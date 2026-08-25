@@ -28,6 +28,7 @@
             --konv-text: #a16207;
             --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-code: 'JetBrains Mono', monospace;
+            --greeting-gradient: linear-gradient(135deg, #eef2ff, #ffffff);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -58,7 +59,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .brand-block {
@@ -111,6 +112,80 @@
             transition: transform 0.15s ease;
         }
         .icon-action-btn:active { transform: scale(0.92); }
+
+        /* ===== GREETING - DESIGN BARU ===== */
+        .greeting-container {
+            background: var(--greeting-gradient);
+            border-radius: 20px;
+            padding: 18px 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .greeting-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0,115,234,0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .greeting-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .greeting-top .date-display {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .greeting-top .time-display {
+            font-family: var(--font-code);
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            background: rgba(0,115,234,0.06);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .greeting-divider {
+            height: 2px;
+            background: linear-gradient(to right, rgba(0,115,234,0.1), rgba(0,115,234,0.3), rgba(0,115,234,0.1));
+            margin: 10px 0 8px 0;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        .greeting-sapaan {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            min-height: 32px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s ease;
+        }
+        .greeting-sapaan .greeting-icon {
+            font-size: 1.4rem;
+        }
+        .greeting-sapaan.fade {
+            opacity: 0;
+        }
 
         /* SEARCH */
         .sticky-search-bar {
@@ -168,7 +243,6 @@
             justify-content: center;
         }
 
-        /* SECTION BAR */
         .section-bar {
             display: flex;
             justify-content: space-between;
@@ -194,7 +268,6 @@
             border-radius: 12px;
         }
 
-        /* LEGENDA + TOGGLE BARU (di satu baris) */
         .toolbar-row {
             display: flex;
             justify-content: space-between;
@@ -254,7 +327,7 @@
             border-color: var(--primary-blue);
         }
 
-        /* BRAND GRID 2x2 */
+        /* BRAND GRID 2x2 (Tanpa Statistik PLU) */
         .brand-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -271,7 +344,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 138px;
+            height: 120px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -309,10 +382,9 @@
             font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 600;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
-        /* FILTER PILLS */
         .pills-container {
             display: flex;
             gap: 8px;
@@ -345,7 +417,6 @@
             box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
         }
 
-        /* DETAIL HEADER */
         .detail-header {
             display: flex;
             align-items: center;
@@ -371,7 +442,6 @@
         }
         .back-btn:active { transform: scale(0.95); }
 
-        /* PRODUCTS - LIST VIEW */
         .products-grid { display: flex; flex-direction: column; gap: 10px; }
 
         .product-card {
@@ -436,7 +506,6 @@
             color: #15803d !important;
         }
 
-        /* PRODUCTS - TABLE VIEW */
         .table-wrapper {
             background: var(--card-white);
             border-radius: 16px;
@@ -488,7 +557,52 @@
         }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
 
-        /* BOTTOM NAV */
+        .accordion-section {
+            background: var(--card-white);
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .accordion-header:active { background: #f8fafc; }
+        .accordion-header .brand-label {
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .accordion-header .brand-label .brand-color-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .accordion-header .accordion-arrow {
+            transition: transform 0.25s ease;
+            color: var(--text-light);
+        }
+        .accordion-header .accordion-arrow.open { transform: rotate(180deg); }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-body.open { max-height: 2000px; }
+        .accordion-body .products-grid { padding: 0 12px 12px 12px; }
+
         .bottom-dock {
             position: fixed;
             bottom: 0;
@@ -524,7 +638,6 @@
         .dock-tab.active { color: var(--primary-blue); }
         .dock-tab-icon { font-size: 1.2rem; }
 
-        /* TOAST */
         .toast-notification {
             position: fixed;
             bottom: 84px;
@@ -569,16 +682,27 @@
         <!-- HEADER -->
         <header class="app-header">
             <div class="brand-block">
-                <div class="brand-icon">
-                    <i class="fas fa-cubes"></i>
-                </div>
+                <div class="brand-icon"><i class="fas fa-cubes"></i></div>
                 <div class="brand-title-group">
                     <h1>plukakang</h1>
                     <span>hapalkeun euy!</span>
                 </div>
             </div>
-            <button class="icon-action-btn" onclick="showAllPLU()"><i class="fas fa-layer-group"></i></button>
+            <button class="icon-action-btn" onclick="showPLUKatalog()"><i class="fas fa-layer-group"></i></button>
         </header>
+
+        <!-- ===== GREETING - DESIGN BARU ===== -->
+        <div class="greeting-container">
+            <div class="greeting-top">
+                <span class="date-display" id="dateDisplay">📅 Selasa, 25 Agustus 2026</span>
+                <span class="time-display" id="timeDisplay">14:32:45 WIB</span>
+            </div>
+            <div class="greeting-divider"></div>
+            <div class="greeting-sapaan" id="sapaanDisplay">
+                <span class="greeting-icon" id="sapaanIcon">☀️</span>
+                <span id="sapaanText">Selamat Pagi, Tim PLU!</span>
+            </div>
+        </div>
 
         <!-- SEARCH -->
         <div class="sticky-search-bar">
@@ -648,7 +772,6 @@
                 <span class="item-count-chip" id="itemCounterBadge">0 Item</span>
             </div>
 
-            <!-- LEGENDA + TOGGLE LIST/TABEL (sebaris) -->
             <div class="toolbar-row">
                 <div class="legend-bar">
                     <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
@@ -663,10 +786,8 @@
             <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
             <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
 
-            <!-- LIST VIEW -->
             <section class="products-grid" id="productGrid"></section>
 
-            <!-- TABLE VIEW -->
             <div id="tableView" class="table-wrapper hidden">
                 <div class="table-scroll">
                     <table>
@@ -684,6 +805,18 @@
             </div>
         </section>
 
+        <!-- KATALOG VIEW -->
+        <section id="katalogView" style="display: none;">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+            <div class="section-bar">
+                <span class="section-title">📚 PLU Katalog</span>
+                <span class="item-count-chip" id="katalogCounter">0 Item</span>
+            </div>
+            <div id="katalogAccordion"></div>
+        </section>
+
     </div>
 
     <!-- BOTTOM NAV -->
@@ -696,9 +829,9 @@
             <i class="fas fa-search dock-tab-icon"></i>
             <span>Cari</span>
         </button>
-        <button class="dock-tab" id="dock-all" onclick="showAllPLU()">
+        <button class="dock-tab" id="dock-katalog" onclick="showPLUKatalog()">
             <i class="fas fa-layer-group dock-tab-icon"></i>
-            <span>All PLU</span>
+            <span>Katalog</span>
         </button>
     </nav>
 
@@ -711,6 +844,20 @@
             'sayburger': 'Say Burger',
             'yummychoice': 'Yummy Choice',
             'yummycoffee': 'Yummy Coffee Gold'
+        };
+
+        var BRAND_COLORS = {
+            'saybread': '#8c5332',
+            'sayburger': '#e11d48',
+            'yummychoice': '#059669',
+            'yummycoffee': '#d97706'
+        };
+
+        var BRAND_ICONS = {
+            'saybread': 'fa-bread-slice',
+            'sayburger': 'fa-hamburger',
+            'yummychoice': 'fa-utensils',
+            'yummycoffee': 'fa-mug-hot'
         };
 
         var SUB_CONFIG = {
@@ -762,6 +909,7 @@
         var currentSub = 'all';
         var currentKategori = 'all';
         var viewMode = 'list';
+        var currentView = 'home';
 
         // ================================================================
         // FETCH DATA
@@ -771,10 +919,75 @@
             .then(function(data) {
                 DATABASE = data;
                 renderDataGrid();
+                renderKatalog();
             })
             .catch(function(err) {
                 console.error('Gagal mengambil data.json:', err);
             });
+
+        // ================================================================
+        // GREETING: JAM + TANGGAL + SAPAAN + COUNTDOWN GAJIAN
+        // ================================================================
+        var sapaanIcon = document.getElementById('sapaanIcon');
+        var sapaanText = document.getElementById('sapaanText');
+
+        function updateClock() {
+            var now = new Date();
+            var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            
+            var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
+            document.getElementById('dateDisplay').innerText = '📅 ' + tanggal;
+            
+            var jam = String(now.getHours()).padStart(2, '0');
+            var menit = String(now.getMinutes()).padStart(2, '0');
+            var detik = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('timeDisplay').innerText = jam + ':' + menit + ':' + detik + ' WIB';
+        }
+
+        function getSapaanData() {
+            var jam = new Date().getHours();
+            if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
+            if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
+            if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
+            if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
+            return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
+        }
+
+        function getCountdownGajian() {
+            var now = new Date();
+            var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
+            if (now > gajian) {
+                gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
+            }
+            var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
+            if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN! 🎉🎉🎉' };
+            if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
+            return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
+        }
+
+        var isSapaan = true;
+
+        function toggleSapaanCountdown() {
+            if (isSapaan) {
+                var s = getSapaanData();
+                sapaanIcon.innerText = s.icon;
+                sapaanText.innerText = s.text;
+                isSapaan = false;
+                setTimeout(toggleSapaanCountdown, 5000);
+            } else {
+                var g = getCountdownGajian();
+                sapaanIcon.innerText = g.icon;
+                sapaanText.innerText = g.text;
+                isSapaan = true;
+                setTimeout(toggleSapaanCountdown, 3000);
+            }
+        }
+
+        // Jalankan
+        updateClock();
+        setInterval(updateClock, 1000);
+        toggleSapaanCountdown();
 
         // ================================================================
         // SEARCH
@@ -785,15 +998,17 @@
         searchInput.addEventListener('input', function() {
             searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
             
-            if (searchInput.value.trim() !== '' && currentBrand === '') {
+            if (searchInput.value.trim() !== '' && currentBrand === '' && currentView !== 'katalog') {
                 document.getElementById('homeView').style.display = 'none';
                 document.getElementById('detailView').style.display = 'block';
+                document.getElementById('katalogView').style.display = 'none';
                 document.getElementById('detailHeadingTitle').innerText = 'Hasil Pencarian';
                 document.getElementById('subPillsContainer').style.display = 'none';
                 document.getElementById('kategoriPillsContainer').style.display = 'none';
-            } else if (searchInput.value.trim() === '' && currentBrand === '') {
+            } else if (searchInput.value.trim() === '' && currentBrand === '' && currentView !== 'katalog') {
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
+                document.getElementById('katalogView').style.display = 'none';
             }
             renderDataGrid();
         });
@@ -801,9 +1016,10 @@
         function clearSearchInput() {
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
-            if (currentBrand === '') {
+            if (currentBrand === '' && currentView !== 'katalog') {
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
+                document.getElementById('katalogView').style.display = 'none';
             }
             renderDataGrid();
         }
@@ -841,36 +1057,107 @@
         // NAVIGATION
         // ================================================================
         function goHomeView() {
+            currentView = 'home';
             currentBrand = '';
             currentSub = 'all';
             currentKategori = 'all';
             document.getElementById('homeView').style.display = 'block';
             document.getElementById('detailView').style.display = 'none';
+            document.getElementById('katalogView').style.display = 'none';
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
             renderDataGrid();
             setDockTabActive('home');
         }
 
-        function showAllPLU() {
-            currentBrand = 'all';
-            currentSub = 'all';
-            currentKategori = 'all';
+        function showPLUKatalog() {
+            currentView = 'katalog';
+            currentBrand = '';
             document.getElementById('homeView').style.display = 'none';
-            document.getElementById('detailView').style.display = 'block';
-            document.getElementById('detailHeadingTitle').innerText = 'Semua PLU (All Brand)';
-            document.getElementById('subPillsContainer').style.display = 'none';
-            document.getElementById('kategoriPillsContainer').style.display = 'none';
-            renderDataGrid();
-            setDockTabActive('all');
+            document.getElementById('detailView').style.display = 'none';
+            document.getElementById('katalogView').style.display = 'block';
+            renderKatalog();
+            setDockTabActive('katalog');
         }
 
+        function renderKatalog() {
+            var container = document.getElementById('katalogAccordion');
+            var counter = document.getElementById('katalogCounter');
+            container.innerHTML = '';
+
+            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee'];
+            var totalItems = 0;
+
+            for (var b = 0; b < brands.length; b++) {
+                var brand = brands[b];
+                var items = DATABASE.filter(function(item) { return item.brand === brand; });
+                if (items.length === 0) continue;
+                totalItems += items.length;
+
+                var section = document.createElement('div');
+                section.className = 'accordion-section';
+
+                var header = document.createElement('div');
+                header.className = 'accordion-header';
+                var isOpen = (b === 0);
+                header.innerHTML = 
+                    '<div class="brand-label">' +
+                        '<span class="brand-color-icon" style="background:' + BRAND_COLORS[brand] + ';color:#fff;"><i class="fas ' + BRAND_ICONS[brand] + '"></i></span>' +
+                        BRAND_NAMES[brand] +
+                    '</div>' +
+                    '<span class="accordion-arrow ' + (isOpen ? 'open' : '') + '"><i class="fas fa-chevron-down"></i></span>';
+                
+                var body = document.createElement('div');
+                body.className = 'accordion-body' + (isOpen ? ' open' : '');
+                
+                var grid = document.createElement('div');
+                grid.className = 'products-grid';
+                
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var card = document.createElement('div');
+                    card.className = 'product-card';
+                    var badgesHtml = '';
+                    if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+                    if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+                    card.innerHTML = 
+                        '<div class="product-info-col">' +
+                            '<span class="brand-mini-tag">' + BRAND_NAMES[brand] + '</span>' +
+                            '<div class="product-card-title">' + item.nama + '</div>' +
+                        '</div>' +
+                        '<div class="plu-badges-stack">' + badgesHtml + '</div>';
+                    grid.appendChild(card);
+                }
+
+                body.appendChild(grid);
+                
+                header.onclick = function(bdy, arr) {
+                    return function() {
+                        var isNowOpen = bdy.classList.contains('open');
+                        bdy.classList.toggle('open');
+                        arr.classList.toggle('open');
+                    };
+                }(body, header.querySelector('.accordion-arrow'));
+
+                section.appendChild(header);
+                section.appendChild(body);
+                container.appendChild(section);
+            }
+
+            counter.textContent = totalItems + ' Item';
+        }
+
+        // ================================================================
+        // BRAND NAVIGATION
+        // ================================================================
         function openBrandCategory(key) {
+            currentView = 'detail';
             currentBrand = key;
             currentSub = 'all';
             currentKategori = 'all';
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('detailView').style.display = 'block';
+            document.getElementById('katalogView').style.display = 'none';
             document.getElementById('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
             renderSubPills();
             renderDataGrid();
@@ -976,7 +1263,7 @@
         }
 
         // ================================================================
-        // RENDER DATA GRID (List & Table)
+        // RENDER DATA GRID
         // ================================================================
         function renderDataGrid() {
             var query = searchInput.value.toLowerCase().trim();
@@ -987,7 +1274,7 @@
             gridContainer.innerHTML = '';
             tableBody.innerHTML = '';
 
-            if (currentBrand === '' && query === '') {
+            if (currentBrand === '' && query === '' && currentView !== 'katalog') {
                 counterBadge.innerText = '0 Item';
                 return;
             }
@@ -1015,19 +1302,14 @@
                 return;
             }
 
-            // LIST VIEW
             for (var i = 0; i < filtered.length; i++) {
                 var item = filtered[i];
                 var card = document.createElement('div');
                 card.className = 'product-card';
 
                 var badgesHtml = '';
-                if (item.raw) {
-                    badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">RAW: ' + item.raw + '</button>';
-                }
-                if (item.konv) {
-                    badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">KONV: ' + item.konv + '</button>';
-                }
+                if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+                if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
 
                 card.innerHTML = 
                     '<div class="product-info-col">' +
@@ -1038,7 +1320,6 @@
 
                 gridContainer.appendChild(card);
 
-                // TABLE VIEW
                 var tr = document.createElement('tr');
                 var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
                 var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
@@ -1057,7 +1338,7 @@
         function copyPLUCode(code, btnEl) {
             navigator.clipboard.writeText(code).then(function() {
                 var originalText = btnEl.innerText;
-                btnEl.innerText = 'Tersalin! ✓';
+                btnEl.innerText = '✓';
                 btnEl.classList.add('plu-copied-style');
 
                 var toast = document.getElementById('toastNotification');
