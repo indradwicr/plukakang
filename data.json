@@ -251,14 +251,13 @@
     { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Ice Cube BKL", "raw": "20069642", "konv": "20069643" },
     { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Indomilk Kental Manis", "raw": "20094283", "konv": "20071970" },
     { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Oatmilk 1L", "raw": "20122061", "konv": "20122239" },
-[
   {
     "brand": "pointcoffee",
     "sub": "bkl",
     "kategori": "coffee_bean",
     "nama": "Coffee Bean",
-    "raw": "20080424",
-    "konv": "20069027",
+    "raw": 20080424,
+    "konv": 20069027,
     "": ""
   },
   {
@@ -266,8 +265,8 @@
     "sub": "bkl",
     "kategori": "coffee_bean",
     "nama": "Decaf",
-    "raw": "20128179",
-    "konv": "20100830",
+    "raw": 20128179,
+    "konv": 20100830,
     "": ""
   },
   {
@@ -275,7 +274,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Cadbury Cashew Nut",
-    "raw": "20126358",
+    "raw": 20126358,
     "konv": "",
     "": ""
   },
@@ -284,7 +283,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Cadbury Milk",
-    "raw": "20126357",
+    "raw": 20126357,
     "konv": "",
     "": ""
   },
@@ -293,7 +292,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Cashew Milk",
-    "raw": "20139148",
+    "raw": 20139148,
     "konv": "",
     "": ""
   },
@@ -302,8 +301,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Coconut 1L",
-    "raw": "20137554",
-    "konv": "20137782",
+    "raw": 20137554,
+    "konv": 20137782,
     "": ""
   },
   {
@@ -311,7 +310,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Fresh Milk Greenfields",
-    "raw": "20084981",
+    "raw": 20084981,
     "konv": "",
     "": ""
   },
@@ -320,8 +319,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Fresh Milk Indomilk",
-    "raw": "20069727",
-    "konv": "20069028",
+    "raw": 20069727,
+    "konv": 20069028,
     "": ""
   },
   {
@@ -329,7 +328,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Greenfields DC 1000ml",
-    "raw": "10013027",
+    "raw": 10013027,
     "konv": "",
     "": ""
   },
@@ -338,7 +337,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Indomilk DC 950ml",
-    "raw": "10005909",
+    "raw": 10005909,
     "konv": "",
     "": ""
   },
@@ -347,8 +346,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Indomilk SKM",
-    "raw": "20094283",
-    "konv": "20071970",
+    "raw": 20094283,
+    "konv": 20071970,
     "": ""
   },
   {
@@ -356,8 +355,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Oat Side 1 L",
-    "raw": "20122061",
-    "konv": "20122239",
+    "raw": 20122061,
+    "konv": 20122239,
     "": ""
   },
   {
@@ -365,8 +364,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Oat Side 200 ML",
-    "raw": "20129102",
-    "konv": "20129102",
+    "raw": 20129102,
+    "konv": 20129102,
     "": ""
   },
   {
@@ -374,7 +373,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Oatside PC 1000ml",
-    "raw": "20142757",
+    "raw": 20142757,
     "konv": "",
     "": ""
   },
@@ -383,8 +382,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Soyfresh Milk 250",
-    "raw": "20133147",
-    "konv": "20072014",
+    "raw": 20133147,
+    "konv": 20072014,
     "": ""
   },
   {
@@ -392,8 +391,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Whip Charger N20",
-    "raw": "20119285",
-    "konv": "20119620",
+    "raw": 20119285,
+    "konv": 20119620,
     "": ""
   },
   {
@@ -401,8 +400,8 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Whip Cream",
-    "raw": "20073634",
-    "konv": "20073642",
+    "raw": 20073634,
+    "konv": 20073642,
     "": ""
   },
   {
@@ -410,7 +409,7 @@
     "sub": "bkl",
     "kategori": "milk_dairy",
     "nama": "Whip Cream DC",
-    "raw": "20088871",
+    "raw": 20088871,
     "konv": "",
     "": ""
   },
@@ -419,8 +418,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Avocado Powder",
-    "raw": "20080440",
-    "konv": "20074244",
+    "raw": 20080440,
+    "konv": 20074244,
     "": ""
   },
   {
@@ -428,7 +427,7 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Banana Powder",
-    "raw": "20130595",
+    "raw": 20130595,
     "konv": "",
     "": ""
   },
@@ -437,8 +436,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Cheese Powder",
-    "raw": "20118131",
-    "konv": "20119619",
+    "raw": 20118131,
+    "konv": 20119619,
     "": ""
   },
   {
@@ -446,8 +445,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Choco Powder",
-    "raw": "20080425",
-    "konv": "20069029",
+    "raw": 20080425,
+    "konv": 20069029,
     "": ""
   },
   {
@@ -455,8 +454,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Creamer Powder",
-    "raw": "20102840",
-    "konv": "20103792",
+    "raw": 20102840,
+    "konv": 20103792,
     "": ""
   },
   {
@@ -464,8 +463,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Frappe Base Powder",
-    "raw": "20080429",
-    "konv": "20069032",
+    "raw": 20080429,
+    "konv": 20069032,
     "": ""
   },
   {
@@ -473,7 +472,7 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Ginger Powder",
-    "raw": "20103697",
+    "raw": 20103697,
     "konv": "",
     "": ""
   },
@@ -482,7 +481,7 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Kunyit Powder",
-    "raw": "20103698",
+    "raw": 20103698,
     "konv": "",
     "": ""
   },
@@ -491,7 +490,7 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Kurma Powder",
-    "raw": "20128213",
+    "raw": 20128213,
     "konv": "",
     "": ""
   },
@@ -500,8 +499,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Lemon Powder",
-    "raw": "20080431",
-    "konv": "20069033",
+    "raw": 20080431,
+    "konv": 20069033,
     "": ""
   },
   {
@@ -509,8 +508,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Matcha Powder",
-    "raw": "20080428",
-    "konv": "20069030",
+    "raw": 20080428,
+    "konv": 20069030,
     "": ""
   },
   {
@@ -518,8 +517,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Seasalt Powder",
-    "raw": "20134776",
-    "konv": "20134932",
+    "raw": 20134776,
+    "konv": 20134932,
     "": ""
   },
   {
@@ -527,8 +526,8 @@
     "sub": "bkl",
     "kategori": "powder",
     "nama": "Toffe Powder",
-    "raw": "20102080",
-    "konv": "20069034",
+    "raw": 20102080,
+    "konv": 20069034,
     "": ""
   },
   {
@@ -536,8 +535,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Air Mineral",
-    "raw": "20004249",
-    "konv": "20115098",
+    "raw": 20004249,
+    "konv": 20115098,
     "": ""
   },
   {
@@ -545,8 +544,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Buavita Apel",
-    "raw": "10007972",
-    "konv": "20141218",
+    "raw": 10007972,
+    "konv": 20141218,
     "": ""
   },
   {
@@ -554,8 +553,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Buavita Jeruk",
-    "raw": "10007971",
-    "konv": "20141216",
+    "raw": 10007971,
+    "konv": 20141216,
     "": ""
   },
   {
@@ -563,8 +562,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Chi Sparkling",
-    "raw": "20124898",
-    "konv": "20142069",
+    "raw": 20124898,
+    "konv": 20142069,
     "": ""
   },
   {
@@ -572,8 +571,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Cranberry",
-    "raw": "20136649",
-    "konv": "20141217",
+    "raw": 20136649,
+    "konv": 20141217,
     "": ""
   },
   {
@@ -581,8 +580,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Hydro Coco",
-    "raw": "20018435",
-    "konv": "20137010",
+    "raw": 20018435,
+    "konv": 20137010,
     "": ""
   },
   {
@@ -590,8 +589,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Ice Cube BKL",
-    "raw": "20069642",
-    "konv": "20069643",
+    "raw": 20069642,
+    "konv": 20069643,
     "": ""
   },
   {
@@ -599,8 +598,8 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Ice Cube Maker",
-    "raw": "20127438",
-    "konv": "20127438",
+    "raw": 20127438,
+    "konv": 20127438,
     "": ""
   },
   {
@@ -608,7 +607,7 @@
     "sub": "bkl",
     "kategori": "rtd_beverage",
     "nama": "Yakult",
-    "raw": "20096249",
+    "raw": 20096249,
     "konv": "",
     "": ""
   },
@@ -617,7 +616,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "CB Black",
-    "raw": "20068994",
+    "raw": 20068994,
     "konv": "",
     "": ""
   },
@@ -626,7 +625,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "CB Caramel",
-    "raw": "20082648",
+    "raw": 20082648,
     "konv": "",
     "": ""
   },
@@ -635,7 +634,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "CB Hazelnut",
-    "raw": "20085197",
+    "raw": 20085197,
     "konv": "",
     "": ""
   },
@@ -644,7 +643,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "CB Original",
-    "raw": "20099877",
+    "raw": 20099877,
     "konv": "",
     "": ""
   },
@@ -653,7 +652,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "CB PSI",
-    "raw": "20082649",
+    "raw": 20082649,
     "konv": "",
     "": ""
   },
@@ -662,7 +661,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Choco Berry",
-    "raw": "20123065",
+    "raw": 20123065,
     "konv": "",
     "": ""
   },
@@ -671,7 +670,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Esp Caramel",
-    "raw": "20094648",
+    "raw": 20094648,
     "konv": "",
     "": ""
   },
@@ -680,7 +679,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Esp Hazelnut",
-    "raw": "20094649",
+    "raw": 20094649,
     "konv": "",
     "": ""
   },
@@ -689,7 +688,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Esp Jadul",
-    "raw": "20094650",
+    "raw": 20094650,
     "konv": "",
     "": ""
   },
@@ -698,7 +697,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Esp Original",
-    "raw": "20099878",
+    "raw": 20099878,
     "konv": "",
     "": ""
   },
@@ -707,7 +706,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Esp Palm",
-    "raw": "20094647",
+    "raw": 20094647,
     "konv": "",
     "": ""
   },
@@ -716,7 +715,7 @@
     "sub": "bkl",
     "kategori": "rtd_coffee",
     "nama": "Kopi Saku",
-    "raw": "20124306",
+    "raw": 20124306,
     "konv": "",
     "": ""
   },
@@ -725,7 +724,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Botol 1L",
-    "raw": "20137039",
+    "raw": 20137039,
     "konv": "",
     "": ""
   },
@@ -734,7 +733,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Botol 250ml (250/300)",
-    "raw": "20069691",
+    "raw": 20069691,
     "konv": "",
     "": ""
   },
@@ -743,7 +742,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Botol Kopi Saku",
-    "raw": "20113683",
+    "raw": 20113683,
     "konv": "",
     "": ""
   },
@@ -752,7 +751,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Container Box 2000ml (25/150)",
-    "raw": "20106235",
+    "raw": 20106235,
     "konv": "",
     "": ""
   },
@@ -761,7 +760,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Container Box 750ml (25/500)",
-    "raw": "20094407",
+    "raw": 20094407,
     "konv": "",
     "": ""
   },
@@ -770,7 +769,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup 10oz (50)",
-    "raw": "20092878",
+    "raw": 20092878,
     "konv": "",
     "": ""
   },
@@ -779,7 +778,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup 12oz (Hijau) (25/250)",
-    "raw": "20111189",
+    "raw": 20111189,
     "konv": "",
     "": ""
   },
@@ -788,7 +787,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Cold 16oz (50/500)",
-    "raw": "20069664",
+    "raw": 20069664,
     "konv": "",
     "": ""
   },
@@ -797,7 +796,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Cold 22oz Upsize (50/500)",
-    "raw": "20111188",
+    "raw": 20111188,
     "konv": "",
     "": ""
   },
@@ -806,7 +805,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Hot (25/50/250)",
-    "raw": "20069607",
+    "raw": 20069607,
     "konv": "",
     "": ""
   },
@@ -815,7 +814,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup One Piece",
-    "raw": "20141140",
+    "raw": 20141140,
     "konv": "",
     "": ""
   },
@@ -824,7 +823,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Pokemon",
-    "raw": "20141141",
+    "raw": 20141141,
     "konv": "",
     "": ""
   },
@@ -833,7 +832,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Solev",
-    "raw": "20139749",
+    "raw": 20139749,
     "konv": "",
     "": ""
   },
@@ -842,7 +841,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Cup Timnas",
-    "raw": "20139591",
+    "raw": 20139591,
     "konv": "",
     "": ""
   },
@@ -851,7 +850,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Drink Tray 2 Cup (100)",
-    "raw": "20106684",
+    "raw": 20106684,
     "konv": "",
     "": ""
   },
@@ -860,7 +859,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Gift Card",
-    "raw": "20124602",
+    "raw": 20124602,
     "konv": "",
     "": ""
   },
@@ -869,7 +868,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Hampers",
-    "raw": "20132639",
+    "raw": 20132639,
     "konv": "",
     "": ""
   },
@@ -878,7 +877,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Jacket Sleeve (25)",
-    "raw": "20069608",
+    "raw": 20069608,
     "konv": "",
     "": ""
   },
@@ -887,7 +886,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Lid Dome (50/250)",
-    "raw": "20069776",
+    "raw": 20069776,
     "konv": "",
     "": ""
   },
@@ -896,7 +895,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Lid Flat (50/250)",
-    "raw": "20069777",
+    "raw": 20069777,
     "konv": "",
     "": ""
   },
@@ -905,7 +904,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Paper Bag 2 Cup (500)",
-    "raw": "20106237",
+    "raw": 20106237,
     "konv": "",
     "": ""
   },
@@ -914,7 +913,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Paper Bag 4–8 Cup (200)",
-    "raw": "20106238",
+    "raw": 20106238,
     "konv": "",
     "": ""
   },
@@ -923,7 +922,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Plastik Kondimen (100)",
-    "raw": "20106878",
+    "raw": 20106878,
     "konv": "",
     "": ""
   },
@@ -932,7 +931,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Puding Spoon (100)",
-    "raw": "20092879",
+    "raw": 20092879,
     "konv": "",
     "": ""
   },
@@ -941,8 +940,8 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Seal Cup",
-    "raw": "20106233",
-    "konv": "20116103",
+    "raw": 20106233,
+    "konv": 20116103,
     "": ""
   },
   {
@@ -950,7 +949,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Straw Big Frape (100)",
-    "raw": "20092877",
+    "raw": 20092877,
     "konv": "",
     "": ""
   },
@@ -959,7 +958,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Straw Slim Green (500)",
-    "raw": "20069690",
+    "raw": 20069690,
     "konv": "",
     "": ""
   },
@@ -968,7 +967,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Tas Ramah L 1-2 (500)",
-    "raw": "20127409",
+    "raw": 20127409,
     "konv": "",
     "": ""
   },
@@ -977,7 +976,7 @@
     "sub": "sarana",
     "kategori": "sarana",
     "nama": "PC Tas Ramah S 3-4 (500)",
-    "raw": "20127408",
+    "raw": 20127408,
     "konv": "",
     "": ""
   },
@@ -986,8 +985,8 @@
     "sub": "bkl",
     "kategori": "sauce",
     "nama": "Caramel Sauce",
-    "raw": "20112042",
-    "konv": "20069023",
+    "raw": 20112042,
+    "konv": 20069023,
     "": ""
   },
   {
@@ -995,8 +994,8 @@
     "sub": "bkl",
     "kategori": "sauce",
     "nama": "Chocolate Sauce",
-    "raw": "20112043",
-    "konv": "20069015",
+    "raw": 20112043,
+    "konv": 20069015,
     "": ""
   },
   {
@@ -1004,8 +1003,8 @@
     "sub": "bkl",
     "kategori": "sauce",
     "nama": "Strawberry Sauce",
-    "raw": "20126002",
-    "konv": "20126356",
+    "raw": 20126002,
+    "konv": 20126356,
     "": ""
   },
   {
@@ -1013,8 +1012,8 @@
     "sub": "bkl",
     "kategori": "sweetener",
     "nama": "Gula Cair 5kg",
-    "raw": "20101055",
-    "konv": "20069644",
+    "raw": 20101055,
+    "konv": 20069644,
     "": ""
   },
   {
@@ -1022,8 +1021,8 @@
     "sub": "bkl",
     "kategori": "sweetener",
     "nama": "Gula Cair 8ml",
-    "raw": "20106981",
-    "konv": "20054749",
+    "raw": 20106981,
+    "konv": 20054749,
     "": ""
   },
   {
@@ -1031,8 +1030,8 @@
     "sub": "bkl",
     "kategori": "sweetener",
     "nama": "Tropicana 100's",
-    "raw": "20101151",
-    "konv": "20099118",
+    "raw": 20101151,
+    "konv": 20099118,
     "": ""
   },
   {
@@ -1040,8 +1039,8 @@
     "sub": "bkl",
     "kategori": "sweetener",
     "nama": "Uray",
-    "raw": "20133182",
-    "konv": "20135772",
+    "raw": 20133182,
+    "konv": 20135772,
     "": ""
   },
   {
@@ -1049,8 +1048,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Almond Syrup",
-    "raw": "20131238",
-    "konv": "20131338",
+    "raw": 20131238,
+    "konv": 20131338,
     "": ""
   },
   {
@@ -1058,8 +1057,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Banana Syrup",
-    "raw": "20138892",
-    "konv": "20139105",
+    "raw": 20138892,
+    "konv": 20139105,
     "": ""
   },
   {
@@ -1067,8 +1066,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Blue Lagoon",
-    "raw": "20139652",
-    "konv": "20140114",
+    "raw": 20139652,
+    "konv": 20140114,
     "": ""
   },
   {
@@ -1076,8 +1075,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Butterfly Syrup",
-    "raw": "20124992",
-    "konv": "20125094",
+    "raw": 20124992,
+    "konv": 20125094,
     "": ""
   },
   {
@@ -1085,8 +1084,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Butterscotch Syrup",
-    "raw": "20134848",
-    "konv": "20134931",
+    "raw": 20134848,
+    "konv": 20134931,
     "": ""
   },
   {
@@ -1094,8 +1093,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Caramel Syrup",
-    "raw": "20080434",
-    "konv": "20069025",
+    "raw": 20080434,
+    "konv": 20069025,
     "": ""
   },
   {
@@ -1103,8 +1102,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Cendol Syrup",
-    "raw": "20111403",
-    "konv": "20103275",
+    "raw": 20111403,
+    "konv": 20103275,
     "": ""
   },
   {
@@ -1112,8 +1111,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Citrus Syrup",
-    "raw": "20138891",
-    "konv": "20139106",
+    "raw": 20138891,
+    "konv": 20139106,
     "": ""
   },
   {
@@ -1121,8 +1120,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Frambozen Syrup",
-    "raw": "20109705",
-    "konv": "20093288",
+    "raw": 20109705,
+    "konv": 20093288,
     "": ""
   },
   {
@@ -1130,8 +1129,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Guava Syrup",
-    "raw": "20142756",
-    "konv": "20143155",
+    "raw": 20142756,
+    "konv": 20143155,
     "": ""
   },
   {
@@ -1139,8 +1138,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Hazelnut Syrup",
-    "raw": "20084978",
-    "konv": "20069026",
+    "raw": 20084978,
+    "konv": 20069026,
     "": ""
   },
   {
@@ -1148,8 +1147,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Lime Syrup",
-    "raw": "20123707",
-    "konv": "20124303",
+    "raw": 20123707,
+    "konv": 20124303,
     "": ""
   },
   {
@@ -1157,8 +1156,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Lychee Syrup",
-    "raw": "20085198",
-    "konv": "20085447",
+    "raw": 20085198,
+    "konv": 20085447,
     "": ""
   },
   {
@@ -1166,7 +1165,7 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Melon Syrup",
-    "raw": "20133812",
+    "raw": 20133812,
     "konv": "",
     "": ""
   },
@@ -1175,8 +1174,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Mint Mojito Syrup",
-    "raw": "20123702",
-    "konv": "20124304",
+    "raw": 20123702,
+    "konv": 20124304,
     "": ""
   },
   {
@@ -1184,8 +1183,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Palm Sugar Syrup",
-    "raw": "20101056",
-    "konv": "20082341",
+    "raw": 20101056,
+    "konv": 20082341,
     "": ""
   },
   {
@@ -1193,8 +1192,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Pandan Syrup",
-    "raw": "20094570",
-    "konv": "20095414",
+    "raw": 20094570,
+    "konv": 20095414,
     "": ""
   },
   {
@@ -1202,8 +1201,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Passion Fruit",
-    "raw": "20134560",
-    "konv": "20134663",
+    "raw": 20134560,
+    "konv": 20134663,
     "": ""
   },
   {
@@ -1211,8 +1210,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Peach Syrup",
-    "raw": "20085199",
-    "konv": "20085448",
+    "raw": 20085199,
+    "konv": 20085448,
     "": ""
   },
   {
@@ -1220,8 +1219,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Pistachio Syrup",
-    "raw": "20131236",
-    "konv": "20131340",
+    "raw": 20131236,
+    "konv": 20131340,
     "": ""
   },
   {
@@ -1229,8 +1228,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Pure Kiwi Syrup",
-    "raw": "20080438",
-    "konv": "20069021",
+    "raw": 20080438,
+    "konv": 20069021,
     "": ""
   },
   {
@@ -1238,8 +1237,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Tiramisu Syrup",
-    "raw": "20133209",
-    "konv": "20133315",
+    "raw": 20133209,
+    "konv": 20133315,
     "": ""
   },
   {
@@ -1247,8 +1246,8 @@
     "sub": "bkl",
     "kategori": "syrup",
     "nama": "Vanilla Syrup",
-    "raw": "20080433",
-    "konv": "20069024",
+    "raw": 20080433,
+    "konv": 20069024,
     "": ""
   },
   {
@@ -1256,8 +1255,8 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "Chamomile",
-    "raw": "20099545",
-    "konv": "20099125",
+    "raw": 20099545,
+    "konv": 20099125,
     "": ""
   },
   {
@@ -1265,8 +1264,8 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "Earl Grey",
-    "raw": "20099546",
-    "konv": "20134349",
+    "raw": 20099546,
+    "konv": 20134349,
     "": ""
   },
   {
@@ -1274,7 +1273,7 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "EBT",
-    "raw": "20099544",
+    "raw": 20099544,
     "konv": "",
     "": ""
   },
@@ -1283,8 +1282,8 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "Java Ginger",
-    "raw": "20135179",
-    "konv": "20134930",
+    "raw": 20135179,
+    "konv": 20134930,
     "": ""
   },
   {
@@ -1292,7 +1291,7 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "Mix Fruit Olong",
-    "raw": "20101811",
+    "raw": 20101811,
     "konv": "",
     "": ""
   },
@@ -1301,8 +1300,8 @@
     "sub": "bkl",
     "kategori": "tea",
     "nama": "Rose & Rosella",
-    "raw": "20132529",
-    "konv": "20134350",
+    "raw": 20132529,
+    "konv": 20134350,
     "": ""
   },
   {
@@ -1310,7 +1309,7 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Biscuit Crumb",
-    "raw": "20132790",
+    "raw": 20132790,
     "konv": "",
     "": ""
   },
@@ -1319,7 +1318,7 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "IDM Popcorn Caramel",
-    "raw": "20132091",
+    "raw": 20132091,
     "konv": "",
     "": ""
   },
@@ -1328,8 +1327,8 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Kacang Almond",
-    "raw": "20131237",
-    "konv": "20131339",
+    "raw": 20131237,
+    "konv": 20131339,
     "": ""
   },
   {
@@ -1337,7 +1336,7 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "KitKat",
-    "raw": "20082339",
+    "raw": 20082339,
     "konv": "",
     "": ""
   },
@@ -1346,8 +1345,8 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Lotus Sprd Crun",
-    "raw": "20104936",
-    "konv": "20133408",
+    "raw": 20104936,
+    "konv": 20133408,
     "": ""
   },
   {
@@ -1355,7 +1354,7 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Oreo Original",
-    "raw": "20124774",
+    "raw": 20124774,
     "konv": "",
     "": ""
   },
@@ -1364,7 +1363,7 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Oreo Red Velvet",
-    "raw": "20105994",
+    "raw": 20105994,
     "konv": "",
     "": ""
   },
@@ -1373,8 +1372,8 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Ovomaltine",
-    "raw": "20109085",
-    "konv": "20137293",
+    "raw": 20109085,
+    "konv": 20137293,
     "": ""
   },
   {
@@ -1382,8 +1381,8 @@
     "sub": "bkl",
     "kategori": "topping_crunches",
     "nama": "Pudding Mango",
-    "raw": "20047616",
-    "konv": "20136064",
+    "raw": 20047616,
+    "konv": 20136064,
     "": ""
   },
   {
@@ -1391,8 +1390,8 @@
     "sub": "bkl",
     "kategori": "topping_jelly",
     "nama": "Brown Sugar Konyaku Jelly",
-    "raw": "20096765",
-    "konv": "20096725",
+    "raw": 20096765,
+    "konv": 20096725,
     "": ""
   },
   {
@@ -1400,8 +1399,8 @@
     "sub": "bkl",
     "kategori": "topping_jelly",
     "nama": "Coffee Jelly",
-    "raw": "20085776",
-    "konv": "20069020",
+    "raw": 20085776,
+    "konv": 20069020,
     "": ""
   },
   {
@@ -1409,8 +1408,8 @@
     "sub": "bkl",
     "kategori": "topping_jelly",
     "nama": "Nangka Jelly",
-    "raw": "20102824",
-    "konv": "20103277",
+    "raw": 20102824,
+    "konv": 20103277,
     "": ""
   },
   {
@@ -1418,8 +1417,8 @@
     "sub": "bkl",
     "kategori": "topping_jelly",
     "nama": "Tropical Jelly",
-    "raw": "20098731",
-    "konv": "20099122",
+    "raw": 20098731,
+    "konv": 20099122,
     "": ""
   }
 ]
