@@ -376,10 +376,21 @@
             flex-shrink: 0;
         }
 
+        /* Warna Brand */
         .card-saybread { background: #fdf6f0; color: #8c5332; }
+        .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
+
         .card-sayburger { background: #fff1f2; color: #e11d48; }
-        .card-yummychoice { background: #ecfdf5; color: #059669; }
+        .card-sayburger .brand-card-icon { background: #e11d48; color: #fff; }
+
+        .card-yummychoice { background: #ffedd5; color: #c2410c; }
+        .card-yummychoice .brand-card-icon { background: #f97316; color: #fff; }
+
         .card-yummycoffee { background: #fffbeb; color: #d97706; }
+        .card-yummycoffee .brand-card-icon { background: #d97706; color: #fff; }
+
+        .card-pointcoffee { background: #dcfce7; color: #14532d; }
+        .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
 
         .brand-card-bottom {
             flex: 1;
@@ -625,8 +636,9 @@
 
         .sheet-tab.bread.active { border-top: 3px solid #8c5332; }
         .sheet-tab.burger.active { border-top: 3px solid #e11d48; }
-        .sheet-tab.yummy.active { border-top: 3px solid #059669; }
+        .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
         .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
+        .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
         /* ===== SECTION HEADER UNTUK GROUPING ===== */
@@ -756,6 +768,7 @@
                 <span class="section-title">Kategori Brand</span>
             </div>
             <section class="brand-grid">
+                <!-- Say Bread -->
                 <div class="brand-card" onclick="openBrandCategory('saybread')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-saybread"><i class="fas fa-bread-slice"></i></div>
@@ -766,6 +779,8 @@
                         <p>Bakery & Pastry</p>
                     </div>
                 </div>
+
+                <!-- Say Burger -->
                 <div class="brand-card" onclick="openBrandCategory('sayburger')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-sayburger"><i class="fas fa-hamburger"></i></div>
@@ -776,6 +791,8 @@
                         <p>Burger & Hotdog</p>
                     </div>
                 </div>
+
+                <!-- Yummy Choice (ORANYE) -->
                 <div class="brand-card" onclick="openBrandCategory('yummychoice')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummychoice"><i class="fas fa-utensils"></i></div>
@@ -786,6 +803,8 @@
                         <p>Ready to Eat</p>
                     </div>
                 </div>
+
+                <!-- Yummy Coffee Gold -->
                 <div class="brand-card" onclick="openBrandCategory('yummycoffee')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummycoffee"><i class="fas fa-mug-hot"></i></div>
@@ -794,6 +813,18 @@
                     <div class="brand-card-bottom">
                         <h3>Yummy Coffee Gold</h3>
                         <p>Beverages & Coffee</p>
+                    </div>
+                </div>
+
+                <!-- Point Coffee (HIJAU GELAP) -->
+                <div class="brand-card" onclick="openBrandCategory('pointcoffee')">
+                    <div class="brand-card-top">
+                        <div class="brand-card-icon card-pointcoffee"><i class="fas fa-mug-saucer"></i></div>
+                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
+                    </div>
+                    <div class="brand-card-bottom">
+                        <h3>Point Coffee</h3>
+                        <p>Coffee & Beverages</p>
                     </div>
                 </div>
             </section>
@@ -843,7 +874,7 @@
             </div>
         </section>
 
-        <!-- ===== KATALOG VIEW - SHEETS STYLE DENGAN GROUPING ===== -->
+        <!-- ===== KATALOG VIEW - SHEETS STYLE ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -908,62 +939,69 @@
             'saybread': 'Say Bread',
             'sayburger': 'Say Burger',
             'yummychoice': 'Yummy Choice',
-            'yummycoffee': 'Yummy Coffee Gold'
-        };
-
-        var BRAND_COLORS = {
-            'saybread': '#8c5332',
-            'sayburger': '#e11d48',
-            'yummychoice': '#059669',
-            'yummycoffee': '#d97706'
-        };
-
-        var BRAND_ICONS = {
-            'saybread': 'fa-bread-slice',
-            'sayburger': 'fa-hamburger',
-            'yummychoice': 'fa-utensils',
-            'yummycoffee': 'fa-mug-hot'
+            'yummycoffee': 'Yummy Coffee Gold',
+            'pointcoffee': 'Point Coffee'
         };
 
         var SUB_CONFIG = {
             'saybread': [
                 { id: 'all', label: 'Semua' },
-                { id: 'dcf', label: '❄️ Frozen Dough' },
-                { id: 'sarana', label: '📦 Sarana' }
+                { id: 'dcf', label: 'Frozen Dough' },
+                { id: 'sarana', label: 'Sarana' }
             ],
             'sayburger': [
                 { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: '🍔 Bahan Baku' },
-                { id: 'sarana', label: '📦 Sarana' }
+                { id: 'bkl', label: 'Bahan Baku' },
+                { id: 'sarana', label: 'Sarana' }
             ],
             'yummychoice': [
                 { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: '🍽️ Menu Utama' },
-                { id: 'sarana', label: '📦 Sarana' }
+                { id: 'bkl', label: 'Menu Utama' },
+                { id: 'sarana', label: 'Sarana' }
             ],
             'yummycoffee': [
                 { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: '🧪 Bahan Utama' },
-                { id: 'dcf', label: '🧂 Bahan Tambahan' },
-                { id: 'sarana', label: '📦 Sarana' }
+                { id: 'bkl', label: 'Bahan Utama' },
+                { id: 'dcf', label: 'Bahan Tambahan' },
+                { id: 'sarana', label: 'Sarana' }
+            ],
+            'pointcoffee': [
+                { id: 'all', label: 'Semua' },
+                { id: 'bkl', label: 'Bahan Baku' },
+                { id: 'sarana', label: 'Sarana' }
             ]
         };
 
         var KATEGORI_LABEL = {
-            'snack_rte': '🍿 Snack RTE',
-            'dimsum': '🥟 Dimsum',
-            'pao': '🫓 Pao',
-            'fried_chicken': '🍗 Fried Chicken',
-            'frozen_fc': '❄️ Frozen FC',
-            'sosis': '🌭 Sosis',
-            'pizza': '🍕 Pizza'
+            'snack_rte': 'Snack RTE',
+            'dimsum': 'Dimsum',
+            'pao': 'Pao',
+            'fried_chicken': 'Fried Chicken',
+            'frozen_fc': 'Frozen FC',
+            'sosis': 'Sosis',
+            'pizza': 'Pizza'
         };
 
         var KATEGORI_LABEL_COFFEE = {
-            'jelly': '🍮 Jelly',
-            'syrup': '🍯 Syrup',
-            'powder': '🍵 Powder',
-            'other': '🧂 Other'
+            'jelly': 'Jelly',
+            'syrup': 'Syrup',
+            'powder': 'Powder',
+            'other': 'Other'
+        };
+
+        var KATEGORI_LABEL_POINT = {
+            'coffee_bean': 'Coffee Bean',
+            'sauce': 'Sauce',
+            'topping_jelly': 'Topping Jelly',
+            'syrup': 'Syrup',
+            'powder': 'Powder',
+            'milk_dairy': 'Milk & Dairy',
+            'rtd_beverage': 'RTD Beverage',
+            'tea': 'Tea',
+            'sweetener': 'Sweetener',
+            'topping_crunches': 'Topping Crunches',
+            'rtd_coffee': 'RTD Coffee',
+            'sarana': 'Sarana'
         };
 
         // ================================================================
@@ -1163,12 +1201,12 @@
         }
 
         // ================================================================
-        // KATALOG - SHEETS STYLE DENGAN GROUPING PER KATEGORI
+        // KATALOG - SHEETS STYLE
         // ================================================================
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
             var counter = document.getElementById('katalogCounter');
-            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee'];
+            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee'];
             var totalItems = 0;
 
             brands.forEach(function(b) {
@@ -1193,6 +1231,7 @@
                 else if (b === 'sayburger') colorClass = 'burger';
                 else if (b === 'yummychoice') colorClass = 'yummy';
                 else if (b === 'yummycoffee') colorClass = 'coffee';
+                else if (b === 'pointcoffee') colorClass = 'pointcoffee';
 
                 var tab = document.createElement('div');
                 tab.className = 'sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '');
@@ -1226,8 +1265,8 @@
                 return;
             }
 
-            // Cek apakah perlu grouping (hanya Yummy Choice & Yummy Coffee)
-            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee');
+            // Cek apakah perlu grouping
+            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee');
             var kategoriSet = {};
             if (needGrouping) {
                 items.forEach(function(item) {
@@ -1238,6 +1277,12 @@
             }
             var kategoriKeys = Object.keys(kategoriSet);
             var hasKategori = needGrouping && kategoriKeys.length > 0;
+
+            // Pilih label map yang sesuai
+            var labelMap = {};
+            if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
+            else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
+            else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
 
             // ===== LIST VIEW =====
             if (katalogViewMode === 'list') {
@@ -1252,7 +1297,7 @@
                         var headerDiv = document.createElement('div');
                         headerDiv.className = 'section-bar';
                         headerDiv.style.marginTop = '10px';
-                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + (KATEGORI_LABEL[kat] || kat) + '</span>';
+                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + (labelMap[kat] || kat) + '</span>';
                         listGrid.appendChild(headerDiv);
 
                         katItems.forEach(function(item) {
@@ -1299,7 +1344,7 @@
                         if (katItems.length === 0) return;
 
                         var headerRow = document.createElement('tr');
-                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + (KATEGORI_LABEL[kat] || kat) + '</td>';
+                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + (labelMap[kat] || kat) + '</td>';
                         tableBody.appendChild(headerRow);
 
                         katItems.forEach(function(item) {
@@ -1402,6 +1447,8 @@
                 labelMap = KATEGORI_LABEL;
             } else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') {
                 labelMap = KATEGORI_LABEL_COFFEE;
+            } else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') {
+                labelMap = KATEGORI_LABEL_POINT;
             }
 
             if (!labelMap) {
