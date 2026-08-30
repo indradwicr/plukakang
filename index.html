@@ -388,6 +388,9 @@
         .card-pointcoffee { background: #dcfce7; color: #14532d; }
         .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
 
+        .card-hambalanfc { background: #dbeafe; color: #1e40af; }
+        .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
+
         .brand-card-bottom {
             flex: 1;
             display: flex;
@@ -633,6 +636,7 @@
         .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
         .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
         .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
+        .sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
         .section-header-group {
@@ -812,6 +816,17 @@
                         <p>Coffee & Beverages</p>
                     </div>
                 </div>
+
+                <div class="brand-card" onclick="openBrandCategory('hambalanfc')">
+                    <div class="brand-card-top">
+                        <div class="brand-card-icon card-hambalanfc"><i class="fas fa-box"></i></div>
+                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
+                    </div>
+                    <div class="brand-card-bottom">
+                        <h3>Hambalan FC</h3>
+                        <p>Si Paling Hambalan</p>
+                    </div>
+                </div>
             </section>
         </main>
 
@@ -919,7 +934,8 @@
             'sayburger': 'Say Burger',
             'yummychoice': 'Yummy Choice',
             'yummycoffee': 'Yummy Coffee Gold',
-            'pointcoffee': 'Point Coffee'
+            'pointcoffee': 'Point Coffee',
+            'hambalanfc': 'Hambalan FC'
         };
 
         var SUB_CONFIG = {
@@ -948,6 +964,10 @@
                 { id: 'all', label: 'Semua' },
                 { id: 'bkl', label: 'Bahan Baku' },
                 { id: 'sarana', label: 'Sarana' }
+            ],
+            'hambalanfc': [
+                { id: 'all', label: 'Semua' },
+                { id: 'bkl', label: 'Bahan Baku' }
             ]
         };
 
@@ -980,6 +1000,14 @@
             'sweetener': 'Sweetener',
             'topping_crunches': 'Topping Crunches',
             'rtd_coffee': 'RTD Coffee'
+        };
+
+        var KATEGORI_LABEL_HAMBALAN = {
+            'minyak': 'Minyak',
+            'beras': 'Beras',
+            'gula': 'Gula',
+            'mineral': 'Mineral',
+            'beverage': 'Beverage'
         };
 
         var DATABASE = [];
@@ -1157,7 +1185,7 @@
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
             var counter = document.getElementById('katalogCounter');
-            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee'];
+            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc'];
             var totalItems = 0;
 
             brands.forEach(function(b) {
@@ -1183,6 +1211,7 @@
                 else if (b === 'yummychoice') colorClass = 'yummy';
                 else if (b === 'yummycoffee') colorClass = 'coffee';
                 else if (b === 'pointcoffee') colorClass = 'pointcoffee';
+                else if (b === 'hambalanfc') colorClass = 'hambalanfc';
 
                 var tab = document.createElement('div');
                 tab.className = 'sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '');
@@ -1216,7 +1245,7 @@
                 return;
             }
 
-            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee');
+            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc');
             var kategoriSet = {};
             if (needGrouping) {
                 items.forEach(function(item) {
@@ -1232,6 +1261,7 @@
             if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
             else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
             else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
+            else if (currentSheet === 'hambalanfc') labelMap = KATEGORI_LABEL_HAMBALAN;
 
             if (katalogViewMode === 'list') {
                 document.getElementById('katalogListGrid').style.display = 'flex';
@@ -1387,6 +1417,8 @@
                 labelMap = KATEGORI_LABEL_COFFEE;
             } else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') {
                 labelMap = KATEGORI_LABEL_POINT;
+            } else if (currentBrand === 'hambalanfc' && currentSub === 'bkl') {
+                labelMap = KATEGORI_LABEL_HAMBALAN;
             }
 
             if (!labelMap) {
@@ -1525,4 +1557,4 @@
         }
     </script>
 </body>
-</html>
+                        </html>
