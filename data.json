@@ -1,5 +1,4 @@
 [
-  // ==================== SAYBREAD ====================
   { "brand": "saybread", "sub": "dcf", "nama": "Apple Pie", "raw": "20119954", "konv": "20119955" },
   { "brand": "saybread", "sub": "dcf", "nama": "Boule Hokkaido (15)", "raw": "20082424", "konv": "20090984" },
   { "brand": "saybread", "sub": "dcf", "nama": "Cheese Pie", "raw": "20078877", "konv": "20090997" },
@@ -35,8 +34,6 @@
   { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Croissant (100/250s)", "raw": "20122435", "konv": null },
   { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Panjang (100/250s)", "raw": "20120852", "konv": null },
   { "brand": "saybread", "sub": "sarana", "nama": "Say Bread Plastik Roti Variety (100s)", "raw": "20120854", "konv": null },
-
-  // ==================== SAYBURGER ====================
   { "brand": "sayburger", "sub": "bkl", "nama": "Beef Patty Burger", "raw": "20113628", "konv": "20123299" },
   { "brand": "sayburger", "sub": "bkl", "nama": "Beef Rasher", "raw": null, "konv": "20123300" },
   { "brand": "sayburger", "sub": "bkl", "nama": "Blackpepper Sauce", "raw": null, "konv": "20123304" },
@@ -55,8 +52,6 @@
   { "brand": "sayburger", "sub": "sarana", "nama": "Mika Say Burger (50s)", "raw": "20135077", "konv": null },
   { "brand": "sayburger", "sub": "sarana", "nama": "Paper Bag Say Burger", "raw": "20123156", "konv": null },
   { "brand": "sayburger", "sub": "sarana", "nama": "Paper Wrap Say Burger (500s)", "raw": "20120870", "konv": null },
-
-  // ==================== YUMMYCHOICE ====================
   { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Bakso Goreng", "raw": "20137325", "konv": null },
   { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "Boneless Chicken (5 pcs)", "raw": "20122602", "konv": "20107657" },
   { "brand": "yummychoice", "sub": "bkl", "kategori": "snack_rte", "nama": "French Fries (10 pcs)", "raw": "20039823", "konv": "20115652" },
@@ -125,8 +120,6 @@
   { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Sendok Garpu (100s/50s)", "raw": "20119970", "konv": "20120590" },
   { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Tray Buah Potong (250s/1000s)", "raw": "20094407", "konv": null },
   { "brand": "yummychoice", "sub": "sarana", "kategori": "sarana", "nama": "Y/C Paper Bowl 16oz (50s/300s)", "raw": "20115550", "konv": "20128437" },
-
-  // ==================== YUMMYCOFFEE ====================
   { "brand": "yummycoffee", "sub": "bkl", "kategori": "jelly", "nama": "Brown Sugar Konyaku", "raw": "20134357", "konv": "20096725" },
   { "brand": "yummycoffee", "sub": "bkl", "kategori": "jelly", "nama": "Cendol", "raw": "20112042", "konv": "20124212" },
   { "brand": "yummycoffee", "sub": "bkl", "kategori": "jelly", "nama": "Tropical", "raw": "20134358", "konv": "20099122" },
@@ -160,8 +153,6 @@
   { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Ice Cube BKL", "raw": "20069642", "konv": "20069643" },
   { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Indomilk Kental Manis", "raw": "20094283", "konv": "20071970" },
   { "brand": "yummycoffee", "sub": "dcf", "kategori": "other", "nama": "Oatmilk 1L", "raw": "20122061", "konv": "20122239" },
-
-  // ==================== POINT COFFEE (ditambahkan di paling bawah) ====================
   { "brand": "point coffee", "sub": "bkl", "kategori": "coffee_bean", "nama": "Coffee Bean", "raw": "20080424", "konv": "20069027" },
   { "brand": "point coffee", "sub": "bkl", "kategori": "coffee_bean", "nama": "Decaf", "raw": "20128179", "konv": "20100830" },
   { "brand": "point coffee", "sub": "bkl", "kategori": "sauce", "nama": "Caramel Sauce", "raw": "20112042", "konv": "20069023" },
