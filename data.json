@@ -330,8 +330,8 @@
   {"brand":"hambalanfc","sub":"beras","nama":"Weni Asih","raw":"10009392","konv":""},
   {"brand":"hambalanfc","sub":"gula","nama":"FS Gula (25)","raw":"20103543","konv":""},
   {"brand":"hambalanfc","sub":"gula","nama":"GMP Gula (20)","raw":"20078207","konv":""},
-  {"brand":"hambalanfc","sub":"gula","nama":"Gulaku Hijau (20)","raw":"10021010","konv":""},
-  {"brand":"hambalanfc","sub":"gula","nama":"Gulaku Kuning (20)","raw":"10021008","konv":""},
+  {"brand":"hambalanfc","sub":"gula","nama":"Gulaku Hijau (24)","raw":"10021010","konv":""},
+  {"brand":"hambalanfc","sub":"gula","nama":"Gulaku Kuning (24)","raw":"10021008","konv":""},
   {"brand":"hambalanfc","sub":"gula","nama":"Gulavit (20)","raw":"20113564","konv":""},
   {"brand":"hambalanfc","sub":"gula","nama":"IDM Gula Hijau (25)","raw":"20042991","konv":""},
   {"brand":"hambalanfc","sub":"gula","nama":"IDM Gula Kuning (25)","raw":"20052296","konv":""},
@@ -475,5 +475,16 @@
   {"brand":"hambalanfc","sub":"beverage","nama":"You C1000 Lemon 500 mL","raw":"20019673","konv":""},
   {"brand":"hambalanfc","sub":"beverage","nama":"You C1000 Mango 140 mL","raw":"20115636","konv":""},
   {"brand":"hambalanfc","sub":"beverage","nama":"You C1000 Orange 140 mL","raw":"20009737","konv":""},
-  {"brand":"hambalanfc","sub":"beverage","nama":"You C1000 Orange 500 mL","raw":"20019674","konv":""}
+  {"brand":"hambalanfc","sub":"beverage","nama":"You C1000 Orange 500 mL","raw":"20019674","konv":""},
+
+{"brand":"hambalanfc","sub":"minyak","nama":"Sovia 1.8 L","raw":"20140913","konv":""},
+
+{"brand":"hambalanfc","sub":"minyak","nama":"Tropical 1.5","raw":"20140636","konv":""},
+
+{"brand":"hambalanfc","sub":"minyak","nama":"Grandco 1.8 L","raw":"20142102","konv":""},
+
+{"brand":"hambalanfc","sub":"gula","nama":"Indosugar (25)","raw":"20078902","konv":""},
+
+{"brand":"hambalanfc","sub":"gula","nama":"Kebon Agung (24)","raw":"20097781","konv":""}
+
 ]
