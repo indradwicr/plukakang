@@ -111,7 +111,6 @@
         }
         .icon-action-btn:active { transform: scale(0.92); }
 
-        /* ===== GREETING ===== */
         #greetingWrapper.hidden {
             display: none;
         }
@@ -190,7 +189,6 @@
             font-size: 1.4rem;
         }
 
-        /* ===== STICKY SEARCH ===== */
         .sticky-search-bar {
             position: sticky;
             top: 0;
@@ -335,7 +333,6 @@
             border-color: var(--primary-blue);
         }
 
-        /* ===== BRAND GRID ===== */
         .brand-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -376,7 +373,6 @@
             flex-shrink: 0;
         }
 
-        /* Warna Brand */
         .card-saybread { background: #fdf6f0; color: #8c5332; }
         .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
 
@@ -413,7 +409,6 @@
             margin-top: 2px;
         }
 
-        /* ===== DETAIL VIEW ===== */
         .pills-container {
             display: flex;
             gap: 8px;
@@ -587,7 +582,6 @@
         }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
 
-        /* ===== SHEET TABS ===== */
         .sheet-tabs {
             display: flex;
             gap: 6px;
@@ -641,7 +635,6 @@
         .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
-        /* ===== SECTION HEADER UNTUK GROUPING ===== */
         .section-header-group {
             padding: 10px 0 6px 0;
             font-size: 0.85rem;
@@ -739,7 +732,6 @@
             <button class="icon-action-btn" onclick="showPLUKatalog()"><i class="fas fa-layer-group"></i></button>
         </header>
 
-        <!-- ===== GREETING ===== -->
         <div id="greetingWrapper">
             <div class="greeting-container">
                 <div class="greeting-date-time">
@@ -754,7 +746,6 @@
             </div>
         </div>
 
-        <!-- ===== STICKY SEARCH ===== -->
         <div class="sticky-search-bar">
             <div class="search-field">
                 <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU...">
@@ -762,13 +753,11 @@
             </div>
         </div>
 
-        <!-- HOME VIEW -->
         <main id="homeView">
             <div class="section-bar">
                 <span class="section-title">Kategori Brand</span>
             </div>
             <section class="brand-grid">
-                <!-- Say Bread -->
                 <div class="brand-card" onclick="openBrandCategory('saybread')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-saybread"><i class="fas fa-bread-slice"></i></div>
@@ -780,7 +769,6 @@
                     </div>
                 </div>
 
-                <!-- Say Burger -->
                 <div class="brand-card" onclick="openBrandCategory('sayburger')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-sayburger"><i class="fas fa-hamburger"></i></div>
@@ -792,7 +780,6 @@
                     </div>
                 </div>
 
-                <!-- Yummy Choice (ORANYE) -->
                 <div class="brand-card" onclick="openBrandCategory('yummychoice')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummychoice"><i class="fas fa-utensils"></i></div>
@@ -804,7 +791,6 @@
                     </div>
                 </div>
 
-                <!-- Yummy Coffee Gold -->
                 <div class="brand-card" onclick="openBrandCategory('yummycoffee')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-yummycoffee"><i class="fas fa-mug-hot"></i></div>
@@ -816,7 +802,6 @@
                     </div>
                 </div>
 
-                <!-- Point Coffee (HIJAU GELAP) -->
                 <div class="brand-card" onclick="openBrandCategory('pointcoffee')">
                     <div class="brand-card-top">
                         <div class="brand-card-icon card-pointcoffee"><i class="fas fa-mug-saucer"></i></div>
@@ -830,7 +815,6 @@
             </section>
         </main>
 
-        <!-- DETAIL VIEW -->
         <section id="detailView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -874,7 +858,6 @@
             </div>
         </section>
 
-        <!-- ===== KATALOG VIEW - SHEETS STYLE ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -915,7 +898,6 @@
 
     </div>
 
-    <!-- BOTTOM NAV -->
     <nav class="bottom-dock">
         <button class="dock-tab active" id="dock-home" onclick="goHomeView()">
             <i class="fas fa-home dock-tab-icon"></i>
@@ -932,9 +914,6 @@
     </nav>
 
     <script>
-        // ================================================================
-        // KONFIGURASI
-        // ================================================================
         var BRAND_NAMES = {
             'saybread': 'Say Bread',
             'sayburger': 'Say Burger',
@@ -1004,9 +983,6 @@
             'sarana': 'Sarana'
         };
 
-        // ================================================================
-        // STATE
-        // ================================================================
         var DATABASE = [];
         var currentBrand = '';
         var currentSub = 'all';
@@ -1017,9 +993,6 @@
         var currentSheet = 'all';
         var katalogData = {};
 
-        // ================================================================
-        // FETCH DATA
-        // ================================================================
         fetch('data.json')
             .then(function(res) { return res.json(); })
             .then(function(data) {
@@ -1031,9 +1004,6 @@
                 console.error('Gagal mengambil data.json:', err);
             });
 
-        // ================================================================
-        // GREETING
-        // ================================================================
         var sapaanIcon = document.getElementById('sapaanIcon');
         var sapaanText = document.getElementById('sapaanText');
 
@@ -1094,9 +1064,6 @@
         setInterval(updateClock, 1000);
         toggleSapaanCountdown();
 
-        // ================================================================
-        // SEARCH
-        // ================================================================
         var searchInput = document.getElementById('searchInput');
         var searchClearBtn = document.getElementById('searchClearBtn');
 
@@ -1137,9 +1104,6 @@
             searchInput.select();
         }
 
-        // ================================================================
-        // DETAIL VIEW MODE
-        // ================================================================
         function setDetailView(mode) {
             detailViewMode = mode;
             document.getElementById('viewListBtn').classList.toggle('active', mode === 'list');
@@ -1149,9 +1113,6 @@
             renderDataGrid();
         }
 
-        // ================================================================
-        // KATALOG VIEW MODE
-        // ================================================================
         function setKatalogView(mode) {
             katalogViewMode = mode;
             document.getElementById('katalogListBtn').classList.toggle('active', mode === 'list');
@@ -1159,9 +1120,6 @@
             renderSheetData();
         }
 
-        // ================================================================
-        // BOTTOM NAV
-        // ================================================================
         function setDockTabActive(tabId) {
             var tabs = document.querySelectorAll('.dock-tab');
             for (var i = 0; i < tabs.length; i++) {
@@ -1171,9 +1129,6 @@
             if (activeTab) activeTab.classList.add('active');
         }
 
-        // ================================================================
-        // NAVIGATION
-        // ================================================================
         function goHomeView() {
             currentView = 'home';
             currentBrand = '';
@@ -1200,9 +1155,6 @@
             setDockTabActive('katalog');
         }
 
-        // ================================================================
-        // KATALOG - SHEETS STYLE
-        // ================================================================
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
             var counter = document.getElementById('katalogCounter');
@@ -1265,7 +1217,6 @@
                 return;
             }
 
-            // Cek apakah perlu grouping
             var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee');
             var kategoriSet = {};
             if (needGrouping) {
@@ -1278,13 +1229,11 @@
             var kategoriKeys = Object.keys(kategoriSet);
             var hasKategori = needGrouping && kategoriKeys.length > 0;
 
-            // Pilih label map yang sesuai
             var labelMap = {};
             if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
             else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
             else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
 
-            // ===== LIST VIEW =====
             if (katalogViewMode === 'list') {
                 document.getElementById('katalogListGrid').style.display = 'flex';
                 document.getElementById('katalogTableView').style.display = 'none';
@@ -1332,7 +1281,6 @@
                     });
                 }
             } else {
-                // ===== TABLE VIEW =====
                 document.getElementById('katalogListGrid').style.display = 'none';
                 document.getElementById('katalogTableView').style.display = 'block';
 
@@ -1377,9 +1325,6 @@
             }
         }
 
-        // ================================================================
-        // BRAND NAVIGATION
-        // ================================================================
         function openBrandCategory(key) {
             currentView = 'detail';
             currentBrand = key;
@@ -1394,9 +1339,6 @@
             renderDataGrid();
         }
 
-        // ================================================================
-        // SUB PILLS
-        // ================================================================
         function renderSubPills() {
             var container = document.getElementById('subPillsContainer');
             container.innerHTML = '';
@@ -1435,9 +1377,6 @@
             renderKategoriPills();
         }
 
-        // ================================================================
-        // KATEGORI PILLS
-        // ================================================================
         function renderKategoriPills() {
             var katContainer = document.getElementById('kategoriPillsContainer');
             katContainer.innerHTML = '';
@@ -1495,9 +1434,6 @@
             }
         }
 
-        // ================================================================
-        // RENDER DATA GRID
-        // ================================================================
         function renderDataGrid() {
             var query = searchInput.value.toLowerCase().trim();
             var gridContainer = document.getElementById('productGrid');
@@ -1565,9 +1501,6 @@
             }
         }
 
-        // ================================================================
-        // COPY PLU
-        // ================================================================
         function copyPLUCode(code, btnEl) {
             navigator.clipboard.writeText(code).then(function() {
                 var originalText = btnEl.innerText;
