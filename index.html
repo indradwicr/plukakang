@@ -629,6 +629,17 @@
         .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
+        /* ===== SECTION HEADER UNTUK GROUPING ===== */
+        .section-header-group {
+            padding: 10px 0 6px 0;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--card-border);
+            margin-bottom: 8px;
+            margin-top: 4px;
+        }
+
         .bottom-dock {
             position: fixed;
             bottom: 0;
@@ -832,7 +843,7 @@
             </div>
         </section>
 
-        <!-- ===== KATALOG VIEW - SHEETS STYLE ===== -->
+        <!-- ===== KATALOG VIEW - SHEETS STYLE DENGAN GROUPING ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -1152,7 +1163,7 @@
         }
 
         // ================================================================
-        // KATALOG - SHEETS STYLE
+        // KATALOG - SHEETS STYLE DENGAN GROUPING PER KATEGORI
         // ================================================================
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
@@ -1215,39 +1226,109 @@
                 return;
             }
 
+            // Cek apakah perlu grouping (hanya Yummy Choice & Yummy Coffee)
+            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee');
+            var kategoriSet = {};
+            if (needGrouping) {
+                items.forEach(function(item) {
+                    if (item.kategori && !kategoriSet[item.kategori]) {
+                        kategoriSet[item.kategori] = true;
+                    }
+                });
+            }
+            var kategoriKeys = Object.keys(kategoriSet);
+            var hasKategori = needGrouping && kategoriKeys.length > 0;
+
+            // ===== LIST VIEW =====
             if (katalogViewMode === 'list') {
                 document.getElementById('katalogListGrid').style.display = 'flex';
                 document.getElementById('katalogTableView').style.display = 'none';
-                
-                items.forEach(function(item) {
-                    var card = document.createElement('div');
-                    card.className = 'product-card';
-                    var badges = '';
-                    if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-                    if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
-                    card.innerHTML = 
-                        '<div class="product-info-col">' +
-                            '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                            '<div class="product-card-title">' + item.nama + '</div>' +
-                        '</div>' +
-                        '<div class="plu-badges-stack">' + badges + '</div>';
-                    listGrid.appendChild(card);
-                });
+
+                if (hasKategori) {
+                    kategoriKeys.forEach(function(kat) {
+                        var katItems = items.filter(function(item) { return item.kategori === kat; });
+                        if (katItems.length === 0) return;
+
+                        var headerDiv = document.createElement('div');
+                        headerDiv.className = 'section-bar';
+                        headerDiv.style.marginTop = '10px';
+                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + (KATEGORI_LABEL[kat] || kat) + '</span>';
+                        listGrid.appendChild(headerDiv);
+
+                        katItems.forEach(function(item) {
+                            var card = document.createElement('div');
+                            card.className = 'product-card';
+                            var badges = '';
+                            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+                            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+                            card.innerHTML =
+                                '<div class="product-info-col">' +
+                                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                                    '<div class="product-card-title">' + item.nama + '</div>' +
+                                '</div>' +
+                                '<div class="plu-badges-stack">' + badges + '</div>';
+                            listGrid.appendChild(card);
+                        });
+                    });
+                } else {
+                    items.forEach(function(item) {
+                        var card = document.createElement('div');
+                        card.className = 'product-card';
+                        var badges = '';
+                        if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+                        if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+                        card.innerHTML =
+                            '<div class="product-info-col">' +
+                                '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                                '<div class="product-card-title">' + item.nama + '</div>' +
+                            '</div>' +
+                            '<div class="plu-badges-stack">' + badges + '</div>';
+                        listGrid.appendChild(card);
+                    });
+                }
             } else {
+                // ===== TABLE VIEW =====
                 document.getElementById('katalogListGrid').style.display = 'none';
                 document.getElementById('katalogTableView').style.display = 'block';
-                
-                items.forEach(function(item, index) {
-                    var tr = document.createElement('tr');
-                    var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-                    var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
-                    tr.innerHTML = 
-                        '<td class="row-number">' + (index + 1) + '</td>' +
-                        '<td><div class="item-name">' + item.nama + '</div></td>' +
-                        '<td>' + rawHtml + '</td>' +
-                        '<td>' + konvHtml + '</td>';
-                    tableBody.appendChild(tr);
-                });
+
+                var rowCounter = 0;
+
+                if (hasKategori) {
+                    kategoriKeys.forEach(function(kat) {
+                        var katItems = items.filter(function(item) { return item.kategori === kat; });
+                        if (katItems.length === 0) return;
+
+                        var headerRow = document.createElement('tr');
+                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + (KATEGORI_LABEL[kat] || kat) + '</td>';
+                        tableBody.appendChild(headerRow);
+
+                        katItems.forEach(function(item) {
+                            rowCounter++;
+                            var tr = document.createElement('tr');
+                            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
+                            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+                            tr.innerHTML =
+                                '<td class="row-number">' + rowCounter + '</td>' +
+                                '<td><div class="item-name">' + item.nama + '</div></td>' +
+                                '<td>' + rawHtml + '</td>' +
+                                '<td>' + konvHtml + '</td>';
+                            tableBody.appendChild(tr);
+                        });
+                    });
+                } else {
+                    items.forEach(function(item) {
+                        rowCounter++;
+                        var tr = document.createElement('tr');
+                        var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
+                        var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+                        tr.innerHTML =
+                            '<td class="row-number">' + rowCounter + '</td>' +
+                            '<td><div class="item-name">' + item.nama + '</div></td>' +
+                            '<td>' + rawHtml + '</td>' +
+                            '<td>' + konvHtml + '</td>';
+                        tableBody.appendChild(tr);
+                    });
+                }
             }
         }
 
@@ -1416,7 +1497,7 @@
                 if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
                 if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
 
-                card.innerHTML = 
+                card.innerHTML =
                     '<div class="product-info-col">' +
                         '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
                         '<div class="product-card-title">' + item.nama + '</div>' +
@@ -1428,7 +1509,7 @@
                 var tr = document.createElement('tr');
                 var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
                 var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
-                tr.innerHTML = 
+                tr.innerHTML =
                     '<td class="row-number">' + (i + 1) + '</td>' +
                     '<td><div class="item-name">' + item.nama + '</div></td>' +
                     '<td>' + rawHtml + '</td>' +
