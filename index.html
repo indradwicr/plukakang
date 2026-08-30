@@ -525,22 +525,27 @@
             color: #15803d !important;
         }
 
+        /* ===== TABLE VIEW - SCROLL HORIZONTAL ===== */
         .table-wrapper {
             background: var(--card-white);
             border-radius: 16px;
             border: 1px solid var(--card-border);
             overflow: hidden;
             box-shadow: var(--card-shadow);
+            position: relative;
         }
         .table-scroll {
             overflow-x: auto;
+            overflow-y: auto;
+            max-height: 500px;
             -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         .table-scroll table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.78rem;
-            min-width: 340px;
+            min-width: 600px;
         }
         .table-scroll th {
             text-align: left;
@@ -552,12 +557,17 @@
             color: var(--text-light);
             border-bottom: 2px solid var(--card-border);
             background: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
         }
         .table-scroll td {
             padding: 8px 12px;
             border-bottom: 1px solid var(--card-border);
             color: var(--text-main);
             vertical-align: middle;
+            white-space: nowrap;
         }
         .table-scroll tr:last-child td { border-bottom: none; }
         .table-scroll tr:active { background: #f8fafc; }
@@ -566,15 +576,25 @@
             font-size: 0.65rem;
             padding: 3px 8px;
             margin: 1px 2px 1px 0;
+            white-space: nowrap;
         }
         .table-scroll .row-number {
             font-size: 0.65rem;
             color: var(--text-light);
             font-weight: 700;
-            width: 28px;
             text-align: center;
+            min-width: 32px;
         }
-        .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
+        .table-scroll .item-name {
+            font-weight: 700;
+            font-size: 0.8rem;
+            min-width: 120px;
+        }
+
+        /* Kolom dengan lebar tetap agar scroll horizontal */
+        .table-scroll .col-nama { min-width: 140px; }
+        .table-scroll .col-raw { min-width: 100px; }
+        .table-scroll .col-konv { min-width: 100px; }
 
         /* ===== SHEET TABS ===== */
         .sheet-tabs {
@@ -628,17 +648,6 @@
         .sheet-tab.yummy.active { border-top: 3px solid #059669; }
         .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
-
-        /* ===== SECTION HEADER UNTUK GROUPING ===== */
-        .section-header-group {
-            padding: 10px 0 6px 0;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--primary-blue);
-            border-bottom: 2px solid var(--card-border);
-            margin-bottom: 8px;
-            margin-top: 4px;
-        }
 
         .bottom-dock {
             position: fixed;
@@ -708,6 +717,15 @@
         }
 
         .hidden { display: none !important; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 400px) {
+            .table-scroll table { font-size: 0.72rem; min-width: 500px; }
+            .table-scroll .col-nama { min-width: 100px; }
+            .table-scroll .col-raw { min-width: 80px; }
+            .table-scroll .col-konv { min-width: 80px; }
+            .sheet-tab { padding: 6px 12px; font-size: 0.72rem; }
+        }
     </style>
 </head>
 <body>
@@ -831,10 +849,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width:28px;text-align:center;">#</th>
-                                <th>Nama Barang</th>
-                                <th>PLU RAW</th>
-                                <th>PLU KONV</th>
+                                <th class="row-number">#</th>
+                                <th class="col-nama">Nama Barang</th>
+                                <th class="col-raw">PLU RAW</th>
+                                <th class="col-konv">PLU KONV</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -843,7 +861,7 @@
             </div>
         </section>
 
-        <!-- ===== KATALOG VIEW - SHEETS STYLE DENGAN GROUPING ===== -->
+        <!-- ===== KATALOG VIEW - SHEETS STYLE ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -870,10 +888,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width:28px;text-align:center;">#</th>
-                                <th>Nama Barang</th>
-                                <th>PLU RAW</th>
-                                <th>PLU KONV</th>
+                                <th class="row-number">#</th>
+                                <th class="col-nama">Nama Barang</th>
+                                <th class="col-raw">PLU RAW</th>
+                                <th class="col-konv">PLU KONV</th>
                             </tr>
                         </thead>
                         <tbody id="katalogTableBody"></tbody>
@@ -1163,7 +1181,7 @@
         }
 
         // ================================================================
-        // KATALOG - SHEETS STYLE DENGAN GROUPING PER KATEGORI
+        // KATALOG - SHEETS STYLE
         // ================================================================
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
@@ -1226,7 +1244,6 @@
                 return;
             }
 
-            // Cek apakah perlu grouping (hanya Yummy Choice & Yummy Coffee)
             var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee');
             var kategoriSet = {};
             if (needGrouping) {
@@ -1309,9 +1326,9 @@
                             var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
                             tr.innerHTML =
                                 '<td class="row-number">' + rowCounter + '</td>' +
-                                '<td><div class="item-name">' + item.nama + '</div></td>' +
-                                '<td>' + rawHtml + '</td>' +
-                                '<td>' + konvHtml + '</td>';
+                                '<td class="col-nama"><div class="item-name">' + item.nama + '</div></td>' +
+                                '<td class="col-raw">' + rawHtml + '</td>' +
+                                '<td class="col-konv">' + konvHtml + '</td>';
                             tableBody.appendChild(tr);
                         });
                     });
@@ -1323,9 +1340,9 @@
                         var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
                         tr.innerHTML =
                             '<td class="row-number">' + rowCounter + '</td>' +
-                            '<td><div class="item-name">' + item.nama + '</div></td>' +
-                            '<td>' + rawHtml + '</td>' +
-                            '<td>' + konvHtml + '</td>';
+                            '<td class="col-nama"><div class="item-name">' + item.nama + '</div></td>' +
+                            '<td class="col-raw">' + rawHtml + '</td>' +
+                            '<td class="col-konv">' + konvHtml + '</td>';
                         tableBody.appendChild(tr);
                     });
                 }
@@ -1511,9 +1528,9 @@
                 var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
                 tr.innerHTML =
                     '<td class="row-number">' + (i + 1) + '</td>' +
-                    '<td><div class="item-name">' + item.nama + '</div></td>' +
-                    '<td>' + rawHtml + '</td>' +
-                    '<td>' + konvHtml + '</td>';
+                    '<td class="col-nama"><div class="item-name">' + item.nama + '</div></td>' +
+                    '<td class="col-raw">' + rawHtml + '</td>' +
+                    '<td class="col-konv">' + konvHtml + '</td>';
                 tableBody.appendChild(tr);
             }
         }
