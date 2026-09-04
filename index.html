@@ -391,6 +391,9 @@
         .card-hambalanfc { background: #dbeafe; color: #1e40af; }
         .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
 
+        .card-perishable { background: #ecfdf5; color: #065f46; }
+        .card-perishable .brand-card-icon { background: #059669; color: #fff; }
+
         .brand-card-bottom {
             flex: 1;
             display: flex;
@@ -637,6 +640,7 @@
         .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
         .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
         .sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
+        .sheet-tab.perishable.active { border-top: 3px solid #059669; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
         .section-header-group {
@@ -827,6 +831,17 @@
                         <p>Si Paling Hambalan</p>
                     </div>
                 </div>
+
+                <div class="brand-card" onclick="openBrandCategory('perishable')">
+                    <div class="brand-card-top">
+                        <div class="brand-card-icon card-perishable"><i class="fas fa-seedling"></i></div>
+                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
+                    </div>
+                    <div class="brand-card-bottom">
+                        <h3>Perishable</h3>
+                        <p>Buah & Sayur Segar</p>
+                    </div>
+                </div>
             </section>
         </main>
 
@@ -935,7 +950,8 @@
             'yummychoice': 'Yummy Choice',
             'yummycoffee': 'Yummy Coffee Gold',
             'pointcoffee': 'Point Coffee',
-            'hambalanfc': 'Hambalan FC'
+            'hambalanfc': 'Hambalan FC',
+            'perishable': 'Perishable'
         };
 
         var SUB_CONFIG = {
@@ -971,6 +987,10 @@
                 { id: 'gula', label: 'Gula' },
                 { id: 'mineral', label: 'Mineral' },
                 { id: 'beverage', label: 'Beverage' }
+            ],
+            'perishable': [
+                { id: 'all', label: 'Semua' },
+                { id: 'buah_sayur', label: 'Buah & Sayur' }
             ]
         };
 
@@ -1003,6 +1023,14 @@
             'sweetener': 'Sweetener',
             'topping_crunches': 'Topping Crunches',
             'rtd_coffee': 'RTD Coffee'
+        };
+
+        var KATEGORI_LABEL_PERISHABLE = {
+            'buah': 'Buah',
+            'sayur': 'Sayur',
+            'jus': 'Jus',
+            'bo': 'B/O',
+            'bp': 'B/P'
         };
 
         var DATABASE = [];
@@ -1180,7 +1208,7 @@
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
             var counter = document.getElementById('katalogCounter');
-            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc'];
+            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
             var totalItems = 0;
 
             brands.forEach(function(b) {
@@ -1226,6 +1254,7 @@
                 else if (b === 'yummycoffee') colorClass = 'coffee';
                 else if (b === 'pointcoffee') colorClass = 'pointcoffee';
                 else if (b === 'hambalanfc') colorClass = 'hambalanfc';
+                else if (b === 'perishable') colorClass = 'perishable';
 
                 var tab = document.createElement('div');
                 tab.className = 'sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '');
@@ -1259,7 +1288,7 @@
                 return;
             }
 
-            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc');
+            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
             var kategoriSet = {};
             if (needGrouping) {
                 items.forEach(function(item) {
@@ -1275,7 +1304,7 @@
             if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
             else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
             else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
-            // Hambalan FC tidak perlu labelMap karena sub sudah jadi kategori
+            else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
 
             if (katalogViewMode === 'list') {
                 document.getElementById('katalogListGrid').style.display = 'flex';
@@ -1483,6 +1512,8 @@
                 // Hambalan FC sudah pakai sub sebagai kategori, tidak perlu kategori pills
                 katContainer.style.display = 'none';
                 return;
+            } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') {
+                labelMap = KATEGORI_LABEL_PERISHABLE;
             }
 
             if (!labelMap) {
@@ -1630,4 +1661,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
