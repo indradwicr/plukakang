@@ -1117,10 +1117,22 @@
         var searchInput = document.getElementById('searchInput');
         var searchClearBtn = document.getElementById('searchClearBtn');
 
+        // FIX: Event listener untuk pencarian di SEMUA view
         searchInput.addEventListener('input', function() {
             searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
             
-            if (searchInput.value.trim() !== '' && currentBrand === '' && currentView !== 'katalog') {
+            // Update tampilan berdasarkan view
+            if (currentView === 'katalog') {
+                // Jika di katalog, render ulang sheet data dengan filter
+                renderSheetData();
+            } else if (currentView === 'detail' || currentView === 'home') {
+                // Jika di detail atau home, render data grid
+                renderDataGrid();
+            }
+            
+            // Update judul jika ada pencarian
+            var query = searchInput.value.trim();
+            if (query !== '' && currentView === 'home' && currentBrand === '') {
                 document.getElementById('homeView').style.display = 'none';
                 document.getElementById('detailView').style.display = 'block';
                 document.getElementById('katalogView').style.display = 'none';
@@ -1128,25 +1140,31 @@
                 document.getElementById('detailHeadingTitle').innerText = 'Hasil Pencarian';
                 document.getElementById('subPillsContainer').style.display = 'none';
                 document.getElementById('kategoriPillsContainer').style.display = 'none';
-            } else if (searchInput.value.trim() === '' && currentBrand === '' && currentView !== 'katalog') {
+                currentView = 'detail';
+            } else if (query === '' && currentView === 'detail' && currentBrand === '') {
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
                 document.getElementById('katalogView').style.display = 'none';
                 document.getElementById('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
             }
-            renderDataGrid();
         });
 
         function clearSearchInput() {
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
-            if (currentBrand === '' && currentView !== 'katalog') {
+            if (currentView === 'katalog') {
+                renderSheetData();
+            } else if (currentView === 'detail' && currentBrand === '') {
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
                 document.getElementById('katalogView').style.display = 'none';
                 document.getElementById('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+                renderDataGrid();
+            } else {
+                renderDataGrid();
             }
-            renderDataGrid();
         }
 
         function focusSearchInput() {
@@ -1276,17 +1294,35 @@
         function renderSheetData() {
             var listGrid = document.getElementById('katalogListGrid');
             var tableBody = document.getElementById('katalogTableBody');
+            
+            // FIX: Ambil data berdasarkan sheet, lalu filter dengan query
+            var query = searchInput.value.toLowerCase().trim();
             var items = katalogData[currentSheet] || [];
+            
+            // FIX: Filter berdasarkan query
+            if (query !== '') {
+                items = items.filter(function(item) {
+                    var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+                    return searchString.indexOf(query) !== -1;
+                });
+            }
 
             listGrid.innerHTML = '';
             tableBody.innerHTML = '';
 
             if (items.length === 0) {
-                var empty = '<div class="empty-search-state">Tidak ada PLU di brand ini.</div>';
+                var empty = '<div class="empty-search-state">' + 
+                    (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + 
+                    '</div>';
                 listGrid.innerHTML = empty;
                 tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
+                // Update counter
+                document.getElementById('katalogCounter').textContent = '0 Item';
                 return;
             }
+
+            // Update counter
+            document.getElementById('katalogCounter').textContent = items.length + ' Item';
 
             var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
             var kategoriSet = {};
@@ -1332,7 +1368,7 @@
                         if (currentSheet === 'hambalanfc') {
                             label = kat.charAt(0).toUpperCase() + kat.slice(1);
                         }
-                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + '</span>';
+                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span>';
                         listGrid.appendChild(headerDiv);
 
                         katItems.forEach(function(item) {
@@ -1391,7 +1427,7 @@
                         if (currentSheet === 'hambalanfc') {
                             label = kat.charAt(0).toUpperCase() + kat.slice(1);
                         }
-                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + '</td>';
+                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td>';
                         tableBody.appendChild(headerRow);
 
                         katItems.forEach(function(item) {
