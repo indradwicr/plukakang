@@ -28,6 +28,7 @@
             --konv-text: #a16207;
             --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-code: 'JetBrains Mono', monospace;
+            --dark-green: #1b4d2e;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -653,6 +654,151 @@
             margin-top: 4px;
         }
 
+        /* ===== KALKULATOR STYLES ===== */
+        .kalkulator-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 0 0 16px 0;
+        }
+
+        .kalkulator-card {
+            background: var(--card-white);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .kalkulator-card .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .input-row label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .input-row input {
+            background: #fef08a;
+            border: 1.5px solid #fde047;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            width: 110px;
+            text-align: right;
+            outline: none;
+            font-family: var(--font-main);
+        }
+        .input-row input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.15);
+        }
+
+        .hasil-box {
+            background: var(--bg-app);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 6px;
+        }
+        .hasil-box .input-row {
+            margin-bottom: 6px;
+        }
+        .hasil-box .input-row:last-child {
+            margin-bottom: 0;
+        }
+        .hasil-box .hasil-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .hasil-box .hasil-value {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+        .hasil-box .hasil-value.primary {
+            color: var(--primary-blue);
+            font-size: 18px;
+        }
+
+        .tabel-wadah-container {
+            max-height: 380px;
+            overflow-y: auto;
+            margin-top: 4px;
+        }
+        .tabel-wadah-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tabel-wadah-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .tabel-wadah-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .tabel-wadah-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        }
+        .tabel-wadah-container th {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 8px 6px;
+            text-align: left;
+            border-bottom: 1.5px solid var(--card-border);
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 2;
+        }
+        .tabel-wadah-container td {
+            padding: 7px 6px;
+            font-size: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .tabel-wadah-container th:nth-child(2),
+        .tabel-wadah-container th:nth-child(3),
+        .tabel-wadah-container td:nth-child(2),
+        .tabel-wadah-container td:nth-child(3) {
+            text-align: center;
+        }
+        .tabel-wadah-container th:last-child,
+        .tabel-wadah-container td:last-child {
+            text-align: right;
+        }
+        .tabel-wadah-container .bold {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .tabel-wadah-container .hasil-gramasi {
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .seal-tip {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
         .bottom-dock {
             position: fixed;
             bottom: 0;
@@ -721,6 +867,22 @@
         }
 
         .hidden { display: none !important; }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .input-row input {
+                width: 90px;
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+            .tabel-wadah-container {
+                max-height: 280px;
+            }
+            .tabel-wadah-container td {
+                font-size: 11px;
+                padding: 5px 4px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -740,6 +902,7 @@
             <button class="icon-action-btn" onclick="showPLUKatalog()"><i class="fas fa-layer-group"></i></button>
         </header>
 
+        <!-- GREETING -->
         <div id="greetingWrapper">
             <div class="greeting-container">
                 <div class="greeting-date-time">
@@ -754,6 +917,7 @@
             </div>
         </div>
 
+        <!-- SEARCH BAR -->
         <div class="sticky-search-bar">
             <div class="search-field">
                 <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU...">
@@ -761,6 +925,7 @@
             </div>
         </div>
 
+        <!-- ===== HOME VIEW ===== -->
         <main id="homeView">
             <div class="section-bar">
                 <span class="section-title">Kategori Brand</span>
@@ -845,6 +1010,7 @@
             </section>
         </main>
 
+        <!-- ===== DETAIL VIEW ===== -->
         <section id="detailView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -888,6 +1054,7 @@
             </div>
         </section>
 
+        <!-- ===== KATALOG VIEW ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
@@ -926,24 +1093,300 @@
             </div>
         </section>
 
+        <!-- ===== KALKULATOR VIEW ===== -->
+        <section id="kalkulatorView" style="display: none;">
+            <div class="section-bar">
+                <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
+            </div>
+
+            <div class="kalkulator-grid">
+
+                <!-- KARTU 1: INPUT GRAMASI -->
+                <div class="kalkulator-card">
+                    <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
+                    <div class="input-row" style="margin-bottom:0;">
+                        <label for="timbanganGramasi">Berat Timbangan (gr)</label>
+                        <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()">
+                    </div>
+                </div>
+
+                <!-- KARTU 2: DAFTAR WADAH -->
+                <div class="kalkulator-card">
+                    <div class="card-title" style="justify-content: space-between; margin-bottom: 8px;">
+                        <span><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</span>
+                    </div>
+
+                    <div class="tabel-wadah-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>WADAH</th>
+                                    <th>TARE</th>
+                                    <th>MJ</th>
+                                    <th>BERSIH</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelGramasi"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- KARTU 3: SO BIANG KOPI -->
+                <div class="kalkulator-card">
+                    <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
+                    <div class="input-row">
+                        <label for="biangTimbangan">Total Timbangan</label>
+                        <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()">
+                    </div>
+                    <div class="input-row">
+                        <label for="biangBotol">Berat Botol Kosong</label>
+                        <input type="number" id="biangBotol" value="680" oninput="hitungBiang()">
+                    </div>
+
+                    <div class="hasil-box">
+                        <div class="input-row">
+                            <span class="hasil-label">Hasil Netto</span>
+                            <span class="hasil-value" id="resNetto">267</span>
+                        </div>
+                        <div class="input-row">
+                            <span class="hasil-label">Konversi Biji Kopi</span>
+                            <span class="hasil-value" id="resKopi">80</span>
+                        </div>
+                        <div class="input-row" style="margin-bottom:0;">
+                            <span class="hasil-label">Konversi Air Mineral</span>
+                            <span class="hasil-value" id="resAir">187</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KARTU 4: PLASTIK SEAL -->
+                <div class="kalkulator-card">
+                    <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
+                    
+                    <div class="input-row">
+                        <div>
+                            <label for="inputTebalSeal">Tebal Sisa Roll (mm)</label>
+                            <div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div>
+                        </div>
+                        <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()">
+                    </div>
+
+                    <div class="hasil-box">
+                        <div class="input-row" style="margin-bottom:0;">
+                            <span class="hasil-label">Estimasi Jumlah Cup</span>
+                            <span class="hasil-value primary" id="resSealPcs">547</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-dock">
-        <button class="dock-tab active" id="dock-home" onclick="goHomeView()">
+        <button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
             <i class="fas fa-home dock-tab-icon"></i>
             <span>Home</span>
         </button>
-        <button class="dock-tab" id="dock-search" onclick="focusSearchInput()">
-            <i class="fas fa-search dock-tab-icon"></i>
-            <span>Cari</span>
-        </button>
-        <button class="dock-tab" id="dock-katalog" onclick="showPLUKatalog()">
+        <button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
             <i class="fas fa-layer-group dock-tab-icon"></i>
             <span>Katalog</span>
+        </button>
+        <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
+            <i class="fas fa-calculator dock-tab-icon"></i>
+            <span>Kalkulator</span>
         </button>
     </nav>
 
     <script>
+        // ================================================================
+        // DATA DEFAULT KALKULATOR
+        // ================================================================
+        var DEFAULT_WADAH = [
+            { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
+            { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
+            { nama: "Botol Kaca", tare: 418, mj: 0.74 },
+            { nama: "Botol Palm Sugar 1,3 kg", tare: 77, mj: 1 },
+            { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
+            { nama: "Botol Sauce", tare: 122, mj: 0.80 },
+            { nama: "Botol Sirup Bulat", tare: 83, mj: 0.80 },
+            { nama: "Botol Sirup Kotak", tare: 78, mj: 0.80 },
+            { nama: "Botol Squeeze", tare: 40, mj: 1 },
+            { nama: "Box Powder", tare: 62, mj: 1 },
+            { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
+            { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
+            { nama: "Ice Bulk 8 L", tare: 420, mj: 1 },
+            { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
+            { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
+            { nama: "Madu Uray", tare: 26.6, mj: 1 },
+            { nama: "Oreo / Pcs", tare: 0, mj: 1 },
+            { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
+            { nama: "Toples Coffee Jelly", tare: 70, mj: 1 },
+            { nama: "Toples Crumb", tare: 650, mj: 1 },
+            { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
+            { nama: "Toples Tropical Jelly", tare: 65, mj: 1 },
+            { nama: "Whip Cream", tare: 51, mj: 0.97 },
+            { nama: "Yakult / Pcs", tare: 0, mj: 65 }
+        ];
+
+        var DEFAULT_SEAL = {
+            1: 54, 2: 108, 3: 163, 4: 217, 5: 271,
+            6: 326, 7: 381, 8: 437, 9: 492, 10: 547,
+            11: 603, 12: 659, 13: 715, 14: 771, 15: 827,
+            16: 884, 17: 942, 18: 999, 19: 1057, 20: 1114,
+            21: 1172, 22: 1230, 23: 1289, 24: 1347, 25: 1405,
+            26: 1465, 27: 1524, 28: 1584, 29: 1643, 30: 1703,
+            31: 1763, 32: 1823, 33: 1883, 34: 1943, 35: 2003
+        };
+
+        // ================================================================
+        // LOAD & SAVE DATA
+        // ================================================================
+        function loadWadah() {
+            var saved = localStorage.getItem('plukakang_wadah');
+            if (saved) {
+                try { return JSON.parse(saved); }
+                catch(e) { return DEFAULT_WADAH; }
+            }
+            return DEFAULT_WADAH;
+        }
+
+        function saveWadah(data) {
+            localStorage.setItem('plukakang_wadah', JSON.stringify(data));
+        }
+
+        function loadSeal() {
+            var saved = localStorage.getItem('plukakang_seal');
+            if (saved) {
+                try { return JSON.parse(saved); }
+                catch(e) { return DEFAULT_SEAL; }
+            }
+            return DEFAULT_SEAL;
+        }
+
+        var dataWadah = loadWadah();
+        var dataSeal = loadSeal();
+
+        // ================================================================
+        // KALKULATOR FUNGSI
+        // ================================================================
+        function hitungGramasi() {
+            var input = parseFloat(document.getElementById('timbanganGramasi').value) || 0;
+            var tbody = document.getElementById('tabelGramasi');
+            tbody.innerHTML = '';
+
+            dataWadah.forEach(function(item) {
+                var hasil = item.nama.includes("Yakult") 
+                    ? Math.round(input * item.mj) 
+                    : Math.round((input - item.tare) * item.mj);
+
+                var displayMj = (item.mj % 1 === 0) ? item.mj.toString() : item.mj.toString().replace('.', ',');
+
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="bold">${item.nama}</td>
+                    <td>${item.tare === 0 ? '-' : item.tare}</td>
+                    <td>${displayMj}</td>
+                    <td class="hasil-gramasi">${hasil}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function hitungBiang() {
+            var timbangan = parseFloat(document.getElementById('biangTimbangan').value) || 0;
+            var botol = parseFloat(document.getElementById('biangBotol').value) || 0;
+            var netto = Math.max(0, timbangan - botol);
+            var kopi = Math.round(netto * 0.3);
+            document.getElementById('resNetto').innerText = netto;
+            document.getElementById('resKopi').innerText = kopi;
+            document.getElementById('resAir').innerText = netto - kopi;
+        }
+
+        function hitungSeal() {
+            var inputSeal = parseInt(document.getElementById('inputTebalSeal').value);
+            var resEl = document.getElementById('resSealPcs');
+            
+            if (!inputSeal || inputSeal < 1) {
+                resEl.innerText = "0";
+                resEl.style.fontSize = "18px";
+                resEl.style.color = "var(--primary-blue)";
+            } else if (inputSeal > 35) {
+                resEl.innerText = "Maks 35 mm";
+                resEl.style.fontSize = "14px";
+                resEl.style.color = "var(--danger)";
+            } else {
+                resEl.innerText = dataSeal[inputSeal] || 0;
+                resEl.style.fontSize = "18px";
+                resEl.style.color = "var(--primary-blue)";
+            }
+        }
+
+        // ================================================================
+        // NAVIGASI
+        // ================================================================
+        var currentView = 'home';
+        var currentBrand = '';
+        var currentSub = 'all';
+        var currentKategori = 'all';
+        var detailViewMode = 'list';
+        var katalogViewMode = 'list';
+        var currentSheet = 'all';
+        var katalogData = {};
+
+        function switchTab(tab) {
+            // Sembunyikan semua view
+            document.getElementById('homeView').style.display = 'none';
+            document.getElementById('detailView').style.display = 'none';
+            document.getElementById('katalogView').style.display = 'none';
+            document.getElementById('kalkulatorView').style.display = 'none';
+            document.getElementById('greetingWrapper').classList.add('hidden');
+
+            // Tampilkan view sesuai tab
+            if (tab === 'home') {
+                document.getElementById('homeView').style.display = 'block';
+                document.getElementById('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+            } else if (tab === 'katalog') {
+                document.getElementById('katalogView').style.display = 'block';
+                currentView = 'katalog';
+                renderKatalog();
+            } else if (tab === 'kalkulator') {
+                document.getElementById('kalkulatorView').style.display = 'block';
+                currentView = 'kalkulator';
+                hitungGramasi();
+                hitungBiang();
+                hitungSeal();
+            }
+
+            // Update active tab
+            var tabs = document.querySelectorAll('.dock-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            var activeTab = document.getElementById('dock-' + tab);
+            if (activeTab) activeTab.classList.add('active');
+
+            // Reset search jika bukan di home/katalog
+            if (tab !== 'katalog' && tab !== 'home') {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('searchClearBtn').style.display = 'none';
+            }
+        }
+
+        function goHomeView() {
+            switchTab('home');
+        }
+
+        function showPLUKatalog() {
+            switchTab('katalog');
+        }
+
+        // ================================================================
+        // BRAND & KATALOG FUNGSI (existing)
+        // ================================================================
         var BRAND_NAMES = {
             'saybread': 'Say Bread',
             'sayburger': 'Say Burger',
@@ -1034,15 +1477,10 @@
         };
 
         var DATABASE = [];
-        var currentBrand = '';
-        var currentSub = 'all';
-        var currentKategori = 'all';
-        var detailViewMode = 'list';
-        var katalogViewMode = 'list';
-        var currentView = 'home';
-        var currentSheet = 'all';
-        var katalogData = {};
 
+        // ================================================================
+        // LOAD DATA JSON
+        // ================================================================
         fetch('data.json')
             .then(function(res) { return res.json(); })
             .then(function(data) {
@@ -1054,6 +1492,9 @@
                 console.error('Gagal mengambil data.json:', err);
             });
 
+        // ================================================================
+        // GREETING
+        // ================================================================
         var sapaanIcon = document.getElementById('sapaanIcon');
         var sapaanText = document.getElementById('sapaanText');
 
@@ -1114,28 +1555,27 @@
         setInterval(updateClock, 1000);
         toggleSapaanCountdown();
 
+        // ================================================================
+        // SEARCH
+        // ================================================================
         var searchInput = document.getElementById('searchInput');
         var searchClearBtn = document.getElementById('searchClearBtn');
 
-        // FIX: Event listener untuk pencarian di SEMUA view
         searchInput.addEventListener('input', function() {
             searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
             
-            // Update tampilan berdasarkan view
             if (currentView === 'katalog') {
-                // Jika di katalog, render ulang sheet data dengan filter
                 renderSheetData();
             } else if (currentView === 'detail' || currentView === 'home') {
-                // Jika di detail atau home, render data grid
                 renderDataGrid();
             }
             
-            // Update judul jika ada pencarian
             var query = searchInput.value.trim();
             if (query !== '' && currentView === 'home' && currentBrand === '') {
                 document.getElementById('homeView').style.display = 'none';
                 document.getElementById('detailView').style.display = 'block';
                 document.getElementById('katalogView').style.display = 'none';
+                document.getElementById('kalkulatorView').style.display = 'none';
                 document.getElementById('greetingWrapper').classList.add('hidden');
                 document.getElementById('detailHeadingTitle').innerText = 'Hasil Pencarian';
                 document.getElementById('subPillsContainer').style.display = 'none';
@@ -1145,6 +1585,7 @@
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
                 document.getElementById('katalogView').style.display = 'none';
+                document.getElementById('kalkulatorView').style.display = 'none';
                 document.getElementById('greetingWrapper').classList.remove('hidden');
                 currentView = 'home';
             }
@@ -1159,6 +1600,7 @@
                 document.getElementById('homeView').style.display = 'block';
                 document.getElementById('detailView').style.display = 'none';
                 document.getElementById('katalogView').style.display = 'none';
+                document.getElementById('kalkulatorView').style.display = 'none';
                 document.getElementById('greetingWrapper').classList.remove('hidden');
                 currentView = 'home';
                 renderDataGrid();
@@ -1172,6 +1614,9 @@
             searchInput.select();
         }
 
+        // ================================================================
+        // DETAIL VIEW
+        // ================================================================
         function setDetailView(mode) {
             detailViewMode = mode;
             document.getElementById('viewListBtn').classList.toggle('active', mode === 'list');
@@ -1197,32 +1642,9 @@
             if (activeTab) activeTab.classList.add('active');
         }
 
-        function goHomeView() {
-            currentView = 'home';
-            currentBrand = '';
-            currentSub = 'all';
-            currentKategori = 'all';
-            document.getElementById('homeView').style.display = 'block';
-            document.getElementById('detailView').style.display = 'none';
-            document.getElementById('katalogView').style.display = 'none';
-            document.getElementById('greetingWrapper').classList.remove('hidden');
-            searchInput.value = '';
-            searchClearBtn.style.display = 'none';
-            renderDataGrid();
-            setDockTabActive('home');
-        }
-
-        function showPLUKatalog() {
-            currentView = 'katalog';
-            currentBrand = '';
-            document.getElementById('homeView').style.display = 'none';
-            document.getElementById('detailView').style.display = 'none';
-            document.getElementById('katalogView').style.display = 'block';
-            document.getElementById('greetingWrapper').classList.add('hidden');
-            renderKatalog();
-            setDockTabActive('katalog');
-        }
-
+        // ================================================================
+        // RENDER KATALOG
+        // ================================================================
         function renderKatalog() {
             var tabsContainer = document.getElementById('sheetTabs');
             var counter = document.getElementById('katalogCounter');
@@ -1231,7 +1653,6 @@
 
             brands.forEach(function(b) {
                 var items = DATABASE.filter(function(item) { return item.brand === b; });
-                // SORTIR berdasarkan nama
                 items.sort(function(a, b) {
                     var nameA = a.nama.toLowerCase();
                     var nameB = b.nama.toLowerCase();
@@ -1243,7 +1664,6 @@
                 totalItems += items.length;
             });
             
-            // Sortir semua data
             var allData = DATABASE.slice();
             allData.sort(function(a, b) {
                 var nameA = a.nama.toLowerCase();
@@ -1295,11 +1715,9 @@
             var listGrid = document.getElementById('katalogListGrid');
             var tableBody = document.getElementById('katalogTableBody');
             
-            // FIX: Ambil data berdasarkan sheet, lalu filter dengan query
             var query = searchInput.value.toLowerCase().trim();
             var items = katalogData[currentSheet] || [];
             
-            // FIX: Filter berdasarkan query
             if (query !== '') {
                 items = items.filter(function(item) {
                     var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
@@ -1316,12 +1734,10 @@
                     '</div>';
                 listGrid.innerHTML = empty;
                 tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
-                // Update counter
                 document.getElementById('katalogCounter').textContent = '0 Item';
                 return;
             }
 
-            // Update counter
             document.getElementById('katalogCounter').textContent = items.length + ' Item';
 
             var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
@@ -1351,7 +1767,6 @@
                         var katItems = items.filter(function(item) { return item.kategori === kat; });
                         if (katItems.length === 0) return;
 
-                        // Sortir dalam kategori
                         katItems.sort(function(a, b) {
                             var nameA = a.nama.toLowerCase();
                             var nameB = b.nama.toLowerCase();
@@ -1364,7 +1779,6 @@
                         headerDiv.className = 'section-bar';
                         headerDiv.style.marginTop = '10px';
                         var label = labelMap[kat] || kat;
-                        // Untuk Hambalan FC, label sudah dari sub
                         if (currentSheet === 'hambalanfc') {
                             label = kat.charAt(0).toUpperCase() + kat.slice(1);
                         }
@@ -1413,7 +1827,6 @@
                         var katItems = items.filter(function(item) { return item.kategori === kat; });
                         if (katItems.length === 0) return;
 
-                        // Sortir dalam kategori
                         katItems.sort(function(a, b) {
                             var nameA = a.nama.toLowerCase();
                             var nameB = b.nama.toLowerCase();
@@ -1460,6 +1873,9 @@
             }
         }
 
+        // ================================================================
+        // BRAND NAVIGATION
+        // ================================================================
         function openBrandCategory(key) {
             currentView = 'detail';
             currentBrand = key;
@@ -1468,10 +1884,18 @@
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('detailView').style.display = 'block';
             document.getElementById('katalogView').style.display = 'none';
+            document.getElementById('kalkulatorView').style.display = 'none';
             document.getElementById('greetingWrapper').classList.add('hidden');
             document.getElementById('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
             renderSubPills();
             renderDataGrid();
+            
+            // Update active tab
+            var tabs = document.querySelectorAll('.dock-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById('dock-home').classList.add('active');
         }
 
         function renderSubPills() {
@@ -1486,7 +1910,6 @@
 
             container.style.display = 'flex';
             
-            // Untuk Hambalan FC, tambahkan "Semua" di awal
             if (currentBrand === 'hambalanfc') {
                 var allPill = document.createElement('button');
                 allPill.className = 'pill-button';
@@ -1545,7 +1968,6 @@
             } else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') {
                 labelMap = KATEGORI_LABEL_POINT;
             } else if (currentBrand === 'hambalanfc') {
-                // Hambalan FC sudah pakai sub sebagai kategori, tidak perlu kategori pills
                 katContainer.style.display = 'none';
                 return;
             } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') {
@@ -1578,7 +2000,6 @@
             for (var i = 0; i < keys.length; i++) {
                 var key = keys[i];
                 
-                // SKIP 'sarana' untuk Point Coffee karena sudah ada di sub kategori
                 if (currentBrand === 'pointcoffee' && key === 'sarana') {
                     continue;
                 }
@@ -1602,6 +2023,9 @@
             }
         }
 
+        // ================================================================
+        // RENDER DATA GRID
+        // ================================================================
         function renderDataGrid() {
             var query = searchInput.value.toLowerCase().trim();
             var gridContainer = document.getElementById('productGrid');
@@ -1630,7 +2054,6 @@
                 }
             }
 
-            // SORTIR berdasarkan nama
             filtered.sort(function(a, b) {
                 var nameA = a.nama.toLowerCase();
                 var nameB = b.nama.toLowerCase();
@@ -1678,6 +2101,9 @@
             }
         }
 
+        // ================================================================
+        // COPY PLU
+        // ================================================================
         function copyPLUCode(code, btnEl) {
             navigator.clipboard.writeText(code).then(function() {
                 var originalText = btnEl.innerText;
@@ -1695,6 +2121,14 @@
                 }, 1000);
             });
         }
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        // Hitung kalkulator saat pertama kali load
+        hitungGramasi();
+        hitungBiang();
+        hitungSeal();
     </script>
 </body>
-</html>
+    </html>
