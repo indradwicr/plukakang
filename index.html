@@ -323,20 +323,23 @@ body {
 .empty-search-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; background: var(--card-white); border-radius: 20px; border: 1px dashed var(--card-border); }
 .hidden { display: none !important; }
 
-/* ===== ALPHABET INDEX SIDEBAR ===== */
+/* ===== ALPHABET INDEX SIDEBAR (PERBAIKAN POSISI REVISI 2) ===== */
 .alphabet-nav {
-  position: fixed; right: 6px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  z-index: 90; background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(8px);
-  padding: 6px 3px; border-radius: 16px; border: 1px solid var(--card-border);
+  position: fixed; right: 6px;
+  top: 190px;
+  bottom: 80px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-between;
+  z-index: 90; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
+  padding: 4px 2px; border-radius: 16px; border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow); touch-action: none; display: none;
 }
 .alpha-item {
-  font-size: 0.62rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
-  width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
+  width: 15px; height: 15px; display: flex; align-items: center; justify-content: center;
   border-radius: 50%; user-select: none; transition: all 0.15s ease;
 }
-.alpha-item:active, .alpha-item.active { background: var(--primary-blue); color: #fff; font-size: 0.7rem; }
+.alpha-item:active, .alpha-item.active { background: var(--primary-blue); color: #fff; font-weight: 800; transform: scale(1.1); }
 
 .alpha-bubble {
   position: fixed; right: 48px; top: 50%; transform: translateY(-50%);
@@ -1354,13 +1357,14 @@ function toggleSapaanCountdown() {
 
 /* ===== LOGIC FITUR ALPHABET INDEX ===== */
 var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+var isManualTouch = false;
 
 function renderAlphabetNav() {
   var nav = $('alphabetNav');
   if (!nav) return;
   var html = '';
   ALPHABET.forEach(function(letter) {
-    html += '<div class="alpha-item" data-letter="' + letter + '">' + letter + '</div>';
+    html += '<div class="alpha-item" data-letter="' + letter + '" id="alpha-' + letter + '">' + letter + '</div>';
   });
   nav.innerHTML = html;
 }
@@ -1375,7 +1379,18 @@ function toggleAlphabetNav() {
   }
 }
 
+function setActiveLetter(letter) {
+  var items = document.querySelectorAll('.alpha-item');
+  for (var i = 0; i < items.length; i++) {
+    items[i].classList.remove('active');
+  }
+  var activeEl = $('alpha-' + letter);
+  if (activeEl) activeEl.classList.add('active');
+}
+
 function scrollToLetter(letter) {
+  setActiveLetter(letter);
+  
   var bubble = $('alphaBubble');
   if (bubble) {
     bubble.innerText = letter;
@@ -1396,12 +1411,35 @@ function scrollToLetter(letter) {
   }
 }
 
+function updateActiveLetterOnScroll() {
+  if (isManualTouch) return;
+  
+  var cards = document.querySelectorAll('.product-card-title, .item-name');
+  var currentFirstLetter = '';
+  
+  for (var i = 0; i < cards.length; i++) {
+    var rect = cards[i].getBoundingClientRect();
+    if (rect.top >= 100 && rect.top <= window.innerHeight / 2) {
+      var text = cards[i].innerText.trim().toUpperCase();
+      if (text.length > 0) {
+        currentFirstLetter = text.charAt(0);
+        break;
+      }
+    }
+  }
+  
+  if (currentFirstLetter && ALPHABET.indexOf(currentFirstLetter) !== -1) {
+    setActiveLetter(currentFirstLetter);
+  }
+}
+
 function initAlphabetNavEvents() {
   var nav = $('alphabetNav');
   if (!nav) return;
 
   function handleTouch(e) {
     e.preventDefault();
+    isManualTouch = true;
     var touch = e.touches ? e.touches[0] : e;
     var target = document.elementFromPoint(touch.clientX, touch.clientY);
     if (target && target.classList.contains('alpha-item')) {
@@ -1417,7 +1455,13 @@ function initAlphabetNavEvents() {
     }
   });
 
+  nav.addEventListener('touchstart', function() { isManualTouch = true; });
   nav.addEventListener('touchmove', handleTouch, { passive: false });
+  nav.addEventListener('touchend', function() {
+    setTimeout(function() { isManualTouch = false; }, 500);
+  });
+
+  window.addEventListener('scroll', debounce(updateActiveLetterOnScroll, 50));
 }
 
 /* INIT */
