@@ -289,6 +289,26 @@
         .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
         .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
 
+        /* LETTER DIVIDER */
+        .letter-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px 0 12px 0;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .letter-divider::before,
+        .letter-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--card-border), transparent);
+        }
+
         /* GOOGLE SHEETS KATALOG STYLES */
         .sheets-container {
             background: var(--card-white);
@@ -440,7 +460,7 @@
         .tabel-wadah-container .hasil-gramasi { font-weight: 700; color: var(--primary-blue); }
         .seal-tip { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-        /* ===== SIDEBAR PLU & ALPHABET INDEXER ===== */
+        /* ===== SIDEBAR PLU & ALPHABET INDEXER (IMPROVED) ===== */
         .plu-sidebar {
             background: #f0f4ff; border-radius: 20px; padding: 16px;
             border: 1px solid var(--card-border); margin-bottom: 16px;
@@ -473,48 +493,70 @@
         .alphabet-nav {
             position: absolute; right: 2px; top: 50%;
             transform: translateY(-50%); display: flex; flex-direction: column;
-            align-items: center; gap: 1px; z-index: 10; touch-action: none;
-            padding: 4px 2px; border-radius: 16px; background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(4px);
+            align-items: center; gap: 2px; z-index: 10; touch-action: none;
+            padding: 6px 2px; border-radius: 18px; background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0, 115, 234, 0.15);
         }
         .alphabet-char {
-            font-size: 8px; font-weight: 800; color: var(--text-muted);
-            cursor: pointer; width: 12px; height: 11px;
+            font-size: 9px; font-weight: 900; color: var(--text-muted);
+            cursor: pointer; width: 14px; height: 12px;
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.1s ease, color 0.1s ease;
+            transition: all 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 3px;
+            position: relative;
         }
-        .alphabet-char:nth-child(4n+1) { transform: translateX(0px); }
-        .alphabet-char:nth-child(4n+2) { transform: translateX(-2px); }
-        .alphabet-char:nth-child(4n+3) { transform: translateX(-4px); }
-        .alphabet-char:nth-child(4n+4) { transform: translateX(-2px); }
+        .alphabet-char:hover {
+            background: rgba(0, 115, 234, 0.08);
+            transform: scale(1.1);
+        }
         .alphabet-char.active {
-            color: var(--primary-blue); font-weight: 900;
-            transform: scale(1.4) translateX(-5px) !important;
+            color: #ffffff;
+            background: var(--primary-blue);
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(0, 115, 234, 0.4);
+            transform: scale(1.2);
         }
         .alphabet-bubble {
-            position: absolute; right: 35px; top: 50%;
-            transform: translateY(-50%) scale(0); width: 40px; height: 40px;
+            position: absolute; right: 38px; top: 50%;
+            transform: translateY(-50%) scale(0); width: 45px; height: 45px;
             background: var(--primary-blue); color: #ffffff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; font-weight: 800;
-            box-shadow: 0 4px 14px rgba(0, 115, 234, 0.4);
+            font-size: 1.2rem; font-weight: 900;
+            box-shadow: 0 6px 20px rgba(0, 115, 234, 0.35);
             z-index: 20; pointer-events: none;
-            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .alphabet-bubble.show { transform: translateY(-50%) scale(1); }
 
         .plu-sidebar .sidebar-plu-list {
             height: 300px; overflow-y: auto;
             display: flex; flex-direction: column; gap: 4px;
-            contain: strict; padding-right: 18px;
+            contain: strict; padding-right: 20px;
         }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 3px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .plu-sidebar .letter-header {
+            font-size: 10px;
+            font-weight: 900;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 8px 0 6px 0;
+            padding: 0 10px;
+        }
+        
         .plu-sidebar .plu-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 8px 10px; background: #fff; border-radius: 10px;
             font-size: 12px; border: 1px solid transparent; gap: 8px;
+            animation: slideInLeft 0.2s ease-out;
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         .plu-sidebar .plu-item .plu-name {
             font-weight: 600; font-size: 12px; flex: 1; min-width: 0;
@@ -525,7 +567,7 @@
             font-family: var(--font-code); font-size: 10px; font-weight: 700;
             padding: 2px 7px; border-radius: 6px; cursor: pointer;
             white-space: nowrap; border: 1px solid transparent;
-            transition: transform 0.1s ease;
+            transition: all 0.12s ease;
         }
         .plu-sidebar .plu-item .plu-code:active { transform: scale(0.95); }
         .plu-sidebar .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
@@ -575,6 +617,8 @@
             .tabel-wadah-container { max-height: 250px; }
             .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
             .plu-sidebar .sidebar-plu-list { height: 240px; }
+            .alphabet-nav { gap: 1px; padding: 4px 1px; }
+            .alphabet-char { width: 12px; height: 10px; font-size: 7px; }
         }
     </style>
 </head>
@@ -823,6 +867,13 @@
     var katalogActiveSheet = 'all';
     var _renderCache = { key: '' };
 
+    /* ALPHABET CACHE */
+    var alphabetCache = {
+        katalog: [],
+        detail: [],
+        sidebar: []
+    };
+
     /* KALKULATOR DATA */
     var DEFAULT_WADAH = [
         { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
@@ -905,6 +956,209 @@
         _toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 1500);
     }
 
+    /* SMART ALPHABET GENERATOR */
+    function generateSmartAlphabet(items, getNameFn) {
+        var alphabet = new Set();
+        items.forEach(function(item) {
+            var name = getNameFn(item).trim();
+            if (name.length > 0) {
+                var firstChar = name.charAt(0).toUpperCase();
+                if (/[A-Z]/.test(firstChar)) {
+                    alphabet.add(firstChar);
+                }
+            }
+        });
+        var result = Array.from(alphabet).sort();
+        return result;
+    }
+
+    /* ALPHABET INDEXER FOR KATALOG */
+    function initAlphabetNavForKatalog() {
+        var nav = $('alphabetNav');
+        if (!nav || currentView !== 'katalog') return;
+        
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (katalogActiveSheet === 'all' || item.brand === katalogActiveSheet);
+            return matchBrand;
+        });
+        
+        var alphabet = generateSmartAlphabet(filtered, function(item) { return item.nama; });
+        alphabetCache.katalog = alphabet;
+        
+        nav.innerHTML = '';
+        alphabet.forEach(function(letter) {
+            var el = document.createElement('span');
+            el.className = 'alphabet-char';
+            el.dataset.letter = letter;
+            el.innerText = letter;
+            nav.appendChild(el);
+        });
+
+        attachAlphabetEvents(nav, $('sheetsTableBody'), 'katalog');
+    }
+
+    /* ALPHABET INDEXER FOR DETAIL VIEW */
+    function initAlphabetNavForDetail() {
+        var nav = $('alphabetNav');
+        if (nav) nav.remove();
+        
+        var container = $('productGrid');
+        if (!container) return;
+        
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+            var matchSub = (currentSub === 'all' || item.sub === currentSub);
+            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+            return matchBrand && matchSub && matchKat;
+        });
+        
+        var alphabet = generateSmartAlphabet(filtered, function(item) { return item.nama; });
+        alphabetCache.detail = alphabet;
+        
+        if (alphabet.length === 0) return;
+        
+        var parentContainer = document.createElement('div');
+        parentContainer.className = 'alphabet-indexer-container';
+        
+        var bubble = document.createElement('div');
+        bubble.className = 'alphabet-bubble';
+        bubble.id = 'detailAlphabetBubble';
+        bubble.innerText = alphabet[0];
+        parentContainer.appendChild(bubble);
+        
+        var nav2 = document.createElement('div');
+        nav2.className = 'alphabet-nav';
+        nav2.id = 'detailAlphabetNav';
+        
+        alphabet.forEach(function(letter) {
+            var el = document.createElement('span');
+            el.className = 'alphabet-char';
+            el.dataset.letter = letter;
+            el.innerText = letter;
+            nav2.appendChild(el);
+        });
+        
+        parentContainer.appendChild(nav2);
+        container.parentElement.insertBefore(parentContainer, container);
+        
+        attachAlphabetEvents(nav2, container, 'detail');
+    }
+
+    /* ALPHABET INDEXER FOR SIDEBAR PLU */
+    function initAlphabetNavForSidebar() {
+        var nav = $('alphabetNav');
+        if (!nav) return;
+        
+        var alphabet = generateSmartAlphabet(pointCoffeeData, function(item) { return item.nama; });
+        alphabetCache.sidebar = alphabet;
+        
+        nav.innerHTML = '';
+        alphabet.forEach(function(letter) {
+            var el = document.createElement('span');
+            el.className = 'alphabet-char';
+            el.dataset.letter = letter;
+            el.innerText = letter;
+            nav.appendChild(el);
+        });
+
+        attachAlphabetEvents(nav, $('sidebarPluList'), 'sidebar');
+    }
+
+    /* ATTACH ALPHABET EVENTS */
+    function attachAlphabetEvents(navEl, targetContainer, type) {
+        var bubble = type === 'katalog' 
+            ? document.querySelector('.alphabet-bubble')
+            : type === 'detail'
+            ? $('detailAlphabetBubble')
+            : $('alphabetBubble');
+        
+        function scrollToLetter(letter) {
+            if (!letter) return;
+            bubble.innerText = letter;
+            bubble.classList.add('show');
+            
+            var items = targetContainer.querySelectorAll(type === 'katalog' ? 'tr' : (type === 'sidebar' ? '.plu-item' : '.product-card'));
+            for (var i = 0; i < items.length; i++) {
+                var nameEl = null;
+                
+                if (type === 'katalog') {
+                    nameEl = items[i].querySelector('.item-name');
+                } else if (type === 'sidebar') {
+                    nameEl = items[i].querySelector('.plu-name');
+                } else {
+                    nameEl = items[i].querySelector('.product-card-title');
+                }
+                
+                if (nameEl) {
+                    var firstChar = nameEl.innerText.trim().charAt(0).toUpperCase();
+                    if (firstChar === letter) {
+                        items[i].scrollIntoView({ block: 'start', behavior: 'smooth' });
+                        break;
+                    }
+                }
+            }
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            var touch = e.touches ? e.touches[0] : e;
+            var target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('alphabet-char')) {
+                var letter = target.dataset.letter;
+                scrollToLetter(letter);
+                
+                navEl.querySelectorAll('.alphabet-char').forEach(function(c) { c.classList.remove('active'); });
+                target.classList.add('active');
+            }
+        }
+
+        navEl.addEventListener('touchstart', handleTouchMove, { passive: false });
+        navEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+        navEl.addEventListener('touchend', function() {
+            bubble.classList.remove('show');
+            navEl.querySelectorAll('.alphabet-char').forEach(function(c) { c.classList.remove('active'); });
+        });
+        
+        navEl.addEventListener('click', function(e) {
+            if (e.target.classList.contains('alphabet-char')) {
+                var letter = e.target.dataset.letter;
+                scrollToLetter(letter);
+                setTimeout(function() { bubble.classList.remove('show'); }, 500);
+            }
+        });
+        
+        // Real-time highlight saat scroll
+        targetContainer.addEventListener('scroll', debounce(function() {
+            var items = targetContainer.querySelectorAll(type === 'katalog' ? 'tr' : (type === 'sidebar' ? '.plu-item' : '.product-card'));
+            var firstVisibleLetter = null;
+            
+            for (var i = 0; i < items.length; i++) {
+                var rect = items[i].getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < targetContainer.clientHeight) {
+                    var nameEl = null;
+                    if (type === 'katalog') {
+                        nameEl = items[i].querySelector('.item-name');
+                    } else if (type === 'sidebar') {
+                        nameEl = items[i].querySelector('.plu-name');
+                    } else {
+                        nameEl = items[i].querySelector('.product-card-title');
+                    }
+                    
+                    if (nameEl) {
+                        firstVisibleLetter = nameEl.innerText.trim().charAt(0).toUpperCase();
+                        break;
+                    }
+                }
+            }
+            
+            if (firstVisibleLetter) {
+                navEl.querySelectorAll('.alphabet-char').forEach(function(c) { c.classList.remove('active'); });
+                var activeChar = navEl.querySelector('[data-letter="' + firstVisibleLetter + '"]');
+                if (activeChar) activeChar.classList.add('active');
+            }
+        }, 150));
+    }
+
     /* RENDER BRAND GRID HOME */
     function renderBrandGrid() {
         var html = '';
@@ -942,6 +1196,7 @@
             currentView = 'katalog';
             renderSheetsTabs();
             renderSheetsTable();
+            setTimeout(function() { initAlphabetNavForKatalog(); }, 100);
         } else if (tab === 'kalkulator') {
             $('kalkulatorView').style.display = 'block';
             $('globalSearchBar').style.display = 'none';
@@ -950,6 +1205,7 @@
             hitungBiang();
             hitungSeal();
             renderSidebarPlu($('sidebarSearchPlu').value || '');
+            setTimeout(function() { initAlphabetNavForSidebar(); }, 100);
         }
         var tabs = document.querySelectorAll('.dock-tab');
         for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
@@ -1005,67 +1261,7 @@
         }
     }
 
-    /* ALPHABET SCROLLER LOGIC */
-    var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    function initAlphabetNav() {
-        var nav = $('alphabetNav');
-        if (!nav) return;
-        var html = '';
-        ALPHABET.forEach(function(letter) {
-            html += '<span class="alphabet-char" data-letter="' + letter + '">' + letter + '</span>';
-        });
-        nav.innerHTML = html;
-
-        var container = $('sidebarPluList');
-        var bubble = $('alphabetBubble');
-
-        function scrollToLetter(letter) {
-            if (!letter) return;
-            bubble.innerText = letter;
-            bubble.classList.add('show');
-            var items = container.querySelectorAll('.plu-item');
-            for (var i = 0; i < items.length; i++) {
-                var nameEl = items[i].querySelector('.plu-name');
-                if (nameEl) {
-                    var firstChar = nameEl.innerText.trim().charAt(0).toUpperCase();
-                    if (firstChar === letter) {
-                        items[i].scrollIntoView({ block: 'start', behavior: 'smooth' });
-                        break;
-                    }
-                }
-            }
-        }
-
-        function handleTouchMove(e) {
-            e.preventDefault();
-            var touch = e.touches ? e.touches[0] : e;
-            var target = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (target && target.classList.contains('alphabet-char')) {
-                var letter = target.dataset.letter;
-                scrollToLetter(letter);
-                var chars = nav.querySelectorAll('.alphabet-char');
-                chars.forEach(function(c) { c.classList.remove('active'); });
-                target.classList.add('active');
-            }
-        }
-
-        nav.addEventListener('touchstart', handleTouchMove, { passive: false });
-        nav.addEventListener('touchmove', handleTouchMove, { passive: false });
-        nav.addEventListener('touchend', function() {
-            bubble.classList.remove('show');
-            var chars = nav.querySelectorAll('.alphabet-char');
-            chars.forEach(function(c) { c.classList.remove('active'); });
-        });
-        nav.addEventListener('click', function(e) {
-            if (e.target.classList.contains('alphabet-char')) {
-                var letter = e.target.dataset.letter;
-                scrollToLetter(letter);
-                setTimeout(function() { bubble.classList.remove('show'); }, 500);
-            }
-        });
-    }
-
-    /* SIDEBAR PLU POINT COFFEE */
+    /* SIDEBAR PLU POINT COFFEE WITH LETTER GROUPING */
     function renderSidebarPlu(filter) {
         var list = $('sidebarPluList');
         var count = $('pluCount');
@@ -1083,15 +1279,27 @@
             list.innerHTML = '<div class="plu-empty">' + (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + '</div>';
             return;
         }
-        var html = '';
+        
+        // Group by first letter
+        var grouped = {};
         items.forEach(function(item) {
-            var badges = '';
-            if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
-            if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
-            html += '<div class="plu-item">' +
-                '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
-                (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
-            '</div>';
+            var firstLetter = item.nama.trim().charAt(0).toUpperCase();
+            if (!grouped[firstLetter]) grouped[firstLetter] = [];
+            grouped[firstLetter].push(item);
+        });
+        
+        var html = '';
+        Object.keys(grouped).sort().forEach(function(letter) {
+            html += '<div class="letter-header">' + letter + '</div>';
+            grouped[letter].forEach(function(item) {
+                var badges = '';
+                if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
+                if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
+                html += '<div class="plu-item">' +
+                    '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
+                    (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
+                '</div>';
+            });
         });
         list.innerHTML = html;
     }
@@ -1135,6 +1343,7 @@
         renderSubPills();
         _renderCache.key = '';
         renderDataGrid();
+        setTimeout(function() { initAlphabetNavForDetail(); }, 100);
         
         var tabs = document.querySelectorAll('.dock-tab');
         for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
@@ -1188,6 +1397,7 @@
         });
     }
 
+    /* RENDER DATA GRID WITH LETTER DIVIDERS */
     function renderDataGrid() {
         var query = searchInput.value.toLowerCase().trim();
         var counterBadge = $('itemCounterBadge');
@@ -1210,18 +1420,30 @@
             _renderCache.key = cacheKey;
             return;
         }
-        var html = '';
+        
+        // Group by first letter
+        var grouped = {};
         filtered.forEach(function(item) {
-            var badgesHtml = '';
-            if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
-            if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
-            html += '<div class="product-card">' +
-                '<div class="product-info-col">' +
-                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
-                '</div>' +
-                '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
-            '</div>';
+            var firstLetter = item.nama.trim().charAt(0).toUpperCase();
+            if (!grouped[firstLetter]) grouped[firstLetter] = [];
+            grouped[firstLetter].push(item);
+        });
+        
+        var html = '';
+        Object.keys(grouped).sort().forEach(function(letter) {
+            html += '<div class="letter-divider">' + letter + '</div>';
+            grouped[letter].forEach(function(item) {
+                var badgesHtml = '';
+                if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
+                if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
+                html += '<div class="product-card">' +
+                    '<div class="product-info-col">' +
+                        '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                        '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
+                    '</div>' +
+                    '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
+                '</div>';
+            });
         });
         $('productGrid').innerHTML = html;
         _renderCache.key = cacheKey;
@@ -1256,6 +1478,7 @@
         var labelText = brandKey === 'all' ? 'Semua Brand' : (BRAND_NAMES[brandKey] || brandKey);
         $('sheetActiveBrandText').innerText = 'Sheet: ' + labelText;
         renderSheetsTable();
+        setTimeout(function() { initAlphabetNavForKatalog(); }, 100);
     }
 
     function renderSheetsTable() {
@@ -1278,18 +1501,31 @@
             return;
         }
 
+        // Group by first letter
+        var grouped = {};
+        filtered.forEach(function(item) {
+            var firstLetter = item.nama.trim().charAt(0).toUpperCase();
+            if (!grouped[firstLetter]) grouped[firstLetter] = [];
+            grouped[firstLetter].push(item);
+        });
+        
         var html = '';
-        filtered.forEach(function(item, i) {
-            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
-            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
+        var rowNum = 1;
+        Object.keys(grouped).sort().forEach(function(letter) {
+            html += '<tr><td colspan="5" style="padding:12px 12px 6px 12px; font-size:10px; font-weight:900; color:var(--primary-blue); text-transform:uppercase; letter-spacing:1px;">' + letter + '</td></tr>';
+            
+            grouped[letter].forEach(function(item) {
+                var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
+                var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
-            html += '<tr>' +
-                '<td class="row-number">' + (i + 1) + '</td>' +
-                '<td style="font-size:0.68rem; font-weight:800; color:var(--primary-blue); text-transform:uppercase;">' + (BRAND_NAMES[item.brand] || item.brand) + '</td>' +
-                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
-                '<td>' + rawHtml + '</td>' +
-                '<td>' + konvHtml + '</td>' +
-            '</tr>';
+                html += '<tr>' +
+                    '<td class="row-number">' + (rowNum++) + '</td>' +
+                    '<td style="font-size:0.68rem; font-weight:800; color:var(--primary-blue); text-transform:uppercase;">' + (BRAND_NAMES[item.brand] || item.brand) + '</td>' +
+                    '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
+                    '<td>' + rawHtml + '</td>' +
+                    '<td>' + konvHtml + '</td>' +
+                '</tr>';
+            });
         });
         tbody.innerHTML = html;
     }
@@ -1310,6 +1546,7 @@
             _renderCache.key = '';
             renderKategoriPills();
             renderDataGrid();
+            setTimeout(function() { initAlphabetNavForDetail(); }, 100);
             return;
         }
         var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
@@ -1319,6 +1556,7 @@
             currentKategori = katPill.dataset.katId;
             _renderCache.key = '';
             renderDataGrid();
+            setTimeout(function() { initAlphabetNavForDetail(); }, 100);
             return;
         }
         var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
@@ -1355,6 +1593,7 @@
     var handleSearch = debounce(function() {
         if (currentView === 'katalog') {
             renderSheetsTable();
+            setTimeout(function() { initAlphabetNavForKatalog(); }, 100);
         } else if (currentView === 'detail' || currentView === 'home') {
             var query = searchInput.value.trim();
             if (query !== '' && currentView === 'home' && currentBrand === '') {
@@ -1378,6 +1617,11 @@
             }
             _renderCache.key = '';
             renderDataGrid();
+            setTimeout(function() { 
+                if (currentView === 'detail' || currentBrand !== '') {
+                    initAlphabetNavForDetail();
+                }
+            }, 100);
         }
     }, 120);
 
@@ -1392,6 +1636,7 @@
         _renderCache.key = '';
         if (currentView === 'katalog') {
             renderSheetsTable();
+            setTimeout(function() { initAlphabetNavForKatalog(); }, 100);
         } else {
             if (currentView === 'detail' && currentBrand === '') {
                 $('homeView').style.display = 'block';
@@ -1402,11 +1647,17 @@
                 currentView = 'home';
             }
             renderDataGrid();
+            setTimeout(function() { 
+                if (currentView === 'detail' || currentBrand !== '') {
+                    initAlphabetNavForDetail();
+                }
+            }, 100);
         }
     }
 
     $('sidebarSearchPlu').addEventListener('input', debounce(function() {
         renderSidebarPlu($('sidebarSearchPlu').value);
+        setTimeout(function() { initAlphabetNavForSidebar(); }, 100);
     }, 100));
 
     /* GREETING & CLOCK */
@@ -1465,7 +1716,6 @@
         hitungGramasi();
         hitungBiang();
         hitungSeal();
-        initAlphabetNav();
         loadData();
     });
     </script>
