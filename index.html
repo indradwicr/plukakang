@@ -430,24 +430,31 @@
         /* ===== SIDEBAR PLU ===== */
         .plu-sidebar {
             background: #f0f4ff; border-radius: 20px; padding: 16px;
-            border: 1px solid var(--card-border); margin-top: 16px;
+            border: 1px solid var(--card-border); margin-bottom: 16px;
         }
         .plu-sidebar .sidebar-title {
             font-size: 13px; font-weight: 700; color: var(--dark-green);
             display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
         }
         .plu-sidebar .sidebar-title span {
-            font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: auto;
+            background: var(--primary-blue);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: auto;
         }
         .plu-sidebar .sidebar-search {
-            width: 100%; padding: 8px 12px; border-radius: 12px;
-            border: 1.5px solid var(--card-border); font-size: 13px;
+            width: 100%; padding: 10px 14px; border-radius: 12px;
+            border: 1.5px solid var(--card-border); font-size: 14px;
             font-family: inherit; outline: none; background: #fff; margin-bottom: 10px;
         }
         .plu-sidebar .sidebar-search:focus { border-color: var(--primary-blue); }
         .plu-sidebar .sidebar-plu-list {
-            max-height: 300px; overflow-y: auto;
+            height: 300px; overflow-y: auto;
             display: flex; flex-direction: column; gap: 4px;
+            contain: strict;
         }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
@@ -517,11 +524,17 @@
 
         .hidden { display: none !important; }
 
+        /* ===== PERFORMANCE ===== */
+        .products-grid { contain: layout style; }
+        .product-card { will-change: transform; }
+        .table-wrapper.hidden,
+        .products-grid.hidden { display: none !important; }
+
         @media (max-width: 480px) {
             .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
             .tabel-wadah-container { max-height: 250px; }
             .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
-            .plu-sidebar .sidebar-plu-list { max-height: 200px; }
+            .plu-sidebar .sidebar-plu-list { height: 220px; }
         }
     </style>
 </head>
@@ -558,10 +571,10 @@
             </div>
         </div>
 
-        <!-- SEARCH BAR -->
-        <div class="sticky-search-bar">
+        <!-- SEARCH BAR GLOBAL -->
+        <div class="sticky-search-bar" id="globalSearchBar">
             <div class="search-field">
-                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
                 <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">✕</button>
             </div>
         </div>
@@ -640,7 +653,7 @@
 
             <section class="products-grid" id="katalogListGrid"></section>
 
-            <div id="katalogTableView" class="table-wrapper">
+            <div id="katalogTableView" class="table-wrapper hidden">
                 <div class="table-scroll">
                     <table>
                         <thead>
@@ -659,7 +672,20 @@
 
         <!-- ===== KALKULATOR VIEW ===== -->
         <section id="kalkulatorView" style="display: none;">
-            <div class="section-bar">
+
+            <!-- SIDEBAR PLU POINT COFFEE -->
+            <div class="plu-sidebar" id="pluSidebar">
+                <div class="sidebar-title">
+                    <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
+                    <span id="pluCount">0</span>
+                </div>
+                <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Ketik nama atau kode PLU..." autocomplete="off" spellcheck="false">
+                <div class="sidebar-plu-list" id="sidebarPluList">
+                    <div class="plu-empty">Memuat data...</div>
+                </div>
+            </div>
+
+            <div class="section-bar" style="margin-top:16px;">
                 <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
             </div>
 
@@ -668,7 +694,7 @@
                 <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
                 <div class="input-row" style="margin-bottom:0;">
                     <label for="timbanganGramasi">Berat Timbangan (gr)</label>
-                    <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()">
+                    <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()" inputmode="numeric">
                 </div>
             </div>
 
@@ -688,11 +714,11 @@
                 <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
                 <div class="input-row">
                     <label for="biangTimbangan">Total Timbangan</label>
-                    <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()">
+                    <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()" inputmode="numeric">
                 </div>
                 <div class="input-row">
                     <label for="biangBotol">Berat Botol Kosong</label>
-                    <input type="number" id="biangBotol" value="680" oninput="hitungBiang()">
+                    <input type="number" id="biangBotol" value="680" oninput="hitungBiang()" inputmode="numeric">
                 </div>
                 <div class="hasil-box">
                     <div class="input-row"><span class="hasil-label">Hasil Netto</span><span class="hasil-value" id="resNetto">267</span></div>
@@ -706,25 +732,13 @@
                 <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
                 <div class="input-row">
                     <div><label for="inputTebalSeal">Tebal Sisa Roll (mm)</label><div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div></div>
-                    <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()">
+                    <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()" inputmode="numeric">
                 </div>
                 <div class="hasil-box">
                     <div class="input-row" style="margin-bottom:0;">
                         <span class="hasil-label">Estimasi Jumlah Cup</span>
                         <span class="hasil-value primary" id="resSealPcs">547</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- ===== SIDEBAR PLU POINT COFFEE ===== -->
-            <div class="plu-sidebar" id="pluSidebar">
-                <div class="sidebar-title">
-                    <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> PLU Point Coffee
-                    <span id="pluCount">0</span>
-                </div>
-                <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari PLU Point Coffee..." oninput="filterSidebarPlu()">
-                <div class="sidebar-plu-list" id="sidebarPluList">
-                    <div class="plu-empty">Memuat data...</div>
                 </div>
             </div>
 
@@ -749,9 +763,9 @@
     </nav>
 
     <script>
-    // ================================================================
-    // KONFIGURASI BRAND
-    // ================================================================
+    /* ================================================================
+       KONFIGURASI BRAND
+       ================================================================ */
     var BRAND_NAMES = {
         'saybread': 'Say Bread', 'sayburger': 'Say Burger',
         'yummychoice': 'Yummy Choice', 'yummycoffee': 'Yummy Coffee Gold',
@@ -784,9 +798,9 @@
     var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
     var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
 
-    // ================================================================
-    // STATE
-    // ================================================================
+    /* ================================================================
+       STATE
+       ================================================================ */
     var DATABASE = [];
     var pointCoffeeData = [];
     var currentView = 'home';
@@ -798,9 +812,12 @@
     var currentSheet = 'all';
     var katalogData = {};
 
-    // ================================================================
-    // DATA KALKULATOR
-    // ================================================================
+    var _renderCache = { key: '' };
+    var _katalogCache = { key: '' };
+
+    /* ================================================================
+       DATA KALKULATOR
+       ================================================================ */
     var DEFAULT_WADAH = [
         { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
         { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
@@ -843,10 +860,11 @@
         return DEFAULT_WADAH;
     })();
 
-    // ================================================================
-    // UTILITY
-    // ================================================================
+    /* ================================================================
+       UTILITY
+       ================================================================ */
     function $(id) { return document.getElementById(id); }
+
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>"']/g, function(m) {
@@ -854,13 +872,50 @@
         });
     }
 
-    // ================================================================
-    // RENDER BRAND GRID
-    // ================================================================
+    function debounce(fn, wait) {
+        var t;
+        return function() {
+            var ctx = this, args = arguments;
+            clearTimeout(t);
+            t = setTimeout(function() { fn.apply(ctx, args); }, wait);
+        };
+    }
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch(e) {}
+            document.body.removeChild(ta);
+            resolve();
+        });
+    }
+
+    var _toastTimer;
+    function showToast(msg) {
+        var toast = $('toastNotification');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(function() {
+            toast.classList.remove('show');
+        }, 1500);
+    }
+
+    /* ================================================================
+       RENDER BRAND GRID
+       ================================================================ */
     function renderBrandGrid() {
         var html = '';
         BRAND_CARDS.forEach(function(b) {
-            html += '<div class="brand-card ' + b.cls + '" onclick="openBrandCategory(\'' + b.id + '\')">' +
+            html += '<div class="brand-card ' + b.cls + '" data-brand="' + b.id + '">' +
                 '<div class="brand-card-top">' +
                     '<div class="brand-card-icon"><i class="fas ' + b.icon + '"></i></div>' +
                     '<i class="fas fa-chevron-right" style="color:var(--text-light); font-size:0.85rem;"></i>' +
@@ -874,9 +929,9 @@
         $('brandGrid').innerHTML = html;
     }
 
-    // ================================================================
-    // TAB SWITCHING
-    // ================================================================
+    /* ================================================================
+       TAB SWITCHING
+       ================================================================ */
     function switchTab(tab) {
         $('homeView').style.display = 'none';
         $('detailView').style.display = 'none';
@@ -887,19 +942,22 @@
         if (tab === 'home') {
             $('homeView').style.display = 'block';
             $('greetingWrapper').classList.remove('hidden');
+            $('globalSearchBar').style.display = '';
             currentView = 'home';
             currentBrand = '';
         } else if (tab === 'katalog') {
             $('katalogView').style.display = 'block';
+            $('globalSearchBar').style.display = '';
             currentView = 'katalog';
             renderKatalog();
         } else if (tab === 'kalkulator') {
             $('kalkulatorView').style.display = 'block';
+            $('globalSearchBar').style.display = 'none';
             currentView = 'kalkulator';
             hitungGramasi();
             hitungBiang();
             hitungSeal();
-            renderSidebarPlu('');
+            renderSidebarPlu($('sidebarSearchPlu').value || '');
         }
 
         var tabs = document.querySelectorAll('.dock-tab');
@@ -907,15 +965,15 @@
         var activeTab = $('dock-' + tab);
         if (activeTab) activeTab.classList.add('active');
 
-        if (tab === 'home' || tab === 'katalog') {
+        if (tab !== 'kalkulator') {
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
         }
     }
 
-    // ================================================================
-    // KALKULATOR
-    // ================================================================
+    /* ================================================================
+       KALKULATOR
+       ================================================================ */
     function hitungGramasi() {
         var input = parseFloat($('timbanganGramasi').value) || 0;
         var html = '';
@@ -961,9 +1019,9 @@
         }
     }
 
-    // ================================================================
-    // SIDEBAR PLU POINT COFFEE
-    // ================================================================
+    /* ================================================================
+       SIDEBAR PLU POINT COFFEE
+       ================================================================ */
     function renderSidebarPlu(filter) {
         var list = $('sidebarPluList');
         var count = $('pluCount');
@@ -992,63 +1050,16 @@
             var pluCode = item.raw || item.konv || '';
             html += '<div class="plu-item">' +
                 '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
-                (pluCode ? '<span class="plu-code" onclick="copyPluFromSidebar(\'' + pluCode + '\', this)">' + pluCode + '</span>' : 
+                (pluCode ? '<span class="plu-code" data-plu="' + escapeHtml(pluCode) + '">' + pluCode + '</span>' : 
                 '<span style="font-size:10px;color:var(--text-light);">-</span>') +
             '</div>';
         });
         list.innerHTML = html;
     }
 
-    function filterSidebarPlu() {
-        renderSidebarPlu($('sidebarSearchPlu').value);
-    }
-
-    function copyPluFromSidebar(code, el) {
-        copyToClipboard(code).then(function() {
-            var original = el.innerText;
-            el.innerText = '✓';
-            el.style.background = '#dcfce7';
-            el.style.color = '#15803d';
-            showToast('PLU ' + code + ' Disalin! ✓');
-            setTimeout(function() {
-                el.innerText = original;
-                el.style.background = '';
-                el.style.color = '';
-            }, 1000);
-        });
-    }
-
-    function copyToClipboard(text) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            return navigator.clipboard.writeText(text);
-        }
-        // Fallback
-        return new Promise(function(resolve) {
-            var ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            try { document.execCommand('copy'); } catch(e) {}
-            document.body.removeChild(ta);
-            resolve();
-        });
-    }
-
-    function showToast(msg) {
-        var toast = $('toastNotification');
-        toast.innerText = msg;
-        toast.classList.add('show');
-        clearTimeout(window._toastTimer);
-        window._toastTimer = setTimeout(function() {
-            toast.classList.remove('show');
-        }, 1500);
-    }
-
-    // ================================================================
-    // LOAD DATA JSON
-    // ================================================================
+    /* ================================================================
+       LOAD DATA JSON
+       ================================================================ */
     function loadData() {
         fetch('data.json')
             .then(function(res) {
@@ -1056,15 +1067,18 @@
                 return res.json();
             })
             .then(function(data) {
+                data.sort(function(a, b) {
+                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+                });
                 DATABASE = data;
-                // Filter Point Coffee untuk sidebar
+
                 pointCoffeeData = data.filter(function(item) {
                     return item.brand === 'pointcoffee' || item.brand === 'point coffee';
                 });
-                // Sort sidebar
                 pointCoffeeData.sort(function(a, b) {
                     return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
                 });
+
                 renderDataGrid();
                 renderKatalog();
                 renderSidebarPlu('');
@@ -1076,23 +1090,35 @@
             });
     }
 
-    // ================================================================
-    // DETAIL VIEW
-    // ================================================================
+    /* ================================================================
+       DETAIL VIEW
+       ================================================================ */
     function setDetailView(mode) {
         detailViewMode = mode;
         $('viewListBtn').classList.toggle('active', mode === 'list');
         $('viewTableBtn').classList.toggle('active', mode === 'table');
-        $('productGrid').classList.toggle('hidden', mode !== 'list');
-        $('tableView').classList.toggle('hidden', mode !== 'table');
-        renderDataGrid();
+        
+        if (mode === 'list') {
+            $('productGrid').classList.remove('hidden');
+            $('tableView').classList.add('hidden');
+        } else {
+            $('productGrid').classList.add('hidden');
+            $('tableView').classList.remove('hidden');
+        }
     }
 
     function setKatalogView(mode) {
         katalogViewMode = mode;
         $('katalogListBtn').classList.toggle('active', mode === 'list');
         $('katalogTableBtn').classList.toggle('active', mode === 'table');
-        renderSheetData();
+        
+        if (mode === 'list') {
+            $('katalogListGrid').classList.remove('hidden');
+            $('katalogTableView').classList.add('hidden');
+        } else {
+            $('katalogListGrid').classList.add('hidden');
+            $('katalogTableView').classList.remove('hidden');
+        }
     }
 
     function openBrandCategory(key) {
@@ -1105,8 +1131,17 @@
         $('katalogView').style.display = 'none';
         $('kalkulatorView').style.display = 'none';
         $('greetingWrapper').classList.add('hidden');
+        $('globalSearchBar').style.display = '';
         $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
+        
+        detailViewMode = 'list';
+        $('viewListBtn').classList.add('active');
+        $('viewTableBtn').classList.remove('active');
+        $('productGrid').classList.remove('hidden');
+        $('tableView').classList.add('hidden');
+        
         renderSubPills();
+        _renderCache.key = '';
         renderDataGrid();
         
         var tabs = document.querySelectorAll('.dock-tab');
@@ -1127,7 +1162,6 @@
         container.style.display = 'flex';
         var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
         
-        // Untuk Hambalan FC, tambah "Semua"
         if (currentBrand === 'hambalanfc') {
             pills = [{ id: 'all', label: 'Semua' }].concat(pills);
         }
@@ -1137,15 +1171,7 @@
             el.className = 'pill-button';
             if (p.id === currentSub) el.classList.add('active');
             el.innerText = p.label;
-            el.onclick = function() {
-                var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
-                for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
-                el.classList.add('active');
-                currentSub = p.id;
-                currentKategori = 'all';
-                renderKategoriPills();
-                renderDataGrid();
-            };
+            el.dataset.pillId = p.id;
             container.appendChild(el);
         });
 
@@ -1172,56 +1198,37 @@
 
         katContainer.style.display = 'flex';
 
-        // "Semua" pill
         var allPill = document.createElement('button');
-        allPill.className = 'pill-button';
-        if (currentKategori === 'all') allPill.classList.add('active');
+        allPill.className = 'pill-button' + (currentKategori === 'all' ? ' active' : '');
         allPill.innerText = 'Semua';
-        allPill.onclick = function() {
-            var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-            for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
-            allPill.classList.add('active');
-            currentKategori = 'all';
-            renderDataGrid();
-        };
+        allPill.dataset.katId = 'all';
         katContainer.appendChild(allPill);
 
         var keys = Object.keys(labelMap);
         keys.forEach(function(key) {
-            // Skip sarana untuk Point Coffee
             if (currentBrand === 'pointcoffee' && key === 'sarana') return;
-            
             var el = document.createElement('button');
-            el.className = 'pill-button';
-            if (key === currentKategori) el.classList.add('active');
+            el.className = 'pill-button' + (key === currentKategori ? ' active' : '');
             el.innerText = labelMap[key];
-            el.onclick = function() {
-                var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-                for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
-                el.classList.add('active');
-                currentKategori = key;
-                renderDataGrid();
-            };
+            el.dataset.katId = key;
             katContainer.appendChild(el);
         });
     }
 
-    // ================================================================
-    // RENDER DATA GRID
-    // ================================================================
+    /* ================================================================
+       RENDER DATA GRID
+       ================================================================ */
     function renderDataGrid() {
         var query = searchInput.value.toLowerCase().trim();
-        var gridContainer = $('productGrid');
-        var tableBody = $('tableBody');
         var counterBadge = $('itemCounterBadge');
-
-        gridContainer.innerHTML = '';
-        tableBody.innerHTML = '';
 
         if (currentBrand === '' && query === '' && currentView !== 'katalog') {
             counterBadge.innerText = '0 Item';
             return;
         }
+
+        var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
+        if (cacheKey === _renderCache.key) return;
 
         var filtered = DATABASE.filter(function(item) {
             var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
@@ -1232,15 +1239,12 @@
             return matchBrand && matchSub && matchKat && matchQuery;
         });
 
-        filtered.sort(function(a, b) {
-            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-        });
-
         counterBadge.innerText = filtered.length + ' Item';
 
         if (filtered.length === 0) {
-            gridContainer.innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
+            $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
+            $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
+            _renderCache.key = cacheKey;
             return;
         }
 
@@ -1248,8 +1252,8 @@
         var tableHtml = '';
         filtered.forEach(function(item, i) {
             var badgesHtml = '';
-            if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-            if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+            if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
+            if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
 
             html += '<div class="product-card">' +
                 '<div class="product-info-col">' +
@@ -1259,8 +1263,8 @@
                 '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
             '</div>';
 
-            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
             tableHtml += '<tr>' +
                 '<td class="row-number">' + (i + 1) + '</td>' +
                 '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
@@ -1269,13 +1273,15 @@
             '</tr>';
         });
 
-        gridContainer.innerHTML = html;
-        tableBody.innerHTML = tableHtml;
+        $('productGrid').innerHTML = html;
+        $('tableBody').innerHTML = tableHtml;
+        
+        _renderCache.key = cacheKey;
     }
 
-    // ================================================================
-    // KATALOG
-    // ================================================================
+    /* ================================================================
+       KATALOG
+       ================================================================ */
     function renderKatalog() {
         var tabsContainer = $('sheetTabs');
         var counter = $('katalogCounter');
@@ -1284,43 +1290,32 @@
 
         brands.forEach(function(b) {
             var items = DATABASE.filter(function(item) { return item.brand === b; });
-            items.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
             katalogData[b] = items;
             totalItems += items.length;
         });
         
-        var allData = DATABASE.slice();
-        allData.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
-        katalogData['all'] = allData;
-        
+        katalogData['all'] = DATABASE.slice();
         counter.textContent = totalItems + ' Item';
 
-        var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" onclick="switchSheet(\'all\')">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
+        var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" data-sheet="all">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
         
         brands.forEach(function(b) {
             var colorClass = b === 'saybread' ? 'bread' : b === 'sayburger' ? 'burger' : b === 'yummychoice' ? 'yummy' : b === 'yummycoffee' ? 'coffee' : b === 'pointcoffee' ? 'pointcoffee' : b === 'hambalanfc' ? 'hambalanfc' : 'perishable';
-            tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" onclick="switchSheet(\'' + b + '\')">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
+            tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" data-sheet="' + b + '">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
         });
 
         tabsContainer.innerHTML = tabsHtml;
+        _katalogCache.key = '';
         renderSheetData();
     }
 
     function switchSheet(brand) {
         currentSheet = brand;
-        // Update active class tanpa re-render semua
         var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
         for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
+            tabs[i].classList.toggle('active', tabs[i].dataset.sheet === brand);
         }
-        // Cari yang sesuai
-        for (var i = 0; i < tabs.length; i++) {
-            if (tabs[i].innerHTML.indexOf(BRAND_NAMES[brand] || 'Semua') !== -1 || 
-                (brand === 'all' && tabs[i].classList.contains('all-brand'))) {
-                tabs[i].classList.add('active');
-                break;
-            }
-        }
+        _katalogCache.key = '';
         renderSheetData();
     }
 
@@ -1338,8 +1333,8 @@
             });
         }
 
-        listGrid.innerHTML = '';
-        tableBody.innerHTML = '';
+        var cacheKey = currentSheet + '|' + query + '|' + items.length;
+        if (cacheKey === _katalogCache.key) return;
 
         if (items.length === 0) {
             listGrid.innerHTML = '<div class="empty-search-state">' + 
@@ -1347,6 +1342,7 @@
             '</div>';
             tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
             $('katalogCounter').textContent = '0 Item';
+            _katalogCache.key = cacheKey;
             return;
         }
 
@@ -1374,8 +1370,8 @@
 
         function renderItem(item) {
             var badges = '';
-            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
+            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
             
             listHtml += '<div class="product-card">' +
                 '<div class="product-info-col">' +
@@ -1386,8 +1382,8 @@
             '</div>';
 
             rowCounter++;
-            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
             tableHtml += '<tr>' +
                 '<td class="row-number">' + rowCounter + '</td>' +
                 '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
@@ -1400,7 +1396,6 @@
             kategoriKeys.forEach(function(kat) {
                 var katItems = items.filter(function(item) { return item.kategori === kat; });
                 if (katItems.length === 0) return;
-                katItems.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
 
                 var label = labelMap[kat] || kat;
                 if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
@@ -1411,43 +1406,101 @@
                 katItems.forEach(renderItem);
             });
         } else {
-            items.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
             items.forEach(renderItem);
         }
 
         listGrid.innerHTML = listHtml;
         tableBody.innerHTML = tableHtml;
+        
+        _katalogCache.key = cacheKey;
     }
 
-    // ================================================================
-    // COPY PLU
-    // ================================================================
-    function copyPLUCode(code, btnEl) {
-        copyToClipboard(code).then(function() {
-            var originalText = btnEl.innerText;
-            btnEl.innerText = '✓';
-            btnEl.classList.add('plu-copied-style');
-            showToast('PLU ' + code + ' Disalin! ✓');
-            setTimeout(function() {
-                btnEl.innerText = originalText;
-                btnEl.classList.remove('plu-copied-style');
-            }, 1000);
-        });
-    }
+    /* ================================================================
+       EVENT DELEGATION
+       ================================================================ */
+    document.addEventListener('click', function(e) {
+        var brandCard = e.target.closest('.brand-card');
+        if (brandCard && brandCard.dataset.brand) {
+            openBrandCategory(brandCard.dataset.brand);
+            return;
+        }
 
-    // ================================================================
-    // SEARCH
-    // ================================================================
+        var pill = e.target.closest('#subPillsContainer .pill-button');
+        if (pill) {
+            var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
+            for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
+            pill.classList.add('active');
+            currentSub = pill.dataset.pillId;
+            currentKategori = 'all';
+            _renderCache.key = '';
+            renderKategoriPills();
+            renderDataGrid();
+            return;
+        }
+
+        var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
+        if (katPill) {
+            var allKat = document.querySelectorAll('#kategoriPillsContainer .pill-button');
+            for (var k = 0; k < allKat.length; k++) allKat[k].classList.remove('active');
+            katPill.classList.add('active');
+            currentKategori = katPill.dataset.katId;
+            _renderCache.key = '';
+            renderDataGrid();
+            return;
+        }
+
+        var sheetTab = e.target.closest('#sheetTabs .sheet-tab');
+        if (sheetTab) {
+            switchSheet(sheetTab.dataset.sheet);
+            return;
+        }
+
+        var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
+        if (pluBtn) {
+            var code = pluBtn.dataset.plu;
+            copyToClipboard(code).then(function() {
+                var originalText = pluBtn.innerText;
+                pluBtn.innerText = '✓';
+                pluBtn.classList.add('plu-copied-style');
+                showToast('PLU ' + code + ' Disalin! ✓');
+                setTimeout(function() {
+                    pluBtn.innerText = originalText;
+                    pluBtn.classList.remove('plu-copied-style');
+                }, 1000);
+            });
+            return;
+        }
+
+        var sidebarPlu = e.target.closest('.plu-code[data-plu]');
+        if (sidebarPlu) {
+            var code2 = sidebarPlu.dataset.plu;
+            copyToClipboard(code2).then(function() {
+                var original = sidebarPlu.innerText;
+                sidebarPlu.innerText = '✓';
+                sidebarPlu.style.background = '#dcfce7';
+                sidebarPlu.style.color = '#15803d';
+                showToast('PLU ' + code2 + ' Disalin! ✓');
+                setTimeout(function() {
+                    sidebarPlu.innerText = original;
+                    sidebarPlu.style.background = '';
+                    sidebarPlu.style.color = '';
+                }, 1000);
+            });
+            return;
+        }
+    });
+
+    /* ================================================================
+       SEARCH
+       ================================================================ */
     var searchInput = $('searchInput');
     var searchClearBtn = $('searchClearBtn');
 
-    searchInput.addEventListener('input', function() {
-        searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
-        
+    var handleSearch = debounce(function() {
         if (currentView === 'katalog') {
+            _katalogCache.key = '';
             renderSheetData();
         } else if (currentView === 'detail' || currentView === 'home') {
-            // Jika di home dan ada query, pindah ke detail view
             var query = searchInput.value.trim();
             if (query !== '' && currentView === 'home' && currentBrand === '') {
                 $('homeView').style.display = 'none';
@@ -1455,6 +1508,7 @@
                 $('katalogView').style.display = 'none';
                 $('kalkulatorView').style.display = 'none';
                 $('greetingWrapper').classList.add('hidden');
+                $('globalSearchBar').style.display = '';
                 $('detailHeadingTitle').innerText = 'Hasil Pencarian';
                 $('subPillsContainer').style.display = 'none';
                 $('kategoriPillsContainer').style.display = 'none';
@@ -1467,13 +1521,21 @@
                 $('greetingWrapper').classList.remove('hidden');
                 currentView = 'home';
             }
+            _renderCache.key = '';
             renderDataGrid();
         }
+    }, 120);
+
+    searchInput.addEventListener('input', function() {
+        searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
+        handleSearch();
     });
 
     function clearSearchInput() {
         searchInput.value = '';
         searchClearBtn.style.display = 'none';
+        _renderCache.key = '';
+        _katalogCache.key = '';
         if (currentView === 'katalog') {
             renderSheetData();
         } else {
@@ -1489,11 +1551,21 @@
         }
     }
 
-    // ================================================================
-    // GREETING & CLOCK
-    // ================================================================
+    /* Search sidebar PLU */
+    var handleSidebarSearch = debounce(function() {
+        renderSidebarPlu($('sidebarSearchPlu').value);
+    }, 100);
+    $('sidebarSearchPlu').addEventListener('input', handleSidebarSearch);
+
+    /* ================================================================
+       GREETING & CLOCK
+       ================================================================ */
+    var _lastClockSecond = -1;
     function updateClock() {
         var now = new Date();
+        if (now.getSeconds() === _lastClockSecond) return;
+        _lastClockSecond = now.getSeconds();
+        
         var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
         var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
@@ -1502,6 +1574,10 @@
         var menit = String(now.getMinutes()).padStart(2, '0');
         var detik = String(now.getSeconds()).padStart(2, '0');
         $('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
+    }
+    function clockLoop() {
+        updateClock();
+        requestAnimationFrame(clockLoop);
     }
 
     function getSapaanData() {
@@ -1524,20 +1600,21 @@
     }
 
     var isSapaan = true;
+    var _sapaanTimer;
     function toggleSapaanCountdown() {
         var s = isSapaan ? getSapaanData() : getCountdownGajian();
         $('sapaanIcon').innerText = s.icon;
         $('sapaanText').innerText = s.text;
         isSapaan = !isSapaan;
-        setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
+        clearTimeout(_sapaanTimer);
+        _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
     }
 
-    // ================================================================
-    // INIT
-    // ================================================================
+    /* ================================================================
+       INIT
+       ================================================================ */
     renderBrandGrid();
-    updateClock();
-    setInterval(updateClock, 1000);
+    clockLoop();
     toggleSapaanCountdown();
     hitungGramasi();
     hitungBiang();
