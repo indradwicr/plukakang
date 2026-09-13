@@ -272,15 +272,15 @@
             border-color: var(--primary-blue);
         }
 
-        /* ===== SCROLL CONTAINER (kunci utama) ===== */
+        /* ===== SCROLL AREA (internal scroll, seperti sidebar) ===== */
         .scroll-area {
             position: relative;
             height: calc(100vh - 340px);
-            min-height: 300px;
+            min-height: 320px;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding-right: 34px; /* ruang untuk alpha index */
+            padding-right: 34px;
             border-radius: 16px;
             scrollbar-width: thin;
         }
@@ -319,11 +319,6 @@
         .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
 
         /* ===== TABLE ===== */
-        .table-wrapper {
-            background: var(--card-white); border-radius: 16px;
-            border: 1px solid var(--card-border); overflow: hidden;
-            box-shadow: var(--card-shadow);
-        }
         .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
         .table-scroll th {
@@ -533,7 +528,7 @@
         }
 
         /* ============================================================
-           ALPHABET INDEX — SELALU MUNCUL, TIDAK AUTO-HIDE
+           ALPHABET INDEX — SELALU MUNCUL, FLUID SLIDE
            ============================================================ */
         .alpha-index {
             position: absolute;
@@ -545,8 +540,8 @@
             align-items: center;
             justify-content: center;
             z-index: 60;
-            opacity: 1; /* selalu muncul */
-            pointer-events: auto; /* selalu interaktif */
+            opacity: 1;
+            pointer-events: auto;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
@@ -555,6 +550,7 @@
             min-width: 30px;
             background: transparent;
             transition: background 0.15s ease;
+            overscroll-behavior: contain;
         }
         .alpha-index.active {
             background: rgba(255, 255, 255, 0.92);
@@ -639,10 +635,6 @@
 
         .hidden { display: none !important; }
 
-        .product-card { will-change: transform; }
-        .table-wrapper.hidden,
-        .products-grid.hidden { display: none !important; }
-
         @media (max-width: 480px) {
             .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
             .tabel-wadah-container { max-height: 250px; }
@@ -723,28 +715,24 @@
             <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
             <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
 
-            <!-- LIST VIEW -->
             <div class="scroll-area" id="detailListScroll">
                 <section class="products-grid" id="productGrid"></section>
                 <div class="alpha-index" id="detailListAlpha"></div>
             </div>
 
-            <!-- TABLE VIEW -->
             <div class="scroll-area hidden" id="detailTableScroll">
-                <div class="table-wrapper" style="border-radius:0;border:none;box-shadow:none;">
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:28px;text-align:center;">#</th>
-                                    <th>Nama Barang</th>
-                                    <th>PLU RAW</th>
-                                    <th>PLU KONV</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody"></tbody>
-                        </table>
-                    </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:28px;text-align:center;">#</th>
+                                <th>Nama Barang</th>
+                                <th>PLU RAW</th>
+                                <th>PLU KONV</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
                 </div>
                 <div class="alpha-index" id="detailTableAlpha"></div>
             </div>
@@ -770,28 +758,24 @@
                 </div>
             </div>
 
-            <!-- LIST VIEW -->
             <div class="scroll-area" id="katalogListScroll">
                 <section class="products-grid" id="katalogListGrid"></section>
                 <div class="alpha-index" id="katalogListAlpha"></div>
             </div>
 
-            <!-- TABLE VIEW -->
             <div class="scroll-area hidden" id="katalogTableScroll">
-                <div class="table-wrapper" style="border-radius:0;border:none;box-shadow:none;">
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:28px;text-align:center;">#</th>
-                                    <th>Nama Barang</th>
-                                    <th>PLU RAW</th>
-                                    <th>PLU KONV</th>
-                                </tr>
-                            </thead>
-                            <tbody id="katalogTableBody"></tbody>
-                        </table>
-                    </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:28px;text-align:center;">#</th>
+                                <th>Nama Barang</th>
+                                <th>PLU RAW</th>
+                                <th>PLU KONV</th>
+                            </tr>
+                        </thead>
+                        <tbody id="katalogTableBody"></tbody>
+                    </table>
                 </div>
                 <div class="alpha-index" id="katalogTableAlpha"></div>
             </div>
@@ -1042,13 +1026,15 @@
     }
 
     /* ================================================================
-       ALPHA INDEX — PERSIS SEPERTI SIDEBAR
+       ALPHA INDEX — FLUID SLIDE (TOUCH NATIVE)
        ================================================================
-       Kunci utama:
-       - Scroll target = internal element (.scroll-area / .sidebar-plu-list)
-       - Alpha index position: absolute di dalam scroll container
-       - Auto-scroll pakai scrollTop (bukan window.scrollTo)
-       - Tidak auto-hide
+       Kunci:
+       - PAKAI touchstart/touchmove NATIVE (bukan PointerEvent + setPointerCapture)
+       - setPointerCapture DIHAPUS karena bikin pointer "nyangkut"
+       - touch-action: none di .alpha-index biar browser gak interpret as scroll
+       - preventDefault() di touchstart & touchmove untuk stop scroll chaining
+       - Hit detection: cari huruf terdekat dengan toleransi 40px
+       - Auto-scroll: scrollTop = offset (instant, fluid)
     */
     var alphaRegistry = {};
 
@@ -1056,7 +1042,6 @@
         var host = $(hostId);
         if (!host) return;
 
-        /* Kumpulkan huruf unik */
         var letterSet = {};
         var letterFirstEl = {};
         for (var i = 0; i < itemEls.length; i++) {
@@ -1085,15 +1070,16 @@
                 scrollEl: scrollEl,
                 activeLetter: null,
                 touching: false,
-                pointerId: null,
                 rafPending: false,
-                pendingLetter: null
+                pendingLetter: null,
+                letterElsCache: null
             };
             attachAlphaListeners(state);
         } else {
             state.letters = letters;
             state.letterFirstEl = letterFirstEl;
             state.scrollEl = scrollEl;
+            state.letterElsCache = null;
         }
 
         var html = '<div class="alpha-list">';
@@ -1102,13 +1088,21 @@
         }
         html += '</div>';
         host.innerHTML = html;
+        state.letterElsCache = null;
     }
 
     function attachAlphaListeners(state) {
         var host = state.host;
 
+        function getLetterEls() {
+            if (!state.letterElsCache || state.letterElsCache.length === 0) {
+                state.letterElsCache = host.querySelectorAll('.alpha-letter');
+            }
+            return state.letterElsCache;
+        }
+
         function letterFromY(clientY) {
-            var letterEls = host.querySelectorAll('.alpha-letter');
+            var letterEls = getLetterEls();
             if (letterEls.length === 0) return null;
             var closest = null;
             var closestDist = Infinity;
@@ -1121,13 +1115,17 @@
                     closest = letterEls[i];
                 }
             }
-            return closest ? closest.dataset.letter : null;
+            if (closest && closestDist <= 40) {
+                return closest.dataset.letter;
+            }
+            return null;
         }
 
         function applyLetter(letter) {
             if (!letter || letter === state.activeLetter) return;
             state.activeLetter = letter;
-            var letterEls = host.querySelectorAll('.alpha-letter');
+
+            var letterEls = getLetterEls();
             for (var i = 0; i < letterEls.length; i++) {
                 letterEls[i].classList.toggle('active', letterEls[i].dataset.letter === letter);
             }
@@ -1137,25 +1135,72 @@
 
         function clearActive() {
             state.activeLetter = null;
-            var letterEls = host.querySelectorAll('.alpha-letter');
+            var letterEls = getLetterEls();
             for (var i = 0; i < letterEls.length; i++) letterEls[i].classList.remove('active');
         }
 
-        function onPointerDown(e) {
-            /* Skip kalau target adalah tombol copy */
+        /* ============ TOUCH EVENTS (native, paling reliable di mobile) ============ */
+        function onTouchStart(e) {
             if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
 
             state.touching = true;
-            state.pointerId = e.pointerId;
             host.classList.add('active');
-            try { host.setPointerCapture(e.pointerId); } catch(err) {}
+            state.letterElsCache = null;
+
+            var touch = e.touches[0];
+            var letter = letterFromY(touch.clientY);
+            if (letter) applyLetter(letter);
+
+            e.preventDefault();
+        }
+
+        function onTouchMove(e) {
+            if (!state.touching) return;
+
+            var touch = e.touches[0];
+            var letter = letterFromY(touch.clientY);
+
+            if (letter && letter !== state.pendingLetter) {
+                state.pendingLetter = letter;
+                if (!state.rafPending) {
+                    state.rafPending = true;
+                    requestAnimationFrame(function() {
+                        state.rafPending = false;
+                        applyLetter(state.pendingLetter);
+                    });
+                }
+            }
+
+            e.preventDefault();
+        }
+
+        function onTouchEnd() {
+            state.touching = false;
+            state.pendingLetter = null;
+            setTimeout(clearActive, 400);
+        }
+
+        host.addEventListener('touchstart', onTouchStart, { passive: false });
+        host.addEventListener('touchmove', onTouchMove, { passive: false });
+        host.addEventListener('touchend', onTouchEnd);
+        host.addEventListener('touchcancel', onTouchEnd);
+
+        /* ============ MOUSE EVENTS (desktop) ============ */
+        var mouseDown = false;
+
+        function onMouseDown(e) {
+            if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
+            mouseDown = true;
+            state.touching = true;
+            host.classList.add('active');
+            state.letterElsCache = null;
             var letter = letterFromY(e.clientY);
             if (letter) applyLetter(letter);
             e.preventDefault();
         }
 
-        function onPointerMove(e) {
-            if (!state.touching || e.pointerId !== state.pointerId) return;
+        function onMouseMove(e) {
+            if (!mouseDown) return;
             var letter = letterFromY(e.clientY);
             if (letter && letter !== state.pendingLetter) {
                 state.pendingLetter = letter;
@@ -1167,54 +1212,21 @@
                     });
                 }
             }
-            e.preventDefault();
         }
 
-        function onPointerUp(e) {
-            if (e.pointerId !== state.pointerId) return;
+        function onMouseUp() {
+            if (!mouseDown) return;
+            mouseDown = false;
             state.touching = false;
-            state.pointerId = null;
-            try { host.releasePointerCapture(e.pointerId); } catch(err) {}
+            state.pendingLetter = null;
             setTimeout(clearActive, 400);
         }
 
-        if (window.PointerEvent) {
-            host.addEventListener('pointerdown', onPointerDown);
-            host.addEventListener('pointermove', onPointerMove);
-            host.addEventListener('pointerup', onPointerUp);
-            host.addEventListener('pointercancel', onPointerUp);
-        } else {
-            host.addEventListener('touchstart', function(e) {
-                if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
-                state.touching = true;
-                host.classList.add('active');
-                var pt = e.touches[0];
-                var letter = letterFromY(pt.clientY);
-                if (letter) applyLetter(letter);
-                e.preventDefault();
-            }, { passive: false });
-            host.addEventListener('touchmove', function(e) {
-                if (!state.touching) return;
-                var pt = e.touches[0];
-                var letter = letterFromY(pt.clientY);
-                if (letter && letter !== state.pendingLetter) {
-                    state.pendingLetter = letter;
-                    if (!state.rafPending) {
-                        state.rafPending = true;
-                        requestAnimationFrame(function() {
-                            state.rafPending = false;
-                            applyLetter(state.pendingLetter);
-                        });
-                    }
-                }
-                e.preventDefault();
-            }, { passive: false });
-            host.addEventListener('touchend', function() {
-                state.touching = false;
-                setTimeout(clearActive, 400);
-            });
-        }
+        host.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
 
+        /* Tap langsung di huruf */
         host.addEventListener('click', function(e) {
             var letterEl = e.target.closest('.alpha-letter');
             if (!letterEl) return;
@@ -1224,25 +1236,22 @@
     }
 
     /**
-     * Scroll ke huruf — pakai scrollTop LANGSUNG pada scroll element.
-     * Ini yang bikin fluid persis seperti sidebar.
+     * Scroll ke huruf — instant pakai scrollTop.
+     * Tidak pakai setPointerCapture, jadi slide tetap fluid.
      */
     function scrollToLetter(state, letter) {
         var target = state.letterFirstEl[letter];
         if (!target || !state.scrollEl) return;
         var scrollEl = state.scrollEl;
 
-        /* Hitung posisi target relatif ke scroll container */
         var containerRect = scrollEl.getBoundingClientRect();
         var targetRect = target.getBoundingClientRect();
         var offset = targetRect.top - containerRect.top + scrollEl.scrollTop - 6;
 
-        /* Clamp */
         var max = scrollEl.scrollHeight - scrollEl.clientHeight;
         if (offset < 0) offset = 0;
         if (offset > max) offset = max;
 
-        /* Langsung set scrollTop — instant, fluid, seperti sidebar */
         scrollEl.scrollTop = offset;
     }
 
@@ -1375,7 +1384,7 @@
 
         count.textContent = items.length;
 
-        /* Hapus item lama, tapi pertahankan alpha-index */
+        /* Hapus item lama, pertahankan alpha-index */
         var alphaEl = $('sidebarAlpha');
         var existingItems = list.querySelectorAll('.plu-item');
         for (var i = 0; i < existingItems.length; i++) existingItems[i].remove();
@@ -1419,7 +1428,6 @@
             frag.appendChild(div);
         });
 
-        /* Insert sebelum alphaEl */
         if (alphaEl) {
             list.insertBefore(frag, alphaEl);
         } else {
@@ -1478,9 +1486,7 @@
         } else {
             $('detailListScroll').classList.add('hidden');
             $('detailTableScroll').classList.remove('hidden');
-            setTimeout(function() {
-                rebuildDetailTableAlpha();
-            }, 30);
+            setTimeout(rebuildDetailTableAlpha, 30);
         }
     }
 
@@ -1495,9 +1501,7 @@
         } else {
             $('katalogListScroll').classList.add('hidden');
             $('katalogTableScroll').classList.remove('hidden');
-            setTimeout(function() {
-                rebuildKatalogTableAlpha();
-            }, 30);
+            setTimeout(rebuildKatalogTableAlpha, 30);
         }
     }
 
