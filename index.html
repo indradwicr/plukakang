@@ -37,16 +37,19 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        body {
+        html, body {
             font-family: var(--font-main);
             background-color: var(--bg-app);
             color: var(--text-main);
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
             display: flex;
             justify-content: center;
-            -webkit-font-smoothing: antialiased;
         }
 
         .app-layout {
@@ -435,7 +438,6 @@
             background: #f0f4ff; border-radius: 20px; padding: 16px;
             border: 1px solid var(--card-border); margin-bottom: 16px;
             position: relative;
-            padding-right: 52px;
         }
         .plu-sidebar .sidebar-title {
             font-size: 13px; font-weight: 700; color: var(--dark-green);
@@ -514,55 +516,53 @@
         }
 
         /* ============================================================
-           WAVE ALPHABET (v2 — compact & proper)
+           WAVE ALPHABET — FIXED VIEWPORT, ARC SHAPE
            ============================================================ */
         .wave-alphabet {
-            position: absolute;
+            position: fixed;
             right: 4px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
-            gap: 1px;
-            z-index: 60;
+            z-index: 90;
             opacity: 0;
             transition: opacity 0.25s ease;
             pointer-events: none;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
-            padding: 6px 4px;
-            border-radius: 20px;
-            background: transparent;
-            max-height: calc(100% - 24px);
+            padding: 8px 6px 8px 10px;
+            border-radius: 24px;
         }
         .wave-alphabet.visible {
             opacity: 1;
             pointer-events: auto;
         }
         .wave-alphabet.active {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 6px 24px rgba(17, 24, 39, 0.12);
         }
 
         .wave-alphabet .wave-letter {
-            font-size: 9px;
+            font-size: 9.5px;
             font-weight: 800;
             color: var(--text-light);
             line-height: 1;
-            width: 18px;
-            height: 14px;
+            width: 20px;
+            height: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: color 0.12s ease, transform 0.12s ease;
-            border-radius: 6px;
+            transition: color 0.12s ease, transform 0.15s ease, background 0.12s ease;
+            border-radius: 7px;
             flex-shrink: 0;
+            /* Arc: setiap huruf di-offset horizontal berdasarkan jarak dari tengah */
         }
         .wave-alphabet .wave-letter.has-data {
             color: var(--primary-blue);
@@ -570,22 +570,22 @@
         .wave-alphabet .wave-letter.active {
             color: #fff;
             background: var(--primary-blue);
-            transform: scale(1.15);
-            box-shadow: 0 2px 8px var(--primary-blue-shadow);
+            transform: scale(1.2);
+            box-shadow: 0 2px 10px var(--primary-blue-shadow);
         }
         .wave-alphabet .wave-letter.disabled {
-            opacity: 0.3;
+            opacity: 0.28;
             cursor: default;
         }
 
-        /* Bubble besar di tengah */
+        /* Bubble preview */
         .wave-bubble {
-            position: absolute;
-            right: 44px;
+            position: fixed;
+            right: 52px;
             top: 50%;
             transform: translateY(-50%) scale(0.5);
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
             background: var(--primary-blue);
             color: #fff;
@@ -594,54 +594,16 @@
             justify-content: center;
             font-size: 24px;
             font-weight: 800;
-            box-shadow: 0 8px 24px var(--primary-blue-shadow);
+            box-shadow: 0 10px 28px var(--primary-blue-shadow);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 70;
+            transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 95;
             font-family: var(--font-main);
         }
         .wave-bubble.show {
             opacity: 1;
             transform: translateY(-50%) scale(1);
-        }
-
-        /* Wave di dalam sidebar PLU */
-        .plu-sidebar .wave-alphabet {
-            top: 108px;
-            bottom: 12px;
-            transform: none;
-            max-height: none;
-            padding: 4px 3px;
-        }
-        .plu-sidebar .wave-bubble {
-            right: 38px;
-        }
-
-        /* Wave untuk detail & katalog — posisi absolute di kanan konten */
-        .wave-container {
-            position: relative;
-        }
-        .wave-container .wave-alphabet {
-            position: absolute;
-            right: 2px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .wave-container .wave-bubble {
-            right: 40px;
-        }
-
-        /* Wave untuk table */
-        .table-wrapper { position: relative; }
-        .table-wrapper .wave-alphabet {
-            position: absolute;
-            right: 2px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .table-wrapper .wave-bubble {
-            right: 40px;
         }
 
         /* ===== BOTTOM NAV ===== */
@@ -689,7 +651,6 @@
 
         .hidden { display: none !important; }
 
-        /* ===== PERFORMANCE ===== */
         .product-card { will-change: transform; }
         .table-wrapper.hidden,
         .products-grid.hidden { display: none !important; }
@@ -699,8 +660,8 @@
             .tabel-wadah-container { max-height: 250px; }
             .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
             .plu-sidebar .sidebar-plu-list { height: 220px; }
-            .wave-alphabet .wave-letter { font-size: 8px; width: 16px; height: 12px; }
-            .wave-bubble { width: 46px; height: 46px; font-size: 20px; right: 38px; }
+            .wave-alphabet .wave-letter { font-size: 8.5px; width: 18px; height: 13px; }
+            .wave-bubble { width: 46px; height: 46px; font-size: 20px; right: 44px; }
         }
     </style>
 </head>
@@ -778,11 +739,7 @@
             <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
             <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
 
-            <div class="wave-container" id="detailWaveContainer">
-                <section class="products-grid" id="productGrid"></section>
-                <div class="wave-alphabet" id="detailWaveAlphabet"></div>
-                <div class="wave-bubble" id="detailWaveBubble"></div>
-            </div>
+            <section class="products-grid" id="productGrid"></section>
 
             <div id="tableView" class="table-wrapper hidden">
                 <div class="table-scroll">
@@ -798,8 +755,6 @@
                         <tbody id="tableBody"></tbody>
                     </table>
                 </div>
-                <div class="wave-alphabet" id="detailTableWaveAlphabet"></div>
-                <div class="wave-bubble" id="detailTableWaveBubble"></div>
             </div>
         </section>
 
@@ -823,11 +778,7 @@
                 </div>
             </div>
 
-            <div class="wave-container" id="katalogWaveContainer">
-                <section class="products-grid" id="katalogListGrid"></section>
-                <div class="wave-alphabet" id="katalogWaveAlphabet"></div>
-                <div class="wave-bubble" id="katalogWaveBubble"></div>
-            </div>
+            <section class="products-grid" id="katalogListGrid"></section>
 
             <div id="katalogTableView" class="table-wrapper hidden">
                 <div class="table-scroll">
@@ -843,15 +794,12 @@
                         <tbody id="katalogTableBody"></tbody>
                     </table>
                 </div>
-                <div class="wave-alphabet" id="katalogTableWaveAlphabet"></div>
-                <div class="wave-bubble" id="katalogTableWaveBubble"></div>
             </div>
         </section>
 
         <!-- ===== KALKULATOR VIEW ===== -->
         <section id="kalkulatorView" style="display: none;">
 
-            <!-- SIDEBAR PLU POINT COFFEE -->
             <div class="plu-sidebar" id="pluSidebar">
                 <div class="sidebar-title">
                     <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
@@ -865,15 +813,12 @@
                 <div class="sidebar-plu-list" id="sidebarPluList">
                     <div class="plu-empty">Memuat data...</div>
                 </div>
-                <div class="wave-alphabet" id="sidebarWaveAlphabet"></div>
-                <div class="wave-bubble" id="sidebarWaveBubble"></div>
             </div>
 
             <div class="section-bar" style="margin-top:16px;">
                 <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
             </div>
 
-            <!-- KARTU 1: INPUT GRAMASI -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
                 <div class="input-row" style="margin-bottom:0;">
@@ -882,7 +827,6 @@
                 </div>
             </div>
 
-            <!-- KARTU 2: DAFTAR WADAH -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
                 <div class="tabel-wadah-container">
@@ -893,7 +837,6 @@
                 </div>
             </div>
 
-            <!-- KARTU 3: SO BIANG KOPI -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
                 <div class="input-row">
@@ -911,7 +854,6 @@
                 </div>
             </div>
 
-            <!-- KARTU 4: PLASTIK SEAL -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
                 <div class="input-row">
@@ -929,6 +871,10 @@
         </section>
 
     </div>
+
+    <!-- GLOBAL WAVE ALPHABET (fixed di viewport) -->
+    <div class="wave-alphabet" id="globalWaveAlphabet"></div>
+    <div class="wave-bubble" id="globalWaveBubble"></div>
 
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-dock">
@@ -1100,6 +1046,276 @@
     }
 
     /* ================================================================
+       GLOBAL WAVE ALPHABET
+       ================================================================
+       - Satu wave untuk semua view (detail list, detail table, katalog list,
+         katalog table). Wave fixed di viewport kanan.
+       - Sidebar PLU punya wave sendiri di dalam sidebar (karena scroll internal).
+       - Wave berbentuk arc: huruf tengah paling ke kanan, ujung paling ke kiri.
+    */
+    var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    var ARC_OFFSETS = []; /* dihitung sekali */
+    (function computeArc() {
+        var len = ALPHABET.length;
+        var maxOffset = 14; /* px */
+        for (var i = 0; i < len; i++) {
+            var t = (i / (len - 1)) * 2 - 1; /* -1 .. 1 */
+            /* parabola: offset paling besar di tengah */
+            var offset = maxOffset * (1 - t * t);
+            ARC_OFFSETS.push(offset);
+        }
+    })();
+
+    var waveState = {
+        el: null,
+        bubbleEl: null,
+        activeLetter: null,
+        active: false,
+        hideTimer: null,
+        target: null,        /* { scrollTarget, letterIndex, view } */
+        listenersAttached: false,
+        touching: false,
+        rafPending: false,
+        pendingLetter: null
+    };
+
+    function initGlobalWave() {
+        waveState.el = $('globalWaveAlphabet');
+        waveState.bubbleEl = $('globalWaveBubble');
+
+        /* Render huruf A-Z dengan arc offset */
+        var html = '';
+        for (var i = 0; i < ALPHABET.length; i++) {
+            var L = ALPHABET[i];
+            var off = ARC_OFFSETS[i];
+            html += '<div class="wave-letter" data-letter="' + L + '" style="margin-right:' + off.toFixed(1) + 'px">' + L + '</div>';
+        }
+        waveState.el.innerHTML = html;
+
+        attachGlobalWaveListeners();
+    }
+
+    /* Attach listener sekali */
+    function attachGlobalWaveListeners() {
+        if (waveState.listenersAttached) return;
+        waveState.listenersAttached = true;
+        var el = waveState.el;
+
+        function letterFromY(clientY) {
+            var letters = el.querySelectorAll('.wave-letter');
+            if (letters.length === 0) return null;
+            var rect = el.getBoundingClientRect();
+            var relY = clientY - rect.top;
+            if (relY < -4 || relY > rect.height + 4) return null;
+            var ratio = Math.max(0, Math.min(1, relY / rect.height));
+            var idx = Math.floor(ratio * letters.length);
+            idx = Math.max(0, Math.min(letters.length - 1, idx));
+            return letters[idx].dataset.letter;
+        }
+
+        function applyLetter(letter) {
+            if (!letter || letter === waveState.activeLetter) return;
+            if (!waveState.target || !waveState.target.letterIndex[letter]) {
+                /* Huruf tidak ada data — tetap highlight tapi tidak scroll */
+                waveState.activeLetter = letter;
+                updateLetterUI(letter);
+                if (waveState.bubbleEl) {
+                    waveState.bubbleEl.innerText = letter;
+                    waveState.bubbleEl.classList.add('show');
+                }
+                haptic();
+                return;
+            }
+            waveState.activeLetter = letter;
+            updateLetterUI(letter);
+            if (waveState.bubbleEl) {
+                waveState.bubbleEl.innerText = letter;
+                waveState.bubbleEl.classList.add('show');
+            }
+            haptic();
+            scrollToLetter(letter);
+        }
+
+        function clearActive() {
+            waveState.activeLetter = null;
+            waveState.el.classList.remove('active');
+            var letters = el.querySelectorAll('.wave-letter');
+            for (var i = 0; i < letters.length; i++) letters[i].classList.remove('active');
+            if (waveState.bubbleEl) waveState.bubbleEl.classList.remove('show');
+        }
+
+        function onStart(e) {
+            waveState.touching = true;
+            el.classList.add('visible', 'active');
+            clearTimeout(waveState.hideTimer);
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter) applyLetter(letter);
+            if (e.cancelable) e.preventDefault();
+        }
+        function onMove(e) {
+            if (!waveState.touching) return;
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter && letter !== waveState.pendingLetter) {
+                waveState.pendingLetter = letter;
+                if (!waveState.rafPending) {
+                    waveState.rafPending = true;
+                    requestAnimationFrame(function() {
+                        waveState.rafPending = false;
+                        applyLetter(waveState.pendingLetter);
+                    });
+                }
+            }
+            if (e.cancelable) e.preventDefault();
+        }
+        function onEnd() {
+            if (!waveState.touching) return;
+            waveState.touching = false;
+            scheduleWaveHide(900);
+            setTimeout(clearActive, 400);
+        }
+
+        el.addEventListener('touchstart', onStart, { passive: false });
+        el.addEventListener('touchmove', onMove, { passive: false });
+        el.addEventListener('touchend', onEnd);
+        el.addEventListener('touchcancel', onEnd);
+
+        el.addEventListener('mousedown', onStart);
+        el.addEventListener('mousemove', function(e) {
+            if (!waveState.touching) return;
+            var letter = letterFromY(e.clientY);
+            if (letter && letter !== waveState.pendingLetter) {
+                waveState.pendingLetter = letter;
+                if (!waveState.rafPending) {
+                    waveState.rafPending = true;
+                    requestAnimationFrame(function() {
+                        waveState.rafPending = false;
+                        applyLetter(waveState.pendingLetter);
+                    });
+                }
+            }
+        });
+        el.addEventListener('mouseup', onEnd);
+        el.addEventListener('mouseleave', onEnd);
+
+        el.addEventListener('click', function(e) {
+            var letterEl = e.target.closest('.wave-letter');
+            if (!letterEl) return;
+            el.classList.add('visible');
+            applyLetter(letterEl.dataset.letter);
+            scheduleWaveHide(900);
+            setTimeout(clearActive, 500);
+        });
+
+        el.addEventListener('mouseenter', function() {
+            el.classList.add('visible');
+            clearTimeout(waveState.hideTimer);
+        });
+        el.addEventListener('mouseleave', function() {
+            if (!waveState.touching) scheduleWaveHide(1200);
+        });
+    }
+
+    function updateLetterUI(letter) {
+        var letters = waveState.el.querySelectorAll('.wave-letter');
+        for (var i = 0; i < letters.length; i++) {
+            letters[i].classList.toggle('active', letters[i].dataset.letter === letter);
+        }
+    }
+
+    function scrollToLetter(letter) {
+        var t = waveState.target;
+        if (!t) return;
+        var el = t.letterIndex[letter];
+        if (!el) return;
+
+        if (t.scrollTarget === window) {
+            var rect = el.getBoundingClientRect();
+            var top = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 90;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        } else {
+            var hostRect = t.scrollTarget.getBoundingClientRect();
+            var tRect = el.getBoundingClientRect();
+            var offset = tRect.top - hostRect.top + t.scrollTarget.scrollTop - 6;
+            t.scrollTarget.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+    }
+
+    function scheduleWaveHide(delay) {
+        clearTimeout(waveState.hideTimer);
+        waveState.hideTimer = setTimeout(function() {
+            if (!waveState.activeLetter) waveState.el.classList.remove('visible');
+        }, delay);
+    }
+
+    function showGlobalWave() {
+        if (waveState.el) {
+            waveState.el.classList.add('visible');
+            clearTimeout(waveState.hideTimer);
+            waveState.hideTimer = setTimeout(function() {
+                if (!waveState.activeLetter) waveState.el.classList.remove('visible');
+            }, 2500);
+        }
+    }
+
+    function hideGlobalWave() {
+        if (waveState.el) {
+            waveState.el.classList.remove('visible', 'active');
+            if (waveState.bubbleEl) waveState.bubbleEl.classList.remove('show');
+        }
+        clearTimeout(waveState.hideTimer);
+        waveState.activeLetter = null;
+    }
+
+    /* Set target untuk global wave */
+    function setGlobalWaveTarget(letterIndex, scrollTarget, view) {
+        waveState.target = {
+            letterIndex: letterIndex,
+            scrollTarget: scrollTarget,
+            view: view
+        };
+        /* Update available state pada huruf */
+        var letters = waveState.el.querySelectorAll('.wave-letter');
+        for (var i = 0; i < letters.length; i++) {
+            var L = letters[i].dataset.letter;
+            var has = !!letterIndex[L];
+            letters[i].classList.toggle('has-data', has);
+            letters[i].classList.toggle('disabled', !has);
+        }
+    }
+
+    /* Build letterIndex dari koleksi elemen */
+    function buildLetterIndex(els) {
+        var idx = {};
+        for (var i = 0; i < els.length; i++) {
+            var L = els[i].dataset.firstLetter;
+            if (L && !idx[L]) idx[L] = els[i];
+        }
+        return idx;
+    }
+
+    /* Auto reveal global wave on scroll */
+    var _revealBound = false;
+    function bindScrollReveal() {
+        if (_revealBound) return;
+        _revealBound = true;
+        var lastY = 0, ticking = false;
+        window.addEventListener('scroll', function() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function() {
+                var cur = window.pageYOffset || 0;
+                if (Math.abs(cur - lastY) > 60) {
+                    if (waveState.target) showGlobalWave();
+                    lastY = cur;
+                }
+                ticking = false;
+            });
+        }, { passive: true });
+    }
+
+    /* ================================================================
        RENDER BRAND GRID
        ================================================================ */
     function renderBrandGrid() {
@@ -1128,7 +1344,7 @@
         $('katalogView').style.display = 'none';
         $('kalkulatorView').style.display = 'none';
         $('greetingWrapper').classList.add('hidden');
-        hideAllWaves();
+        hideGlobalWave();
 
         if (tab === 'home') {
             $('homeView').style.display = 'block';
@@ -1211,266 +1427,21 @@
     }
 
     /* ================================================================
-       WAVE ALPHABET v2
+       SIDEBAR PLU POINT COFFEE (wave sendiri di dalam sidebar)
        ================================================================ */
-    var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    var sidebarWave = {
+        el: null,
+        bubbleEl: null,
+        letterIndex: {},
+        activeLetter: null,
+        touching: false,
+        hideTimer: null,
+        rafPending: false,
+        pendingLetter: null,
+        listenersAttached: false,
+        scrollEl: null
+    };
 
-    /* Registry: id -> { el, bubbleEl, scrollTarget, letterPositions, active, hideTimer, availableSet } */
-    var waveRegistry = {};
-
-    /**
-     * Bangun wave.
-     * @param {string} id - element id dari .wave-alphabet
-     * @param {string} bubbleId - element id dari .wave-bubble
-     * @param {NodeList|Array} itemEls - elemen list yang punya data-first-letter
-     * @param {Element|Window} scrollTarget - target scroll (window untuk body)
-     * @param {Element} waveHost - host container (untuk hitung bounding rect wave)
-     */
-    function buildWave(id, bubbleId, itemEls, scrollTarget, waveHost) {
-        var el = $(id);
-        if (!el) return;
-        var bubbleEl = $(bubbleId);
-
-        /* Kumpulkan huruf tersedia */
-        var available = {};
-        var letterFirstEl = {};
-        for (var i = 0; i < itemEls.length; i++) {
-            var letter = itemEls[i].dataset.firstLetter;
-            if (!letter) continue;
-            if (!available[letter]) {
-                available[letter] = true;
-                letterFirstEl[letter] = itemEls[i];
-            }
-        }
-
-        /* Render huruf A-Z */
-        var html = '';
-        for (var j = 0; j < ALPHABET.length; j++) {
-            var L = ALPHABET[j];
-            var hasData = !!available[L];
-            html += '<div class="wave-letter' + (hasData ? ' has-data' : ' disabled') +
-                    '" data-letter="' + L + '">' + L + '</div>';
-        }
-        el.innerHTML = html;
-
-        var reg = waveRegistry[id];
-        if (!reg) {
-            reg = waveRegistry[id] = {
-                el: el,
-                bubbleEl: bubbleEl,
-                active: false,
-                activeLetter: null,
-                hideTimer: null,
-                listenersAttached: false
-            };
-        }
-        reg.scrollTarget = scrollTarget;
-        reg.letterFirstEl = letterFirstEl;
-        reg.available = available;
-        reg.waveHost = waveHost;
-
-        /* Attach listener sekali saja */
-        if (!reg.listenersAttached) {
-            attachWaveListeners(id);
-            reg.listenersAttached = true;
-        }
-    }
-
-    function attachWaveListeners(id) {
-        var reg = waveRegistry[id];
-        if (!reg) return;
-        var el = reg.el;
-        var touching = false;
-        var rafPending = false;
-        var pendingLetter = null;
-
-        function letterFromY(clientY) {
-            var letters = el.querySelectorAll('.wave-letter');
-            if (letters.length === 0) return null;
-            var rect = el.getBoundingClientRect();
-            var relY = clientY - rect.top;
-            if (relY < 0 || relY > rect.height) return null;
-            var ratio = relY / rect.height;
-            var idx = Math.max(0, Math.min(letters.length - 1, Math.floor(ratio * letters.length)));
-            return letters[idx].dataset.letter;
-        }
-
-        function applyLetter(letter) {
-            if (!letter || letter === reg.activeLetter) return;
-            reg.activeLetter = letter;
-            reg.el.classList.add('active');
-
-            /* Update UI huruf aktif */
-            var letters = el.querySelectorAll('.wave-letter');
-            for (var i = 0; i < letters.length; i++) {
-                letters[i].classList.toggle('active', letters[i].dataset.letter === letter);
-            }
-            /* Bubble */
-            if (reg.bubbleEl) {
-                reg.bubbleEl.innerText = letter;
-                reg.bubbleEl.classList.add('show');
-            }
-            haptic();
-            scrollToLetter(id, letter);
-        }
-
-        function clearActive() {
-            reg.activeLetter = null;
-            reg.el.classList.remove('active');
-            var letters = el.querySelectorAll('.wave-letter');
-            for (var i = 0; i < letters.length; i++) letters[i].classList.remove('active');
-            if (reg.bubbleEl) reg.bubbleEl.classList.remove('show');
-        }
-
-        function onStart(e) {
-            touching = true;
-            el.classList.add('visible');
-            clearTimeout(reg.hideTimer);
-            var pt = e.touches ? e.touches[0] : e;
-            var letter = letterFromY(pt.clientY);
-            if (letter) applyLetter(letter);
-            if (e.cancelable) e.preventDefault();
-        }
-        function onMove(e) {
-            if (!touching) return;
-            var pt = e.touches ? e.touches[0] : e;
-            var letter = letterFromY(pt.clientY);
-            if (letter && letter !== pendingLetter) {
-                pendingLetter = letter;
-                if (!rafPending) {
-                    rafPending = true;
-                    requestAnimationFrame(function() {
-                        rafPending = false;
-                        applyLetter(pendingLetter);
-                    });
-                }
-            }
-            if (e.cancelable) e.preventDefault();
-        }
-        function onEnd() {
-            if (!touching) return;
-            touching = false;
-            scheduleHide(id, 800);
-            setTimeout(clearActive, 400);
-        }
-
-        el.addEventListener('touchstart', onStart, { passive: false });
-        el.addEventListener('touchmove', onMove, { passive: false });
-        el.addEventListener('touchend', onEnd);
-        el.addEventListener('touchcancel', onEnd);
-
-        el.addEventListener('mousedown', onStart);
-        el.addEventListener('mousemove', function(e) {
-            if (!touching) return;
-            var letter = letterFromY(e.clientY);
-            if (letter && letter !== pendingLetter) {
-                pendingLetter = letter;
-                if (!rafPending) {
-                    rafPending = true;
-                    requestAnimationFrame(function() {
-                        rafPending = false;
-                        applyLetter(pendingLetter);
-                    });
-                }
-            }
-        });
-        el.addEventListener('mouseup', onEnd);
-        el.addEventListener('mouseleave', onEnd);
-
-        /* Tap huruf */
-        el.addEventListener('click', function(e) {
-            var letterEl = e.target.closest('.wave-letter');
-            if (!letterEl || letterEl.classList.contains('disabled')) return;
-            el.classList.add('visible');
-            applyLetter(letterEl.dataset.letter);
-            scheduleHide(id, 800);
-            setTimeout(clearActive, 500);
-        });
-
-        el.addEventListener('mouseenter', function() {
-            el.classList.add('visible');
-            clearTimeout(reg.hideTimer);
-        });
-        el.addEventListener('mouseleave', function() {
-            if (!touching) scheduleHide(id, 1200);
-        });
-    }
-
-    function scrollToLetter(id, letter) {
-        var reg = waveRegistry[id];
-        if (!reg || !reg.letterFirstEl) return;
-        var target = reg.letterFirstEl[letter];
-        if (!target) return;
-
-        var scrollTarget = reg.scrollTarget || document.scrollingElement || document.documentElement;
-
-        /* Hitung posisi target relatif terhadap scrollTarget */
-        var targetTop;
-        if (scrollTarget === window || scrollTarget === document.documentElement || scrollTarget === document.body) {
-            var rect = target.getBoundingClientRect();
-            targetTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 90;
-            window.scrollTo({ top: targetTop, behavior: 'smooth' });
-        } else {
-            var hostRect = scrollTarget.getBoundingClientRect();
-            var tRect = target.getBoundingClientRect();
-            var offset = tRect.top - hostRect.top + scrollTarget.scrollTop - 6;
-            scrollTarget.scrollTo({ top: offset, behavior: 'smooth' });
-        }
-    }
-
-    function scheduleHide(id, delay) {
-        var reg = waveRegistry[id];
-        if (!reg) return;
-        clearTimeout(reg.hideTimer);
-        reg.hideTimer = setTimeout(function() {
-            if (!reg.activeLetter) reg.el.classList.remove('visible');
-        }, delay);
-    }
-
-    function showWave(id) {
-        var reg = waveRegistry[id];
-        if (!reg) return;
-        reg.el.classList.add('visible');
-        clearTimeout(reg.hideTimer);
-        reg.hideTimer = setTimeout(function() {
-            if (!reg.activeLetter) reg.el.classList.remove('visible');
-        }, 2500);
-    }
-
-    function hideAllWaves() {
-        Object.keys(waveRegistry).forEach(function(k) {
-            var r = waveRegistry[k];
-            if (r.el) r.el.classList.remove('visible', 'active');
-            if (r.bubbleEl) r.bubbleEl.classList.remove('show');
-            clearTimeout(r.hideTimer);
-        });
-    }
-
-    /* Reveal wave saat user scroll */
-    var _scrollRevealBound = {};
-    function bindScrollReveal(key, scrollEl, waveId) {
-        if (_scrollRevealBound[key]) return;
-        _scrollRevealBound[key] = true;
-        var lastY = 0;
-        var ticking = false;
-        var target = scrollEl === window ? window : scrollEl;
-        target.addEventListener('scroll', function() {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(function() {
-                var cur = scrollEl === window ? (window.pageYOffset || 0) : scrollEl.scrollTop;
-                if (Math.abs(cur - lastY) > 40) {
-                    showWave(waveId);
-                    lastY = cur;
-                }
-                ticking = false;
-            });
-        }, { passive: true });
-    }
-
-    /* ================================================================
-       SIDEBAR PLU POINT COFFEE
-       ================================================================ */
     function renderSidebarPlu(filter) {
         var list = $('sidebarPluList');
         var count = $('pluCount');
@@ -1491,8 +1462,7 @@
             list.innerHTML = '<div class="plu-empty">' + 
                 (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + 
             '</div>';
-            var w = $('sidebarWaveAlphabet');
-            if (w) w.innerHTML = '';
+            if (sidebarWave.el) sidebarWave.el.innerHTML = '';
             return;
         }
 
@@ -1514,12 +1484,160 @@
         });
         list.innerHTML = html;
 
-        /* Bangun wave untuk sidebar — scroll target = list element */
+        buildSidebarWave();
+    }
+
+    function buildSidebarWave() {
+        var sidebar = $('pluSidebar');
+        if (!sidebar) return;
+
+        if (!sidebarWave.el) {
+            var el = document.createElement('div');
+            el.className = 'wave-alphabet';
+            el.id = 'sidebarWaveAlphabet';
+            el.style.position = 'absolute';
+            el.style.right = '4px';
+            el.style.top = '112px';
+            el.style.bottom = '12px';
+            el.style.transform = 'none';
+            el.style.maxHeight = 'none';
+            sidebar.appendChild(el);
+            sidebarWave.el = el;
+
+            var bubble = document.createElement('div');
+            bubble.className = 'wave-bubble';
+            bubble.id = 'sidebarWaveBubble';
+            bubble.style.position = 'absolute';
+            bubble.style.right = '40px';
+            bubble.style.top = '50%';
+            sidebar.appendChild(bubble);
+            sidebarWave.bubbleEl = bubble;
+
+            attachSidebarWaveListeners();
+        }
+
+        var list = $('sidebarPluList');
+        sidebarWave.scrollEl = list;
+
         var itemEls = list.querySelectorAll('.plu-item');
-        buildWave('sidebarWaveAlphabet', 'sidebarWaveBubble', itemEls, list, $('pluSidebar'));
-        var reg = waveRegistry['sidebarWaveAlphabet'];
-        if (reg) reg.el.classList.add('visible');
-        bindScrollReveal('sidebar', list, 'sidebarWaveAlphabet');
+        sidebarWave.letterIndex = buildLetterIndex(itemEls);
+
+        var html = '';
+        for (var i = 0; i < ALPHABET.length; i++) {
+            var L = ALPHABET[i];
+            var has = !!sidebarWave.letterIndex[L];
+            html += '<div class="wave-letter' + (has ? ' has-data' : ' disabled') +
+                    '" data-letter="' + L + '">' + L + '</div>';
+        }
+        sidebarWave.el.innerHTML = html;
+        sidebarWave.el.classList.add('visible');
+    }
+
+    function attachSidebarWaveListeners() {
+        if (sidebarWave.listenersAttached) return;
+        sidebarWave.listenersAttached = true;
+        var el = sidebarWave.el;
+
+        function letterFromY(clientY) {
+            var letters = el.querySelectorAll('.wave-letter');
+            if (letters.length === 0) return null;
+            var rect = el.getBoundingClientRect();
+            var relY = clientY - rect.top;
+            if (relY < -4 || relY > rect.height + 4) return null;
+            var ratio = Math.max(0, Math.min(1, relY / rect.height));
+            var idx = Math.floor(ratio * letters.length);
+            idx = Math.max(0, Math.min(letters.length - 1, idx));
+            return letters[idx].dataset.letter;
+        }
+
+        function applyLetter(letter) {
+            if (!letter) return;
+            if (letter === sidebarWave.activeLetter) return;
+            sidebarWave.activeLetter = letter;
+            var letters = el.querySelectorAll('.wave-letter');
+            for (var i = 0; i < letters.length; i++) {
+                letters[i].classList.toggle('active', letters[i].dataset.letter === letter);
+            }
+            if (sidebarWave.bubbleEl) {
+                sidebarWave.bubbleEl.innerText = letter;
+                sidebarWave.bubbleEl.classList.add('show');
+            }
+            haptic();
+            /* Scroll ke letter */
+            var targetEl = sidebarWave.letterIndex[letter];
+            if (targetEl && sidebarWave.scrollEl) {
+                var hostRect = sidebarWave.scrollEl.getBoundingClientRect();
+                var tRect = targetEl.getBoundingClientRect();
+                var offset = tRect.top - hostRect.top + sidebarWave.scrollEl.scrollTop - 6;
+                sidebarWave.scrollEl.scrollTo({ top: offset, behavior: 'smooth' });
+            }
+        }
+
+        function clearActive() {
+            sidebarWave.activeLetter = null;
+            var letters = el.querySelectorAll('.wave-letter');
+            for (var i = 0; i < letters.length; i++) letters[i].classList.remove('active');
+            if (sidebarWave.bubbleEl) sidebarWave.bubbleEl.classList.remove('show');
+        }
+
+        function onStart(e) {
+            sidebarWave.touching = true;
+            el.classList.add('active');
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter) applyLetter(letter);
+            if (e.cancelable) e.preventDefault();
+        }
+        function onMove(e) {
+            if (!sidebarWave.touching) return;
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter && letter !== sidebarWave.pendingLetter) {
+                sidebarWave.pendingLetter = letter;
+                if (!sidebarWave.rafPending) {
+                    sidebarWave.rafPending = true;
+                    requestAnimationFrame(function() {
+                        sidebarWave.rafPending = false;
+                        applyLetter(sidebarWave.pendingLetter);
+                    });
+                }
+            }
+            if (e.cancelable) e.preventDefault();
+        }
+        function onEnd() {
+            if (!sidebarWave.touching) return;
+            sidebarWave.touching = false;
+            setTimeout(clearActive, 400);
+        }
+
+        el.addEventListener('touchstart', onStart, { passive: false });
+        el.addEventListener('touchmove', onMove, { passive: false });
+        el.addEventListener('touchend', onEnd);
+        el.addEventListener('touchcancel', onEnd);
+        el.addEventListener('mousedown', onStart);
+        el.addEventListener('mousemove', function(e) {
+            if (!sidebarWave.touching) return;
+            var letter = letterFromY(e.clientY);
+            if (letter && letter !== sidebarWave.pendingLetter) {
+                sidebarWave.pendingLetter = letter;
+                if (!sidebarWave.rafPending) {
+                    sidebarWave.rafPending = true;
+                    requestAnimationFrame(function() {
+                        sidebarWave.rafPending = false;
+                        applyLetter(sidebarWave.pendingLetter);
+                    });
+                }
+            }
+        });
+        el.addEventListener('mouseup', onEnd);
+        el.addEventListener('mouseleave', onEnd);
+
+        el.addEventListener('click', function(e) {
+            var letterEl = e.target.closest('.wave-letter');
+            if (!letterEl || letterEl.classList.contains('disabled')) return;
+            applyLetter(letterEl.dataset.letter);
+            setTimeout(clearActive, 500);
+        });
     }
 
     /* ================================================================
@@ -1567,12 +1685,11 @@
         if (mode === 'list') {
             $('productGrid').classList.remove('hidden');
             $('tableView').classList.add('hidden');
-            setTimeout(function() { rebuildDetailListWave(); }, 30);
         } else {
             $('productGrid').classList.add('hidden');
             $('tableView').classList.remove('hidden');
-            setTimeout(function() { rebuildDetailTableWave(); }, 30);
         }
+        refreshDetailWave();
     }
 
     function setKatalogView(mode) {
@@ -1583,12 +1700,36 @@
         if (mode === 'list') {
             $('katalogListGrid').classList.remove('hidden');
             $('katalogTableView').classList.add('hidden');
-            setTimeout(function() { rebuildKatalogListWave(); }, 30);
         } else {
             $('katalogListGrid').classList.add('hidden');
             $('katalogTableView').classList.remove('hidden');
-            setTimeout(function() { rebuildKatalogTableWave(); }, 30);
         }
+        refreshKatalogWave();
+    }
+
+    function refreshDetailWave() {
+        if (detailViewMode === 'list') {
+            var items = $('productGrid').querySelectorAll('.product-card');
+            if (items.length === 0) { hideGlobalWave(); return; }
+            setGlobalWaveTarget(buildLetterIndex(items), window, 'detail-list');
+        } else {
+            var rows = $('tableBody').querySelectorAll('tr[data-first-letter]');
+            if (rows.length === 0) { hideGlobalWave(); return; }
+            setGlobalWaveTarget(buildLetterIndex(rows), window, 'detail-table');
+        }
+    }
+
+    function refreshKatalogWave() {
+        if (katalogViewMode === 'list') {
+            var items = $('katalogListGrid').querySelectorAll('.product-card');
+            if (items.length === 0) { hideGlobalWave(); return; }
+            setGlobalWaveTarget(buildLetterIndex(items), window, 'katalog-list');
+        } else {
+            var rows = $('katalogTableBody').querySelectorAll('tr[data-first-letter]');
+            if (rows.length === 0) { hideGlobalWave(); return; }
+            setGlobalWaveTarget(buildLetterIndex(rows), window, 'katalog-table');
+        }
+        showGlobalWave();
     }
 
     function openBrandCategory(key) {
@@ -1686,7 +1827,7 @@
     }
 
     /* ================================================================
-       RENDER DATA GRID (FLAT — TANPA HEADING HURUF)
+       RENDER DATA GRID — flat, tanpa heading huruf
        ================================================================ */
     function renderDataGrid() {
         var query = searchInput.value.toLowerCase().trim();
@@ -1707,6 +1848,7 @@
             $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
             $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
             _renderCache.key = cacheKey;
+            hideGlobalWave();
             return;
         }
 
@@ -1740,9 +1882,7 @@
         $('tableBody').innerHTML = tableHtml;
         
         _renderCache.key = cacheKey;
-
-        rebuildDetailListWave();
-        rebuildDetailTableWave();
+        refreshDetailWave();
     }
 
     function getCurrentFilteredData() {
@@ -1759,24 +1899,6 @@
             return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
         });
         return filtered;
-    }
-
-    function rebuildDetailListWave() {
-        var grid = $('productGrid');
-        if (!grid) return;
-        var items = grid.querySelectorAll('.product-card');
-        if (items.length === 0) { $('detailWaveAlphabet').innerHTML = ''; return; }
-        buildWave('detailWaveAlphabet', 'detailWaveBubble', items, window, grid.parentNode);
-        bindScrollReveal('detailList', window, 'detailWaveAlphabet');
-    }
-
-    function rebuildDetailTableWave() {
-        var tbody = $('tableBody');
-        if (!tbody) return;
-        var rows = tbody.querySelectorAll('tr[data-first-letter]');
-        if (rows.length === 0) { $('detailTableWaveAlphabet').innerHTML = ''; return; }
-        buildWave('detailTableWaveAlphabet', 'detailTableWaveBubble', rows, window, $('tableView'));
-        bindScrollReveal('detailTable', window, 'detailTableWaveAlphabet');
     }
 
     /* ================================================================
@@ -1843,6 +1965,7 @@
             tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
             $('katalogCounter').textContent = '0 Item';
             _katalogCache.key = cacheKey;
+            hideGlobalWave();
             return;
         }
 
@@ -1919,27 +2042,7 @@
         tableBody.innerHTML = tableHtml;
         
         _katalogCache.key = cacheKey;
-
-        rebuildKatalogListWave();
-        rebuildKatalogTableWave();
-    }
-
-    function rebuildKatalogListWave() {
-        var grid = $('katalogListGrid');
-        if (!grid) return;
-        var items = grid.querySelectorAll('.product-card');
-        if (items.length === 0) { $('katalogWaveAlphabet').innerHTML = ''; return; }
-        buildWave('katalogWaveAlphabet', 'katalogWaveBubble', items, window, grid.parentNode);
-        bindScrollReveal('katalogList', window, 'katalogWaveAlphabet');
-    }
-
-    function rebuildKatalogTableWave() {
-        var tbody = $('katalogTableBody');
-        if (!tbody) return;
-        var rows = tbody.querySelectorAll('tr[data-first-letter]');
-        if (rows.length === 0) { $('katalogTableWaveAlphabet').innerHTML = ''; return; }
-        buildWave('katalogTableWaveAlphabet', 'katalogTableWaveBubble', rows, window, $('katalogTableView'));
-        bindScrollReveal('katalogTable', window, 'katalogTableWaveAlphabet');
+        refreshKatalogWave();
     }
 
     /* ================================================================
@@ -2139,12 +2242,14 @@
     /* ================================================================
        INIT
        ================================================================ */
+    initGlobalWave();
     renderBrandGrid();
     clockLoop();
     toggleSapaanCountdown();
     hitungGramasi();
     hitungBiang();
     hitungSeal();
+    bindScrollReveal();
     loadData();
     </script>
 </body>
