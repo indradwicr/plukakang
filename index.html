@@ -272,7 +272,7 @@
             border-color: var(--primary-blue);
         }
 
-        /* ===== SCROLL AREA (internal scroll, seperti sidebar) ===== */
+        /* ===== SCROLL AREA ===== */
         .scroll-area {
             position: relative;
             height: calc(100vh - 340px);
@@ -528,7 +528,7 @@
         }
 
         /* ============================================================
-           ALPHABET INDEX — SELALU MUNCUL, FLUID SLIDE
+           ALPHABET INDEX — TOUCH-DOMINANT (FINAL)
            ============================================================ */
         .alpha-index {
             position: absolute;
@@ -542,7 +542,7 @@
             z-index: 60;
             opacity: 1;
             pointer-events: auto;
-            touch-action: none;
+            touch-action: pan-y;         /* ✅ bukan none */
             user-select: none;
             -webkit-user-select: none;
             padding: 6px 3px;
@@ -582,6 +582,7 @@
             border-radius: 6px;
             flex-shrink: 0;
             font-family: var(--font-main);
+            pointer-events: none;        /* ✅ event ke container, bukan letter */
         }
         .alpha-index .alpha-letter.active {
             color: #fff;
@@ -1026,15 +1027,15 @@
     }
 
     /* ================================================================
-       ALPHA INDEX — FLUID SLIDE (TOUCH NATIVE)
+       ALPHA INDEX — TOUCH-DOMINANT (FINAL)
        ================================================================
-       Kunci:
-       - PAKAI touchstart/touchmove NATIVE (bukan PointerEvent + setPointerCapture)
-       - setPointerCapture DIHAPUS karena bikin pointer "nyangkut"
-       - touch-action: none di .alpha-index biar browser gak interpret as scroll
-       - preventDefault() di touchstart & touchmove untuk stop scroll chaining
-       - Hit detection: cari huruf terdekat dengan toleransi 40px
-       - Auto-scroll: scrollTop = offset (instant, fluid)
+       Racikan utama:
+       1. touchstart TIDAK preventDefault → biar browser tahu ini gesture
+       2. touchmove preventDefault HANYA kalau sudah geser >8px → cegah scroll halaman
+       3. hasMoved flag → kalau slide, jangan proses click (hindari ghost click)
+       4. Hit test pakai koordinat relatif ke host → konsisten
+       5. scrollTop di-clamp → scroll gak reset
+       6. .alpha-letter pakai pointer-events: none → event ke container
     */
     var alphaRegistry = {};
 
@@ -1072,7 +1073,10 @@
                 touching: false,
                 rafPending: false,
                 pendingLetter: null,
-                letterElsCache: null
+                letterElsCache: null,
+                hasMoved: false,
+                startY: 0,
+                touchId: null
             };
             attachAlphaListeners(state);
         } else {
@@ -1093,6 +1097,7 @@
 
     function attachAlphaListeners(state) {
         var host = state.host;
+        var MOVE_THRESHOLD = 8;
 
         function getLetterEls() {
             if (!state.letterElsCache || state.letterElsCache.length === 0) {
@@ -1104,21 +1109,26 @@
         function letterFromY(clientY) {
             var letterEls = getLetterEls();
             if (letterEls.length === 0) return null;
+
+            var hostRect = host.getBoundingClientRect();
+            var relY = clientY - hostRect.top;
+
+            /* Clamp: kalau di luar area, kembalikan huruf paling ujung */
+            if (relY < 0) return letterEls[0].dataset.letter;
+            if (relY > hostRect.height) return letterEls[letterEls.length - 1].dataset.letter;
+
             var closest = null;
             var closestDist = Infinity;
             for (var i = 0; i < letterEls.length; i++) {
                 var rect = letterEls[i].getBoundingClientRect();
-                var centerY = rect.top + rect.height / 2;
-                var dist = Math.abs(clientY - centerY);
+                var centerY = rect.top + rect.height / 2 - hostRect.top;
+                var dist = Math.abs(relY - centerY);
                 if (dist < closestDist) {
                     closestDist = dist;
                     closest = letterEls[i];
                 }
             }
-            if (closest && closestDist <= 40) {
-                return closest.dataset.letter;
-            }
-            return null;
+            return closest ? closest.dataset.letter : null;
         }
 
         function applyLetter(letter) {
@@ -1139,27 +1149,47 @@
             for (var i = 0; i < letterEls.length; i++) letterEls[i].classList.remove('active');
         }
 
-        /* ============ TOUCH EVENTS (native, paling reliable di mobile) ============ */
+        /* ============================================================
+           TOUCH HANDLERS — "touch-dominant"
+           ============================================================ */
         function onTouchStart(e) {
             if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
 
+            var touch = e.touches[0];
+            state.touchId = touch.identifier;
+            state.startY = touch.clientY;
+            state.hasMoved = false;
             state.touching = true;
+
             host.classList.add('active');
             state.letterElsCache = null;
 
-            var touch = e.touches[0];
+            /* Apply huruf yang disentuh */
             var letter = letterFromY(touch.clientY);
             if (letter) applyLetter(letter);
 
-            e.preventDefault();
+            /* ❌ JANGAN preventDefault — biar browser tahu ini gesture */
         }
 
         function onTouchMove(e) {
             if (!state.touching) return;
 
-            var touch = e.touches[0];
-            var letter = letterFromY(touch.clientY);
+            var touch = null;
+            for (var i = 0; i < e.touches.length; i++) {
+                if (e.touches[i].identifier === state.touchId) {
+                    touch = e.touches[i];
+                    break;
+                }
+            }
+            if (!touch) return;
 
+            /* Cek pergerakan */
+            if (!state.hasMoved && Math.abs(touch.clientY - state.startY) > MOVE_THRESHOLD) {
+                state.hasMoved = true;
+            }
+
+            /* Cari huruf baru */
+            var letter = letterFromY(touch.clientY);
             if (letter && letter !== state.pendingLetter) {
                 state.pendingLetter = letter;
                 if (!state.rafPending) {
@@ -1171,36 +1201,49 @@
                 }
             }
 
-            e.preventDefault();
+            /* ✅ preventDefault HANYA kalau sudah geser */
+            if (state.hasMoved && e.cancelable) {
+                e.preventDefault();
+            }
         }
 
         function onTouchEnd() {
+            if (!state.touching) return;
             state.touching = false;
             state.pendingLetter = null;
-            setTimeout(clearActive, 400);
+            state.touchId = null;
+            setTimeout(clearActive, state.hasMoved ? 400 : 500);
         }
 
-        host.addEventListener('touchstart', onTouchStart, { passive: false });
+        host.addEventListener('touchstart', onTouchStart, { passive: true });
         host.addEventListener('touchmove', onTouchMove, { passive: false });
         host.addEventListener('touchend', onTouchEnd);
         host.addEventListener('touchcancel', onTouchEnd);
 
-        /* ============ MOUSE EVENTS (desktop) ============ */
+        /* ============================================================
+           MOUSE EVENTS (desktop)
+           ============================================================ */
         var mouseDown = false;
+        var mouseStartY = 0;
+        var mouseHasMoved = false;
 
         function onMouseDown(e) {
             if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
             mouseDown = true;
+            mouseStartY = e.clientY;
+            mouseHasMoved = false;
             state.touching = true;
             host.classList.add('active');
             state.letterElsCache = null;
             var letter = letterFromY(e.clientY);
             if (letter) applyLetter(letter);
-            e.preventDefault();
         }
 
         function onMouseMove(e) {
             if (!mouseDown) return;
+            if (!mouseHasMoved && Math.abs(e.clientY - mouseStartY) > MOVE_THRESHOLD) {
+                mouseHasMoved = true;
+            }
             var letter = letterFromY(e.clientY);
             if (letter && letter !== state.pendingLetter) {
                 state.pendingLetter = letter;
@@ -1226,18 +1269,24 @@
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
 
-        /* Tap langsung di huruf */
+        /* ============================================================
+           CLICK HANDLER — cek hasMoved
+           ============================================================ */
         host.addEventListener('click', function(e) {
-            var letterEl = e.target.closest('.alpha-letter');
-            if (!letterEl) return;
-            applyLetter(letterEl.dataset.letter);
-            setTimeout(clearActive, 500);
+            /* Kalau user sudah slide, JANGAN proses click (hindari ghost tap) */
+            if (state.hasMoved || mouseHasMoved) return;
+
+            var touch = e.changedTouches ? e.changedTouches[0] : e;
+            var letter = letterFromY(touch.clientY);
+            if (letter) {
+                applyLetter(letter);
+                setTimeout(clearActive, 500);
+            }
         });
     }
 
     /**
-     * Scroll ke huruf — instant pakai scrollTop.
-     * Tidak pakai setPointerCapture, jadi slide tetap fluid.
+     * Scroll ke huruf — pakai scrollTop dengan clamping.
      */
     function scrollToLetter(state, letter) {
         var target = state.letterFirstEl[letter];
@@ -1384,7 +1433,6 @@
 
         count.textContent = items.length;
 
-        /* Hapus item lama, pertahankan alpha-index */
         var alphaEl = $('sidebarAlpha');
         var existingItems = list.querySelectorAll('.plu-item');
         for (var i = 0; i < existingItems.length; i++) existingItems[i].remove();
