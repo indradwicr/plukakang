@@ -18,9 +18,6 @@
             --text-muted: #4b5563;
             --text-light: #9ca3af;
             --primary-blue: #0073ea;
-            --primary-blue-dark: #0057b8;
-            --primary-blue-soft: rgba(0, 115, 234, 0.12);
-            --primary-blue-shadow: rgba(0, 115, 234, 0.42);
             --card-white: #ffffff;
             --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
             --card-border: #e5e7eb;
@@ -34,21 +31,19 @@
             --font-code: 'JetBrains Mono', monospace;
             --dark-green: #1b4d2e;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        html, body {
+        body {
             font-family: var(--font-main);
             background-color: var(--bg-app);
             color: var(--text-main);
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
             -webkit-font-smoothing: antialiased;
         }
-
-        body { display: flex; justify-content: center; }
-
         .app-layout {
             width: 100%;
             max-width: 480px;
@@ -93,12 +88,6 @@
             border: 1px solid var(--card-border);
             box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
             margin-bottom: 16px; position: relative; overflow: hidden;
-        }
-        .greeting-container::before {
-            content: ''; position: absolute; top: -40%; right: -20%;
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(0,115,234,0.06) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none;
         }
         .greeting-date-time {
             display: flex; justify-content: space-between; align-items: center;
@@ -241,7 +230,6 @@
             display: flex; align-items: center; gap: 6px;
         }
         .back-btn:active { transform: scale(0.95); }
-
         .toolbar-row {
             display: flex; justify-content: space-between; align-items: center;
             flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
@@ -257,7 +245,6 @@
         .legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
         .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
         .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
-
         .view-toggle { display: flex; gap: 6px; }
         .view-toggle .vt-btn {
             background: var(--card-white); border: 1px solid var(--card-border);
@@ -272,23 +259,7 @@
             border-color: var(--primary-blue);
         }
 
-        /* ===== SCROLL AREA (internal scroll seperti sidebar) ===== */
-        .scroll-area {
-            position: relative;
-            height: calc(100vh - 340px);
-            min-height: 320px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding-right: 34px;
-            border-radius: 16px;
-            scrollbar-width: thin;
-        }
-        .scroll-area::-webkit-scrollbar { width: 4px; }
-        .scroll-area::-webkit-scrollbar-track { background: transparent; }
-        .scroll-area::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-
-        /* ===== PRODUCTS ===== */
+        /* ===== PRODUCTS & TABLE ===== */
         .products-grid { display: flex; flex-direction: column; gap: 10px; }
         .product-card {
             background: var(--card-white); border-radius: 18px;
@@ -297,7 +268,7 @@
             border: 1px solid var(--card-border);
             box-shadow: var(--card-shadow); gap: 12px;
         }
-        .product-info-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+        .product-info-col { display: flex; flex-direction: column; gap: 4px; }
         .brand-mini-tag {
             font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
             letter-spacing: 0.5px; color: var(--primary-blue);
@@ -318,11 +289,87 @@
         .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
         .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
 
-        /* ===== TABLE ===== */
-        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        /* GOOGLE SHEETS KATALOG STYLES */
+        .sheets-container {
+            background: var(--card-white);
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .sheets-toolbar {
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .sheets-tabs-bar {
+            display: flex;
+            background: #e2e8f0;
+            border-bottom: 2px solid #cbd5e1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .sheets-tabs-bar::-webkit-scrollbar { display: none; }
+        .sheet-tab-item {
+            padding: 10px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: #cbd5e1;
+            border: none;
+            border-right: 1px solid #94a3b8;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        .sheet-tab-item.active {
+            background: var(--card-white);
+            color: var(--text-main);
+            font-weight: 800;
+        }
+        .sheet-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--tab-color, var(--primary-blue));
+        }
+        .sheet-tab-item .tab-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--tab-color, #94a3b8);
+        }
+        .sheet-tab-item .tab-count-badge {
+            font-size: 0.6rem;
+            background: rgba(0, 0, 0, 0.08);
+            padding: 1px 6px;
+            border-radius: 10px;
+        }
+        .table-wrapper {
+            background: var(--card-white); border-radius: 16px;
+            border: 1px solid var(--card-border); overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        .table-scroll { overflow-x: auto; max-height: 500px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
         .table-scroll th {
-            text-align: left; padding: 10px 12px 8px 12px;
+            position: sticky; top: 0; z-index: 10;
+            text-align: left; padding: 10px 12px;
             font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
             letter-spacing: 0.4px; color: var(--text-light);
             border-bottom: 2px solid var(--card-border); background: #f8fafc;
@@ -331,51 +378,10 @@
             padding: 8px 12px; border-bottom: 1px solid var(--card-border);
             vertical-align: middle;
         }
-        .table-scroll tr:last-child td { border-bottom: none; }
-        .table-scroll .plu-badge-button {
-            display: inline-block; font-size: 0.65rem;
-            padding: 3px 8px; margin: 1px 2px 1px 0;
-        }
-        .table-scroll .row-number {
-            font-size: 0.65rem; color: var(--text-light);
-            font-weight: 700; width: 28px; text-align: center;
-        }
+        .table-scroll tr:nth-child(even) { background: #fafafa; }
+        .table-scroll tr:hover { background: #f1f5f9; }
+        .table-scroll .row-number { font-size: 0.65rem; color: var(--text-light); font-weight: 700; width: 28px; text-align: center; }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
-
-        /* ===== SHEET TABS ===== */
-        .sheet-tabs {
-            display: flex; gap: 6px; overflow-x: auto;
-            padding-bottom: 8px; margin-bottom: 12px;
-            scrollbar-width: none;
-            border-bottom: 2px solid var(--card-border);
-        }
-        .sheet-tabs::-webkit-scrollbar { display: none; }
-        .sheet-tab {
-            padding: 8px 16px; border-radius: 10px 10px 0 0;
-            font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
-            cursor: pointer; white-space: nowrap;
-            border: 1px solid transparent; border-bottom: none;
-            transition: all 0.2s ease; background: transparent;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .sheet-tab .tab-count {
-            font-size: 0.6rem; color: var(--text-light);
-            background: var(--bg-app); padding: 1px 8px; border-radius: 10px;
-        }
-        .sheet-tab.active {
-            color: var(--text-main); background: var(--card-white);
-            border-color: var(--card-border); font-weight: 800;
-        }
-        .sheet-tab.active .tab-count { background: var(--primary-blue); color: white; }
-        .sheet-tab:active { transform: scale(0.95); }
-        .sheet-tab.bread.active { border-top: 3px solid #8c5332; }
-        .sheet-tab.burger.active { border-top: 3px solid #e11d48; }
-        .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
-        .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
-        .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
-        .sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
-        .sheet-tab.perishable.active { border-top: 3px solid #059669; }
-        .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
         /* ===== KALKULATOR ===== */
         .kalkulator-card {
@@ -411,10 +417,7 @@
         .hasil-box .hasil-label { font-size: 12px; color: var(--text-muted); }
         .hasil-box .hasil-value { font-weight: 700; font-size: 16px; }
         .hasil-box .hasil-value.primary { color: var(--primary-blue); font-size: 18px; }
-
-        .tabel-wadah-container {
-            max-height: 380px; overflow-y: auto; margin-top: 4px;
-        }
+        .tabel-wadah-container { max-height: 380px; overflow-y: auto; margin-top: 4px; }
         .tabel-wadah-container::-webkit-scrollbar { width: 4px; }
         .tabel-wadah-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
         .tabel-wadah-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
@@ -426,10 +429,7 @@
             font-weight: 700; position: sticky; top: 0;
             background: #fff; z-index: 2;
         }
-        .tabel-wadah-container td {
-            padding: 7px 6px; font-size: 12px;
-            border-bottom: 1px solid #f1f5f9;
-        }
+        .tabel-wadah-container td { padding: 7px 6px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
         .tabel-wadah-container th:nth-child(2),
         .tabel-wadah-container th:nth-child(3),
         .tabel-wadah-container td:nth-child(2),
@@ -438,27 +438,21 @@
         .tabel-wadah-container td:last-child { text-align: right; }
         .tabel-wadah-container .bold { font-weight: 700; }
         .tabel-wadah-container .hasil-gramasi { font-weight: 700; color: var(--primary-blue); }
-
         .seal-tip { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-        /* ===== SIDEBAR PLU ===== */
+        /* ===== SIDEBAR PLU & ALPHABET INDEXER ===== */
         .plu-sidebar {
             background: #f0f4ff; border-radius: 20px; padding: 16px;
             border: 1px solid var(--card-border); margin-bottom: 16px;
-            position: relative;
         }
         .plu-sidebar .sidebar-title {
             font-size: 13px; font-weight: 700; color: var(--dark-green);
             display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
         }
         .plu-sidebar .sidebar-title span {
-            background: var(--primary-blue);
-            color: #fff;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-left: auto;
+            background: var(--primary-blue); color: #fff;
+            padding: 2px 10px; border-radius: 10px;
+            font-size: 11px; font-weight: 700; margin-left: auto;
         }
         .plu-sidebar .sidebar-search {
             width: 100%; padding: 10px 14px; border-radius: 12px;
@@ -470,133 +464,80 @@
             display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700;
             color: var(--text-muted); margin-bottom: 8px; padding-left: 2px;
         }
-        .plu-sidebar .sidebar-legend .legend-item {
-            display: flex; align-items: center; gap: 5px;
+        .plu-sidebar .sidebar-legend .legend-item { display: flex; align-items: center; gap: 5px; }
+        .plu-sidebar .sidebar-legend .legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
+        .plu-sidebar .sidebar-legend .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
+        .plu-sidebar .sidebar-legend .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
+        
+        .alphabet-indexer-container { position: relative; user-select: none; }
+        .alphabet-nav {
+            position: absolute; right: 2px; top: 50%;
+            transform: translateY(-50%); display: flex; flex-direction: column;
+            align-items: center; gap: 1px; z-index: 10; touch-action: none;
+            padding: 4px 2px; border-radius: 16px; background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
         }
-        .plu-sidebar .sidebar-legend .legend-box {
-            width: 12px; height: 12px; border-radius: 4px; border: 1px solid;
+        .alphabet-char {
+            font-size: 8px; font-weight: 800; color: var(--text-muted);
+            cursor: pointer; width: 12px; height: 11px;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.1s ease, color 0.1s ease;
         }
-        .plu-sidebar .sidebar-legend .legend-box.raw {
-            background: var(--raw-bg); border-color: var(--raw-border);
+        .alphabet-char:nth-child(4n+1) { transform: translateX(0px); }
+        .alphabet-char:nth-child(4n+2) { transform: translateX(-2px); }
+        .alphabet-char:nth-child(4n+3) { transform: translateX(-4px); }
+        .alphabet-char:nth-child(4n+4) { transform: translateX(-2px); }
+        .alphabet-char.active {
+            color: var(--primary-blue); font-weight: 900;
+            transform: scale(1.4) translateX(-5px) !important;
         }
-        .plu-sidebar .sidebar-legend .legend-box.konv {
-            background: var(--konv-bg); border-color: var(--konv-border);
+        .alphabet-bubble {
+            position: absolute; right: 35px; top: 50%;
+            transform: translateY(-50%) scale(0); width: 40px; height: 40px;
+            background: var(--primary-blue); color: #ffffff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 800;
+            box-shadow: 0 4px 14px rgba(0, 115, 234, 0.4);
+            z-index: 20; pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .alphabet-bubble.show { transform: translateY(-50%) scale(1); }
+
         .plu-sidebar .sidebar-plu-list {
-            height: 300px;
-            overflow-y: auto;
+            height: 300px; overflow-y: auto;
             display: flex; flex-direction: column; gap: 4px;
-            scrollbar-width: thin;
-            padding-right: 34px;
-            position: relative;
+            contain: strict; padding-right: 18px;
         }
-        .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
+        .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 3px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
         .plu-sidebar .plu-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 8px 10px; background: #fff; border-radius: 10px;
             font-size: 12px; border: 1px solid transparent; gap: 8px;
-            flex-shrink: 0;
         }
         .plu-sidebar .plu-item .plu-name {
             font-weight: 600; font-size: 12px; flex: 1; min-width: 0;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .plu-sidebar .plu-item .plu-badges {
-            display: flex; flex-direction: column; gap: 3px;
-            align-items: flex-end; flex-shrink: 0;
-        }
+        .plu-sidebar .plu-item .plu-badges { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
         .plu-sidebar .plu-item .plu-code {
             font-family: var(--font-code); font-size: 10px; font-weight: 700;
             padding: 2px 7px; border-radius: 6px; cursor: pointer;
             white-space: nowrap; border: 1px solid transparent;
-            transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
+            transition: transform 0.1s ease;
         }
         .plu-sidebar .plu-item .plu-code:active { transform: scale(0.95); }
-        .plu-sidebar .plu-item .plu-code.raw {
-            color: var(--raw-text); background: var(--raw-bg);
-            border-color: var(--raw-border);
-        }
-        .plu-sidebar .plu-item .plu-code.konv {
-            color: var(--konv-text); background: var(--konv-bg);
-            border-color: var(--konv-border);
-        }
-        .plu-sidebar .plu-empty {
-            text-align: center; color: var(--text-muted);
-            font-size: 12px; padding: 20px 0;
-        }
-
-        /* ============================================================
-           ALPHABET INDEX — VERSI YANG WORKS
-           ============================================================ */
-        .alpha-index {
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 60;
-            opacity: 1;
-            pointer-events: auto;
-            touch-action: none;
-            user-select: none;
-            -webkit-user-select: none;
-            padding: 6px 3px;
-            border-radius: 14px;
-            min-width: 30px;
-            background: transparent;
-            transition: background 0.15s ease;
-        }
-        .alpha-index.active {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 18px rgba(17, 24, 39, 0.12);
-        }
-
-        .alpha-index .alpha-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            max-height: 100%;
-        }
-
-        .alpha-index .alpha-letter {
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--text-muted);
-            line-height: 1;
-            width: 22px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: color 0.1s ease, background 0.1s ease, transform 0.1s ease;
-            border-radius: 6px;
-            flex-shrink: 0;
-            font-family: var(--font-main);
-            /* pointer-events: auto (default) — biar bisa di-tap langsung */
-        }
-        .alpha-index .alpha-letter.active {
-            color: #fff;
-            background: var(--primary-blue);
-            transform: scale(1.15);
-            box-shadow: 0 2px 8px var(--primary-blue-shadow);
-        }
+        .plu-sidebar .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
+        .plu-sidebar .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
+        .plu-sidebar .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
 
         /* ===== BOTTOM NAV ===== */
         .bottom-dock {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 480px; height: 68px;
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--card-border);
             display: flex; justify-content: space-around; align-items: center;
             z-index: 100; padding: 0 16px;
@@ -604,8 +545,7 @@
         .dock-tab {
             display: flex; flex-direction: column; align-items: center;
             gap: 4px; cursor: pointer; color: var(--text-light);
-            font-size: 0.68rem; font-weight: 700;
-            border: none; background: none;
+            font-size: 0.68rem; font-weight: 700; border: none; background: none;
         }
         .dock-tab.active { color: var(--primary-blue); }
         .dock-tab-icon { font-size: 1.2rem; }
@@ -621,36 +561,28 @@
             transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 200;
         }
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
+        .toast-notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .empty-search-state {
             text-align: center; padding: 40px 20px;
             color: var(--text-muted); font-size: 0.88rem;
             font-weight: 600; background: var(--card-white);
             border-radius: 20px; border: 1px dashed var(--card-border);
         }
-
         .hidden { display: none !important; }
 
         @media (max-width: 480px) {
             .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
             .tabel-wadah-container { max-height: 250px; }
             .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
-            .plu-sidebar .sidebar-plu-list { height: 220px; }
-            .alpha-index .alpha-letter { font-size: 9px; width: 20px; height: 14px; }
-            .scroll-area { height: calc(100vh - 320px); }
+            .plu-sidebar .sidebar-plu-list { height: 240px; }
         }
     </style>
 </head>
 <body>
-
     <div class="app-layout">
-        
         <div id="toastNotification" class="toast-notification">PLU Disalin! ✓</div>
 
+        <!-- HEADER -->
         <header class="app-header">
             <div class="brand-block">
                 <div class="brand-icon"><i class="fas fa-cubes"></i></div>
@@ -659,9 +591,10 @@
                     <span>hapalkeun euy!</span>
                 </div>
             </div>
-            <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
+            <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-file-excel"></i></button>
         </header>
 
+        <!-- GREETING -->
         <div id="greetingWrapper">
             <div class="greeting-container">
                 <div class="greeting-date-time">
@@ -676,6 +609,7 @@
             </div>
         </div>
 
+        <!-- STICKY SEARCH -->
         <div class="sticky-search-bar" id="globalSearchBar">
             <div class="search-field">
                 <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
@@ -683,6 +617,7 @@
             </div>
         </div>
 
+        <!-- ===== HOME VIEW ===== -->
         <main id="homeView">
             <div class="section-bar">
                 <span class="section-title">Kategori Brand</span>
@@ -695,95 +630,56 @@
             <div class="detail-header">
                 <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
             </div>
-
             <div class="section-bar">
                 <span class="section-title" id="detailHeadingTitle">Say Bread</span>
                 <span class="item-count-chip" id="itemCounterBadge">0 Item</span>
             </div>
-
-            <div class="toolbar-row">
-                <div class="legend-bar">
-                    <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
-                    <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
-                </div>
-                <div class="view-toggle">
-                    <button class="vt-btn active" id="viewListBtn" onclick="setDetailView('list')"><i class="fas fa-list"></i> List</button>
-                    <button class="vt-btn" id="viewTableBtn" onclick="setDetailView('table')"><i class="fas fa-table"></i> Tabel</button>
-                </div>
-            </div>
-
             <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
             <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
-
-            <div class="scroll-area" id="detailListScroll">
-                <section class="products-grid" id="productGrid"></section>
-                <div class="alpha-index" id="detailListAlpha"></div>
-            </div>
-
-            <div class="scroll-area hidden" id="detailTableScroll">
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:28px;text-align:center;">#</th>
-                                <th>Nama Barang</th>
-                                <th>PLU RAW</th>
-                                <th>PLU KONV</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-                <div class="alpha-index" id="detailTableAlpha"></div>
-            </div>
+            <section class="products-grid" id="productGrid"></section>
         </section>
 
-        <!-- ===== KATALOG VIEW ===== -->
+        <!-- ===== KATALOG SHEETS VIEW ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
                 <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <div class="section-bar">
+                <span class="section-title">📊 Sheets PLU Katalog</span>
                 <span class="item-count-chip" id="katalogCounter">0 Item</span>
             </div>
 
-            <div class="sheet-tabs" id="sheetTabs"></div>
+            <div class="sheets-container">
+                <!-- Tab Header ala Google Sheets -->
+                <div class="sheets-tabs-bar" id="sheetsTabsBar"></div>
 
-            <div class="toolbar-row">
-                <div class="legend-bar">
-                    <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
-                    <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+                <div class="sheets-toolbar">
+                    <span><i class="fas fa-table"></i> Data Grid View</span>
+                    <span id="sheetActiveBrandText">Sheet: Semua Brand</span>
                 </div>
-                <div class="view-toggle">
-                    <button class="vt-btn active" id="katalogListBtn" onclick="setKatalogView('list')"><i class="fas fa-list"></i> List</button>
-                    <button class="vt-btn" id="katalogTableBtn" onclick="setKatalogView('table')"><i class="fas fa-table"></i> Tabel</button>
-                </div>
-            </div>
 
-            <div class="scroll-area" id="katalogListScroll">
-                <section class="products-grid" id="katalogListGrid"></section>
-                <div class="alpha-index" id="katalogListAlpha"></div>
-            </div>
-
-            <div class="scroll-area hidden" id="katalogTableScroll">
+                <!-- Tabel Data Sheets -->
                 <div class="table-scroll">
                     <table>
                         <thead>
                             <tr>
                                 <th style="width:28px;text-align:center;">#</th>
+                                <th>Brand</th>
                                 <th>Nama Barang</th>
                                 <th>PLU RAW</th>
                                 <th>PLU KONV</th>
                             </tr>
                         </thead>
-                        <tbody id="katalogTableBody"></tbody>
+                        <tbody id="sheetsTableBody"></tbody>
                     </table>
                 </div>
-                <div class="alpha-index" id="katalogTableAlpha"></div>
             </div>
         </section>
 
         <!-- ===== KALKULATOR VIEW ===== -->
         <section id="kalkulatorView" style="display: none;">
-
+            <!-- SIDEBAR PLU POINT COFFEE WITH ALPHABET INDEXER -->
             <div class="plu-sidebar" id="pluSidebar">
                 <div class="sidebar-title">
                     <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
@@ -794,9 +690,13 @@
                     <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
                     <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
                 </div>
-                <div class="sidebar-plu-list" id="sidebarPluList">
-                    <div class="plu-empty">Memuat data...</div>
-                    <div class="alpha-index" id="sidebarAlpha"></div>
+
+                <div class="alphabet-indexer-container">
+                    <div class="alphabet-bubble" id="alphabetBubble">A</div>
+                    <div class="alphabet-nav" id="alphabetNav"></div>
+                    <div class="sidebar-plu-list" id="sidebarPluList">
+                        <div class="plu-empty">Memuat data...</div>
+                    </div>
                 </div>
             </div>
 
@@ -804,6 +704,7 @@
                 <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
             </div>
 
+            <!-- KARTU 1: INPUT GRAMASI -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
                 <div class="input-row" style="margin-bottom:0;">
@@ -812,6 +713,7 @@
                 </div>
             </div>
 
+            <!-- KARTU 2: DAFTAR WADAH -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
                 <div class="tabel-wadah-container">
@@ -822,6 +724,7 @@
                 </div>
             </div>
 
+            <!-- KARTU 3: SO BIANG KOPI -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
                 <div class="input-row">
@@ -839,6 +742,7 @@
                 </div>
             </div>
 
+            <!-- KARTU 4: PLASTIK SEAL -->
             <div class="kalkulator-card">
                 <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
                 <div class="input-row">
@@ -852,18 +756,17 @@
                     </div>
                 </div>
             </div>
-
         </section>
-
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-dock">
         <button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
             <i class="fas fa-home dock-tab-icon"></i>
             <span>Home</span>
         </button>
         <button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
-            <i class="fas fa-layer-group dock-tab-icon"></i>
+            <i class="fas fa-file-excel dock-tab-icon"></i>
             <span>Katalog</span>
         </button>
         <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
@@ -874,7 +777,7 @@
 
     <script>
     /* ================================================================
-       KONFIGURASI BRAND
+       KONFIGURASI BRAND & SUB
        ================================================================ */
     var BRAND_NAMES = {
         'saybread': 'Say Bread', 'sayburger': 'Say Burger',
@@ -882,7 +785,11 @@
         'pointcoffee': 'Point Coffee', 'hambalanfc': 'Hambalan FC',
         'perishable': 'Perishable'
     };
-
+    var BRAND_COLORS = {
+        'all': '#0073ea', 'saybread': '#8c5332', 'sayburger': '#e11d48',
+        'yummychoice': '#f97316', 'yummycoffee': '#d97706',
+        'pointcoffee': '#15803d', 'hambalanfc': '#1e40af', 'perishable': '#059669'
+    };
     var BRAND_CARDS = [
         { id: 'saybread', title: 'Say Bread', sub: 'Bakery & Pastry', icon: 'fa-bread-slice', cls: 'card-saybread' },
         { id: 'sayburger', title: 'Say Burger', sub: 'Burger & Hotdog', icon: 'fa-hamburger', cls: 'card-sayburger' },
@@ -892,7 +799,6 @@
         { id: 'hambalanfc', title: 'Hambalan FC', sub: 'Si Paling Hambalan', icon: 'fa-box', cls: 'card-hambalanfc' },
         { id: 'perishable', title: 'Perishable', sub: 'Buah & Sayur Segar', icon: 'fa-seedling', cls: 'card-perishable' }
     ];
-
     var SUB_CONFIG = {
         'saybread': [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }],
         'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
@@ -902,32 +808,22 @@
         'hambalanfc': [{ id: 'minyak', label: 'Minyak' }, { id: 'beras', label: 'Beras' }, { id: 'gula', label: 'Gula' }, { id: 'mineral', label: 'Mineral' }, { id: 'beverage', label: 'Beverage' }],
         'perishable': [{ id: 'all', label: 'Semua' }, { id: 'buah_sayur', label: 'Buah & Sayur' }]
     };
-
     var KATEGORI_LABEL = { 'snack_rte': 'Snack RTE', 'dimsum': 'Dimsum', 'pao': 'Pao', 'fried_chicken': 'Fried Chicken', 'frozen_fc': 'Frozen FC', 'sosis': 'Sosis', 'pizza': 'Pizza' };
     var KATEGORI_LABEL_COFFEE = { 'jelly': 'Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'other': 'Other' };
     var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
     var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
 
-    /* ================================================================
-       STATE
-       ================================================================ */
+    /* STATE */
     var DATABASE = [];
     var pointCoffeeData = [];
     var currentView = 'home';
     var currentBrand = '';
     var currentSub = 'all';
     var currentKategori = 'all';
-    var detailViewMode = 'list';
-    var katalogViewMode = 'list';
-    var currentSheet = 'all';
-    var katalogData = {};
-
+    var katalogActiveSheet = 'all';
     var _renderCache = { key: '' };
-    var _katalogCache = { key: '' };
 
-    /* ================================================================
-       DATA KALKULATOR
-       ================================================================ */
+    /* KALKULATOR DATA */
     var DEFAULT_WADAH = [
         { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
         { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
@@ -954,14 +850,12 @@
         { nama: "Whip Cream", tare: 51, mj: 0.97 },
         { nama: "Yakult / Pcs", tare: 0, mj: 65 }
     ];
-
     var DEFAULT_SEAL = {
         1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
         11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
         21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
         31:1763,32:1823,33:1883,34:1943,35:2003
     };
-
     var dataWadah = (function() {
         try {
             var saved = localStorage.getItem('plukakang_wadah');
@@ -970,18 +864,14 @@
         return DEFAULT_WADAH;
     })();
 
-    /* ================================================================
-       UTILITY
-       ================================================================ */
+    /* UTILITY */
     function $(id) { return document.getElementById(id); }
-
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>"']/g, function(m) {
             return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
         });
     }
-
     function debounce(fn, wait) {
         var t;
         return function() {
@@ -990,7 +880,6 @@
             t = setTimeout(function() { fn.apply(ctx, args); }, wait);
         };
     }
-
     function copyToClipboard(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             return navigator.clipboard.writeText(text);
@@ -1007,255 +896,16 @@
             resolve();
         });
     }
-
     var _toastTimer;
     function showToast(msg) {
         var toast = $('toastNotification');
         toast.innerText = msg;
         toast.classList.add('show');
         clearTimeout(_toastTimer);
-        _toastTimer = setTimeout(function() {
-            toast.classList.remove('show');
-        }, 1500);
+        _toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 1500);
     }
 
-    function haptic() {
-        if (navigator.vibrate) {
-            try { navigator.vibrate(6); } catch(e) {}
-        }
-    }
-
-    /* ================================================================
-       ALPHABET INDEX — VERSI YANG WORKS
-       ================================================================
-       Prinsip:
-       - touchstart/touchmove/touchend NATIVE
-       - preventDefault di touchmove (biar gak scroll halaman)
-       - TIDAK pakai pointer-events:none di .alpha-letter
-       - TIDAK pakai hasMoved flag — sentuh = langsung apply
-       - Hit test cari huruf terdekat, toleransi 40px
-       - scrollTop langsung (instant, fluid)
-    */
-    var alphaRegistry = {};
-
-    function buildAlphaIndex(hostId, itemEls, scrollEl) {
-        var host = $(hostId);
-        if (!host) return;
-
-        var letterSet = {};
-        var letterFirstEl = {};
-        for (var i = 0; i < itemEls.length; i++) {
-            var L = itemEls[i].dataset.firstLetter;
-            if (!L) continue;
-            if (!letterSet[L]) {
-                letterSet[L] = true;
-                letterFirstEl[L] = itemEls[i];
-            }
-        }
-        var letters = Object.keys(letterSet).sort();
-
-        if (letters.length === 0) {
-            host.innerHTML = '';
-            host.style.display = 'none';
-            return;
-        }
-        host.style.display = '';
-
-        var state = alphaRegistry[hostId];
-        if (!state) {
-            state = alphaRegistry[hostId] = {
-                host: host,
-                letters: letters,
-                letterFirstEl: letterFirstEl,
-                scrollEl: scrollEl,
-                activeLetter: null,
-                touching: false,
-                rafPending: false,
-                pendingLetter: null,
-                letterElsCache: null
-            };
-            attachAlphaListeners(state);
-        } else {
-            state.letters = letters;
-            state.letterFirstEl = letterFirstEl;
-            state.scrollEl = scrollEl;
-            state.letterElsCache = null;
-        }
-
-        var html = '<div class="alpha-list">';
-        for (var j = 0; j < letters.length; j++) {
-            html += '<div class="alpha-letter" data-letter="' + letters[j] + '">' + letters[j] + '</div>';
-        }
-        html += '</div>';
-        host.innerHTML = html;
-        state.letterElsCache = null;
-    }
-
-    function attachAlphaListeners(state) {
-        var host = state.host;
-
-        function getLetterEls() {
-            if (!state.letterElsCache || state.letterElsCache.length === 0) {
-                state.letterElsCache = host.querySelectorAll('.alpha-letter');
-            }
-            return state.letterElsCache;
-        }
-
-        function letterFromY(clientY) {
-            var letterEls = getLetterEls();
-            if (letterEls.length === 0) return null;
-            var closest = null;
-            var closestDist = Infinity;
-            for (var i = 0; i < letterEls.length; i++) {
-                var rect = letterEls[i].getBoundingClientRect();
-                var centerY = rect.top + rect.height / 2;
-                var dist = Math.abs(clientY - centerY);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closest = letterEls[i];
-                }
-            }
-            if (closest && closestDist <= 40) {
-                return closest.dataset.letter;
-            }
-            return closest ? closest.dataset.letter : null;
-        }
-
-        function applyLetter(letter) {
-            if (!letter || letter === state.activeLetter) return;
-            state.activeLetter = letter;
-
-            var letterEls = getLetterEls();
-            for (var i = 0; i < letterEls.length; i++) {
-                letterEls[i].classList.toggle('active', letterEls[i].dataset.letter === letter);
-            }
-            haptic();
-            scrollToLetter(state, letter);
-        }
-
-        function clearActive() {
-            state.activeLetter = null;
-            var letterEls = getLetterEls();
-            for (var i = 0; i < letterEls.length; i++) letterEls[i].classList.remove('active');
-        }
-
-        /* ============ TOUCH EVENTS ============ */
-        function onTouchStart(e) {
-            if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
-
-            state.touching = true;
-            host.classList.add('active');
-            state.letterElsCache = null;
-
-            var touch = e.touches[0];
-            var letter = letterFromY(touch.clientY);
-            if (letter) applyLetter(letter);
-        }
-
-        function onTouchMove(e) {
-            if (!state.touching) return;
-
-            var touch = e.touches[0];
-            var letter = letterFromY(touch.clientY);
-
-            if (letter && letter !== state.pendingLetter) {
-                state.pendingLetter = letter;
-                if (!state.rafPending) {
-                    state.rafPending = true;
-                    requestAnimationFrame(function() {
-                        state.rafPending = false;
-                        applyLetter(state.pendingLetter);
-                    });
-                }
-            }
-
-            e.preventDefault();
-        }
-
-        function onTouchEnd() {
-            if (!state.touching) return;
-            state.touching = false;
-            state.pendingLetter = null;
-            setTimeout(clearActive, 400);
-        }
-
-        host.addEventListener('touchstart', onTouchStart, { passive: true });
-        host.addEventListener('touchmove', onTouchMove, { passive: false });
-        host.addEventListener('touchend', onTouchEnd);
-        host.addEventListener('touchcancel', onTouchEnd);
-
-        /* ============ MOUSE EVENTS (desktop) ============ */
-        var mouseDown = false;
-
-        function onMouseDown(e) {
-            if (e.target.closest('.plu-badge-button') || e.target.closest('.plu-code')) return;
-            mouseDown = true;
-            state.touching = true;
-            host.classList.add('active');
-            state.letterElsCache = null;
-            var letter = letterFromY(e.clientY);
-            if (letter) applyLetter(letter);
-        }
-
-        function onMouseMove(e) {
-            if (!mouseDown) return;
-            var letter = letterFromY(e.clientY);
-            if (letter && letter !== state.pendingLetter) {
-                state.pendingLetter = letter;
-                if (!state.rafPending) {
-                    state.rafPending = true;
-                    requestAnimationFrame(function() {
-                        state.rafPending = false;
-                        applyLetter(state.pendingLetter);
-                    });
-                }
-            }
-        }
-
-        function onMouseUp() {
-            if (!mouseDown) return;
-            mouseDown = false;
-            state.touching = false;
-            state.pendingLetter = null;
-            setTimeout(clearActive, 400);
-        }
-
-        host.addEventListener('mousedown', onMouseDown);
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-
-        /* Tap langsung di huruf */
-        host.addEventListener('click', function(e) {
-            var letterEl = e.target.closest('.alpha-letter');
-            if (!letterEl) return;
-            applyLetter(letterEl.dataset.letter);
-            setTimeout(clearActive, 500);
-        });
-    }
-
-    /**
-     * Scroll ke huruf — instant pakai scrollTop.
-     */
-    function scrollToLetter(state, letter) {
-        var target = state.letterFirstEl[letter];
-        if (!target || !state.scrollEl) return;
-        var scrollEl = state.scrollEl;
-
-        var containerRect = scrollEl.getBoundingClientRect();
-        var targetRect = target.getBoundingClientRect();
-        var offset = targetRect.top - containerRect.top + scrollEl.scrollTop - 6;
-
-        /* Clamp supaya gak lompat aneh */
-        var max = scrollEl.scrollHeight - scrollEl.clientHeight;
-        if (offset < 0) offset = 0;
-        if (offset > max) offset = max;
-
-        scrollEl.scrollTop = offset;
-    }
-
-    /* ================================================================
-       RENDER BRAND GRID
-       ================================================================ */
+    /* RENDER BRAND GRID HOME */
     function renderBrandGrid() {
         var html = '';
         BRAND_CARDS.forEach(function(b) {
@@ -1273,16 +923,13 @@
         $('brandGrid').innerHTML = html;
     }
 
-    /* ================================================================
-       TAB SWITCHING
-       ================================================================ */
+    /* TAB SWITCHING UTAMA */
     function switchTab(tab) {
         $('homeView').style.display = 'none';
         $('detailView').style.display = 'none';
         $('katalogView').style.display = 'none';
         $('kalkulatorView').style.display = 'none';
         $('greetingWrapper').classList.add('hidden');
-
         if (tab === 'home') {
             $('homeView').style.display = 'block';
             $('greetingWrapper').classList.remove('hidden');
@@ -1293,7 +940,8 @@
             $('katalogView').style.display = 'block';
             $('globalSearchBar').style.display = '';
             currentView = 'katalog';
-            renderKatalog();
+            renderSheetsTabs();
+            renderSheetsTable();
         } else if (tab === 'kalkulator') {
             $('kalkulatorView').style.display = 'block';
             $('globalSearchBar').style.display = 'none';
@@ -1303,21 +951,17 @@
             hitungSeal();
             renderSidebarPlu($('sidebarSearchPlu').value || '');
         }
-
         var tabs = document.querySelectorAll('.dock-tab');
         for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
         var activeTab = $('dock-' + tab);
         if (activeTab) activeTab.classList.add('active');
-
         if (tab !== 'kalkulator') {
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
         }
     }
 
-    /* ================================================================
-       KALKULATOR
-       ================================================================ */
+    /* KALKULATOR LOGIC */
     function hitungGramasi() {
         var input = parseFloat($('timbanganGramasi').value) || 0;
         var html = '';
@@ -1335,7 +979,6 @@
         });
         $('tabelGramasi').innerHTML = html;
     }
-
     function hitungBiang() {
         var timbangan = parseFloat($('biangTimbangan').value) || 0;
         var botol = parseFloat($('biangBotol').value) || 0;
@@ -1345,7 +988,6 @@
         $('resKopi').innerText = kopi;
         $('resAir').innerText = netto - kopi;
     }
-
     function hitungSeal() {
         var inputSeal = parseInt($('inputTebalSeal').value);
         var resEl = $('resSealPcs');
@@ -1363,13 +1005,70 @@
         }
     }
 
-    /* ================================================================
-       SIDEBAR PLU POINT COFFEE
-       ================================================================ */
+    /* ALPHABET SCROLLER LOGIC */
+    var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    function initAlphabetNav() {
+        var nav = $('alphabetNav');
+        if (!nav) return;
+        var html = '';
+        ALPHABET.forEach(function(letter) {
+            html += '<span class="alphabet-char" data-letter="' + letter + '">' + letter + '</span>';
+        });
+        nav.innerHTML = html;
+
+        var container = $('sidebarPluList');
+        var bubble = $('alphabetBubble');
+
+        function scrollToLetter(letter) {
+            if (!letter) return;
+            bubble.innerText = letter;
+            bubble.classList.add('show');
+            var items = container.querySelectorAll('.plu-item');
+            for (var i = 0; i < items.length; i++) {
+                var nameEl = items[i].querySelector('.plu-name');
+                if (nameEl) {
+                    var firstChar = nameEl.innerText.trim().charAt(0).toUpperCase();
+                    if (firstChar === letter) {
+                        items[i].scrollIntoView({ block: 'start', behavior: 'smooth' });
+                        break;
+                    }
+                }
+            }
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            var touch = e.touches ? e.touches[0] : e;
+            var target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('alphabet-char')) {
+                var letter = target.dataset.letter;
+                scrollToLetter(letter);
+                var chars = nav.querySelectorAll('.alphabet-char');
+                chars.forEach(function(c) { c.classList.remove('active'); });
+                target.classList.add('active');
+            }
+        }
+
+        nav.addEventListener('touchstart', handleTouchMove, { passive: false });
+        nav.addEventListener('touchmove', handleTouchMove, { passive: false });
+        nav.addEventListener('touchend', function() {
+            bubble.classList.remove('show');
+            var chars = nav.querySelectorAll('.alphabet-char');
+            chars.forEach(function(c) { c.classList.remove('active'); });
+        });
+        nav.addEventListener('click', function(e) {
+            if (e.target.classList.contains('alphabet-char')) {
+                var letter = e.target.dataset.letter;
+                scrollToLetter(letter);
+                setTimeout(function() { bubble.classList.remove('show'); }, 500);
+            }
+        });
+    }
+
+    /* SIDEBAR PLU POINT COFFEE */
     function renderSidebarPlu(filter) {
         var list = $('sidebarPluList');
         var count = $('pluCount');
-        
         var items = pointCoffeeData;
         if (filter) {
             var f = filter.toLowerCase().trim();
@@ -1379,65 +1078,25 @@
                        (item.konv && item.konv.indexOf(f) !== -1);
             });
         }
-
         count.textContent = items.length;
-
-        var alphaEl = $('sidebarAlpha');
-        var existingItems = list.querySelectorAll('.plu-item');
-        for (var i = 0; i < existingItems.length; i++) existingItems[i].remove();
-        var emptyEl = list.querySelector('.plu-empty');
-        if (emptyEl) emptyEl.remove();
-
         if (items.length === 0) {
-            var empty = document.createElement('div');
-            empty.className = 'plu-empty';
-            empty.innerText = filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat';
-            list.insertBefore(empty, alphaEl);
-            if (alphaEl) { alphaEl.innerHTML = ''; alphaEl.style.display = 'none'; }
+            list.innerHTML = '<div class="plu-empty">' + (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + '</div>';
             return;
         }
-
-        items.sort(function(a, b) {
-            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-        });
-
-        var frag = document.createDocumentFragment();
+        var html = '';
         items.forEach(function(item) {
-            var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            var div = document.createElement('div');
-            div.className = 'plu-item';
-            div.dataset.firstLetter = first;
-
-            var nameSpan = document.createElement('span');
-            nameSpan.className = 'plu-name';
-            nameSpan.textContent = item.nama;
-            div.appendChild(nameSpan);
-
             var badges = '';
             if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
             if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
-            if (badges) {
-                var badgeWrap = document.createElement('span');
-                badgeWrap.className = 'plu-badges';
-                badgeWrap.innerHTML = badges;
-                div.appendChild(badgeWrap);
-            }
-            frag.appendChild(div);
+            html += '<div class="plu-item">' +
+                '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
+                (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
+            '</div>';
         });
-
-        if (alphaEl) {
-            list.insertBefore(frag, alphaEl);
-        } else {
-            list.appendChild(frag);
-        }
-
-        var itemEls = list.querySelectorAll('.plu-item');
-        buildAlphaIndex('sidebarAlpha', itemEls, list);
+        list.innerHTML = html;
     }
 
-    /* ================================================================
-       LOAD DATA JSON
-       ================================================================ */
+    /* LOAD DATA JSON */
     function loadData() {
         fetch('data.json')
             .then(function(res) {
@@ -1445,77 +1104,22 @@
                 return res.json();
             })
             .then(function(data) {
-                data.forEach(function(item, i) { item._id = 'd' + i; });
-                data.sort(function(a, b) {
-                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-                });
+                data.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
                 DATABASE = data;
-
-                pointCoffeeData = data.filter(function(item) {
-                    return item.brand === 'pointcoffee' || item.brand === 'point coffee';
-                });
-                pointCoffeeData.sort(function(a, b) {
-                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-                });
-
+                pointCoffeeData = data.filter(function(item) { return item.brand === 'pointcoffee' || item.brand === 'point coffee'; });
+                pointCoffeeData.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
                 renderDataGrid();
-                renderKatalog();
+                renderSheetsTabs();
+                renderSheetsTable();
                 renderSidebarPlu('');
             })
             .catch(function(err) {
                 console.error('Gagal load data.json:', err);
-                $('sidebarPluList').innerHTML = 
-                    '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+                $('sidebarPluList').innerHTML = '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
             });
     }
 
-    /* ================================================================
-       DETAIL VIEW
-       ================================================================ */
-    function setDetailView(mode) {
-        detailViewMode = mode;
-        $('viewListBtn').classList.toggle('active', mode === 'list');
-        $('viewTableBtn').classList.toggle('active', mode === 'table');
-        
-        if (mode === 'list') {
-            $('detailListScroll').classList.remove('hidden');
-            $('detailTableScroll').classList.add('hidden');
-        } else {
-            $('detailListScroll').classList.add('hidden');
-            $('detailTableScroll').classList.remove('hidden');
-            setTimeout(rebuildDetailTableAlpha, 30);
-        }
-    }
-
-    function setKatalogView(mode) {
-        katalogViewMode = mode;
-        $('katalogListBtn').classList.toggle('active', mode === 'list');
-        $('katalogTableBtn').classList.toggle('active', mode === 'table');
-        
-        if (mode === 'list') {
-            $('katalogListScroll').classList.remove('hidden');
-            $('katalogTableScroll').classList.add('hidden');
-        } else {
-            $('katalogListScroll').classList.add('hidden');
-            $('katalogTableScroll').classList.remove('hidden');
-            setTimeout(rebuildKatalogTableAlpha, 30);
-        }
-    }
-
-    function rebuildDetailTableAlpha() {
-        var tbody = $('tableBody');
-        if (!tbody) return;
-        var rows = tbody.querySelectorAll('tr[data-first-letter]');
-        buildAlphaIndex('detailTableAlpha', rows, $('detailTableScroll'));
-    }
-
-    function rebuildKatalogTableAlpha() {
-        var tbody = $('katalogTableBody');
-        if (!tbody) return;
-        var rows = tbody.querySelectorAll('tr[data-first-letter]');
-        buildAlphaIndex('katalogTableAlpha', rows, $('katalogTableScroll'));
-    }
-
+    /* DETAIL VIEW */
     function openBrandCategory(key) {
         currentView = 'detail';
         currentBrand = key;
@@ -1528,13 +1132,6 @@
         $('greetingWrapper').classList.add('hidden');
         $('globalSearchBar').style.display = '';
         $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
-        
-        detailViewMode = 'list';
-        $('viewListBtn').classList.add('active');
-        $('viewTableBtn').classList.remove('active');
-        $('detailListScroll').classList.remove('hidden');
-        $('detailTableScroll').classList.add('hidden');
-        
         renderSubPills();
         _renderCache.key = '';
         renderDataGrid();
@@ -1547,61 +1144,42 @@
     function renderSubPills() {
         var container = $('subPillsContainer');
         container.innerHTML = '';
-
         if (currentBrand === '' || currentBrand === 'all') {
             container.style.display = 'none';
             $('kategoriPillsContainer').style.display = 'none';
             return;
         }
-
         container.style.display = 'flex';
         var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
-        
-        if (currentBrand === 'hambalanfc') {
-            pills = [{ id: 'all', label: 'Semua' }].concat(pills);
-        }
-
+        if (currentBrand === 'hambalanfc') pills = [{ id: 'all', label: 'Semua' }].concat(pills);
         pills.forEach(function(p) {
             var el = document.createElement('button');
-            el.className = 'pill-button';
-            if (p.id === currentSub) el.classList.add('active');
+            el.className = 'pill-button' + (p.id === currentSub ? ' active' : '');
             el.innerText = p.label;
             el.dataset.pillId = p.id;
             container.appendChild(el);
         });
-
         renderKategoriPills();
     }
 
     function renderKategoriPills() {
         var katContainer = $('kategoriPillsContainer');
         katContainer.innerHTML = '';
-
         var labelMap = null;
         if (currentBrand === 'yummychoice' && currentSub === 'bkl') labelMap = KATEGORI_LABEL;
         else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_COFFEE;
         else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_POINT;
-        else if (currentBrand === 'hambalanfc') {
-            katContainer.style.display = 'none';
-            return;
-        } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
-
-        if (!labelMap) {
-            katContainer.style.display = 'none';
-            return;
-        }
-
+        else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
+        
+        if (!labelMap) { katContainer.style.display = 'none'; return; }
         katContainer.style.display = 'flex';
-
         var allPill = document.createElement('button');
         allPill.className = 'pill-button' + (currentKategori === 'all' ? ' active' : '');
         allPill.innerText = 'Semua';
         allPill.dataset.katId = 'all';
         katContainer.appendChild(allPill);
 
-        var keys = Object.keys(labelMap);
-        keys.forEach(function(key) {
-            if (currentBrand === 'pointcoffee' && key === 'sarana') return;
+        Object.keys(labelMap).forEach(function(key) {
             var el = document.createElement('button');
             el.className = 'pill-button' + (key === currentKategori ? ' active' : '');
             el.innerText = labelMap[key];
@@ -1610,249 +1188,122 @@
         });
     }
 
-    /* ================================================================
-       RENDER DATA GRID
-       ================================================================ */
     function renderDataGrid() {
         var query = searchInput.value.toLowerCase().trim();
         var counterBadge = $('itemCounterBadge');
-
         if (currentBrand === '' && query === '' && currentView !== 'katalog') {
             counterBadge.innerText = '0 Item';
             return;
         }
-
         var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
         if (cacheKey === _renderCache.key) return;
-
-        var filtered = getCurrentFilteredData();
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+            var matchSub = (currentSub === 'all' || item.sub === currentSub);
+            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+            return matchBrand && matchSub && matchKat && (query === '' || searchString.indexOf(query) !== -1);
+        });
         counterBadge.innerText = filtered.length + ' Item';
-
         if (filtered.length === 0) {
             $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
-            $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
             _renderCache.key = cacheKey;
-            var a1 = $('detailListAlpha'); if (a1) { a1.innerHTML = ''; a1.style.display = 'none'; }
-            var a2 = $('detailTableAlpha'); if (a2) { a2.innerHTML = ''; a2.style.display = 'none'; }
             return;
         }
-
         var html = '';
-        var tableHtml = '';
-        filtered.forEach(function(item, i) {
-            var first = (item.nama || '').trim().charAt(0).toUpperCase();
+        filtered.forEach(function(item) {
             var badgesHtml = '';
             if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
             if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
-
-            html += '<div class="product-card" data-first-letter="' + first + '">' +
+            html += '<div class="product-card">' +
                 '<div class="product-info-col">' +
                     '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
                     '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
                 '</div>' +
                 '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
             '</div>';
-
-            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
-            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-            tableHtml += '<tr data-first-letter="' + first + '">' +
-                '<td class="row-number">' + (i + 1) + '</td>' +
-                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
-                '<td>' + rawHtml + '</td>' +
-                '<td>' + konvHtml + '</td>' +
-            '</tr>';
         });
-
         $('productGrid').innerHTML = html;
-        $('tableBody').innerHTML = tableHtml;
-        
         _renderCache.key = cacheKey;
-
-        var listEls = $('productGrid').querySelectorAll('.product-card');
-        var tableEls = $('tableBody').querySelectorAll('tr[data-first-letter]');
-        buildAlphaIndex('detailListAlpha', listEls, $('detailListScroll'));
-        buildAlphaIndex('detailTableAlpha', tableEls, $('detailTableScroll'));
     }
 
-    function getCurrentFilteredData() {
-        var query = searchInput.value.toLowerCase().trim();
-        var filtered = DATABASE.filter(function(item) {
-            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
-            var matchSub = (currentSub === 'all' || item.sub === currentSub);
-            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
-            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-            var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
-            return matchBrand && matchSub && matchKat && matchQuery;
+    /* ===== GOOGLE SHEETS STYLED KATALOG ===== */
+    function renderSheetsTabs() {
+        var tabsContainer = $('sheetsTabsBar');
+        if (!tabsContainer) return;
+        var sheetKeys = ['all', 'saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
+        var html = '';
+        
+        sheetKeys.forEach(function(key) {
+            var count = key === 'all' ? DATABASE.length : DATABASE.filter(function(i){ return i.brand === key; }).length;
+            var label = key === 'all' ? 'Semua' : (BRAND_NAMES[key] || key);
+            var color = BRAND_COLORS[key] || '#0073ea';
+            var activeCls = (key === katalogActiveSheet) ? ' active' : '';
+            
+            html += '<button class="sheet-tab-item' + activeCls + '" style="--tab-color:' + color + ';" onclick="switchSheetTab(\'' + key + '\', this)">' +
+                '<span class="tab-dot"></span>' + label + ' <span class="tab-count-badge">' + count + '</span>' +
+            '</button>';
         });
-        filtered.sort(function(a, b) {
-            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-        });
-        return filtered;
+        tabsContainer.innerHTML = html;
     }
 
-    /* ================================================================
-       KATALOG
-       ================================================================ */
-    function renderKatalog() {
-        var tabsContainer = $('sheetTabs');
+    function switchSheetTab(brandKey, btnEl) {
+        katalogActiveSheet = brandKey;
+        var tabs = document.querySelectorAll('.sheet-tab-item');
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        if (btnEl) btnEl.classList.add('active');
+
+        var labelText = brandKey === 'all' ? 'Semua Brand' : (BRAND_NAMES[brandKey] || brandKey);
+        $('sheetActiveBrandText').innerText = 'Sheet: ' + labelText;
+        renderSheetsTable();
+    }
+
+    function renderSheetsTable() {
+        var tbody = $('sheetsTableBody');
         var counter = $('katalogCounter');
-        var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
-        var totalItems = 0;
-
-        brands.forEach(function(b) {
-            var items = DATABASE.filter(function(item) { return item.brand === b; });
-            katalogData[b] = items;
-            totalItems += items.length;
-        });
-        
-        katalogData['all'] = DATABASE.slice();
-        counter.textContent = totalItems + ' Item';
-
-        var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" data-sheet="all">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
-        
-        brands.forEach(function(b) {
-            var colorClass = b === 'saybread' ? 'bread' : b === 'sayburger' ? 'burger' : b === 'yummychoice' ? 'yummy' : b === 'yummycoffee' ? 'coffee' : b === 'pointcoffee' ? 'pointcoffee' : b === 'hambalanfc' ? 'hambalanfc' : 'perishable';
-            tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" data-sheet="' + b + '">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
-        });
-
-        tabsContainer.innerHTML = tabsHtml;
-        _katalogCache.key = '';
-        renderSheetData();
-    }
-
-    function switchSheet(brand) {
-        currentSheet = brand;
-        var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.toggle('active', tabs[i].dataset.sheet === brand);
-        }
-        _katalogCache.key = '';
-        renderSheetData();
-    }
-
-    function renderSheetData() {
-        var listGrid = $('katalogListGrid');
-        var tableBody = $('katalogTableBody');
-        
         var query = searchInput.value.toLowerCase().trim();
-        var items = katalogData[currentSheet] || [];
-        
-        if (query !== '') {
-            items = items.filter(function(item) {
-                var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-                return searchString.indexOf(query) !== -1;
-            });
-        }
+        if (!tbody) return;
+        tbody.innerHTML = '';
 
-        var cacheKey = currentSheet + '|' + query + '|' + items.length;
-        if (cacheKey === _katalogCache.key) return;
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (katalogActiveSheet === 'all' || item.brand === katalogActiveSheet);
+            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+            return matchBrand && (query === '' || searchString.indexOf(query) !== -1);
+        });
 
-        if (items.length === 0) {
-            listGrid.innerHTML = '<div class="empty-search-state">' + 
-                (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + 
-            '</div>';
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
-            $('katalogCounter').textContent = '0 Item';
-            _katalogCache.key = cacheKey;
-            var a1 = $('katalogListAlpha'); if (a1) { a1.innerHTML = ''; a1.style.display = 'none'; }
-            var a2 = $('katalogTableAlpha'); if (a2) { a2.innerHTML = ''; a2.style.display = 'none'; }
+        counter.innerText = filtered.length + ' Item';
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">Data barang tidak ditemukan.</td></tr>';
             return;
         }
 
-        $('katalogCounter').textContent = items.length + ' Item';
-
-        var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
-        var kategoriSet = {};
-        if (needGrouping) {
-            items.forEach(function(item) {
-                if (item.kategori && !kategoriSet[item.kategori]) kategoriSet[item.kategori] = true;
-            });
-        }
-        var kategoriKeys = Object.keys(kategoriSet);
-        var hasKategori = needGrouping && kategoriKeys.length > 0;
-
-        var labelMap = {};
-        if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
-        else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
-        else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
-        else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
-
-        var listHtml = '';
-        var tableHtml = '';
-        var rowCounter = 0;
-
-        function renderItem(item) {
-            var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            var badges = '';
-            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
-            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
-            
-            listHtml += '<div class="product-card" data-first-letter="' + first + '">' +
-                '<div class="product-info-col">' +
-                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
-                '</div>' +
-                '<div class="plu-badges-stack">' + badges + '</div>' +
-            '</div>';
-
-            rowCounter++;
+        var html = '';
+        filtered.forEach(function(item, i) {
             var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
             var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-            tableHtml += '<tr data-first-letter="' + first + '">' +
-                '<td class="row-number">' + rowCounter + '</td>' +
+
+            html += '<tr>' +
+                '<td class="row-number">' + (i + 1) + '</td>' +
+                '<td style="font-size:0.68rem; font-weight:800; color:var(--primary-blue); text-transform:uppercase;">' + (BRAND_NAMES[item.brand] || item.brand) + '</td>' +
                 '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
                 '<td>' + rawHtml + '</td>' +
                 '<td>' + konvHtml + '</td>' +
             '</tr>';
-        }
-
-        items.sort(function(a, b) {
-            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
         });
-
-        if (hasKategori) {
-            kategoriKeys.sort();
-            kategoriKeys.forEach(function(kat) {
-                var katItems = items.filter(function(item) { return item.kategori === kat; });
-                if (katItems.length === 0) return;
-
-                var label = labelMap[kat] || kat;
-                if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
-
-                listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
-                tableHtml += '<tr class="section-row"><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
-
-                katItems.forEach(renderItem);
-            });
-        } else {
-            items.forEach(renderItem);
-        }
-
-        listGrid.innerHTML = listHtml;
-        tableBody.innerHTML = tableHtml;
-        
-        _katalogCache.key = cacheKey;
-
-        var listEls = listGrid.querySelectorAll('.product-card');
-        var tableEls = tableBody.querySelectorAll('tr[data-first-letter]');
-        buildAlphaIndex('katalogListAlpha', listEls, $('katalogListScroll'));
-        buildAlphaIndex('katalogTableAlpha', tableEls, $('katalogTableScroll'));
+        tbody.innerHTML = html;
     }
 
-    /* ================================================================
-       EVENT DELEGATION
-       ================================================================ */
+    /* EVENT DELEGATION GLOBAL */
     document.addEventListener('click', function(e) {
         var brandCard = e.target.closest('.brand-card');
         if (brandCard && brandCard.dataset.brand) {
             openBrandCategory(brandCard.dataset.brand);
             return;
         }
-
         var pill = e.target.closest('#subPillsContainer .pill-button');
         if (pill) {
-            var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
-            for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
+            document.querySelectorAll('#subPillsContainer .pill-button').forEach(function(p){ p.classList.remove('active'); });
             pill.classList.add('active');
             currentSub = pill.dataset.pillId;
             currentKategori = 'all';
@@ -1861,24 +1312,15 @@
             renderDataGrid();
             return;
         }
-
         var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
         if (katPill) {
-            var allKat = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-            for (var k = 0; k < allKat.length; k++) allKat[k].classList.remove('active');
+            document.querySelectorAll('#kategoriPillsContainer .pill-button').forEach(function(p){ p.classList.remove('active'); });
             katPill.classList.add('active');
             currentKategori = katPill.dataset.katId;
             _renderCache.key = '';
             renderDataGrid();
             return;
         }
-
-        var sheetTab = e.target.closest('#sheetTabs .sheet-tab');
-        if (sheetTab) {
-            switchSheet(sheetTab.dataset.sheet);
-            return;
-        }
-
         var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
         if (pluBtn) {
             var code = pluBtn.dataset.plu;
@@ -1894,36 +1336,25 @@
             });
             return;
         }
-
         var sidebarPlu = e.target.closest('.plu-code[data-plu]');
         if (sidebarPlu) {
             var code2 = sidebarPlu.dataset.plu;
             copyToClipboard(code2).then(function() {
                 var original = sidebarPlu.innerText;
                 sidebarPlu.innerText = '✓';
-                sidebarPlu.style.background = '#dcfce7';
-                sidebarPlu.style.color = '#15803d';
                 showToast('PLU ' + code2 + ' Disalin! ✓');
-                setTimeout(function() {
-                    sidebarPlu.innerText = original;
-                    sidebarPlu.style.background = '';
-                    sidebarPlu.style.color = '';
-                }, 1000);
+                setTimeout(function() { sidebarPlu.innerText = original; }, 1000);
             });
             return;
         }
     });
 
-    /* ================================================================
-       SEARCH
-       ================================================================ */
+    /* SEARCH LOGIC */
     var searchInput = $('searchInput');
     var searchClearBtn = $('searchClearBtn');
-
     var handleSearch = debounce(function() {
         if (currentView === 'katalog') {
-            _katalogCache.key = '';
-            renderSheetData();
+            renderSheetsTable();
         } else if (currentView === 'detail' || currentView === 'home') {
             var query = searchInput.value.trim();
             if (query !== '' && currentView === 'home' && currentBrand === '') {
@@ -1959,9 +1390,8 @@
         searchInput.value = '';
         searchClearBtn.style.display = 'none';
         _renderCache.key = '';
-        _katalogCache.key = '';
         if (currentView === 'katalog') {
-            renderSheetData();
+            renderSheetsTable();
         } else {
             if (currentView === 'detail' && currentBrand === '') {
                 $('homeView').style.display = 'block';
@@ -1975,14 +1405,11 @@
         }
     }
 
-    var handleSidebarSearch = debounce(function() {
+    $('sidebarSearchPlu').addEventListener('input', debounce(function() {
         renderSidebarPlu($('sidebarSearchPlu').value);
-    }, 100);
-    $('sidebarSearchPlu').addEventListener('input', handleSidebarSearch);
+    }, 100));
 
-    /* ================================================================
-       GREETING & CLOCK
-       ================================================================ */
+    /* GREETING & CLOCK */
     var _lastClockSecond = -1;
     function updateClock() {
         var now = new Date();
@@ -2002,7 +1429,6 @@
         updateClock();
         requestAnimationFrame(clockLoop);
     }
-
     function getSapaanData() {
         var jam = new Date().getHours();
         if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
@@ -2011,7 +1437,6 @@
         if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
         return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
     }
-
     function getCountdownGajian() {
         var now = new Date();
         var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
@@ -2021,7 +1446,6 @@
         if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
         return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
     }
-
     var isSapaan = true;
     var _sapaanTimer;
     function toggleSapaanCountdown() {
@@ -2033,16 +1457,17 @@
         _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
     }
 
-    /* ================================================================
-       INIT
-       ================================================================ */
-    renderBrandGrid();
-    clockLoop();
-    toggleSapaanCountdown();
-    hitungGramasi();
-    hitungBiang();
-    hitungSeal();
-    loadData();
+    /* INIT */
+    document.addEventListener("DOMContentLoaded", function() {
+        renderBrandGrid();
+        clockLoop();
+        toggleSapaanCountdown();
+        hitungGramasi();
+        hitungBiang();
+        hitungSeal();
+        initAlphabetNav();
+        loadData();
+    });
     </script>
 </body>
-</html>
+    </html>
