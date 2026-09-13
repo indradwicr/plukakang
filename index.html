@@ -1,1881 +1,1474 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximumscale=1.0, user-scalable=no">
- <meta name="theme-color" content="#0073ea">
- <title>plukakang - hapalkeun euy!</title>
- 
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.5.0/css/all.min.css">
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
- 
- <style>
- :root {
- --bg-app: #f6f8fc;
- --text-main: #111827;
- --text-muted: #4b5563;
- --text-light: #9ca3af;
- --primary-blue: #0073ea;
- --card-white: #ffffff;
- --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
- --card-border: #e5e7eb;
- --raw-bg: #eff6ff;
- --raw-border: #bfdbfe;
- --raw-text: #1d4ed8;
- --konv-bg: #fefce8;
- --konv-border: #fef08a;
- --konv-text: #a16207;
- --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
- --font-code: 'JetBrains Mono', monospace;
- --dark-green: #1b4d2e;
- }
- 
- * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
- 
- body {
- font-family: var(--font-main);
- background-color: var(--bg-app);
- color: var(--text-main);
- margin: 0;
- padding: 0;
- min-height: 100vh;
- display: flex;
- justify-content: center;
- -webkit-font-smoothing: antialiased;
- }
- 
- .app-layout {
- width: 100%;
- max-width: 480px;
- min-height: 100vh;
- background: var(--bg-app);
- padding: 16px 16px 88px 16px;
- position: relative;
- }
- 
- /* ===== HEADER ===== */
- .app-header {
- display: flex;
- justify-content: space-between;
- align-items: center;
- margin-bottom: 12px;
- }
- 
- .brand-block { display: flex; align-items: center; gap: 12px; }
- 
- .brand-icon {
- width: 44px; height: 44px;
- background: linear-gradient(135deg, #0073ea, #4f46e5);
- border-radius: 14px;
- display: flex; align-items: center; justify-content: center;
- color: #ffffff; font-size: 1.25rem;
- box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
- }
- 
- .brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
- .brand-title-group span { font-size: 0.74rem; color: #0073ea; font-weight: 700; }
- 
- .icon-action-btn {
- width: 40px; height: 40px; border-radius: 50%;
- background: var(--card-white); border: 1px solid var(--card-border);
- display: flex; align-items: center; justify-content: center;
- color: var(--text-main); font-size: 0.95rem; cursor: pointer;
- box-shadow: var(--card-shadow); transition: transform 0.15s ease;
- }
- 
- .icon-action-btn:active { transform: scale(0.92); }
- 
- /* ===== GREETING ===== */
- #greetingWrapper.hidden { display: none; }
- 
- .greeting-container {
- background: linear-gradient(145deg, #ffffff, #f0f4ff);
- border-radius: 24px; padding: 20px 22px;
- border: 1px solid var(--card-border);
- box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
- margin-bottom: 16px; position: relative; overflow: hidden;
- }
- 
- .greeting-container::before {
- content: ''; position: absolute; top: -40%; right: -20%;
- width: 200px; height: 200px;
- background: radial-gradient(circle, rgba(0,115,234,0.06) 0%, transparent 70%);
- border-radius: 50%; pointer-events: none;
- }
- 
- .greeting-date-time {
- display: flex; justify-content: space-between; align-items: center;
- font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
- position: relative; z-index: 1; flex-wrap: wrap; gap: 6px;
- }
- 
- .greeting-date-time .date-display {
- color: var(--text-main); font-weight: 600;
- background: rgba(0, 0, 0, 0.04);
- padding: 4px 14px; border-radius: 20px; font-size: 0.78rem;
- }
- 
- .greeting-date-time .time-display {
- font-family: var(--font-code); color: var(--primary-blue); font-size: 0.9rem;
- background: rgba(0, 115, 234, 0.07);
- padding: 4px 14px; border-radius: 20px; font-weight: 700;
- }
- 
- .greeting-divider {
- height: 2px;
- background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
- margin: 12px 0 10px 0; border-radius: 2px;
- }
- 
- .greeting-sapaan {
- font-size: 1.1rem; font-weight: 800; color: var(--text-main);
- min-height: 32px; display: flex; align-items: center; gap: 10px;
- }
- 
- .greeting-sapaan .greeting-icon { font-size: 1.4rem; }
- 
- /* ===== SEARCH ===== */
- .sticky-search-bar {
- position: sticky; top: 0; z-index: 50;
- padding: 6px 0 14px 0;
- background: linear-gradient(to bottom, 
- rgba(246, 248, 252, 0.98) 0%, 
- rgba(246, 248, 252, 0.92) 60%, 
- rgba(246, 248, 252, 0) 100%);
- backdrop-filter: blur(16px);
- -webkit-backdrop-filter: blur(16px);
- }
- 
- .search-field { position: relative; display: flex; align-items: center; }
- 
- .search-input {
- width: 100%; padding: 13px 40px 13px 16px;
- background: var(--card-white); border: 1.5px solid var(--card-border);
- border-radius: 18px; font-size: 0.88rem; font-family: inherit;
- font-weight: 600; outline: none; color: var(--text-main);
- box-shadow: var(--card-shadow);
- }
- 
- .search-input:focus {
- border-color: var(--primary-blue);
- box-shadow: 0 4px 18px rgba(0, 115, 234, 0.18);
- }
- 
- .search-clear-btn {
- position: absolute; right: 12px;
- background: rgba(17, 24, 39, 0.08); border: none;
- width: 24px; height: 24px; border-radius: 50%;
- font-size: 0.72rem; color: var(--text-muted);
- cursor: pointer; display: none;
- align-items: center; justify-content: center;
- }
- 
- /* ===== SECTION ===== */
- .section-bar {
- display: flex; justify-content: space-between; align-items: center;
- margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
- }
- 
- .section-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
- 
- .item-count-chip {
- font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
- background: #e2e8f0; padding: 4px 10px; border-radius: 12px;
- }
- 
- /* ===== BRAND GRID ===== */
- .brand-grid {
- display: grid; grid-template-columns: repeat(2, 1fr);
- gap: 12px; margin-bottom: 24px;
- }
- 
- .brand-card {
- background: var(--card-white); border-radius: 22px;
- padding: 16px; border: 1px solid var(--card-border);
- box-shadow: var(--card-shadow);
- display: flex; flex-direction: column; justify-content: space-between;
- height: 130px; cursor: pointer;
- transition: transform 0.2s ease;
- }
- 
- .brand-card:active { transform: scale(0.96); }
- 
- .brand-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
- 
- .brand-card-icon {
- width: 44px; height: 44px; border-radius: 14px;
- display: flex; align-items: center; justify-content: center;
- font-size: 1.3rem; flex-shrink: 0;
- }
- 
- .card-saybread { background: #fdf6f0; }
- .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
- .card-sayburger { background: #fff1f2; }
- .card-sayburger .brand-card-icon { background: #e11d48; color: #fff; }
- .card-yummychoice { background: #ffedd5; }
- .card-yummychoice .brand-card-icon { background: #f97316; color: #fff; }
- .card-yummycoffee { background: #fffbeb; }
- .card-yummycoffee .brand-card-icon { background: #d97706; color: #fff; }
- .card-pointcoffee { background: #dcfce7; }
- .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
- .card-hambalanfc { background: #dbeafe; }
- .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
- .card-perishable { background: #ecfdf5; }
- .card-perishable .brand-card-icon { background: #059669; color: #fff; }
- 
- .brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
- .brand-card-bottom h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.2; }
- .brand-card-bottom p { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
- 
- /* ===== PILLS ===== */
- .pills-container {
- display: flex; gap: 8px; overflow-x: auto;
- scrollbar-width: none; margin-bottom: 12px; padding-bottom: 4px;
- }
- 
- .pills-container::-webkit-scrollbar { display: none; }
- 
- .pill-button {
- background: var(--card-white); border: 1px solid var(--card-border);
- padding: 7px 14px; border-radius: 18px;
- font-size: 0.76rem; font-family: inherit; font-weight: 700;
- color: var(--text-muted); cursor: pointer; white-space: nowrap;
- transition: all 0.2s ease; user-select: none;
- }
- 
- .pill-button:active { transform: scale(0.95); }
- 
- .pill-button.active {
- background: var(--primary-blue); color: #ffffff;
- border-color: var(--primary-blue);
- }
- 
- /* ===== ALPHABET INDEX ===== */
- .alphabet-nav {
- background: var(--card-white);
- border-radius: 12px;
- padding: 8px 4px;
- margin-bottom: 12px;
- box-shadow: var(--card-shadow);
- border: 1px solid var(--card-border);
- }
- 
- .alphabet-index {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
- gap: 2px;
- }
- 
- .alphabet-btn {
- width: 28px;
- height: 28px;
- border-radius: 6px;
- border: 1px solid var(--card-border);
- background: transparent;
- font-size: 0.7rem;
- font-weight: 700;
- color: var(--text-muted);
- cursor: pointer;
- transition: all 0.15s ease;
- display: flex;
- align-items: center;
- justify-content: center;
- }
- 
- .alphabet-btn:hover:not(.disabled) {
- background: var(--primary-blue);
- color: #ffffff;
- border-color: var(--primary-blue);
- transform: scale(1.1);
- }
- 
- .alphabet-btn.active {
- background: var(--primary-blue);
- color: #ffffff;
- border-color: var(--primary-blue);
- font-weight: 800;
- }
- 
- .alphabet-btn.disabled {
- opacity: 0.3;
- cursor: not-allowed;
- }
- 
- .alphabet-btn.disabled:hover {
- background: transparent;
- color: var(--text-muted);
- transform: none;
- }
- 
- /* ===== DETAIL VIEW ===== */
- .detail-header {
- display: flex; justify-content: space-between; align-items: center;
- margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
- }
- 
- .back-btn {
- background: var(--card-white); border: 1px solid var(--card-border);
- border-radius: 14px; padding: 8px 14px;
- font-family: inherit; font-weight: 700; font-size: 0.8rem;
- color: var(--text-main); cursor: pointer;
- box-shadow: var(--card-shadow);
- transition: transform 0.15s ease;
- display: flex; align-items: center; gap: 6px;
- }
- 
- .back-btn:active { transform: scale(0.95); }
- 
- .toolbar-row {
- display: flex; justify-content: space-between; align-items: center;
- flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
- }
- 
- .legend-bar {
- display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700;
- color: var(--text-muted); background: var(--card-white);
- padding: 5px 12px; border-radius: 20px;
- border: 1px solid var(--card-border);
- box-shadow: var(--card-shadow);
- }
- 
- .legend-item { display: flex; align-items: center; gap: 5px; }
- 
- .legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
- 
- .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
- 
- .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
- 
- .view-toggle { display: flex; gap: 6px; }
- 
- .view-toggle .vt-btn {
- background: var(--card-white); border: 1px solid var(--card-border);
- border-radius: 18px; padding: 5px 12px;
- font-family: inherit; font-weight: 700; font-size: 0.7rem;
- color: var(--text-muted); cursor: pointer;
- box-shadow: var(--card-shadow); transition: all 0.2s ease;
- }
- 
- .view-toggle .vt-btn:active { transform: scale(0.95); }
- 
- .view-toggle .vt-btn.active {
- background: var(--primary-blue); color: #ffffff;
- border-color: var(--primary-blue);
- }
- 
- /* ===== PRODUCTS ===== */
- .products-grid { display: flex; flex-direction: column; gap: 10px; }
- 
- .product-card {
- background: var(--card-white); border-radius: 18px;
- padding: 12px 16px; display: flex; align-items: center;
- justify-content: space-between;
- border: 1px solid var(--card-border);
- box-shadow: var(--card-shadow); gap: 12px;
- }
- 
- .product-info-col { display: flex; flex-direction: column; gap: 4px; }
- 
- .brand-mini-tag {
- font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
- letter-spacing: 0.5px; color: var(--primary-blue);
- }
- 
- .product-card-title { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
- 
- .plu-badges-stack {
- display: flex; flex-direction: column; gap: 4px;
- align-items: flex-end; flex-shrink: 0;
- }
- 
- .plu-badge-button {
- padding: 5px 12px; border-radius: 8px;
- font-family: var(--font-code); font-size: 0.76rem; font-weight: 700;
- border: 1px solid transparent; cursor: pointer;
- transition: all 0.15s ease;
- }
- 
- .plu-badge-button:active { transform: scale(0.95); }
- 
- .plu-raw-style { background: var(--raw-bg); border-color: var(--raw-border); color: var(--raw-text); }
- 
- .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
- 
- .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
- 
- /* ===== TABLE ===== */
- .table-wrapper {
- background: var(--card-white); border-radius: 16px;
- border: 1px solid var(--card-border); overflow: hidden;
- box-shadow: var(--card-shadow);
- }
- 
- .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
- 
- .table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
- 
- .table-scroll th {
- text-align: left; padding: 10px 12px 8px 12px;
- font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
- letter-spacing: 0.4px; color: var(--text-light);
- border-bottom: 2px solid var(--card-border); background: #f8fafc;
- }
- 
- .table-scroll td {
- padding: 8px 12px; border-bottom: 1px solid var(--card-border);
- vertical-align: middle;
- }
- 
- .table-scroll tr:last-child td { border-bottom: none; }
- 
- .table-scroll .plu-badge-button {
- display: inline-block; font-size: 0.65rem;
- padding: 3px 8px; margin: 1px 2px 1px 0;
- }
- 
- .table-scroll .row-number {
- font-size: 0.65rem; color: var(--text-light);
- font-weight: 700; width: 28px; text-align: center;
- }
- 
- .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
- 
- /* ===== SHEET TABS ===== */
- .sheet-tabs {
- display: flex; gap: 6px; overflow-x: auto;
- padding-bottom: 8px; margin-bottom: 12px;
- scrollbar-width: none;
- border-bottom: 2px solid var(--card-border);
- }
- 
- .sheet-tabs::-webkit-scrollbar { display: none; }
- 
- .sheet-tab {
- padding: 8px 16px; border-radius: 10px 10px 0 0;
- font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
- cursor: pointer; white-space: nowrap;
- border: 1px solid transparent; border-bottom: none;
- transition: all 0.2s ease; background: transparent;
- display: flex; align-items: center; gap: 6px;
- }
- 
- .sheet-tab .tab-count {
- font-size: 0.6rem; color: var(--text-light);
- background: var(--bg-app); padding: 1px 8px; border-radius: 10px;
- }
- 
- .sheet-tab.active {
- color: var(--text-main); background: var(--card-white);
- border-color: var(--card-border); font-weight: 800;
- }
- 
- .sheet-tab.active .tab-count { background: var(--primary-blue); color: white; }
- 
- .sheet-tab:active { transform: scale(0.95); }
- 
- .sheet-tab.bread.active { border-top: 3px solid #8c5332; }
- .sheet-tab.burger.active { border-top: 3px solid #e11d48; }
- .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
- .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
- .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
- .sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
- .sheet-tab.perishable.active { border-top: 3px solid #059669; }
- .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
- 
- /* ===== KALKULATOR ===== */
- .kalkulator-card {
- background: var(--card-white); border-radius: 20px;
- padding: 18px; border: 1px solid var(--card-border);
- box-shadow: var(--card-shadow); margin-bottom: 16px;
- }
- 
- .kalkulator-card .card-title {
- font-size: 14px; font-weight: 700; margin-bottom: 14px;
- display: flex; align-items: center; gap: 8px;
- }
- 
- .input-row {
- display: flex; justify-content: space-between; align-items: center;
- margin-bottom: 12px;
- }
- 
- .input-row label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
- 
- .input-row input {
- background: #fef08a; border: 1.5px solid #fde047;
- padding: 8px 12px; border-radius: 12px;
- font-size: 16px; font-weight: 700; width: 110px;
- text-align: right; outline: none; font-family: var(--font-main);
- }
- 
- .input-row input:focus {
- border-color: var(--primary-blue);
- box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.15);
- }
- 
- .hasil-box {
- background: var(--bg-app); padding: 12px;
- border-radius: 12px; margin-top: 6px;
- }
- 
- .hasil-box .input-row { margin-bottom: 6px; }
- .hasil-box .input-row:last-child { margin-bottom: 0; }
- .hasil-box .hasil-label { font-size: 12px; color: var(--text-muted); }
- .hasil-box .hasil-value { font-weight: 700; font-size: 16px; }
- .hasil-box .hasil-value.primary { color: var(--primary-blue); font-size: 18px; }
- 
- .tabel-wadah-container {
- max-height: 380px; overflow-y: auto; margin-top: 4px;
- }
- 
- .tabel-wadah-container::-webkit-scrollbar { width: 4px; }
- .tabel-wadah-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
- .tabel-wadah-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
- 
- .tabel-wadah-container table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
- 
- .tabel-wadah-container th {
- font-size: 10px; text-transform: uppercase; color: var(--text-muted);
- padding: 8px 6px; text-align: left;
- border-bottom: 1.5px solid var(--card-border);
- font-weight: 700; position: sticky; top: 0;
- background: #fff; z-index: 2;
- }
- 
- .tabel-wadah-container td {
- padding: 7px 6px; font-size: 12px;
- border-bottom: 1px solid #f1f5f9;
- }
- 
- .tabel-wadah-container th:nth-child(2),
- .tabel-wadah-container th:nth-child(3),
- .tabel-wadah-container td:nth-child(2),
- .tabel-wadah-container td:nth-child(3) { text-align: center; }
- 
- .tabel-wadah-container th:last-child,
- .tabel-wadah-container td:last-child { text-align: right; }
- 
- .tabel-wadah-container .bold { font-weight: 700; }
- .tabel-wadah-container .hasil-gramasi { font-weight: 700; color: var(--primary-blue); }
- 
- .seal-tip { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
- 
- /* ===== SIDEBAR PLU ===== */
- .plu-sidebar {
- background: #f0f4ff; border-radius: 20px; padding: 16px;
- border: 1px solid var(--card-border); margin-bottom: 16px;
- }
- 
- .plu-sidebar .sidebar-title {
- font-size: 13px; font-weight: 700; color: var(--dark-green);
- display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
- }
- 
- .plu-sidebar .sidebar-title span {
- background: var(--primary-blue);
- color: #fff;
- padding: 2px 10px;
- border-radius: 10px;
- font-size: 11px;
- font-weight: 700;
- margin-left: auto;
- }
- 
- .plu-sidebar .sidebar-search {
- width: 100%; padding: 10px 14px; border-radius: 12px;
- border: 1.5px solid var(--card-border); font-size: 14px;
- font-family: inherit; outline: none; background: #fff; margin-bottom: 10px;
- }
- 
- .plu-sidebar .sidebar-search:focus { border-color: var(--primary-blue); }
- 
- .plu-sidebar .sidebar-legend {
- display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700;
- color: var(--text-muted); margin-bottom: 8px; padding-left: 2px;
- }
- 
- .plu-sidebar .sidebar-legend .legend-item {
- display: flex; align-items: center; gap: 5px;
- }
- 
- .plu-sidebar .sidebar-legend .legend-box {
- width: 12px; height: 12px; border-radius: 4px; border: 1px solid;
- }
- 
- .plu-sidebar .sidebar-legend .legend-box.raw {
- background: var(--raw-bg); border-color: var(--raw-border);
- }
- 
- .plu-sidebar .sidebar-legend .legend-box.konv {
- background: var(--konv-bg); border-color: var(--konv-border);
- }
- 
- .plu-sidebar .sidebar-plu-list {
- height: 300px; overflow-y: auto;
- display: flex; flex-direction: column; gap: 4px;
- contain: strict;
- }
- 
- .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
- .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
- .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
- 
- .plu-sidebar .plu-item {
- display: flex; justify-content: space-between; align-items: center;
- padding: 8px 10px; background: #fff; border-radius: 10px;
- font-size: 12px; border: 1px solid transparent; gap: 8px;
- }
- 
- .plu-sidebar .plu-item .plu-name {
- font-weight: 600; font-size: 12px; flex: 1; min-width: 0;
- white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
- }
- 
- .plu-sidebar .plu-item .plu-badges {
- display: flex; flex-direction: column; gap: 3px;
- align-items: flex-end; flex-shrink: 0;
- }
- 
- .plu-sidebar .plu-item .plu-code {
- font-family: var(--font-code); font-size: 10px; font-weight: 700;
- padding: 2px 7px; border-radius: 6px; cursor: pointer;
- white-space: nowrap; border: 1px solid transparent;
- transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
- }
- 
- .plu-sidebar .plu-item .plu-code:active { transform: scale(0.95); }
- 
- .plu-sidebar .plu-item .plu-code.raw {
- color: var(--raw-text); background: var(--raw-bg);
- border-color: var(--raw-border);
- }
- 
- .plu-sidebar .plu-item .plu-code.konv {
- color: var(--konv-text); background: var(--konv-bg);
- border-color: var(--konv-border);
- }
- 
- .plu-sidebar .plu-empty {
- text-align: center; color: var(--text-muted);
- font-size: 12px; padding: 20px 0;
- }
- 
- /* ===== BOTTOM NAV ===== */
- .bottom-dock {
- position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
- width: 100%; max-width: 480px; height: 68px;
- background: rgba(255, 255, 255, 0.95);
- backdrop-filter: blur(16px);
- -webkit-backdrop-filter: blur(16px);
- border-top: 1px solid var(--card-border);
- display: flex; justify-content: space-around; align-items: center;
- z-index: 100; padding: 0 16px;
- }
- 
- .dock-tab {
- display: flex; flex-direction: column; align-items: center;
- gap: 4px; cursor: pointer; color: var(--text-light);
- font-size: 0.68rem; font-weight: 700;
- border: none; background: none;
- }
- 
- .dock-tab.active { color: var(--primary-blue); }
- .dock-tab-icon { font-size: 1.2rem; }
- 
- /* ===== TOAST ===== */
- .toast-notification {
- position: fixed; bottom: 84px; left: 50%;
- transform: translateX(-50%) translateY(50px);
- background: #111827; color: #ffffff;
- padding: 10px 20px; border-radius: 30px;
- font-size: 0.8rem; font-weight: 700;
- opacity: 0; pointer-events: none;
- transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
- z-index: 200;
- }
- 
- .toast-notification.show {
- transform: translateX(-50%) translateY(0);
- opacity: 1;
- }
- 
- .empty-search-state {
- text-align: center; padding: 40px 20px;
- color: var(--text-muted); font-size: 0.88rem;
- font-weight: 600; background: var(--card-white);
- border-radius: 20px; border: 1px dashed var(--card-border);
- }
- 
- .hidden { display: none !important; }
- 
- /* ===== PERFORMANCE ===== */
- .products-grid { contain: layout style; }
- .product-card { will-change: transform; }
- .table-wrapper.hidden,
- .products-grid.hidden { display: none !important; }
- 
- @media (max-width: 480px) {
- .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
- .tabel-wadah-container { max-height: 250px; }
- .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
- .plu-sidebar .sidebar-plu-list { height: 220px; }
- }
- </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0073ea">
+<title>plukakang- hapalkeun euy!</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg-app:#f6f8fc;
+--text-main:#111827;
+--text-muted:#4b5563;
+--text-light:#9ca3af;
+--primary-blue:#0073ea;
+--card-white:#ffffff;
+--card-shadow:0 4px 16px rgba(17,24,39,0.05);
+--card-border:#e5e7eb;
+--raw-bg:#eff6ff;
+--raw-border:#bfdbfe;
+--raw-text:#1d4ed8;
+--konv-bg:#fefce8;
+--konv-border:#fef08a;
+--konv-text:#a16207;
+--font-main:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+--font-code:'JetBrains Mono',monospace;
+--dark-green:#1b4d2e;
+--indexer-width:32px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--font-main);background-color:var(--bg-app);color:var(--text-main);margin:0;padding:0;min-height:100vh;display:flex;justify-content:center;-webkit-font-smoothing:antialiased;}
+.app-layout{width:100%;max-width:480px;min-height:100vh;background:var(--bg-app);padding:16px 16px 88px 16px;position:relative;}
+.app-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.brand-block{display:flex;align-items:center;gap:12px;}
+.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#0073ea,#4f46e5);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.25rem;box-shadow:0 4px 14px rgba(0,115,234,0.28);}
+.brand-title-group h1{font-size:1.25rem;font-weight:800;letter-spacing:-0.4px;line-height:1.1;}
+.brand-title-group span{font-size:0.74rem;color:#0073ea;font-weight:700;}
+.icon-action-btn{width:40px;height:40px;border-radius:50%;background:var(--card-white);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;color:var(--text-main);font-size:0.95rem;cursor:pointer;box-shadow:var(--card-shadow);transition:transform 0.15s ease;}
+.icon-action-btn:active{transform:scale(0.92);}
+#greetingWrapper.hidden{display:none;}
+.greeting-container{background:linear-gradient(145deg,#ffffff,#f0f4ff);border-radius:24px;padding:20px 22px;border:1px solid var(--card-border);box-shadow:0 8px 30px rgba(0,115,234,0.08);margin-bottom:16px;position:relative;overflow:hidden;}
+.greeting-container::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,115,234,0.06) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.greeting-date-time{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;font-weight:700;color:var(--text-muted);position:relative;z-index:1;flex-wrap:wrap;gap:6px;}
+.greeting-date-time.date-display{color:var(--text-main);font-weight:600;background:rgba(0,0,0,0.04);padding:4px 14px;border-radius:20px;font-size:0.78rem;}
+.greeting-date-time.time-display{font-family:var(--font-code);color:var(--primary-blue);font-size:0.9rem;background:rgba(0,115,234,0.07);padding:4px 14px;border-radius:20px;font-weight:700;}
+.greeting-divider{height:2px;background:linear-gradient(to right,rgba(0,115,234,0.08),rgba(0,115,234,0.25),rgba(0,115,234,0.08));margin:12px 0 10px 0;border-radius:2px;}
+.greeting-sapaan{font-size:1.1rem;font-weight:800;color:var(--text-main);min-height:32px;display:flex;align-items:center;gap:10px;}
+.greeting-sapaan.greeting-icon{font-size:1.4rem;}
+.sticky-search-bar{position:sticky;top:0;z-index:50;padding:6px 0 14px 0;background:linear-gradient(to bottom,rgba(246,248,252,0.98) 0%,rgba(246,248,252,0.92) 60%,rgba(246,248,252,0) 100%);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+.search-field{position:relative;display:flex;align-items:center;}
+.search-input{width:100%;padding:13px 40px 13px 16px;background:var(--card-white);border:1.5px solid var(--card-border);border-radius:18px;font-size:0.88rem;font-family:inherit;font-weight:600;outline:none;color:var(--text-main);box-shadow:var(--card-shadow);}
+.search-input:focus{border-color:var(--primary-blue);box-shadow:0 4px 18px rgba(0,115,234,0.18);}
+.search-clear-btn{position:absolute;right:12px;background:rgba(17,24,39,0.08);border:none;width:24px;height:24px;border-radius:50%;font-size:0.72rem;color:var(--text-muted);cursor:pointer;display:none;align-items:center;justify-content:center;}
+.section-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.section-title{font-size:1.05rem;font-weight:800;letter-spacing:-0.3px;}
+.item-count-chip{font-size:0.72rem;font-weight:800;color:var(--text-muted);background:#e2e8f0;padding:4px 10px;border-radius:12px;}
+.brand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px;}
+.brand-card{background:var(--card-white);border-radius:22px;padding:16px;border:1px solid var(--card-border);box-shadow:var(--card-shadow);display:flex;flex-direction:column;justify-content:space-between;height:130px;cursor:pointer;transition:transform 0.2s ease;}
+.brand-card:active{transform:scale(0.96);}
+.brand-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.brand-card-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.card-saybread{background:#fdf6f0;}
+.card-saybread.brand-card-icon{background:#8c5332;color:#fff;}
+.card-sayburger{background:#fff1f2;}
+.card-sayburger.brand-card-icon{background:#e11d48;color:#fff;}
+.card-yummychoice{background:#ffedd5;}
+.card-yummychoice.brand-card-icon{background:#f97316;color:#fff;}
+.card-yummycoffee{background:#fffbeb;}
+.card-yummycoffee.brand-card-icon{background:#d97706;color:#fff;}
+.card-pointcoffee{background:#dcfce7;}
+.card-pointcoffee.brand-card-icon{background:#15803d;color:#fff;}
+.card-hambalanfc{background:#dbeafe;}
+.card-hambalanfc.brand-card-icon{background:#1e40af;color:#fff;}
+.card-perishable{background:#ecfdf5;}
+.card-perishable.brand-card-icon{background:#059669;color:#fff;}
+.brand-card-bottom{flex:1;display:flex;flex-direction:column;justify-content:flex-end;}
+.brand-card-bottom h3{font-size:0.98rem;font-weight:800;line-height:1.2;}
+.brand-card-bottom p{font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:2px;}
+.pills-container{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:4px;}
+.pills-container::-webkit-scrollbar{display:none;}
+.pill-button{background:var(--card-white);border:1px solid var(--card-border);padding:7px 14px;border-radius:18px;font-size:0.76rem;font-family:inherit;font-weight:700;color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all 0.2s ease;user-select:none;}
+.pill-button:active{transform:scale(0.95);}
+.pill-button.active{background:var(--primary-blue);color:#ffffff;border-color:var(--primary-blue);}
+.detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.back-btn{background:var(--card-white);border:1px solid var(--card-border);border-radius:14px;padding:8px 14px;font-family:inherit;font-weight:700;font-size:0.8rem;color:var(--text-main);cursor:pointer;box-shadow:var(--card-shadow);transition:transform 0.15s ease;display:flex;align-items:center;gap:6px;}
+.back-btn:active{transform:scale(0.95);}
+.toolbar-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.legend-bar{display:flex;gap:12px;font-size:0.68rem;font-weight:700;color:var(--text-muted);background:var(--card-white);padding:5px 12px;border-radius:20px;border:1px solid var(--card-border);box-shadow:var(--card-shadow);}
+.legend-item{display:flex;align-items:center;gap:5px;}
+.legend-box{width:12px;height:12px;border-radius:4px;border:1px solid;}
+.legend-box.raw{background:var(--raw-bg);border-color:var(--raw-border);}
+.legend-box.konv{background:var(--konv-bg);border-color:var(--konv-border);}
+.view-toggle{display:flex;gap:6px;}
+.view-toggle.vt-btn{background:var(--card-white);border:1px solid var(--card-border);border-radius:18px;padding:5px 12px;font-family:inherit;font-weight:700;font-size:0.7rem;color:var(--text-muted);cursor:pointer;box-shadow:var(--card-shadow);transition:all 0.2s ease;}
+.view-toggle.vt-btn:active{transform:scale(0.95);}
+.view-toggle.vt-btn.active{background:var(--primary-blue);color:#ffffff;border-color:var(--primary-blue);}
+
+/* ===== PRODUCTS WITH INDEXER ===== */
+.products-wrapper{position:relative;display:flex;gap:8px;}
+.products-grid{display:flex;flex-direction:column;gap:10px;flex:1;}
+.product-card{background:var(--card-white);border-radius:18px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--card-border);box-shadow:var(--card-shadow);gap:12px;}
+.product-info-col{display:flex;flex-direction:column;gap:4px;}
+.brand-mini-tag{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary-blue);}
+.product-card-title{font-size:0.88rem;font-weight:700;line-height:1.35;}
+.plu-badges-stack{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;}
+.plu-badge-button{padding:5px 12px;border-radius:8px;font-family:var(--font-code);font-size:0.76rem;font-weight:700;border:1px solid transparent;cursor:pointer;transition:all 0.15s ease;}
+.plu-badge-button:active{transform:scale(0.95);}
+.plu-raw-style{background:var(--raw-bg);border-color:var(--raw-border);color:var(--raw-text);}
+.plu-konv-style{background:var(--konv-bg);border-color:var(--konv-border);color:var(--konv-text);}
+.plu-copied-style{background:#dcfce7!important;border-color:#86efac!important;color:#15803d!important;}
+
+/* ===== ALPHABETICAL INDEXER ===== */
+.alphabetical-indexer{position:fixed;right:8px;top:50%;transform:translateY(-50%);width:var(--indexer-width);z-index:60;display:flex;flex-direction:column;align-items:center;gap:2px;user-select:none;}
+.indexer-item{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-muted);cursor:pointer;border-radius:4px;transition:all 0.15s ease;}
+.indexer-item:active{transform:scale(0.85);background:rgba(0,115,234,0.15);}
+.indexer-item.active{background:var(--primary-blue);color:#ffffff;box-shadow:0 2px 8px rgba(0,115,234,0.35);}
+.indexer-item.disabled{opacity:0.25;cursor:default;}
+.indexer-item.disabled:active{transform:none;background:transparent;}
+
+/* Index Section Header */
+.index-section-header{position:sticky;top:0;background:linear-gradient(to bottom,rgba(246,248,252,0.98),rgba(246,248,252,0.95));padding:8px 12px;margin-bottom:8px;border-radius:12px;font-size:0.75rem;font-weight:800;color:var(--primary-blue);background:var(--primary-blue);color:#ffffff;z-index:10;display:flex;align-items:center;gap:8px;}
+.index-section-header i{font-size:0.7rem;opacity:0.8;}
+
+/* Current Letter Indicator */
+.current-letter-indicator{position:fixed;right:45px;top:50%;transform:translateY(-50%);background:var(--primary-blue);color:#ffffff;padding:12px 16px;border-radius:12px;font-size:1.5rem;font-weight:800;box-shadow:0 4px 16px rgba(0,115,234,0.35);opacity:0;pointer-events:none;transition:opacity 0.2s ease,transform 0.2s ease;z-index:70;}
+.current-letter-indicator.show{opacity:1;transform:translateY(-50%) scale(1);}
+
+/* ===== TABLE ===== */
+.table-wrapper{background:var(--card-white);border-radius:16px;border:1px solid var(--card-border);overflow:hidden;box-shadow:var(--card-shadow);}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.table-scroll table{width:100%;border-collapse:collapse;font-size:0.78rem;min-width:340px;}
+.table-scroll th{text-align:left;padding:10px 12px 8px 12px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-light);border-bottom:2px solid var(--card-border);background:#f8fafc;}
+.table-scroll td{padding:8px 12px;border-bottom:1px solid var(--card-border);vertical-align:middle;}
+.table-scroll tr:last-child td{border-bottom:none;}
+.table-scroll.plu-badge-button{display:inline-block;font-size:0.65rem;padding:3px 8px;margin:1px 2px 1px 0;}
+.table-scroll.row-number{font-size:0.65rem;color:var(--text-light);font-weight:700;width:28px;text-align:center;}
+.table-scroll.item-name{font-weight:700;font-size:0.8rem;}
+
+/* ===== SHEET TABS ===== */
+.sheet-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none;border-bottom:2px solid var(--card-border);}
+.sheet-tabs::-webkit-scrollbar{display:none;}
+.sheet-tab{padding:8px 16px;border-radius:10px 10px 0 0;font-size:0.78rem;font-weight:700;color:var(--text-muted);cursor:pointer;white-space:nowrap;border:1px solid transparent;border-bottom:none;transition:all 0.2s ease;background:transparent;display:flex;align-items:center;gap:6px;}
+.sheet-tab.tab-count{font-size:0.6rem;color:var(--text-light);background:var(--bg-app);padding:1px 8px;border-radius:10px;}
+.sheet-tab.active{color:var(--text-main);background:var(--card-white);border-color:var(--card-border);font-weight:800;}
+.sheet-tab.active.tab-count{background:var(--primary-blue);color:white;}
+.sheet-tab:active{transform:scale(0.95);}
+.sheet-tab.bread.active{border-top:3px solid #8c5332;}
+.sheet-tab.burger.active{border-top:3px solid #e11d48;}
+.sheet-tab.yummy.active{border-top:3px solid #f97316;}
+.sheet-tab.coffee.active{border-top:3px solid #d97706;}
+.sheet-tab.pointcoffee.active{border-top:3px solid #15803d;}
+.sheet-tab.hambalanfc.active{border-top:3px solid #1e40af;}
+.sheet-tab.perishable.active{border-top:3px solid #059669;}
+.sheet-tab.all-brand.active{border-top:3px solid var(--primary-blue);}
+
+/* ===== KALKULATOR ===== */
+.kalkulator-card{background:var(--card-white);border-radius:20px;padding:18px;border:1px solid var(--card-border);box-shadow:var(--card-shadow);margin-bottom:16px;}
+.kalkulator-card.card-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.input-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.input-row label{font-size:13px;font-weight:600;color:var(--text-muted);}
+.input-row input{background:#fef08a;border:1.5px solid #fde047;padding:8px 12px;border-radius:12px;font-size:16px;font-weight:700;width:110px;text-align:right;outline:none;font-family:var(--font-main);}
+.input-row input:focus{border-color:var(--primary-blue);box-shadow:0 0 0 3px rgba(0,115,234,0.15);}
+.hasil-box{background:var(--bg-app);padding:12px;border-radius:12px;margin-top:6px;}
+.hasil-box.input-row{margin-bottom:6px;}
+.hasil-box.input-row:last-child{margin-bottom:0;}
+.hasil-box.hasil-label{font-size:12px;color:var(--text-muted);}
+.hasil-box.hasil-value{font-weight:700;font-size:16px;}
+.hasil-box.hasil-value.primary{color:var(--primary-blue);font-size:18px;}
+.tabel-wadah-container{max-height:380px;overflow-y:auto;margin-top:4px;}
+.tabel-wadah-container::-webkit-scrollbar{width:4px;}
+.tabel-wadah-container::-webkit-scrollbar-track{background:#f1f5f9;border-radius:8px;}
+.tabel-wadah-container::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;}
+.tabel-wadah-container table{width:100%;border-collapse:collapse;font-size:0.78rem;}
+.tabel-wadah-container th{font-size:10px;text-transform:uppercase;color:var(--text-muted);padding:8px 6px;text-align:left;border-bottom:1.5px solid var(--card-border);font-weight:700;position:sticky;top:0;background:#fff;z-index:2;}
+.tabel-wadah-container td{padding:7px 6px;font-size:12px;border-bottom:1px solid #f1f5f9;}
+.tabel-wadah-container th:nth-child(2),.tabel-wadah-container th:nth-child(3),.tabel-wadah-container td:nth-child(2),.tabel-wadah-container td:nth-child(3){text-align:center;}
+.tabel-wadah-container th:last-child,.tabel-wadah-container td:last-child{text-align:right;}
+.tabel-wadah-container.bold{font-weight:700;}
+.tabel-wadah-container.hasil-gramasi{font-weight:700;color:var(--primary-blue);}
+.seal-tip{font-size:10px;color:var(--text-muted);margin-top:2px;}
+
+/* ===== SIDEBAR PLU ===== */
+.plu-sidebar{background:#f0f4ff;border-radius:20px;padding:16px;border:1px solid var(--card-border);margin-bottom:16px;}
+.plu-sidebar.sidebar-title{font-size:13px;font-weight:700;color:var(--dark-green);display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.plu-sidebar.sidebar-title span{background:var(--primary-blue);color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-left:auto;}
+.plu-sidebar.sidebar-search{width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid var(--card-border);font-size:14px;font-family:inherit;outline:none;background:#fff;margin-bottom:10px;}
+.plu-sidebar.sidebar-search:focus{border-color:var(--primary-blue);}
+.plu-sidebar.sidebar-legend{display:flex;gap:12px;font-size:0.68rem;font-weight:700;color:var(--text-muted);margin-bottom:8px;padding-left:2px;}
+.plu-sidebar.sidebar-legend.legend-item{display:flex;align-items:center;gap:5px;}
+.plu-sidebar.sidebar-legend.legend-box{width:12px;height:12px;border-radius:4px;border:1px solid;}
+.plu-sidebar.sidebar-legend.legend-box.raw{background:var(--raw-bg);border-color:var(--raw-border);}
+.plu-sidebar.sidebar-legend.legend-box.konv{background:var(--konv-bg);border-color:var(--konv-border);}
+.plu-sidebar.sidebar-plu-list{height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;contain:strict;}
+.plu-sidebar.sidebar-plu-list::-webkit-scrollbar{width:4px;}
+.plu-sidebar.sidebar-plu-list::-webkit-scrollbar-track{background:#e2e8f0;border-radius:8px;}
+.plu-sidebar.sidebar-plu-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;}
+.plu-sidebar.plu-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-radius:10px;font-size:12px;border:1px solid transparent;gap:8px;}
+.plu-sidebar.plu-item.plu-name{font-weight:600;font-size:12px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.plu-sidebar.plu-item.plu-badges{display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0;}
+.plu-sidebar.plu-item.plu-code{font-family:var(--font-code);font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;cursor:pointer;white-space:nowrap;border:1px solid transparent;transition:transform 0.1s ease,background 0.15s ease,color 0.15s ease;}
+.plu-sidebar.plu-item.plu-code:active{transform:scale(0.95);}
+.plu-sidebar.plu-item.plu-code.raw{color:var(--raw-text);background:var(--raw-bg);border-color:var(--raw-border);}
+.plu-sidebar.plu-item.plu-code.konv{color:var(--konv-text);background:var(--konv-bg);border-color:var(--konv-border);}
+.plu-sidebar.plu-empty{text-align:center;color:var(--text-muted);font-size:12px;padding:20px 0;}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-dock{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:68px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--card-border);display:flex;justify-content:space-around;align-items:center;z-index:100;padding:0 16px;}
+.dock-tab{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--text-light);font-size:0.68rem;font-weight:700;border:none;background:none;}
+.dock-tab.active{color:var(--primary-blue);}
+.dock-tab-icon{font-size:1.2rem;}
+
+/* ===== TOAST ===== */
+.toast-notification{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(50px);background:#111827;color:#ffffff;padding:10px 20px;border-radius:30px;font-size:0.8rem;font-weight:700;opacity:0;pointer-events:none;transition:all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);z-index:200;}
+.toast-notification.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.empty-search-state{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:0.88rem;font-weight:600;background:var(--card-white);border-radius:20px;border:1px dashed var(--card-border);}
+.hidden{display:none!important;}
+
+/* ===== PERFORMANCE ===== */
+.products-grid{contain:layout style;}
+.product-card{will-change:transform;}
+.table-wrapper.hidden,.products-grid.hidden{display:none!important;}
+
+@media(max-width:480px){
+.input-row input{width:90px;font-size:14px;padding:6px 10px;}
+.tabel-wadah-container{max-height:250px;}
+.tabel-wadah-container td{font-size:11px;padding:5px 4px;}
+.plu-sidebar.sidebar-plu-list{height:220px;}
+.alphabetical-indexer{right:4px;}
+.indexer-item{width:20px;height:20px;font-size:9px;}
+.current-letter-indicator{right:38px;padding:10px 14px;font-size:1.3rem;}
+}
+</style>
 </head>
 <body>
- <div class="app-layout">
- 
- <div id="toastNotification" class="toast-notification">PLU Disalin! ✓</div>
- 
- <!-- HEADER -->
- <header class="app-header">
- <div class="brand-block">
- <div class="brand-icon"><i class="fas fa-cubes"></i></div>
- <div class="brand-title-group">
- <h1>plukakang</h1>
- <span>hapalkeun euy!</span>
- </div>
- </div>
- <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
- </header>
- 
- <!-- GREETING -->
- <div id="greetingWrapper">
- <div class="greeting-container">
- <div class="greeting-date-time">
- <span class="date-display" id="dateDisplay">📅 Selasa, 25 Agustus 2026</span>
- <span class="time-display" id="timeDisplay">🕐 14:32:45</span>
- </div>
- <div class="greeting-divider"></div>
- <div class="greeting-sapaan" id="sapaanDisplay">
- <span class="greeting-icon" id="sapaanIcon">☀️</span>
- <span id="sapaanText">Selamat Pagi, Tim PLU!</span>
- </div>
- </div>
- </div>
- 
- <!-- SEARCH BAR GLOBAL -->
- <div class="sticky-search-bar" id="globalSearchBar">
- <div class="search-field">
- <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
- <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">✕</button>
- </div>
- </div>
- 
- <!-- ===== HOME VIEW ===== -->
- <main id="homeView">
- <div class="section-bar">
- <span class="section-title">Kategori Brand</span>
- </div>
- <section class="brand-grid" id="brandGrid"></section>
- </main>
- 
- <!-- ===== DETAIL VIEW ===== -->
- <section id="detailView" style="display: none;">
- <div class="detail-header">
- <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
- </div>
- <div class="section-bar">
- <span class="section-title" id="detailHeadingTitle">Say Bread</span>
- <span class="item-count-chip" id="itemCounterBadge">0 Item</span>
- </div>
- <div class="toolbar-row">
- <div class="legend-bar">
- <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
- <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
- </div>
- <div class="view-toggle">
- <button class="vt-btn active" id="viewListBtn" onclick="setDetailView('list')"><i class="fas fa-list"></i> List</button>
- <button class="vt-btn" id="viewTableBtn" onclick="setDetailView('table')"><i class="fas fa-table"></i> Tabel</button>
- </div>
- </div>
- <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
- <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
- <section class="products-grid" id="productGrid"></section>
- <div id="tableView" class="table-wrapper hidden">
- <div class="table-scroll">
- <table>
- <thead>
- <tr>
- <th style="width:28px;text-align:center;">#</th>
- <th>Nama Barang</th>
- <th>PLU RAW</th>
- <th>PLU KONV</th>
- </tr>
- </thead>
- <tbody id="tableBody"></tbody>
- </table>
- </div>
- </div>
- </section>
- 
- <!-- ===== KATALOG VIEW ===== -->
- <section id="katalogView" style="display: none;">
- <div class="detail-header">
- <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
- <span class="item-count-chip" id="katalogCounter">0 Item</span>
- </div>
- 
- <!-- ALPHABET INDEX NAVIGATOR -->
- <div class="alphabet-nav">
- <div class="alphabet-index" id="alphabetIndex"></div>
- </div>
- 
- <div class="sheet-tabs" id="sheetTabs"></div>
- <div class="toolbar-row">
- <div class="legend-bar">
- <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
- <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
- </div>
- <div class="view-toggle">
- <button class="vt-btn active" id="katalogListBtn" onclick="setKatalogView('list')"><i class="fas fa-list"></i> List</button>
- <button class="vt-btn" id="katalogTableBtn" onclick="setKatalogView('table')"><i class="fas fa-table"></i> Tabel</button>
- </div>
- </div>
- <section class="products-grid" id="katalogListGrid"></section>
- <div id="katalogTableView" class="table-wrapper hidden">
- <div class="table-scroll">
- <table>
- <thead>
- <tr>
- <th style="width:28px;text-align:center;">#</th>
- <th>Nama Barang</th>
- <th>PLU RAW</th>
- <th>PLU KONV</th>
- </tr>
- </thead>
- <tbody id="katalogTableBody"></tbody>
- </table>
- </div>
- </div>
- </section>
- 
- <!-- ===== KALKULATOR VIEW ===== -->
- <section id="kalkulatorView" style="display: none;">
- <!-- SIDEBAR PLU POINT COFFEE -->
- <div class="plu-sidebar" id="pluSidebar">
- <div class="sidebar-title">
- <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
- <span id="pluCount">0</span>
- </div>
- <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
- <div class="sidebar-legend">
- <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
- <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
- </div>
- <div class="sidebar-plu-list" id="sidebarPluList">
- <div class="plu-empty">Memuat data...</div>
- </div>
- </div>
- 
- <div class="section-bar" style="margin-top:16px;">
- <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
- </div>
- 
- <!-- KARTU 1: INPUT GRAMASI -->
- <div class="kalkulator-card">
- <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
- <div class="input-row" style="margin-bottom:0;">
- <label for="timbanganGramasi">Berat Timbangan (gr)</label>
- <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()" inputmode="numeric">
- </div>
- </div>
- 
- <!-- KARTU 2: DAFTAR WADAH -->
- <div class="kalkulator-card">
- <div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
- <div class="tabel-wadah-container">
- <table>
- <thead><tr><th>WADAH</th><th>TARE</th><th>MJ</th><th>BERSIH</th></tr></thead>
- <tbody id="tabelGramasi"></tbody>
- </table>
- </div>
- </div>
- 
- <!-- KARTU 3: SO BIANG KOPI -->
- <div class="kalkulator-card">
- <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
- <div class="input-row">
- <label for="biangTimbangan">Total Timbangan</label>
- <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()" inputmode="numeric">
- </div>
- <div class="input-row">
- <label for="biangBotol">Berat Botol Kosong</label>
- <input type="number" id="biangBotol" value="680" oninput="hitungBiang()" inputmode="numeric">
- </div>
- <div class="hasil-box">
- <div class="input-row"><span class="hasil-label">Hasil Netto</span><span class="hasil-value" id="resNetto">267</span></div>
- <div class="input-row"><span class="hasil-label">Konversi Biji Kopi</span><span class="hasil-value" id="resKopi">80</span></div>
- <div class="input-row" style="margin-bottom:0;"><span class="hasil-label">Konversi Air Mineral</span><span class="hasil-value" id="resAir">187</span></div>
- </div>
- </div>
- 
- <!-- KARTU 4: PLASTIK SEAL -->
- <div class="kalkulator-card">
- <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
- <div class="input-row">
- <div><label for="inputTebalSeal">Tebal Sisa Roll (mm)</label><div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div></div>
- <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()" inputmode="numeric">
- </div>
- <div class="hasil-box">
- <div class="input-row" style="margin-bottom:0;">
- <span class="hasil-label">Estimasi Jumlah Cup</span>
- <span class="hasil-value primary" id="resSealPcs">547</span>
- </div>
- </div>
- </div>
- </section>
- 
- </div>
- 
- <!-- BOTTOM NAVIGATION -->
- <nav class="bottom-dock">
- <button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
- <i class="fas fa-home dock-tab-icon"></i>
- <span>Home</span>
- </button>
- <button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
- <i class="fas fa-layer-group dock-tab-icon"></i>
- <span>Katalog</span>
- </button>
- <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
- <i class="fas fa-calculator dock-tab-icon"></i>
- <span>Kalkulator</span>
- </button>
- </nav>
- 
- <script>
- /* ================================================================
- KONFIGURASI BRAND
- ================================================================ */
- var BRAND_NAMES = {
- 'saybread': 'Say Bread', 'sayburger': 'Say Burger',
- 'yummychoice': 'Yummy Choice', 'yummycoffee': 'Yummy Coffee Gold',
- 'pointcoffee': 'Point Coffee', 'hambalanfc': 'Hambalan FC',
- 'perishable': 'Perishable'
- };
- 
- var BRAND_CARDS = [
- { id: 'saybread', title: 'Say Bread', sub: 'Bakery & Pastry', icon: 'fa-bread-slice', cls: 'card-saybread' },
- { id: 'sayburger', title: 'Say Burger', sub: 'Burger & Hotdog', icon: 'fa-hamburger', cls: 'card-sayburger' },
- { id: 'yummychoice', title: 'Yummy Choice', sub: 'Ready to Eat', icon: 'fa-utensils', cls: 'card-yummychoice' },
- { id: 'yummycoffee', title: 'Yummy Coffee Gold', sub: 'Beverages & Coffee', icon: 'fa-mug-hot', cls: 'card-yummycoffee' },
- { id: 'pointcoffee', title: 'Point Coffee', sub: 'Coffee & Beverages', icon: 'fa-mug-saucer', cls: 'card-pointcoffee' },
- { id: 'hambalanfc', title: 'Hambalan FC', sub: 'Si Paling Hambalan', icon: 'fa-box', cls: 'card-hambalanfc' },
- { id: 'perishable', title: 'Perishable', sub: 'Buah & Sayur Segar', icon: 'fa-seedling', cls: 'card-perishable' }
- ];
- 
- var SUB_CONFIG = {
- 'saybread': [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }],
- 'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
- 'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Menu Utama' }, { id: 'sarana', label: 'Sarana' }],
- 'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Utama' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }],
- 'pointcoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
- 'hambalanfc': [{ id: 'minyak', label: 'Minyak' }, { id: 'beras', label: 'Beras' }, { id: 'gula', label: 'Gula' }, { id: 'mineral', label: 'Mineral' }, { id: 'beverage', label: 'Beverage' }],
- 'perishable': [{ id: 'all', label: 'Semua' }, { id: 'buah_sayur', label: 'Buah & Sayur' }]
- };
- 
- var KATEGORI_LABEL = { 'snack_rte': 'Snack RTE', 'dimsum': 'Dimsum', 'pao': 'Pao', 'fried_chicken': 'Fried Chicken', 'frozen_fc': 'Frozen FC', 'sosis': 'Sosis', 'pizza': 'Pizza' };
- var KATEGORI_LABEL_COFFEE = { 'jelly': 'Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'other': 'Other' };
- var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
- var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
- 
- /* ================================================================
- STATE
- ================================================================ */
- var DATABASE = [];
- var pointCoffeeData = [];
- var currentView = 'home';
- var currentBrand = '';
- var currentSub = 'all';
- var currentKategori = 'all';
- var detailViewMode = 'list';
- var katalogViewMode = 'list';
- var currentSheet = 'all';
- var katalogData = {};
- var currentAlphabet = '';
- var _renderCache = { key: '' };
- var _katalogCache = { key: '' };
- 
- /* ================================================================
- DATA KALKULATOR
- ================================================================ */
- var DEFAULT_WADAH = [
- { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
- { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
- { nama: "Botol Kaca", tare: 418, mj: 0.74 },
- { nama: "Botol Palm Sugar 1,3 kg", tare: 77, mj: 1 },
- { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
- { nama: "Botol Sauce", tare: 122, mj: 0.80 },
- { nama: "Botol Sirup Bulat", tare: 83, mj: 0.80 },
- { nama: "Botol Sirup Kotak", tare: 78, mj: 0.80 },
- { nama: "Botol Squeeze", tare: 40, mj: 1 },
- { nama: "Box Powder", tare: 62, mj: 1 },
- { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
- { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
- { nama: "Ice Bulk 8 L", tare: 420, mj: 1 },
- { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
- { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
- { nama: "Madu Uray", tare: 26.6, mj: 1 },
- { nama: "Oreo / Pcs", tare: 0, mj: 1 },
- { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
- { nama: "Toples Coffee Jelly", tare: 70, mj: 1 },
- { nama: "Toples Crumb", tare: 650, mj: 1 },
- { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
- { nama: "Toples Tropical Jelly", tare: 65, mj: 1 },
- { nama: "Whip Cream", tare: 51, mj: 0.97 },
- { nama: "Yakult / Pcs", tare: 0, mj: 65 }
- ];
- 
- var DEFAULT_SEAL = {
- 1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
- 11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
- 21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
- 31:1763,32:1823,33:1883,34:1943,35:2003
- };
- 
- var dataWadah = (function() {
- try {
- var saved = localStorage.getItem('plukakang_wadah');
- if (saved) return JSON.parse(saved);
- } catch(e) {}
- return DEFAULT_WADAH;
- })();
- 
- /* ================================================================
- UTILITY
- ================================================================ */
- function $(id) { return document.getElementById(id); }
- 
- function escapeHtml(str) {
- if (!str) return '';
- return String(str).replace(/[&<>"']/g, function(m) {
- return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
- });
- }
- 
- function debounce(fn, wait) {
- var t;
- return function() {
- var ctx = this, args = arguments;
- clearTimeout(t);
- t = setTimeout(function() { fn.apply(ctx, args); }, wait);
- };
- }
- 
- function copyToClipboard(text) {
- if (navigator.clipboard && navigator.clipboard.writeText) {
- return navigator.clipboard.writeText(text);
- }
- return new Promise(function(resolve) {
- var ta = document.createElement('textarea');
- ta.value = text;
- ta.style.position = 'fixed';
- ta.style.opacity = '0';
- document.body.appendChild(ta);
- ta.select();
- try { document.execCommand('copy'); } catch(e) {}
- document.body.removeChild(ta);
- resolve();
- });
- }
- 
- var _toastTimer;
- function showToast(msg) {
- var toast = $('toastNotification');
- toast.innerText = msg;
- toast.classList.add('show');
- clearTimeout(_toastTimer);
- _toastTimer = setTimeout(function() {
- toast.classList.remove('show');
- }, 1500);
- }
- 
- /* ================================================================
- RENDER BRAND GRID
- ================================================================ */
- function renderBrandGrid() {
- var html = '';
- BRAND_CARDS.forEach(function(b) {
- html += '<div class="brand-card ' + b.cls + '" data-brand="' + b.id + '">' +
- '<div class="brand-card-top">' +
- '<div class="brand-card-icon"><i class="fas ' + b.icon + '"></i></div>' +
- '<i class="fas fa-chevron-right" style="color:var(--text-light); font-size:0.85rem;"></i>' +
- '</div>' +
- '<div class="brand-card-bottom">' +
- '<h3>' + b.title + '</h3>' +
- '<p>' + b.sub + '</p>' +
- '</div>' +
- '</div>';
- });
- $('brandGrid').innerHTML = html;
- }
- 
- /* ================================================================
- TAB SWITCHING
- ================================================================ */
- function switchTab(tab) {
- $('homeView').style.display = 'none';
- $('detailView').style.display = 'none';
- $('katalogView').style.display = 'none';
- $('kalkulatorView').style.display = 'none';
- $('greetingWrapper').classList.add('hidden');
- 
- if (tab === 'home') {
- $('homeView').style.display = 'block';
- $('greetingWrapper').classList.remove('hidden');
- $('globalSearchBar').style.display = '';
- currentView = 'home';
- currentBrand = '';
- } else if (tab === 'katalog') {
- $('katalogView').style.display = 'block';
- $('globalSearchBar').style.display = '';
- currentView = 'katalog';
- renderKatalog();
- } else if (tab === 'kalkulator') {
- $('kalkulatorView').style.display = 'block';
- $('globalSearchBar').style.display = 'none';
- currentView = 'kalkulator';
- hitungGramasi();
- hitungBiang();
- hitungSeal();
- renderSidebarPlu($('sidebarSearchPlu').value || '');
- }
- 
- var tabs = document.querySelectorAll('.dock-tab');
- for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
- var activeTab = $('dock-' + tab);
- if (activeTab) activeTab.classList.add('active');
- 
- if (tab !== 'kalkulator') {
- searchInput.value = '';
- searchClearBtn.style.display = 'none';
- }
- }
- 
- /* ================================================================
- KALKULATOR
- ================================================================ */
- function hitungGramasi() {
- var input = parseFloat($('timbanganGramasi').value) || 0;
- var html = '';
- dataWadah.forEach(function(item) {
- var hasil = item.nama.includes("Yakult") 
- ? Math.round(input * item.mj) 
- : Math.round((input - item.tare) * item.mj);
- var displayMj = (item.mj % 1 === 0) ? item.mj.toString() : item.mj.toString().replace('.', ',');
- html += '<tr>' +
- '<td class="bold">' + escapeHtml(item.nama) + '</td>' +
- '<td>' + (item.tare === 0 ? '-' : item.tare) + '</td>' +
- '<td>' + displayMj + '</td>' +
- '<td class="hasil-gramasi">' + hasil + '</td>' +
- '</tr>';
- });
- $('tabelGramasi').innerHTML = html;
- }
- 
- function hitungBiang() {
- var timbangan = parseFloat($('biangTimbangan').value) || 0;
- var botol = parseFloat($('biangBotol').value) || 0;
- var netto = Math.max(0, timbangan - botol);
- var kopi = Math.round(netto * 0.3);
- $('resNetto').innerText = netto;
- $('resKopi').innerText = kopi;
- $('resAir').innerText = netto - kopi;
- }
- 
- function hitungSeal() {
- var inputSeal = parseInt($('inputTebalSeal').value);
- var resEl = $('resSealPcs');
- if (!inputSeal || inputSeal < 1) {
- resEl.innerText = "0";
- resEl.style.color = "var(--primary-blue)";
- } else if (inputSeal > 35) {
- resEl.innerText = "Maks 35 mm";
- resEl.style.fontSize = "14px";
- resEl.style.color = "#ef4444";
- } else {
- resEl.innerText = DEFAULT_SEAL[inputSeal] || 0;
- resEl.style.fontSize = "18px";
- resEl.style.color = "var(--primary-blue)";
- }
- }
- 
- /* ================================================================
- SIDEBAR PLU POINT COFFEE
- ================================================================ */
- function renderSidebarPlu(filter) {
- var list = $('sidebarPluList');
- var count = $('pluCount');
- 
- var items = pointCoffeeData;
- if (filter) {
- var f = filter.toLowerCase().trim();
- items = items.filter(function(item) {
- return item.nama.toLowerCase().indexOf(f) !== -1 || 
- (item.raw && item.raw.indexOf(f) !== -1) ||
- (item.konv && item.konv.indexOf(f) !== -1);
- });
- }
- 
- count.textContent = items.length;
- 
- if (items.length === 0) {
- list.innerHTML = '<div class="plu-empty">' + 
- (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + 
- '</div>';
- return;
- }
- 
- var html = '';
- items.forEach(function(item) {
- var badges = '';
- if (item.raw) {
- badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
- }
- if (item.konv) {
- badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
- }
- html += '<div class="plu-item">' +
- '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
- (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
- '</div>';
- });
- list.innerHTML = html;
- }
- 
- /* ================================================================
- LOAD DATA JSON
- ================================================================ */
- function loadData() {
- fetch('data.json')
- .then(function(res) {
- if (!res.ok) throw new Error('HTTP ' + res.status);
- return res.json();
- })
- .then(function(data) {
- data.sort(function(a, b) {
- return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
- });
- DATABASE = data;
- pointCoffeeData = data.filter(function(item) {
- return item.brand === 'pointcoffee' || item.brand === 'point coffee';
- });
- pointCoffeeData.sort(function(a, b) {
- return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
- });
- renderDataGrid();
- renderKatalog();
- renderSidebarPlu('');
- })
- .catch(function(err) {
- console.error('Gagal load data.json:', err);
- $('sidebarPluList').innerHTML = '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
- });
- }
- 
- /* ================================================================
- DETAIL VIEW
- ================================================================ */
- function setDetailView(mode) {
- detailViewMode = mode;
- $('viewListBtn').classList.toggle('active', mode === 'list');
- $('viewTableBtn').classList.toggle('active', mode === 'table');
- 
- if (mode === 'list') {
- $('productGrid').classList.remove('hidden');
- $('tableView').classList.add('hidden');
- } else {
- $('productGrid').classList.add('hidden');
- $('tableView').classList.remove('hidden');
- }
- }
- 
- function setKatalogView(mode) {
- katalogViewMode = mode;
- $('katalogListBtn').classList.toggle('active', mode === 'list');
- $('katalogTableBtn').classList.toggle('active', mode === 'table');
- 
- if (mode === 'list') {
- $('katalogListGrid').classList.remove('hidden');
- $('katalogTableView').classList.add('hidden');
- } else {
- $('katalogListGrid').classList.add('hidden');
- $('katalogTableView').classList.remove('hidden');
- }
- }
- 
- function openBrandCategory(key) {
- currentView = 'detail';
- currentBrand = key;
- currentSub = 'all';
- currentKategori = 'all';
- $('homeView').style.display = 'none';
- $('detailView').style.display = 'block';
- $('katalogView').style.display = 'none';
- $('kalkulatorView').style.display = 'none';
- $('greetingWrapper').classList.add('hidden');
- $('globalSearchBar').style.display = '';
- $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
- 
- detailViewMode = 'list';
- $('viewListBtn').classList.add('active');
- $('viewTableBtn').classList.remove('active');
- $('productGrid').classList.remove('hidden');
- $('tableView').classList.add('hidden');
- 
- renderSubPills();
- _renderCache.key = '';
- renderDataGrid();
- 
- var tabs = document.querySelectorAll('.dock-tab');
- for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
- $('dock-home').classList.add('active');
- }
- 
- function renderSubPills() {
- var container = $('subPillsContainer');
- container.innerHTML = '';
- if (currentBrand === '' || currentBrand === 'all') {
- container.style.display = 'none';
- $('kategoriPillsContainer').style.display = 'none';
- return;
- }
- container.style.display = 'flex';
- var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
- 
- if (currentBrand === 'hambalanfc') {
- pills = [{ id: 'all', label: 'Semua' }].concat(pills);
- }
- 
- pills.forEach(function(p) {
- var el = document.createElement('button');
- el.className = 'pill-button';
- if (p.id === currentSub) el.classList.add('active');
- el.innerText = p.label;
- el.dataset.pillId = p.id;
- container.appendChild(el);
- });
- 
- renderKategoriPills();
- }
- 
- function renderKategoriPills() {
- var katContainer = $('kategoriPillsContainer');
- katContainer.innerHTML = '';
- var labelMap = null;
- 
- if (currentBrand === 'yummychoice' && currentSub === 'bkl') labelMap = KATEGORI_LABEL;
- else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_COFFEE;
- else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_POINT;
- else if (currentBrand === 'hambalanfc') {
- katContainer.style.display = 'none';
- return;
- } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
- 
- if (!labelMap) {
- katContainer.style.display = 'none';
- return;
- }
- 
- katContainer.style.display = 'flex';
- var allPill = document.createElement('button');
- allPill.className = 'pill-button' + (currentKategori === 'all' ? ' active' : '');
- allPill.innerText = 'Semua';
- allPill.dataset.katId = 'all';
- katContainer.appendChild(allPill);
- 
- var keys = Object.keys(labelMap);
- keys.forEach(function(key) {
- if (currentBrand === 'pointcoffee' && key === 'sarana') return;
- var el = document.createElement('button');
- el.className = 'pill-button' + (key === currentKategori ? ' active' : '');
- el.innerText = labelMap[key];
- el.dataset.katId = key;
- katContainer.appendChild(el);
- });
- }
- 
- /* ================================================================
- RENDER DATA GRID
- ================================================================ */
- function renderDataGrid() {
- var query = searchInput.value.toLowerCase().trim();
- var counterBadge = $('itemCounterBadge');
- 
- if (currentBrand === '' && query === '' && currentView !== 'katalog') {
- counterBadge.innerText = '0 Item';
- return;
- }
- 
- var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
- if (cacheKey === _renderCache.key) return;
- 
- var filtered = DATABASE.filter(function(item) {
- var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
- var matchSub = (currentSub === 'all' || item.sub === currentSub);
- var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
- var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
- var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
- return matchBrand && matchSub && matchKat && matchQuery;
- });
- 
- counterBadge.innerText = filtered.length + ' Item';
- 
- if (filtered.length === 0) {
- $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
- $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
- _renderCache.key = cacheKey;
- return;
- }
- 
- if (currentBrand === "" && query === "" && currentView !== 'katalog') {
- counterBadge.innerText = '0 Item';
- return;
- }
- 
- var html = '';
- var tableHtml = '';
- 
- filtered.forEach(function(item, i) {
- var badgesHtml = '';
- if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
- if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
- 
- html += '<div class="product-card">' +
- '<div class="product-info-col">' +
- '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
- '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
- '</div>' +
- '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
- '</div>';
- 
- var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
- var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
- 
- tableHtml += '<tr>' +
- '<td class="row-number">' + (i + 1) + '</td>' +
- '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
- '<td>' + rawHtml + '</td>' +
- '<td>' + konvHtml + '</td>' +
- '</tr>';
- });
- 
- $('productGrid').innerHTML = html;
- $('tableBody').innerHTML = tableHtml;
- _renderCache.key = cacheKey;
- }
- 
- /* ================================================================
- ALPHABET INDEX - NEW FEATURE
- ================================================================ */
- function renderAlphabetIndex() {
- var alphabetContainer = $('alphabetIndex');
- var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('');
- var html = '';
- 
- var currentItems = katalogData[currentSheet] || [];
- var availableLetters = {};
- 
- currentItems.forEach(function(item) {
- var firstLetter = (item.nama.charAt(0) || '').toUpperCase();
- if (/[A-Z]/.test(firstLetter)) {
- availableLetters[firstLetter] = true;
- } else {
- availableLetters['#'] = true;
- }
- });
- 
- alphabet.forEach(function(letter) {
- var isAvailable = availableLetters[letter];
- var isActive = letter === currentAlphabet;
- var classes = 'alphabet-btn';
- if (isActive) classes += ' active';
- if (!isAvailable) classes += ' disabled';
- 
- html += '<button class="' + classes + '" data-letter="' + letter + '" ' +
- (isAvailable ? '' : 'disabled') + '>' + letter + '</button>';
- });
- 
- alphabetContainer.innerHTML = html;
- }
- 
- function filterByAlphabet(letter) {
- currentAlphabet = letter;
- _katalogCache.key = '';
- renderSheetData();
- renderAlphabetIndex();
- }
- 
- /* ================================================================
- KATALOG
- ================================================================ */
- function renderKatalog() {
- var tabsContainer = $('sheetTabs');
- var counter = $('katalogCounter');
- var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
- var totalItems = 0;
- 
- brands.forEach(function(b) {
- var items = DATABASE.filter(function(item) { return item.brand === b; });
- katalogData[b] = items;
- totalItems += items.length;
- });
- 
- katalogData['all'] = DATABASE.slice();
- counter.textContent = totalItems + ' Item';
- 
- var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" data-sheet="all">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
- 
- brands.forEach(function(b) {
- var colorClass = b === 'saybread' ? 'bread' : b === 'sayburger' ? 'burger' : b === 'yummychoice' ? 'yummy' : b === 'yummycoffee' ? 'coffee' : b === 'pointcoffee' ? 'pointcoffee' : b === 'hambalanfc' ? 'hambalanfc' : 'perishable';
- 
- tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" data-sheet="' + b + '">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
- });
- 
- tabsContainer.innerHTML = tabsHtml;
- _katalogCache.key = '';
- renderAlphabetIndex();
- renderSheetData();
- }
- 
- function switchSheet(brand) {
- currentSheet = brand;
- currentAlphabet = '';
- var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
- for (var i = 0; i < tabs.length; i++) {
- tabs[i].classList.toggle('active', tabs[i].dataset.sheet === brand);
- }
- _katalogCache.key = '';
- renderAlphabetIndex();
- renderSheetData();
- }
- 
- function renderSheetData() {
- var listGrid = $('katalogListGrid');
- var tableBody = $('katalogTableBody');
- 
- var query = searchInput.value.toLowerCase().trim();
- var items = katalogData[currentSheet] || [];
- 
- if (currentAlphabet && currentAlphabet !== '') {
- items = items.filter(function(item) {
- var firstLetter = (item.nama.charAt(0) || '').toUpperCase();
- if (currentAlphabet === '#') {
- return !/[A-Z]/.test(firstLetter);
- }
- return firstLetter === currentAlphabet;
- });
- }
- 
- if (query !== '') {
- items = items.filter(function(item) {
- var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
- return searchString.indexOf(query) !== -1;
- });
- }
- 
- var cacheKey = currentSheet + '|' + query + '|' + currentAlphabet + '|' + items.length;
- if (cacheKey === _katalogCache.key) return;
- 
- if (items.length === 0) {
- listGrid.innerHTML = '<div class="empty-search-state">' + 
- (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + 
- '</div>';
- tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
- $('katalogCounter').textContent = '0 Item';
- _katalogCache.key = cacheKey;
- return;
- }
- 
- $('katalogCounter').textContent = items.length + ' Item';
- 
- var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
- var kategoriSet = {};
- 
- if (needGrouping) {
- items.forEach(function(item) {
- if (item.kategori && !kategoriSet[item.kategori]) kategoriSet[item.kategori] = true;
- });
- }
- 
- var kategoriKeys = Object.keys(kategoriSet);
- var hasKategori = needGrouping && kategoriKeys.length > 0;
- var labelMap = {};
- 
- if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
- else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
- else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
- else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
- 
- var listHtml = '';
- var tableHtml = '';
- var rowCounter = 0;
- 
- function renderItem(item) {
- var badges = '';
- if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
- if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
- 
- listHtml += '<div class="product-card">' +
- '<div class="product-info-col">' +
- '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
- '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
- '</div>' +
- '<div class="plu-badges-stack">' + badges + '</div>' +
- '</div>';
- 
- rowCounter++;
- var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
- var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
- 
- tableHtml += '<tr>' +
- '<td class="row-number">' + rowCounter + '</td>' +
- '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
- '<td>' + rawHtml + '</td>' +
- '<td>' + konvHtml + '</td>' +
- '</tr>';
- }
- 
- if (hasKategori) {
- kategoriKeys.forEach(function(kat) {
- var katItems = items.filter(function(item) { return item.kategori === kat; });
- if (katItems.length === 0) return;
- 
- var label = labelMap[kat] || kat;
- if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
- 
- listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
- tableHtml += '<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
- 
- katItems.forEach(renderItem);
- });
- } else {
- items.forEach(renderItem);
- }
- 
- listGrid.innerHTML = listHtml;
- tableBody.innerHTML = tableHtml;
- _katalogCache.key = cacheKey;
- }
- 
- /* ================================================================
- EVENT DELEGATION
- ================================================================ */
- document.addEventListener('click', function(e) {
- var brandCard = e.target.closest('.brand-card');
- if (brandCard && brandCard.dataset.brand) {
- openBrandCategory(brandCard.dataset.brand);
- return;
- }
- 
- var pill = e.target.closest('#subPillsContainer .pill-button');
- if (pill) {
- var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
- for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
- pill.classList.add('active');
- currentSub = pill.dataset.pillId;
- currentKategori = 'all';
- _renderCache.key = '';
- renderKategoriPills();
- renderDataGrid();
- return;
- }
- 
- var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
- if (katPill) {
- var allKat = document.querySelectorAll('#kategoriPillsContainer .pill-button');
- for (var k = 0; k < allKat.length; k++) allKat[k].classList.remove('active');
- katPill.classList.add('active');
- currentKategori = katPill.dataset.katId;
- _renderCache.key = '';
- renderDataGrid();
- return;
- }
- 
- var sheetTab = e.target.closest('#sheetTabs .sheet-tab');
- if (sheetTab) {
- switchSheet(sheetTab.dataset.sheet);
- return;
- }
- 
- var alphabetBtn = e.target.closest('.alphabet-btn');
- if (alphabetBtn && !alphabetBtn.disabled) {
- filterByAlphabet(alphabetBtn.dataset.letter);
- return;
- }
- 
- var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
- if (pluBtn) {
- var code = pluBtn.dataset.plu;
- copyToClipboard(code).then(function() {
- var originalText = pluBtn.innerText;
- pluBtn.innerText = '✓';
- pluBtn.classList.add('plu-copied-style');
- showToast('PLU ' + code + ' Disalin! ✓');
- setTimeout(function() {
- pluBtn.innerText = originalText;
- pluBtn.classList.remove('plu-copied-style');
- }, 1000);
- });
- return;
- }
- 
- var sidebarPlu = e.target.closest('.plu-code[data-plu]');
- if (sidebarPlu) {
- var code2 = sidebarPlu.dataset.plu;
- copyToClipboard(code2).then(function() {
- var original = sidebarPlu.innerText;
- sidebarPlu.innerText = '✓';
- sidebarPlu.style.background = '#dcfce7';
- sidebarPlu.style.color = '#15803d';
- showToast('PLU ' + code2 + ' Disalin! ✓');
- setTimeout(function() {
- sidebarPlu.innerText = original;
- sidebarPlu.style.background = '';
- sidebarPlu.style.color = '';
- }, 1000);
- });
- return;
- }
- });
- 
- /* ================================================================
- SEARCH
- ================================================================ */
- var searchInput = $('searchInput');
- var searchClearBtn = $('searchClearBtn');
- 
- var handleSearch = debounce(function() {
- if (currentView === 'katalog') {
- _katalogCache.key = '';
- renderSheetData();
- } else if (currentView === 'detail' || currentView === 'home') {
- var query = searchInput.value.trim();
- if (query !== '' && currentView === 'home' && currentBrand === '') {
- $('homeView').style.display = 'none';
- $('detailView').style.display = 'block';
- $('katalogView').style.display = 'none';
- $('kalkulatorView').style.display = 'none';
- $('greetingWrapper').classList.add('hidden');
- $('globalSearchBar').style.display = '';
- $('detailHeadingTitle').innerText = 'Hasil Pencarian';
- $('subPillsContainer').style.display = 'none';
- $('kategoriPillsContainer').style.display = 'none';
- currentView = 'detail';
- } else if (query === '' && currentView === 'detail' && currentBrand === '') {
- $('homeView').style.display = 'block';
- $('detailView').style.display = 'none';
- $('katalogView').style.display = 'none';
- $('kalkulatorView').style.display = 'none';
- $('greetingWrapper').classList.remove('hidden');
- currentView = 'home';
- }
- _renderCache.key = '';
- renderDataGrid();
- }
- }, 120);
- 
- searchInput.addEventListener('input', function() {
- searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
- handleSearch();
- });
- 
- function clearSearchInput() {
- searchInput.value = '';
- searchClearBtn.style.display = 'none';
- _renderCache.key = '';
- _katalogCache.key = '';
- 
- if (currentView === 'katalog') {
- renderSheetData();
- } else if (currentView === 'detail' && currentBrand === '') {
- $('homeView').style.display = 'block';
- $('detailView').style.display = 'none';
- $('katalogView').style.display = 'none';
- $('kalkulatorView').style.display = 'none';
- $('greetingWrapper').classList.remove('hidden');
- currentView = 'home';
- }
- renderDataGrid();
- }
- 
- var handleSidebarSearch = debounce(function() {
- renderSidebarPlu($('sidebarSearchPlu').value);
- }, 100);
- 
- $('sidebarSearchPlu').addEventListener('input', handleSidebarSearch);
- 
- /* ================================================================
- GREETING & CLOCK
- ================================================================ */
- var _lastClockSecond = -1;
- 
- function updateClock() {
- var now = new Date();
- if (now.getSeconds() === _lastClockSecond) return;
- _lastClockSecond = now.getSeconds();
- 
- var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
- var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
- var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
- $('dateDisplay').innerText = '📅 ' + tanggal;
- 
- var jam = String(now.getHours()).padStart(2, '0');
- var menit = String(now.getMinutes()).padStart(2, '0');
- var detik = String(now.getSeconds()).padStart(2, '0');
- $('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
- }
- 
- function clockLoop() {
- updateClock();
- requestAnimationFrame(clockLoop);
- }
- 
- function getSapaanData() {
- var jam = new Date().getHours();
- if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
- if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
- if (jam >= 11 && jam < 15) return { icon: '🌤', text: 'aduh, kurang lincah wa!' };
- if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
- return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
- }
- 
- function getCountdownGajian() {
- var now = new Date();
- var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
- if (now > gajian) gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
- var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
- if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN! 🎉🎉🎉' };
- if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
- return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
- }
- 
- var isSapaan = true;
- var _sapaanTimer;
- 
- function toggleSapaanCountdown() {
- var s = isSapaan ? getSapaanData() : getCountdownGajian();
- $('sapaanIcon').innerText = s.icon;
- $('sapaanText').innerText = s.text;
- isSapaan = !isSapaan;
- clearTimeout(_sapaanTimer);
- _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
- }
- 
- /* ================================================================
- INIT
- ================================================================ */
- renderBrandGrid();
- clockLoop();
- toggleSapaanCountdown();
- hitungGramasi();
- hitungBiang();
- hitungSeal();
- loadData();
- 
- </script>
+<div class="app-layout">
+<div id="toastNotification" class="toast-notification">PLU Disalin! ✓</div>
+
+<!-- HEADER -->
+<header class="app-header">
+<div class="brand-block">
+<div class="brand-icon"><i class="fas fa-cubes"></i></div>
+<div class="brand-title-group">
+<h1>plukakang</h1>
+<span>hapalkeun euy!</span>
+</div>
+</div>
+<button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
+</header>
+
+<!-- GREETING -->
+<div id="greetingWrapper">
+<div class="greeting-container">
+<div class="greeting-date-time">
+<span class="date-display" id="dateDisplay">📅 Selasa, 25 Agustus 2026</span>
+<span class="time-display" id="timeDisplay">🕐 14:32:45</span>
+</div>
+<div class="greeting-divider"></div>
+<div class="greeting-sapaan" id="sapaanDisplay">
+<span class="greeting-icon" id="sapaanIcon">☀</span>
+<span id="sapaanText">Selamat Pagi, Tim PLU!</span>
+</div>
+</div>
+</div>
+
+<!-- SEARCH BAR GLOBAL -->
+<div class="sticky-search-bar" id="globalSearchBar">
+<div class="search-field">
+<input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
+<button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">✕</button>
+</div>
+</div>
+
+<!--===== HOME VIEW =====-->
+<main id="homeView">
+<div class="section-bar">
+<span class="section-title">Kategori Brand</span>
+</div>
+<section class="brand-grid" id="brandGrid"></section>
+</main>
+
+<!--===== DETAIL VIEW =====-->
+<section id="detailView" style="display: none;">
+<div class="detail-header">
+<button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+</div>
+<div class="section-bar">
+<span class="section-title" id="detailHeadingTitle">Say Bread</span>
+<span class="item-count-chip" id="itemCounterBadge">0 Item</span>
+</div>
+<div class="toolbar-row">
+<div class="legend-bar">
+<span class="legend-item"><span class="legend-box raw"></span> RAW</span>
+<span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+</div>
+<div class="view-toggle">
+<button class="vt-btn active" id="viewListBtn" onclick="setDetailView('list')"><i class="fas fa-list"></i> List</button>
+<button class="vt-btn" id="viewTableBtn" onclick="setDetailView('table')"><i class="fas fa-table"></i> Tabel</button>
+</div>
+</div>
+<div class="pills-container" id="subPillsContainer" style="display: none;"></div>
+<div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
+
+<div class="products-wrapper">
+<section class="products-grid" id="productGrid"></section>
+<!-- Alphabetical Indexer -->
+<div class="alphabetical-indexer" id="detailIndexer"></div>
+</div>
+
+<!-- Current Letter Indicator -->
+<div class="current-letter-indicator" id="currentLetterIndicator">A</div>
+
+<div id="tableView" class="table-wrapper hidden">
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th style="width:28px;text-align:center;">#</th>
+<th>Nama Barang</th>
+<th>PLU RAW</th>
+<th>PLU KONV</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!--===== KATALOG VIEW =====-->
+<section id="katalogView" style="display: none;">
+<div class="detail-header">
+<button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+<span class="item-count-chip" id="katalogCounter">0 Item</span>
+</div>
+<div class="sheet-tabs" id="sheetTabs"></div>
+<div class="toolbar-row">
+<div class="legend-bar">
+<span class="legend-item"><span class="legend-box raw"></span> RAW</span>
+<span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+</div>
+<div class="view-toggle">
+<button class="vt-btn active" id="katalogListBtn" onclick="setKatalogView('list')"><i class="fas fa-list"></i> List</button>
+<button class="vt-btn" id="katalogTableBtn" onclick="setKatalogView('table')"><i class="fas fa-table"></i> Tabel</button>
+</div>
+</div>
+
+<div class="products-wrapper">
+<section class="products-grid" id="katalogListGrid"></section>
+<!-- Alphabetical Indexer -->
+<div class="alphabetical-indexer" id="katalogIndexer"></div>
+</div>
+
+<!-- Current Letter Indicator -->
+<div class="current-letter-indicator" id="katalogCurrentLetter">A</div>
+
+<div id="katalogTableView" class="table-wrapper hidden">
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th style="width:28px;text-align:center;">#</th>
+<th>Nama Barang</th>
+<th>PLU RAW</th>
+<th>PLU KONV</th>
+</tr>
+</thead>
+<tbody id="katalogTableBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!--===== KALKULATOR VIEW =====-->
+<section id="kalkulatorView" style="display: none;">
+<!-- SIDEBAR PLU POINT COFFEE -->
+<div class="plu-sidebar" id="pluSidebar">
+<div class="sidebar-title">
+<i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
+<span id="pluCount">0</span>
+</div>
+<input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari nama/ PLU RAW/ PLU KONV..." autocomplete="off" spellcheck="false">
+<div class="sidebar-legend">
+<span class="legend-item"><span class="legend-box raw"></span> RAW</span>
+<span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+</div>
+<div class="sidebar-plu-list" id="sidebarPluList">
+<div class="plu-empty">Memuat data...</div>
+</div>
+</div>
+
+<div class="section-bar" style="margin-top:16px;">
+<span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
+</div>
+
+<!-- KARTU 1: INPUT GRAMASI -->
+<div class="kalkulator-card">
+<div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
+<div class="input-row" style="margin-bottom:0;">
+<label for="timbanganGramasi">Berat Timbangan(gr)</label>
+<input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()" inputmode="numeric">
+</div>
+</div>
+
+<!-- KARTU 2: DAFTAR WADAH -->
+<div class="kalkulator-card">
+<div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
+<div class="tabel-wadah-container">
+<table>
+<thead><tr><th>WADAH</th><th>TARE</th><th>MJ</th><th>BERSIH</th></tr></thead>
+<tbody id="tabelGramasi"></tbody>
+</table>
+</div>
+</div>
+
+<!-- KARTU 3: SO BIANG KOPI -->
+<div class="kalkulator-card">
+<div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
+<div class="input-row">
+<label for="biangTimbangan">Total Timbangan</label>
+<input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()" inputmode="numeric">
+</div>
+<div class="input-row">
+<label for="biangBotol">Berat Botol Kosong</label>
+<input type="number" id="biangBotol" value="680" oninput="hitungBiang()" inputmode="numeric">
+</div>
+<div class="hasil-box">
+<div class="input-row"><span class="hasil-label">Hasil Netto</span><span class="hasil-value" id="resNetto">267</span></div>
+<div class="input-row"><span class="hasil-label">Konversi Biji Kopi</span><span class="hasil-value" id="resKopi">80</span></div>
+<div class="input-row" style="margin-bottom:0;"><span class="hasil-label">Konversi Air Mineral</span><span class="hasil-value" id="resAir">187</span></div>
+</div>
+</div>
+
+<!-- KARTU 4: PLASTIK SEAL -->
+<div class="kalkulator-card">
+<div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
+<div class="input-row">
+<div><label for="inputTebalSeal">Tebal Sisa Roll(mm)</label><div class="seal-tip">*Berdasarkan tabel HO(1-35 mm)</div></div>
+<input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()" inputmode="numeric">
+</div>
+<div class="hasil-box">
+<div class="input-row" style="margin-bottom:0;">
+<span class="hasil-label">Estimasi Jumlah Cup</span>
+<span class="hasil-value primary" id="resSealPcs">547</span>
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-dock">
+<button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
+<i class="fas fa-home dock-tab-icon"></i>
+<span>Home</span>
+</button>
+<button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
+<i class="fas fa-layer-group dock-tab-icon"></i>
+<span>Katalog</span>
+</button>
+<button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
+<i class="fas fa-calculator dock-tab-icon"></i>
+<span>Kalkulator</span>
+</button>
+</nav>
+
+<script>
+/* ================================================================
+KONFIGURASI BRAND
+================================================================ */
+var BRAND_NAMES={
+'saybread':'Say Bread','sayburger':'Say Burger',
+'yummychoice':'Yummy Choice','yummycoffee':'Yummy Coffee Gold',
+'pointcoffee':'Point Coffee','hambalanfc':'Hambalan FC',
+'perishable':'Perishable'
+};
+
+var BRAND_CARDS=[
+{id:'saybread',title:'Say Bread',sub:'Bakery & Pastry',icon:'fa-bread-slice',cls:'card-saybread'},
+{id:'sayburger',title:'Say Burger',sub:'Burger & Hotdog',icon:'fa-hamburger',cls:'card-sayburger'},
+{id:'yummychoice',title:'Yummy Choice',sub:'Ready to Eat',icon:'fa-utensils',cls:'card-yummychoice'},
+{id:'yummycoffee',title:'Yummy Coffee Gold',sub:'Beverages & Coffee',icon:'fa-mug-hot',cls:'card-yummycoffee'},
+{id:'pointcoffee',title:'Point Coffee',sub:'Coffee & Beverages',icon:'fa-mug-saucer',cls:'card-pointcoffee'},
+{id:'hambalanfc',title:'Hambalan FC',sub:'Si Paling Hambalan',icon:'fa-box',cls:'card-hambalanfc'},
+{id:'perishable',title:'Perishable',sub:'Buah & Sayur Segar',icon:'fa-seedling',cls:'card-perishable'}
+];
+
+var SUB_CONFIG={
+'saybread':[{id:'all',label:'Semua'},{id:'dcf',label:'Frozen Dough'},{id:'sarana',label:'Sarana'}],
+'sayburger':[{id:'all',label:'Semua'},{id:'bkl',label:'Bahan Baku'},{id:'sarana',label:'Sarana'}],
+'yummychoice':[{id:'all',label:'Semua'},{id:'bkl',label:'Menu Utama'},{id:'sarana',label:'Sarana'}],
+'yummycoffee':[{id:'all',label:'Semua'},{id:'bkl',label:'Bahan Utama'},{id:'dcf',label:'Bahan Tambahan'},{id:'sarana',label:'Sarana'}],
+'pointcoffee':[{id:'all',label:'Semua'},{id:'bkl',label:'Bahan Baku'},{id:'sarana',label:'Sarana'}],
+'hambalanfc':[{id:'minyak',label:'Minyak'},{id:'beras',label:'Beras'},{id:'gula',label:'Gula'},{id:'mineral',label:'Mineral'},{id:'beverage',label:'Beverage'}],
+'perishable':[{id:'all',label:'Semua'},{id:'buah_sayur',label:'Buah & Sayur'}]
+};
+
+var KATEGORI_LABEL={'snack_rte':'Snack RTE','dimsum':'Dimsum','pao':'Pao','fried_chicken':'Fried Chicken','frozen_fc':'Frozen FC','sosis':'Sosis','pizza':'Pizza'};
+var KATEGORI_LABEL_COFFEE={'jelly':'Jelly','syrup':'Syrup','powder':'Powder','other':'Other'};
+var KATEGORI_LABEL_POINT={'coffee_bean':'Coffee Bean','sauce':'Sauce','topping_jelly':'Topping Jelly','syrup':'Syrup','powder':'Powder','milk_dairy':'Milk & Dairy','rtd_beverage':'RTD Beverage','tea':'Tea','sweetener':'Sweetener','topping_crunches':'Topping Crunches','rtd_coffee':'RTD Coffee'};
+var KATEGORI_LABEL_PERISHABLE={'buah':'Buah','sayur':'Sayur','jus':'Jus','bo':'B/O','bp':'B/P'};
+
+/* ================================================================
+STATE
+================================================================ */
+var DATABASE=[];
+var pointCoffeeData=[];
+var currentView='home';
+var currentBrand='';
+var currentSub='all';
+var currentKategori='all';
+var detailViewMode='list';
+var katalogViewMode='list';
+var currentSheet='all';
+var katalogData={};
+var _renderCache={key:''};
+var _katalogCache={key:''};
+var _alphabeticalIndex={};
+var _currentActiveIndex=null;
+
+/* ================================================================
+DATA KALKULATOR
+================================================================ */
+var DEFAULT_WADAH=[
+{nama:"Biscoff Crunchy",tare:33,mj:1},
+{nama:"Botol Bening(Korken)",tare:608,mj:1},
+{nama:"Botol Kaca",tare:418,mj:0.74},
+{nama:"Botol Palm Sugar 1,3 kg",tare:77,mj:1},
+{nama:"Botol Pure Kiwi",tare:305,mj:0.80},
+{nama:"Botol Sauce",tare:122,mj:0.80},
+{nama:"Botol Sirup Bulat",tare:83,mj:0.80},
+{nama:"Botol Sirup Kotak",tare:78,mj:0.80},
+{nama:"Botol Squeeze",tare:40,mj:1},
+{nama:"Box Powder",tare:62,mj:1},
+{nama:"Box Powder Seasoning",tare:38,mj:1},
+{nama:"Freshmilk 950 ml",tare:34,mj:0.97},
+{nama:"Ice Bulk 8 L",tare:420,mj:1},
+{nama:"Indomilk SKM/ Pcs",tare:15,mj:1},
+{nama:"Kompan Gula Cair 5 kg",tare:250,mj:1},
+{nama:"Madu Uray",tare:26.6,mj:1},
+{nama:"Oreo/ Pcs",tare:0,mj:1},
+{nama:"Ovomaltine Spread",tare:37,mj:1},
+{nama:"Toples Coffee Jelly",tare:70,mj:1},
+{nama:"Toples Crumb",tare:650,mj:1},
+{nama:"Toples Kaca Oreo",tare:727,mj:1},
+{nama:"Toples Tropical Jelly",tare:65,mj:1},
+{nama:"Whip Cream",tare:51,mj:0.97},
+{nama:"Yakult/ Pcs",tare:0,mj:65}
+];
+
+var DEFAULT_SEAL={
+1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
+11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
+21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
+31:1763,32:1823,33:1883,34:1943,35:2003
+};
+
+var dataWadah=(function(){
+try{
+var saved=localStorage.getItem('plukakang_wadah');
+if(saved)return JSON.parse(saved);
+}catch(e){}
+return DEFAULT_WADAH;
+})();
+
+/* ================================================================
+UTILITY
+================================================================ */
+function $(id){return document.getElementById(id);}
+
+function escapeHtml(str){
+if(!str)return'';
+return String(str).replace(/[&<>"']/g,function(m){
+return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+});
+}
+
+function debounce(fn,wait){
+var t;
+return function(){
+var ctx=this,args=arguments;
+clearTimeout(t);
+t=setTimeout(function(){fn.apply(ctx,args);},wait);
+};
+}
+
+function copyToClipboard(text){
+if(navigator.clipboard&&navigator.clipboard.writeText){
+return navigator.clipboard.writeText(text);
+}
+return new Promise(function(resolve){
+var ta=document.createElement('textarea');
+ta.value=text;
+ta.style.position='fixed';
+ta.style.opacity='0';
+document.body.appendChild(ta);
+ta.select();
+try{document.execCommand('copy');}catch(e){}
+document.body.removeChild(ta);
+resolve();
+});
+}
+
+var _toastTimer;
+function showToast(msg){
+var toast=$('toastNotification');
+toast.innerText=msg;
+toast.classList.add('show');
+clearTimeout(_toastTimer);
+_toastTimer=setTimeout(function(){toast.classList.remove('show');},1500);
+}
+
+/* ================================================================
+ALPHABETICAL INDEXER
+================================================================ */
+function createAlphabeticalIndexer(containerId){
+var alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ#';
+var container=$(containerId);
+if(!container)return;
+
+var html='';
+for(var i=0;i<alphabet.length;i++){
+var letter=alphabet[i];
+html+='<div class="indexer-item'+(letter==='#'?'':'')+'" data-letter="'+letter+'" onclick="jumpToLetter(\''+letter+'\',\''+containerId.replace('Indexer','')+'\')">'+letter+'</div>';
+}
+container.innerHTML=html;
+}
+
+function buildAlphabeticalIndex(items,containerPrefix){
+var index={};
+for(var i=0;i<items.length;i++){
+var item=items[i];
+var firstChar=item.nama.charAt(0).toUpperCase();
+var letter=/[A-Z]/.test(firstChar)?firstChar:'#';
+if(!index[letter])index[letter]=[];
+index[letter].push(i);
+}
+_alphabeticalIndex[containerPrefix]=index;
+}
+
+function jumpToLetter(letter,containerPrefix){
+var index=_alphabeticalIndex[containerPrefix];
+if(!index||!index[letter]||index[letter].length===0)return;
+
+var gridId=containerPrefix==='product'?'productGrid':'katalogListGrid';
+var grid=$(gridId);
+if(!grid)return;
+
+var firstIndex=index[letter][0];
+var cards=grid.getElementsByClassName('product-card');
+if(cards[firstIndex]){
+cards[firstIndex].scrollIntoView({behavior:'smooth',block:'start'});
+showCurrentLetter(letter);
+highlightActiveIndex(letter,containerPrefix);
+}
+}
+
+function showCurrentLetter(letter){
+var indicatorId=currentView==='katalog'?'katalogCurrentLetter':'currentLetterIndicator';
+var indicator=$(indicatorId);
+if(indicator){
+indicator.innerText=letter;
+indicator.classList.add('show');
+setTimeout(function(){indicator.classList.remove('show');},800);
+}
+}
+
+function highlightActiveIndex(letter,prefix){
+var indexerId=prefix==='product'?'detailIndexer':'katalogIndexer';
+var indexer=$(indexerId);
+if(!indexer)return;
+
+var items=indexer.getElementsByClassName('indexer-item');
+for(var i=0;i<items.length;i++){
+items[i].classList.remove('active');
+if(items[i].dataset.letter===letter){
+items[i].classList.add('active');
+}
+}
+}
+
+function updateIndexerOnScroll(containerPrefix){
+var gridId=containerPrefix==='product'?'productGrid':'katalogListGrid';
+var grid=$(gridId);
+if(!grid)return;
+
+var scrollTop=grid.scrollTop;
+var cards=grid.getElementsByClassName('product-card');
+var index=_alphabeticalIndex[containerPrefix];
+
+if(!index)return;
+
+var currentLetter=null;
+for(var letter in index){
+for(var i=0;i<index[letter].length;i++){
+var cardIndex=index[letter][i];
+if(cards[cardIndex]){
+var cardTop=cards[cardIndex].offsetTop;
+if(cardTop<=scrollTop+100){
+currentLetter=letter;
+}
+}
+}
+}
+
+if(currentLetter){
+highlightActiveIndex(currentLetter,containerPrefix);
+}
+}
+
+/* ================================================================
+RENDER BRAND GRID
+================================================================ */
+function renderBrandGrid(){
+var html='';
+BRAND_CARDS.forEach(function(b){
+html+='<div class="brand-card '+b.cls+'" data-brand="'+b.id+'">'+
+'<div class="brand-card-top">'+
+'<div class="brand-card-icon"><i class="fas '+b.icon+'"></i></div>'+
+'<i class="fas fa-chevron-right" style="color:var(--text-light);font-size:0.85rem;"></i>'+
+'</div>'+
+'<div class="brand-card-bottom">'+
+'<h3>'+b.title+'</h3>'+
+'<p>'+b.sub+'</p>'+
+'</div>'+
+'</div>';
+});
+$('brandGrid').innerHTML=html;
+}
+
+/* ================================================================
+TAB SWITCHING
+================================================================ */
+function switchTab(tab){
+$('homeView').style.display='none';
+$('detailView').style.display='none';
+$('katalogView').style.display='none';
+$('kalkulatorView').style.display='none';
+$('greetingWrapper').classList.add('hidden');
+
+if(tab==='home'){
+$('homeView').style.display='block';
+$('greetingWrapper').classList.remove('hidden');
+$('globalSearchBar').style.display='';
+currentView='home';
+currentBrand='';
+}else if(tab==='katalog'){
+$('katalogView').style.display='block';
+$('globalSearchBar').style.display='';
+currentView='katalog';
+renderKatalog();
+}else if(tab==='kalkulator'){
+$('kalkulatorView').style.display='block';
+$('globalSearchBar').style.display='none';
+currentView='kalkulator';
+hitungGramasi();
+hitungBiang();
+hitungSeal();
+renderSidebarPlu($('sidebarSearchPlu').value||'');
+}
+
+var tabs=document.querySelectorAll('.dock-tab');
+for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+var activeTab=$('dock-'+tab);
+if(activeTab)activeTab.classList.add('active');
+
+if(tab!=='kalkulator'){
+searchInput.value='';
+searchClearBtn.style.display='none';
+}
+}
+
+/* ================================================================
+KALKULATOR
+================================================================ */
+function hitungGramasi(){
+var input=parseFloat($('timbanganGramasi').value)||0;
+var html='';
+dataWadah.forEach(function(item){
+var hasil=item.nama.includes("Yakult")?Math.round(input*item.mj):Math.round((input-item.tare)*item.mj);
+var displayMj=(item.mj%1===0)?item.mj.toString():item.mj.toString().replace('.',',');
+html+='<tr>'+
+'<td class="bold">'+escapeHtml(item.nama)+'</td>'+
+'<td>'+(item.tare===0?'-':item.tare)+'</td>'+
+'<td>'+displayMj+'</td>'+
+'<td class="hasil-gramasi">'+hasil+'</td>'+
+'</tr>';
+});
+$('tabelGramasi').innerHTML=html;
+}
+
+function hitungBiang(){
+var timbangan=parseFloat($('biangTimbangan').value)||0;
+var botol=parseFloat($('biangBotol').value)||0;
+var netto=Math.max(0,timbangan-botol);
+var kopi=Math.round(netto*0.3);
+$('resNetto').innerText=netto;
+$('resKopi').innerText=kopi;
+$('resAir').innerText=netto-kopi;
+}
+
+function hitungSeal(){
+var inputSeal=parseInt($('inputTebalSeal').value);
+var resEl=$('resSealPcs');
+if(!inputSeal||inputSeal<1){
+resEl.innerText="0";
+resEl.style.color="var(--primary-blue)";
+}else if(inputSeal>35){
+resEl.innerText="Maks 35 mm";
+resEl.style.fontSize="14px";
+resEl.style.color="#ef4444";
+}else{
+resEl.innerText=DEFAULT_SEAL[inputSeal]||0;
+resEl.style.fontSize="18px";
+resEl.style.color="var(--primary-blue)";
+}
+}
+
+/* ================================================================
+SIDEBAR PLU POINT COFFEE
+================================================================ */
+function renderSidebarPlu(filter){
+var list=$('sidebarPluList');
+var count=$('pluCount');
+
+var items=pointCoffeeData;
+if(filter){
+var f=filter.toLowerCase().trim();
+items=items.filter(function(item){
+return item.nama.toLowerCase().indexOf(f)!==-1||(item.raw&&item.raw.indexOf(f)!==-1)||(item.konv&&item.konv.indexOf(f)!==-1);
+});
+}
+
+count.textContent=items.length;
+
+if(items.length===0){
+list.innerHTML='<div class="plu-empty">'+(filter?'Tidak ada PLU ditemukan':'Data Point Coffee belum dimuat')+'</div>';
+return;
+}
+
+var html='';
+items.forEach(function(item){
+var badges='';
+if(item.raw){
+badges+='<span class="plu-code raw" data-plu="'+escapeHtml(item.raw)+'">'+item.raw+'</span>';
+}
+if(item.konv){
+badges+='<span class="plu-code konv" data-plu="'+escapeHtml(item.konv)+'">'+item.konv+'</span>';
+}
+
+html+='<div class="plu-item">'+
+'<span class="plu-name">'+escapeHtml(item.nama)+'</span>'+
+(badges?'<span class="plu-badges">'+badges+'</span>':'')+
+'</div>';
+});
+list.innerHTML=html;
+}
+
+/* ================================================================
+LOAD DATA JSON
+================================================================ */
+function loadData(){
+fetch('data.json')
+.then(function(res){
+if(!res.ok)throw new Error('HTTP '+res.status);
+return res.json();
+})
+.then(function(data){
+data.sort(function(a,b){
+return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+});
+DATABASE=data;
+
+pointCoffeeData=data.filter(function(item){
+return item.brand==='pointcoffee'||item.brand==='point coffee';
+});
+pointCoffeeData.sort(function(a,b){
+return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+});
+
+renderDataGrid();
+renderKatalog();
+renderSidebarPlu('');
+})
+.catch(function(err){
+console.error('Gagal load data.json:',err);
+$('sidebarPluList').innerHTML='<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+});
+}
+
+/* ================================================================
+DETAIL VIEW
+================================================================ */
+function setDetailView(mode){
+detailViewMode=mode;
+$('viewListBtn').classList.toggle('active',mode==='list');
+$('viewTableBtn').classList.toggle('active',mode==='table');
+
+if(mode==='list'){
+$('productGrid').classList.remove('hidden');
+$('tableView').classList.add('hidden');
+}else{
+$('productGrid').classList.add('hidden');
+$('tableView').classList.remove('hidden');
+}
+}
+
+function setKatalogView(mode){
+katalogViewMode=mode;
+$('katalogListBtn').classList.toggle('active',mode==='list');
+$('katalogTableBtn').classList.toggle('active',mode==='table');
+
+if(mode==='list'){
+$('katalogListGrid').classList.remove('hidden');
+$('katalogTableView').classList.add('hidden');
+}else{
+$('katalogListGrid').classList.add('hidden');
+$('katalogTableView').classList.remove('hidden');
+}
+}
+
+function openBrandCategory(key){
+currentView='detail';
+currentBrand=key;
+currentSub='all';
+currentKategori='all';
+$('homeView').style.display='none';
+$('detailView').style.display='block';
+$('katalogView').style.display='none';
+$('kalkulatorView').style.display='none';
+$('greetingWrapper').classList.add('hidden');
+$('globalSearchBar').style.display='';
+$('detailHeadingTitle').innerText=BRAND_NAMES[key]||'Daftar Produk';
+
+detailViewMode='list';
+$('viewListBtn').classList.add('active');
+$('viewTableBtn').classList.remove('active');
+$('productGrid').classList.remove('hidden');
+$('tableView').classList.add('hidden');
+
+renderSubPills();
+_renderCache.key='';
+createAlphabeticalIndexer('detailIndexer');
+renderDataGrid();
+
+var tabs=document.querySelectorAll('.dock-tab');
+for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+$('dock-home').classList.add('active');
+}
+
+function renderSubPills(){
+var container=$('subPillsContainer');
+container.innerHTML='';
+
+if(currentBrand===''||currentBrand==='all'){
+container.style.display='none';
+$('kategoriPillsContainer').style.display='none';
+return;
+}
+
+container.style.display='flex';
+var pills=SUB_CONFIG[currentBrand]||[{id:'all',label:'Semua'}];
+
+if(currentBrand==='hambalanfc'){
+pills=[{id:'all',label:'Semua'}].concat(pills);
+}
+
+pills.forEach(function(p){
+var el=document.createElement('button');
+el.className='pill-button';
+if(p.id===currentSub)el.classList.add('active');
+el.innerText=p.label;
+el.dataset.pillId=p.id;
+container.appendChild(el);
+});
+
+renderKategoriPills();
+}
+
+function renderKategoriPills(){
+var katContainer=$('kategoriPillsContainer');
+katContainer.innerHTML='';
+
+var labelMap=null;
+if(currentBrand==='yummychoice'&&currentSub==='bkl')labelMap=KATEGORI_LABEL;
+else if(currentBrand==='yummycoffee'&&currentSub==='bkl')labelMap=KATEGORI_LABEL_COFFEE;
+else if(currentBrand==='pointcoffee'&&currentSub==='bkl')labelMap=KATEGORI_LABEL_POINT;
+else if(currentBrand==='hambalanfc'){
+katContainer.style.display='none';
+return;
+}else if(currentBrand==='perishable'&&currentSub==='buah_sayur')labelMap=KATEGORI_LABEL_PERISHABLE;
+
+if(!labelMap){
+katContainer.style.display='none';
+return;
+}
+
+katContainer.style.display='flex';
+
+var allPill=document.createElement('button');
+allPill.className='pill-button'+(currentKategori==='all'?' active':'');
+allPill.innerText='Semua';
+allPill.dataset.katId='all';
+katContainer.appendChild(allPill);
+
+var keys=Object.keys(labelMap);
+keys.forEach(function(key){
+if(currentBrand==='pointcoffee'&&key==='sarana')return;
+var el=document.createElement('button');
+el.className='pill-button'+(key===currentKategori?' active':'');
+el.innerText=labelMap[key];
+el.dataset.katId=key;
+katContainer.appendChild(el);
+});
+}
+
+/* ================================================================
+RENDER DATA GRID
+================================================================ */
+function renderDataGrid(){
+var query=searchInput.value.toLowerCase().trim();
+var counterBadge=$('itemCounterBadge');
+
+if(currentBrand===''&&query===''&&currentView!=='katalog'){
+counterBadge.innerText='0 Item';
+return;
+}
+
+var cacheKey=currentBrand+'|'+currentSub+'|'+currentKategori+'|'+query;
+if(cacheKey===_renderCache.key)return;
+
+var filtered=DATABASE.filter(function(item){
+var matchBrand=(currentBrand===''||currentBrand==='all'||item.brand===currentBrand);
+var matchSub=(currentSub==='all'||item.sub===currentSub);
+var matchKat=(currentKategori==='all'||item.kategori===currentKategori);
+var searchString=(item.nama+''+(item.raw||'')+''+(item.konv||'')).toLowerCase();
+var matchQuery=(query===''||searchString.indexOf(query)!==-1);
+return matchBrand&&matchSub&&matchKat&&matchQuery;
+});
+
+counterBadge.innerText=filtered.length+' Item';
+
+if(filtered.length===0){
+$('productGrid').innerHTML='<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
+$('tableBody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
+_renderCache.key=cacheKey;
+return;
+}
+
+// Build alphabetical index
+buildAlphabeticalIndex(filtered,'product');
+
+var html='';
+var tableHtml='';
+var lastLetter='';
+var letterLabels={'A':'A','B':'B','C':'C','D':'D','E':'E','F':'F','G':'G','H':'H','I':'I','J':'J','K':'K','L':'L','M':'M','N':'N','O':'O','P':'P','Q':'Q','R':'R','S':'S','T':'T','U':'U','V':'V','W':'W','X':'X','Y':'Y','Z':'Z','#':'0-9 & Simbol'};
+
+filtered.forEach(function(item,i){
+var firstChar=item.nama.charAt(0).toUpperCase();
+var currentLetter=/[A-Z]/.test(firstChar)?firstChar:'#';
+
+// Add section header if letter changed
+if(currentLetter!==lastLetter&&detailViewMode==='list'){
+var labelText=letterLabels[currentLetter]||currentLetter;
+html+='<div class="index-section-header" id="section-'+currentLetter+'"><i class="fas fa-bookmark"></i> '+labelText+'</div>';
+lastLetter=currentLetter;
+}
+
+var badgesHtml='';
+if(item.raw)badgesHtml+='<button class="plu-badge-button plu-raw-style" data-plu="'+escapeHtml(item.raw)+'">'+item.raw+'</button>';
+if(item.konv)badgesHtml+='<button class="plu-badge-button plu-konv-style" data-plu="'+escapeHtml(item.konv)+'">'+item.konv+'</button>';
+
+html+='<div class="product-card" data-letter="'+currentLetter+'">'+
+'<div class="product-info-col">'+
+'<span class="brand-mini-tag">'+(BRAND_NAMES[item.brand]||item.brand)+'</span>'+
+'<div class="product-card-title">'+escapeHtml(item.nama)+'</div>'+
+'</div>'+
+'<div class="plu-badges-stack">'+badgesHtml+'</div>'+
+'</div>';
+
+var rawHtml=item.raw?'<button class="plu-badge-button plu-raw-style" data-plu="'+escapeHtml(item.raw)+'">'+item.raw+'</button>':'-';
+var konvHtml=item.konv?'<button class="plu-badge-button plu-konv-style" data-plu="'+escapeHtml(item.konv)+'">'+item.konv+'</button>':'-';
+tableHtml+='<tr>'+
+'<td class="row-number">'+(i+1)+'</td>'+
+'<td><div class="item-name">'+escapeHtml(item.nama)+'</div></td>'+
+'<td>'+rawHtml+'</td>'+
+'<td>'+konvHtml+'</td>'+
+'</tr>';
+});
+
+$('productGrid').innerHTML=html;
+$('tableBody').innerHTML=tableHtml;
+
+_renderCache.key=cacheKey;
+
+// Add scroll listener for indexer
+$('productGrid').addEventListener('scroll',debounce(function(){
+updateIndexerOnScroll('product');
+},100));
+}
+
+/* ================================================================
+KATALOG
+================================================================ */
+function renderKatalog(){
+var tabsContainer=$('sheetTabs');
+var counter=$('katalogCounter');
+var brands=['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'];
+var totalItems=0;
+
+brands.forEach(function(b){
+var items=DATABASE.filter(function(item){
+return item.brand===b;
+});
+katalogData[b]=items;
+totalItems+=items.length;
+});
+
+katalogData['all']=DATABASE.slice();
+counter.textContent=totalItems+' Item';
+
+var tabsHtml='<div class="sheet-tab all-brand'+(currentSheet==='all'?' active':'')+'" data-sheet="all">📋 Semua<span class="tab-count">'+totalItems+'</span></div>';
+
+brands.forEach(function(b){
+var colorClass=b==='saybread'?'bread':b==='sayburger'?'burger':b==='yummychoice'?'yummy':b==='yummycoffee'?'coffee':b==='pointcoffee'?'pointcoffee':b==='hambalanfc'?'hambalanfc':'perishable';
+tabsHtml+='<div class="sheet-tab '+colorClass+(currentSheet===b?' active':'')+'" data-sheet="'+b+'">'+BRAND_NAMES[b]+'<span class="tab-count">'+katalogData[b].length+'</span></div>';
+});
+
+tabsContainer.innerHTML=tabsHtml;
+_katalogCache.key='';
+createAlphabeticalIndexer('katalogIndexer');
+renderSheetData();
+}
+
+function switchSheet(brand){
+currentSheet=brand;
+var tabs=document.querySelectorAll('#sheetTabs .sheet-tab');
+for(var i=0;i<tabs.length;i++){
+tabs[i].classList.toggle('active',tabs[i].dataset.sheet===brand);
+}
+_katalogCache.key='';
+renderSheetData();
+}
+
+function renderSheetData(){
+var listGrid=$('katalogListGrid');
+var tableBody=$('katalogTableBody');
+
+var query=searchInput.value.toLowerCase().trim();
+var items=katalogData[currentSheet]||[];
+
+if(query!==''){
+items=items.filter(function(item){
+var searchString=(item.nama+''+(item.raw||'')+''+(item.konv||'')).toLowerCase();
+return searchString.indexOf(query)!==-1;
+});
+}
+
+var cacheKey=currentSheet+'|'+query+'|'+items.length;
+if(cacheKey===_katalogCache.key)return;
+
+if(items.length===0){
+listGrid.innerHTML='<div class="empty-search-state">'+(query!==''?'Barang yang Anda cari tidak ditemukan.':'Tidak ada PLU di brand this.')+'</div>';
+tableBody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
+$('katalogCounter').textContent='0 Item';
+_katalogCache.key=cacheKey;
+return;
+}
+
+$('katalogCounter').textContent=items.length+' Item';
+
+var needGrouping=(currentSheet==='yummychoice'||currentSheet==='yummycoffee'||currentSheet==='pointcoffee'||currentSheet==='hambalanfc'||currentSheet==='perishable');
+var kategoriSet={};
+if(needGrouping){
+items.forEach(function(item){
+if(item.kategori&&!kategoriSet[item.kategori])kategoriSet[item.kategori]=true;
+});
+}
+var kategoriKeys=Object.keys(kategoriSet);
+var hasKategori=needGrouping&&kategoriKeys.length>0;
+
+var labelMap={};
+if(currentSheet==='yummychoice')labelMap=KATEGORI_LABEL;
+else if(currentSheet==='yummycoffee')labelMap=KATEGORI_LABEL_COFFEE;
+else if(currentSheet==='pointcoffee')labelMap=KATEGORI_LABEL_POINT;
+else if(currentSheet==='perishable')labelMap=KATEGORI_LABEL_PERISHABLE;
+
+// Build alphabetical index for katalog
+buildAlphabeticalIndex(items,'katalog');
+
+var listHtml='';
+var tableHtml='';
+var rowCounter=0;
+var lastLetter='';
+var letterLabels={'A':'A','B':'B','C':'C','D':'D','E':'E','F':'F','G':'G','H':'H','I':'I','J':'J','K':'K','L':'L','M':'M','N':'N','O':'O','P':'P','Q':'Q','R':'R','S':'S','T':'T','U':'U','V':'V','W':'W','X':'X','Y':'Y','Z':'Z','#':'0-9 & Simbol'};
+
+function renderItem(item){
+var firstChar=item.nama.charAt(0).toUpperCase();
+var currentLetter=/[A-Z]/.test(firstChar)?firstChar:'#';
+
+// Add section header if letter changed
+if(currentLetter!==lastLetter&&katalogViewMode==='list'){
+var labelText=letterLabels[currentLetter]||currentLetter;
+listHtml+='<div class="index-section-header" id="katalog-section-'+currentLetter+'"><i class="fas fa-bookmark"></i> '+labelText+'</div>';
+lastLetter=currentLetter;
+}
+
+var badges='';
+if(item.raw)badges+='<button class="plu-badge-button plu-raw-style" data-plu="'+escapeHtml(item.raw)+'">'+item.raw+'</button>';
+if(item.konv)badges+='<button class="plu-badge-button plu-konv-style" data-plu="'+escapeHtml(item.konv)+'">'+item.konv+'</button>';
+
+listHtml+='<div class="product-card" data-letter="'+currentLetter+'">'+
+'<div class="product-info-col">'+
+'<span class="brand-mini-tag">'+(BRAND_NAMES[item.brand]||item.brand)+'</span>'+
+'<div class="product-card-title">'+escapeHtml(item.nama)+'</div>'+
+'</div>'+
+'<div class="plu-badges-stack">'+badges+'</div>'+
+'</div>';
+
+rowCounter++;
+var rawHtml=item.raw?'<button class="plu-badge-button plu-raw-style" data-plu="'+escapeHtml(item.raw)+'">'+item.raw+'</button>':'-';
+var konvHtml=item.konv?'<button class="plu-badge-button plu-konv-style" data-plu="'+escapeHtml(item.konv)+'">'+item.konv+'</button>':'-';
+tableHtml+='<tr>'+
+'<td class="row-number">'+rowCounter+'</td>'+
+'<td><div class="item-name">'+escapeHtml(item.nama)+'</div></td>'+
+'<td>'+rawHtml+'</td>'+
+'<td>'+konvHtml+'</td>'+
+'</tr>';
+}
+
+if(hasKategori){
+kategoriKeys.forEach(function(kat){
+var katItems=items.filter(function(item){
+return item.kategori===kat;
+});
+if(katItems.length===0)return;
+
+var label=labelMap[kat]||kat;
+if(currentSheet==='hambalanfc')label=kat.charAt(0).toUpperCase()+kat.slice(1);
+
+listHtml+='<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">'+label+' ('+katItems.length+')</span></div>';
+tableHtml+='<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">'+label+' ('+katItems.length+')</td></tr>';
+
+lastLetter='';// Reset letter tracking for each category
+katItems.forEach(renderItem);
+});
+}else{
+items.forEach(renderItem);
+}
+
+listGrid.innerHTML=listHtml;
+tableBody.innerHTML=tableHtml;
+
+_katalogCache.key=cacheKey;
+
+// Add scroll listener for indexer
+$('katalogListGrid').addEventListener('scroll',debounce(function(){
+updateIndexerOnScroll('katalog');
+},100));
+}
+
+/* ================================================================
+EVENT DELEGATION
+================================================================ */
+document.addEventListener('click',function(e){
+var brandCard=e.target.closest('.brand-card');
+if(brandCard&&brandCard.dataset.brand){
+openBrandCategory(brandCard.dataset.brand);
+return;
+}
+
+var pill=e.target.closest('#subPillsContainer .pill-button');
+if(pill){
+var allPills=document.querySelectorAll('#subPillsContainer .pill-button');
+for(var j=0;j<allPills.length;j++)allPills[j].classList.remove('active');
+pill.classList.add('active');
+currentSub=pill.dataset.pillId;
+currentKategori='all';
+_renderCache.key='';
+renderKategoriPills();
+renderDataGrid();
+return;
+}
+
+var katPill=e.target.closest('#kategoriPillsContainer .pill-button');
+if(katPill){
+var allKat=document.querySelectorAll('#kategoriPillsContainer .pill-button');
+for(var k=0;k<allKat.length;k++)allKat[k].classList.remove('active');
+katPill.classList.add('active');
+currentKategori=katPill.dataset.katId;
+_renderCache.key='';
+renderDataGrid();
+return;
+}
+
+var sheetTab=e.target.closest('#sheetTabs .sheet-tab');
+if(sheetTab){
+switchSheet(sheetTab.dataset.sheet);
+return;
+}
+
+var pluBtn=e.target.closest('.plu-badge-button[data-plu]');
+if(pluBtn){
+var code=pluBtn.dataset.plu;
+copyToClipboard(code).then(function(){
+var originalText=pluBtn.innerText;
+pluBtn.innerText='✓';
+pluBtn.classList.add('plu-copied-style');
+showToast('PLU '+code+' Disalin! ✓');
+setTimeout(function(){
+pluBtn.innerText=originalText;
+pluBtn.classList.remove('plu-copied-style');
+},1000);
+});
+return;
+}
+
+var sidebarPlu=e.target.closest('.plu-code[data-plu]');
+if(sidebarPlu){
+var code2=sidebarPlu.dataset.plu;
+copyToClipboard(code2).then(function(){
+var original=sidebarPlu.innerText;
+sidebarPlu.innerText='✓';
+sidebarPlu.style.background='#dcfce7';
+sidebarPlu.style.color='#15803d';
+showToast('PLU '+code2+' Disalin! ✓');
+setTimeout(function(){
+sidebarPlu.innerText=original;
+sidebarPlu.style.background='';
+sidebarPlu.style.color='';
+},1000);
+});
+return;
+}
+});
+
+/* ================================================================
+SEARCH
+================================================================ */
+var searchInput=$('searchInput');
+var searchClearBtn=$('searchClearBtn');
+
+var handleSearch=debounce(function(){
+if(currentView==='katalog'){
+_katalogCache.key='';
+renderSheetData();
+}else if(currentView==='detail'||currentView==='home'){
+var query=searchInput.value.trim();
+if(query!==''&&currentView==='home'&&currentBrand===''){
+$('homeView').style.display='none';
+$('detailView').style.display='block';
+$('katalogView').style.display='none';
+$('kalkulatorView').style.display='none';
+$('greetingWrapper').classList.add('hidden');
+$('globalSearchBar').style.display='';
+$('detailHeadingTitle').innerText='Hasil Pencarian';
+$('subPillsContainer').style.display='none';
+$('kategoriPillsContainer').style.display='none';
+currentView='detail';
+}else if(query===''&&currentView==='detail'&&currentBrand===''){
+$('homeView').style.display='block';
+$('detailView').style.display='none';
+$('katalogView').style.display='none';
+$('kalkulatorView').style.display='none';
+$('greetingWrapper').classList.remove('hidden');
+currentView='home';
+}
+_renderCache.key='';
+renderDataGrid();
+}
+},120);
+
+searchInput.addEventListener('input',function(){
+searchClearBtn.style.display=searchInput.value.trim()!==''?'flex':'none';
+handleSearch();
+});
+
+function clearSearchInput(){
+searchInput.value='';
+searchClearBtn.style.display='none';
+_renderCache.key='';
+_katalogCache.key='';
+if(currentView==='katalog'){
+renderSheetData();
+}else{
+if(currentView==='detail'&&currentBrand===''){
+$('homeView').style.display='block';
+$('detailView').style.display='none';
+$('katalogView').style.display='none';
+$('kalkulatorView').style.display='none';
+$('greetingWrapper').classList.remove('hidden');
+currentView='home';
+}
+renderDataGrid();
+}
+}
+
+/* Search sidebar PLU */
+var handleSidebarSearch=debounce(function(){
+renderSidebarPlu($('sidebarSearchPlu').value);
+},100);
+$('sidebarSearchPlu').addEventListener('input',handleSidebarSearch);
+
+/* ================================================================
+GREETING & CLOCK
+================================================================ */
+var _lastClockSecond=-1;
+function updateClock(){
+var now=new Date();
+if(now.getSeconds()===_lastClockSecond)return;
+_lastClockSecond=now.getSeconds();
+
+var hari=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+var bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+var tanggal=hari[now.getDay()]+', '+now.getDate()+' '+bulan[now.getMonth()]+' '+now.getFullYear();
+$('dateDisplay').innerText='📅 '+tanggal;
+
+var jam=String(now.getHours()).padStart(2,'0');
+var menit=String(now.getMinutes()).padStart(2,'0');
+var detik=String(now.getSeconds()).padStart(2,'0');
+$('timeDisplay').innerText=jam+':'+menit+':'+detik;
+}
+
+function clockLoop(){
+updateClock();
+requestAnimationFrame(clockLoop);
+}
+
+function getSapaanData(){
+var jam=new Date().getHours();
+if(jam>=0&&jam<5)return{icon:'🌙',text:'rek naon ente?'};
+if(jam>=5&&jam<11)return{icon:'☀️',text:'gas urang pulcep!'};
+if(jam>=11&&jam<15)return{icon:'🌤️',text:'aduh, kurang lincah wa!'};
+if(jam>=15&&jam<18)return{icon:'🌅',text:'bau-bau balik burit '};
+return{icon:'🌙',text:'astaghfirullah, masih gadag wayah gini.'};
+}
+
+function getCountdownGajian(){
+var now=new Date();
+var gajian=new Date(now.getFullYear(),now.getMonth(),28);
+if(now>gajian)gajian=new Date(now.getFullYear(),now.getMonth()+1,28);
+var selisih=Math.ceil((gajian-now)/(1000*60*60*24));
+if(selisih===0)return{icon:'',text:'HARI INI GAJIAN! 🎉🎉🎉'};
+if(selisih===1)return{icon:'💰',text:'1 hari menuju gajian!'};
+return{icon:'',text:selisih+' hari menuju gajian! 🎉'};
+}
+
+var isSapaan=true;
+var _sapaanTimer;
+function toggleSapaanCountdown(){
+var s=isSapaan?getSapaanData():getCountdownGajian();
+$('sapaanIcon').innerText=s.icon;
+$('sapaanText').innerText=s.text;
+isSapaan=!isSapaan;
+clearTimeout(_sapaanTimer);
+_sapaanTimer=setTimeout(toggleSapaanCountdown,isSapaan?3000:5000);
+}
+
+/* ================================================================
+INIT
+================================================================ */
+renderBrandGrid();
+clockLoop();
+toggleSapaanCountdown();
+hitungGramasi();
+hitungBiang();
+hitungSeal();
+loadData();
+</script>
 </body>
-    </html>
+</html>
