@@ -18,8 +18,9 @@
             --text-muted: #4b5563;
             --text-light: #9ca3af;
             --primary-blue: #0073ea;
-            --wave-purple: #7c3aed;
-            --wave-purple-soft: rgba(124, 58, 237, 0.15);
+            --primary-blue-dark: #0057b8;
+            --primary-blue-soft: rgba(0, 115, 234, 0.12);
+            --primary-blue-shadow: rgba(0, 115, 234, 0.42);
             --card-white: #ffffff;
             --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
             --card-border: #e5e7eb;
@@ -272,7 +273,7 @@
         }
 
         /* ===== PRODUCTS ===== */
-        .products-grid { display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .products-grid { display: flex; flex-direction: column; gap: 10px; }
         .product-card {
             background: var(--card-white); border-radius: 18px;
             padding: 12px 16px; display: flex; align-items: center;
@@ -300,15 +301,6 @@
         .plu-raw-style { background: var(--raw-bg); border-color: var(--raw-border); color: var(--raw-text); }
         .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
         .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
-
-        /* Section letter heading (untuk Wave Alphabet) */
-        .letter-heading {
-            font-size: 0.72rem; font-weight: 800; color: var(--wave-purple);
-            background: var(--wave-purple-soft);
-            padding: 3px 12px; border-radius: 10px;
-            display: inline-block; margin: 14px 0 8px 0;
-            letter-spacing: 1px;
-        }
 
         /* ===== TABLE ===== */
         .table-wrapper {
@@ -338,13 +330,6 @@
             font-weight: 700; width: 28px; text-align: center;
         }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
-        .table-scroll tr.letter-divider td {
-            padding: 6px 12px 4px 12px;
-            font-size: 0.7rem; font-weight: 800;
-            color: var(--wave-purple);
-            background: var(--wave-purple-soft);
-            letter-spacing: 1px;
-        }
 
         /* ===== SHEET TABS ===== */
         .sheet-tabs {
@@ -450,6 +435,7 @@
             background: #f0f4ff; border-radius: 20px; padding: 16px;
             border: 1px solid var(--card-border); margin-bottom: 16px;
             position: relative;
+            padding-right: 52px;
         }
         .plu-sidebar .sidebar-title {
             font-size: 13px; font-weight: 700; color: var(--dark-green);
@@ -489,7 +475,7 @@
         .plu-sidebar .sidebar-plu-list {
             height: 300px; overflow-y: auto;
             display: flex; flex-direction: column; gap: 4px;
-            contain: strict;
+            scrollbar-width: thin;
         }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
         .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
@@ -528,19 +514,18 @@
         }
 
         /* ============================================================
-           WAVE ALPHABET
+           WAVE ALPHABET (v2 — compact & proper)
            ============================================================ */
         .wave-alphabet {
             position: absolute;
-            right: 2px;
-            top: 0;
-            bottom: 0;
-            width: 38px;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0;
+            gap: 1px;
             z-index: 60;
             opacity: 0;
             transition: opacity 0.25s ease;
@@ -548,11 +533,20 @@
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
+            padding: 6px 4px;
+            border-radius: 20px;
+            background: transparent;
+            max-height: calc(100% - 24px);
         }
-        .wave-alphabet.active,
         .wave-alphabet.visible {
             opacity: 1;
             pointer-events: auto;
+        }
+        .wave-alphabet.active {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
         }
 
         .wave-alphabet .wave-letter {
@@ -560,42 +554,47 @@
             font-weight: 800;
             color: var(--text-light);
             line-height: 1;
-            padding: 2px 0;
             width: 18px;
-            text-align: center;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: color 0.15s ease, transform 0.15s ease;
-            position: relative;
+            transition: color 0.12s ease, transform 0.12s ease;
+            border-radius: 6px;
+            flex-shrink: 0;
         }
         .wave-alphabet .wave-letter.has-data {
-            color: var(--wave-purple);
+            color: var(--primary-blue);
         }
         .wave-alphabet .wave-letter.active {
-            color: var(--wave-purple);
-            transform: scale(1.6);
-            font-weight: 800;
+            color: #fff;
+            background: var(--primary-blue);
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px var(--primary-blue-shadow);
         }
         .wave-alphabet .wave-letter.disabled {
-            opacity: 0.35;
+            opacity: 0.3;
+            cursor: default;
         }
 
         /* Bubble besar di tengah */
         .wave-bubble {
             position: absolute;
-            right: 42px;
+            right: 44px;
             top: 50%;
-            transform: translateY(-50%) scale(0.6);
-            width: 56px;
-            height: 56px;
+            transform: translateY(-50%) scale(0.5);
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            background: var(--wave-purple);
+            background: var(--primary-blue);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+            box-shadow: 0 8px 24px var(--primary-blue-shadow);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -607,18 +606,42 @@
             transform: translateY(-50%) scale(1);
         }
 
-        /* Container khusus sidebar PLU — wave relatif ke sini */
+        /* Wave di dalam sidebar PLU */
         .plu-sidebar .wave-alphabet {
-            top: 100px;
+            top: 108px;
             bottom: 12px;
+            transform: none;
+            max-height: none;
+            padding: 4px 3px;
         }
         .plu-sidebar .wave-bubble {
             right: 38px;
         }
 
-        /* Container khusus detail/katalog — wave relatif ke viewport scroll */
+        /* Wave untuk detail & katalog — posisi absolute di kanan konten */
         .wave-container {
             position: relative;
+        }
+        .wave-container .wave-alphabet {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .wave-container .wave-bubble {
+            right: 40px;
+        }
+
+        /* Wave untuk table */
+        .table-wrapper { position: relative; }
+        .table-wrapper .wave-alphabet {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .table-wrapper .wave-bubble {
+            right: 40px;
         }
 
         /* ===== BOTTOM NAV ===== */
@@ -667,21 +690,17 @@
         .hidden { display: none !important; }
 
         /* ===== PERFORMANCE ===== */
-        .products-grid { contain: layout style; }
         .product-card { will-change: transform; }
         .table-wrapper.hidden,
         .products-grid.hidden { display: none !important; }
-
-        /* Padding-right supaya konten tidak ketutup wave saat aktif */
-        .wave-padded { padding-right: 6px; }
 
         @media (max-width: 480px) {
             .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
             .tabel-wadah-container { max-height: 250px; }
             .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
             .plu-sidebar .sidebar-plu-list { height: 220px; }
-            .wave-alphabet .wave-letter { font-size: 8px; }
-            .wave-bubble { width: 48px; height: 48px; font-size: 22px; right: 38px; }
+            .wave-alphabet .wave-letter { font-size: 8px; width: 16px; height: 12px; }
+            .wave-bubble { width: 46px; height: 46px; font-size: 20px; right: 38px; }
         }
     </style>
 </head>
@@ -759,10 +778,9 @@
             <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
             <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
 
-            <!-- Wrapper untuk Wave Alphabet -->
             <div class="wave-container" id="detailWaveContainer">
                 <section class="products-grid" id="productGrid"></section>
-                <div id="detailWaveAlphabet"></div>
+                <div class="wave-alphabet" id="detailWaveAlphabet"></div>
                 <div class="wave-bubble" id="detailWaveBubble"></div>
             </div>
 
@@ -780,8 +798,7 @@
                         <tbody id="tableBody"></tbody>
                     </table>
                 </div>
-                <!-- Wave untuk tabel detail -->
-                <div id="detailTableWaveAlphabet"></div>
+                <div class="wave-alphabet" id="detailTableWaveAlphabet"></div>
                 <div class="wave-bubble" id="detailTableWaveBubble"></div>
             </div>
         </section>
@@ -806,10 +823,9 @@
                 </div>
             </div>
 
-            <!-- Wrapper untuk Wave Alphabet -->
             <div class="wave-container" id="katalogWaveContainer">
                 <section class="products-grid" id="katalogListGrid"></section>
-                <div id="katalogWaveAlphabet"></div>
+                <div class="wave-alphabet" id="katalogWaveAlphabet"></div>
                 <div class="wave-bubble" id="katalogWaveBubble"></div>
             </div>
 
@@ -827,8 +843,7 @@
                         <tbody id="katalogTableBody"></tbody>
                     </table>
                 </div>
-                <!-- Wave untuk tabel katalog -->
-                <div id="katalogTableWaveAlphabet"></div>
+                <div class="wave-alphabet" id="katalogTableWaveAlphabet"></div>
                 <div class="wave-bubble" id="katalogTableWaveBubble"></div>
             </div>
         </section>
@@ -850,7 +865,6 @@
                 <div class="sidebar-plu-list" id="sidebarPluList">
                     <div class="plu-empty">Memuat data...</div>
                 </div>
-                <!-- Wave untuk sidebar PLU -->
                 <div class="wave-alphabet" id="sidebarWaveAlphabet"></div>
                 <div class="wave-bubble" id="sidebarWaveBubble"></div>
             </div>
@@ -1081,7 +1095,7 @@
 
     function haptic() {
         if (navigator.vibrate) {
-            try { navigator.vibrate(8); } catch(e) {}
+            try { navigator.vibrate(6); } catch(e) {}
         }
     }
 
@@ -1197,119 +1211,145 @@
     }
 
     /* ================================================================
-       WAVE ALPHABET
+       WAVE ALPHABET v2
        ================================================================ */
     var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    var waveRegistry = {}; /* id -> { element, container, bubble, activeLetter, availableLetters, items, itemMap } */
 
-    function createWave(id, containerEl, listEl, items, scrollEl) {
-        /* id unik untuk wave ini */
-        var waveEl = $(id);
-        if (!waveEl) return;
+    /* Registry: id -> { el, bubbleEl, scrollTarget, letterPositions, active, hideTimer, availableSet } */
+    var waveRegistry = {};
 
-        var availableLetters = {};
-        var itemMap = {}; /* letter -> { top: px, element } */
+    /**
+     * Bangun wave.
+     * @param {string} id - element id dari .wave-alphabet
+     * @param {string} bubbleId - element id dari .wave-bubble
+     * @param {NodeList|Array} itemEls - elemen list yang punya data-first-letter
+     * @param {Element|Window} scrollTarget - target scroll (window untuk body)
+     * @param {Element} waveHost - host container (untuk hitung bounding rect wave)
+     */
+    function buildWave(id, bubbleId, itemEls, scrollTarget, waveHost) {
+        var el = $(id);
+        if (!el) return;
+        var bubbleEl = $(bubbleId);
 
-        items.forEach(function(item) {
-            var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            if (!first) return;
-            if (!itemMap[first]) {
-                itemMap[first] = [];
-                availableLetters[first] = true;
+        /* Kumpulkan huruf tersedia */
+        var available = {};
+        var letterFirstEl = {};
+        for (var i = 0; i < itemEls.length; i++) {
+            var letter = itemEls[i].dataset.firstLetter;
+            if (!letter) continue;
+            if (!available[letter]) {
+                available[letter] = true;
+                letterFirstEl[letter] = itemEls[i];
             }
-            itemMap[first].push(item);
-        });
+        }
 
+        /* Render huruf A-Z */
         var html = '';
-        ALPHABET.forEach(function(letter) {
-            var hasData = !!availableLetters[letter];
-            html += '<div class="wave-letter' + (hasData ? ' has-data' : ' disabled') + '" data-letter="' + letter + '">' + letter + '</div>';
-        });
-        waveEl.className = 'wave-alphabet';
-        waveEl.innerHTML = html;
+        for (var j = 0; j < ALPHABET.length; j++) {
+            var L = ALPHABET[j];
+            var hasData = !!available[L];
+            html += '<div class="wave-letter' + (hasData ? ' has-data' : ' disabled') +
+                    '" data-letter="' + L + '">' + L + '</div>';
+        }
+        el.innerHTML = html;
 
-        var bubbleEl = waveEl.parentNode.querySelector('.wave-bubble');
+        var reg = waveRegistry[id];
+        if (!reg) {
+            reg = waveRegistry[id] = {
+                el: el,
+                bubbleEl: bubbleEl,
+                active: false,
+                activeLetter: null,
+                hideTimer: null,
+                listenersAttached: false
+            };
+        }
+        reg.scrollTarget = scrollTarget;
+        reg.letterFirstEl = letterFirstEl;
+        reg.available = available;
+        reg.waveHost = waveHost;
 
-        waveRegistry[id] = {
-            element: waveEl,
-            container: containerEl,
-            scrollEl: scrollEl,
-            bubble: bubbleEl,
-            activeLetter: null,
-            availableLetters: availableLetters,
-            itemMap: itemMap,
-            hideTimer: null
-        };
-
-        /* Event handler untuk wave */
-        attachWaveHandlers(id);
+        /* Attach listener sekali saja */
+        if (!reg.listenersAttached) {
+            attachWaveListeners(id);
+            reg.listenersAttached = true;
+        }
     }
 
-    function attachWaveHandlers(id) {
+    function attachWaveListeners(id) {
         var reg = waveRegistry[id];
         if (!reg) return;
-        var el = reg.element;
+        var el = reg.el;
+        var touching = false;
+        var rafPending = false;
+        var pendingLetter = null;
 
-        var isTouching = false;
-        var lastLetter = null;
-
-        function getLetterFromY(clientY) {
-            var rect = el.getBoundingClientRect();
+        function letterFromY(clientY) {
             var letters = el.querySelectorAll('.wave-letter');
-            var totalH = letters.length;
-            if (totalH === 0) return null;
+            if (letters.length === 0) return null;
+            var rect = el.getBoundingClientRect();
             var relY = clientY - rect.top;
+            if (relY < 0 || relY > rect.height) return null;
             var ratio = relY / rect.height;
-            var idx = Math.max(0, Math.min(totalH - 1, Math.floor(ratio * totalH)));
+            var idx = Math.max(0, Math.min(letters.length - 1, Math.floor(ratio * letters.length)));
             return letters[idx].dataset.letter;
         }
 
-        function setActive(letter) {
-            if (!letter || letter === lastLetter) return;
-            lastLetter = letter;
+        function applyLetter(letter) {
+            if (!letter || letter === reg.activeLetter) return;
             reg.activeLetter = letter;
+            reg.el.classList.add('active');
 
-            /* Update UI */
+            /* Update UI huruf aktif */
             var letters = el.querySelectorAll('.wave-letter');
             for (var i = 0; i < letters.length; i++) {
                 letters[i].classList.toggle('active', letters[i].dataset.letter === letter);
             }
-            if (reg.bubble) {
-                reg.bubble.innerText = letter;
-                reg.bubble.classList.add('show');
+            /* Bubble */
+            if (reg.bubbleEl) {
+                reg.bubbleEl.innerText = letter;
+                reg.bubbleEl.classList.add('show');
             }
-            el.classList.add('active');
-
             haptic();
-
-            /* Scroll ke letter */
             scrollToLetter(id, letter);
         }
 
         function clearActive() {
-            lastLetter = null;
             reg.activeLetter = null;
+            reg.el.classList.remove('active');
             var letters = el.querySelectorAll('.wave-letter');
             for (var i = 0; i < letters.length; i++) letters[i].classList.remove('active');
-            if (reg.bubble) reg.bubble.classList.remove('show');
+            if (reg.bubbleEl) reg.bubbleEl.classList.remove('show');
         }
 
         function onStart(e) {
-            isTouching = true;
-            el.classList.add('active');
-            var touch = e.touches ? e.touches[0] : e;
-            setActive(getLetterFromY(touch.clientY));
-            e.preventDefault();
+            touching = true;
+            el.classList.add('visible');
+            clearTimeout(reg.hideTimer);
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter) applyLetter(letter);
+            if (e.cancelable) e.preventDefault();
         }
         function onMove(e) {
-            if (!isTouching) return;
-            var touch = e.touches ? e.touches[0] : e;
-            setActive(getLetterFromY(touch.clientY));
-            e.preventDefault();
+            if (!touching) return;
+            var pt = e.touches ? e.touches[0] : e;
+            var letter = letterFromY(pt.clientY);
+            if (letter && letter !== pendingLetter) {
+                pendingLetter = letter;
+                if (!rafPending) {
+                    rafPending = true;
+                    requestAnimationFrame(function() {
+                        rafPending = false;
+                        applyLetter(pendingLetter);
+                    });
+                }
+            }
+            if (e.cancelable) e.preventDefault();
         }
         function onEnd() {
-            isTouching = false;
-            /* Tetap tampilkan wave sebentar lalu auto-hide */
+            if (!touching) return;
+            touching = false;
             scheduleHide(id, 800);
             setTimeout(clearActive, 400);
         }
@@ -1321,71 +1361,60 @@
 
         el.addEventListener('mousedown', onStart);
         el.addEventListener('mousemove', function(e) {
-            if (!isTouching) return;
-            setActive(getLetterFromY(e.clientY));
+            if (!touching) return;
+            var letter = letterFromY(e.clientY);
+            if (letter && letter !== pendingLetter) {
+                pendingLetter = letter;
+                if (!rafPending) {
+                    rafPending = true;
+                    requestAnimationFrame(function() {
+                        rafPending = false;
+                        applyLetter(pendingLetter);
+                    });
+                }
+            }
         });
         el.addEventListener('mouseup', onEnd);
         el.addEventListener('mouseleave', onEnd);
 
-        /* Tap pada huruf */
+        /* Tap huruf */
         el.addEventListener('click', function(e) {
             var letterEl = e.target.closest('.wave-letter');
-            if (!letterEl) return;
-            if (letterEl.classList.contains('disabled')) return;
-            setActive(letterEl.dataset.letter);
+            if (!letterEl || letterEl.classList.contains('disabled')) return;
+            el.classList.add('visible');
+            applyLetter(letterEl.dataset.letter);
             scheduleHide(id, 800);
-            setTimeout(clearActive, 400);
+            setTimeout(clearActive, 500);
         });
 
-        /* Auto-hide saat idle */
         el.addEventListener('mouseenter', function() {
             el.classList.add('visible');
             clearTimeout(reg.hideTimer);
         });
         el.addEventListener('mouseleave', function() {
-            if (!isTouching) scheduleHide(id, 1200);
+            if (!touching) scheduleHide(id, 1200);
         });
     }
 
     function scrollToLetter(id, letter) {
         var reg = waveRegistry[id];
-        if (!reg) return;
-        var scrollEl = reg.scrollEl;
-        if (!scrollEl) return;
-
-        /* Cari elemen pertama dengan huruf tsb */
-        var target = null;
-        var selector = '[data-first-letter="' + letter + '"]';
-        var candidates = scrollEl.querySelectorAll(selector);
-        if (candidates.length > 0) {
-            target = candidates[0];
-        }
-
-        /* Fallback: cari via items */
-        if (!target && reg.itemMap[letter] && reg.itemMap[letter].length > 0) {
-            var firstItem = reg.itemMap[letter][0];
-            var itemsInScroll = scrollEl.querySelectorAll('[data-item-id]');
-            for (var i = 0; i < itemsInScroll.length; i++) {
-                if (itemsInScroll[i].dataset.itemId === firstItem._id) {
-                    target = itemsInScroll[i];
-                    break;
-                }
-            }
-        }
-
+        if (!reg || !reg.letterFirstEl) return;
+        var target = reg.letterFirstEl[letter];
         if (!target) return;
 
-        /* Scroll dengan offset untuk sticky header */
-        var scrollRect = scrollEl.getBoundingClientRect();
-        var targetRect = target.getBoundingClientRect();
-        var offset = targetRect.top - scrollRect.top + scrollEl.scrollTop;
-        var topPad = 10;
+        var scrollTarget = reg.scrollTarget || document.scrollingElement || document.documentElement;
 
-        /* Smooth scroll */
-        if ('scrollBehavior' in document.documentElement.style) {
-            scrollEl.scrollTo({ top: offset - topPad, behavior: 'smooth' });
+        /* Hitung posisi target relatif terhadap scrollTarget */
+        var targetTop;
+        if (scrollTarget === window || scrollTarget === document.documentElement || scrollTarget === document.body) {
+            var rect = target.getBoundingClientRect();
+            targetTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 90;
+            window.scrollTo({ top: targetTop, behavior: 'smooth' });
         } else {
-            scrollEl.scrollTop = offset - topPad;
+            var hostRect = scrollTarget.getBoundingClientRect();
+            var tRect = target.getBoundingClientRect();
+            var offset = tRect.top - hostRect.top + scrollTarget.scrollTop - 6;
+            scrollTarget.scrollTo({ top: offset, behavior: 'smooth' });
         }
     }
 
@@ -1394,41 +1423,45 @@
         if (!reg) return;
         clearTimeout(reg.hideTimer);
         reg.hideTimer = setTimeout(function() {
-            if (!reg.activeLetter) reg.element.classList.remove('visible');
+            if (!reg.activeLetter) reg.el.classList.remove('visible');
         }, delay);
     }
 
     function showWave(id) {
         var reg = waveRegistry[id];
         if (!reg) return;
-        reg.element.classList.add('visible');
+        reg.el.classList.add('visible');
         clearTimeout(reg.hideTimer);
         reg.hideTimer = setTimeout(function() {
-            if (!reg.activeLetter) reg.element.classList.remove('visible');
+            if (!reg.activeLetter) reg.el.classList.remove('visible');
         }, 2500);
     }
 
     function hideAllWaves() {
         Object.keys(waveRegistry).forEach(function(k) {
-            if (waveRegistry[k].element) waveRegistry[k].element.classList.remove('visible', 'active');
-            if (waveRegistry[k].bubble) waveRegistry[k].bubble.classList.remove('show');
-            clearTimeout(waveRegistry[k].hideTimer);
+            var r = waveRegistry[k];
+            if (r.el) r.el.classList.remove('visible', 'active');
+            if (r.bubbleEl) r.bubbleEl.classList.remove('show');
+            clearTimeout(r.hideTimer);
         });
     }
 
-    /* Deteksi scroll manual untuk memunculkan wave */
-    function bindScrollReveal(scrollEl, waveId) {
-        if (!scrollEl) return;
-        var lastScroll = 0;
+    /* Reveal wave saat user scroll */
+    var _scrollRevealBound = {};
+    function bindScrollReveal(key, scrollEl, waveId) {
+        if (_scrollRevealBound[key]) return;
+        _scrollRevealBound[key] = true;
+        var lastY = 0;
         var ticking = false;
-        scrollEl.addEventListener('scroll', function() {
+        var target = scrollEl === window ? window : scrollEl;
+        target.addEventListener('scroll', function() {
             if (ticking) return;
             ticking = true;
             requestAnimationFrame(function() {
-                var cur = scrollEl.scrollTop;
-                if (Math.abs(cur - lastScroll) > 30) {
+                var cur = scrollEl === window ? (window.pageYOffset || 0) : scrollEl.scrollTop;
+                if (Math.abs(cur - lastY) > 40) {
                     showWave(waveId);
-                    lastScroll = cur;
+                    lastY = cur;
                 }
                 ticking = false;
             });
@@ -1458,45 +1491,35 @@
             list.innerHTML = '<div class="plu-empty">' + 
                 (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + 
             '</div>';
-            /* Reset wave */
-            var waveEl = $('sidebarWaveAlphabet');
-            if (waveEl) waveEl.innerHTML = '';
+            var w = $('sidebarWaveAlphabet');
+            if (w) w.innerHTML = '';
             return;
         }
 
-        /* Sort per huruf untuk grouping */
         items.sort(function(a, b) {
             return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
         });
 
         var html = '';
-        var lastLetter = '';
         items.forEach(function(item) {
             var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            if (first !== lastLetter) {
-                lastLetter = first;
-            }
             var badges = '';
-            if (item.raw) {
-                badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
-            }
-            if (item.konv) {
-                badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
-            }
+            if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
+            if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
 
-            html += '<div class="plu-item" data-item-id="' + escapeHtml(item.nama) + '" data-first-letter="' + first + '">' +
+            html += '<div class="plu-item" data-first-letter="' + first + '">' +
                 '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
                 (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
             '</div>';
         });
         list.innerHTML = html;
 
-        /* Bangun wave */
-        createWave('sidebarWaveAlphabet', list, list, items, list);
-        bindScrollReveal(list, 'sidebarWaveAlphabet');
-        /* Sidebar wave selalu visible (karena sidebar statis) */
+        /* Bangun wave untuk sidebar — scroll target = list element */
+        var itemEls = list.querySelectorAll('.plu-item');
+        buildWave('sidebarWaveAlphabet', 'sidebarWaveBubble', itemEls, list, $('pluSidebar'));
         var reg = waveRegistry['sidebarWaveAlphabet'];
-        if (reg) reg.element.classList.add('visible');
+        if (reg) reg.el.classList.add('visible');
+        bindScrollReveal('sidebar', list, 'sidebarWaveAlphabet');
     }
 
     /* ================================================================
@@ -1509,7 +1532,6 @@
                 return res.json();
             })
             .then(function(data) {
-                /* Beri ID unik untuk lookup */
                 data.forEach(function(item, i) { item._id = 'd' + i; });
                 data.sort(function(a, b) {
                     return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
@@ -1545,11 +1567,11 @@
         if (mode === 'list') {
             $('productGrid').classList.remove('hidden');
             $('tableView').classList.add('hidden');
+            setTimeout(function() { rebuildDetailListWave(); }, 30);
         } else {
             $('productGrid').classList.add('hidden');
             $('tableView').classList.remove('hidden');
-            /* Re-init wave untuk tabel */
-            setTimeout(function() { rebuildDetailTableWave(); }, 50);
+            setTimeout(function() { rebuildDetailTableWave(); }, 30);
         }
     }
 
@@ -1561,10 +1583,11 @@
         if (mode === 'list') {
             $('katalogListGrid').classList.remove('hidden');
             $('katalogTableView').classList.add('hidden');
+            setTimeout(function() { rebuildKatalogListWave(); }, 30);
         } else {
             $('katalogListGrid').classList.add('hidden');
             $('katalogTableView').classList.remove('hidden');
-            setTimeout(function() { rebuildKatalogTableWave(); }, 50);
+            setTimeout(function() { rebuildKatalogTableWave(); }, 30);
         }
     }
 
@@ -1663,7 +1686,7 @@
     }
 
     /* ================================================================
-       RENDER DATA GRID
+       RENDER DATA GRID (FLAT — TANPA HEADING HURUF)
        ================================================================ */
     function renderDataGrid() {
         var query = searchInput.value.toLowerCase().trim();
@@ -1677,49 +1700,25 @@
         var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
         if (cacheKey === _renderCache.key) return;
 
-        var filtered = DATABASE.filter(function(item) {
-            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
-            var matchSub = (currentSub === 'all' || item.sub === currentSub);
-            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
-            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-            var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
-            return matchBrand && matchSub && matchKat && matchQuery;
-        });
-
+        var filtered = getCurrentFilteredData();
         counterBadge.innerText = filtered.length + ' Item';
 
         if (filtered.length === 0) {
             $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
             $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
             _renderCache.key = cacheKey;
-            /* Clear wave */
-            var w = $('detailWaveAlphabet');
-            if (w) w.innerHTML = '';
             return;
         }
 
-        /* Sort alphabetical */
-        filtered.sort(function(a, b) {
-            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-        });
-
         var html = '';
         var tableHtml = '';
-        var lastLetter = '';
-
         filtered.forEach(function(item, i) {
             var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            if (first !== lastLetter) {
-                html += '<div class="letter-heading" data-letter-anchor="' + first + '" data-first-letter="' + first + '">' + first + '</div>';
-                tableHtml += '<tr class="letter-divider" data-letter-anchor="' + first + '" data-first-letter="' + first + '"><td colspan="4">' + first + '</td></tr>';
-                lastLetter = first;
-            }
-
             var badgesHtml = '';
             if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
             if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
 
-            html += '<div class="product-card" data-item-id="' + escapeHtml(item._id) + '" data-first-letter="' + first + '">' +
+            html += '<div class="product-card" data-first-letter="' + first + '">' +
                 '<div class="product-info-col">' +
                     '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
                     '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
@@ -1729,7 +1728,7 @@
 
             var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
             var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-            tableHtml += '<tr data-item-id="' + escapeHtml(item._id) + '" data-first-letter="' + first + '">' +
+            tableHtml += '<tr data-first-letter="' + first + '">' +
                 '<td class="row-number">' + (i + 1) + '</td>' +
                 '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
                 '<td>' + rawHtml + '</td>' +
@@ -1742,35 +1741,42 @@
         
         _renderCache.key = cacheKey;
 
-        /* Bangun wave untuk detail list */
-        createWave('detailWaveAlphabet', $('detailWaveContainer'), $('productGrid'), filtered, document.scrollingElement || document.documentElement);
-        bindScrollReveal(window, 'detailWaveAlphabet');
-
-        /* Bangun wave untuk detail table (hidden, tapi siap saat toggle) */
+        rebuildDetailListWave();
         rebuildDetailTableWave();
-    }
-
-    function rebuildDetailTableWave() {
-        /* Karena table pakai window scroll, gunakan document.scrollingElement */
-        var filtered = getCurrentFilteredData();
-        if (filtered.length === 0) return;
-        var waveEl = $('detailTableWaveAlphabet');
-        if (!waveEl) return;
-        createWave('detailTableWaveAlphabet', $('tableView'), document.body, filtered, document.scrollingElement || document.documentElement);
     }
 
     function getCurrentFilteredData() {
         var query = searchInput.value.toLowerCase().trim();
-        return DATABASE.filter(function(item) {
+        var filtered = DATABASE.filter(function(item) {
             var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
             var matchSub = (currentSub === 'all' || item.sub === currentSub);
             var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
             var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
             var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
             return matchBrand && matchSub && matchKat && matchQuery;
-        }).sort(function(a, b) {
+        });
+        filtered.sort(function(a, b) {
             return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
         });
+        return filtered;
+    }
+
+    function rebuildDetailListWave() {
+        var grid = $('productGrid');
+        if (!grid) return;
+        var items = grid.querySelectorAll('.product-card');
+        if (items.length === 0) { $('detailWaveAlphabet').innerHTML = ''; return; }
+        buildWave('detailWaveAlphabet', 'detailWaveBubble', items, window, grid.parentNode);
+        bindScrollReveal('detailList', window, 'detailWaveAlphabet');
+    }
+
+    function rebuildDetailTableWave() {
+        var tbody = $('tableBody');
+        if (!tbody) return;
+        var rows = tbody.querySelectorAll('tr[data-first-letter]');
+        if (rows.length === 0) { $('detailTableWaveAlphabet').innerHTML = ''; return; }
+        buildWave('detailTableWaveAlphabet', 'detailTableWaveBubble', rows, window, $('tableView'));
+        bindScrollReveal('detailTable', window, 'detailTableWaveAlphabet');
     }
 
     /* ================================================================
@@ -1861,25 +1867,14 @@
         var listHtml = '';
         var tableHtml = '';
         var rowCounter = 0;
-        var lastLetter = '';
-
-        function pushLetter(letter) {
-            if (letter !== lastLetter) {
-                listHtml += '<div class="letter-heading" data-letter-anchor="' + letter + '" data-first-letter="' + letter + '">' + letter + '</div>';
-                tableHtml += '<tr class="letter-divider" data-letter-anchor="' + letter + '" data-first-letter="' + letter + '"><td colspan="4">' + letter + '</td></tr>';
-                lastLetter = letter;
-            }
-        }
 
         function renderItem(item) {
             var first = (item.nama || '').trim().charAt(0).toUpperCase();
-            pushLetter(first);
-
             var badges = '';
             if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
             if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
             
-            listHtml += '<div class="product-card" data-item-id="' + escapeHtml(item._id) + '" data-first-letter="' + first + '">' +
+            listHtml += '<div class="product-card" data-first-letter="' + first + '">' +
                 '<div class="product-info-col">' +
                     '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
                     '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
@@ -1890,7 +1885,7 @@
             rowCounter++;
             var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
             var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-            tableHtml += '<tr data-item-id="' + escapeHtml(item._id) + '" data-first-letter="' + first + '">' +
+            tableHtml += '<tr data-first-letter="' + first + '">' +
                 '<td class="row-number">' + rowCounter + '</td>' +
                 '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
                 '<td>' + rawHtml + '</td>' +
@@ -1898,7 +1893,6 @@
             '</tr>';
         }
 
-        /* Sort semua items alphabetical dulu */
         items.sort(function(a, b) {
             return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
         });
@@ -1913,10 +1907,8 @@
                 if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
 
                 listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
-                tableHtml += '<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
+                tableHtml += '<tr class="section-row"><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
 
-                /* Reset lastLetter untuk grup kategori baru */
-                lastLetter = '';
                 katItems.forEach(renderItem);
             });
         } else {
@@ -1928,25 +1920,26 @@
         
         _katalogCache.key = cacheKey;
 
-        /* Bangun wave untuk katalog list */
-        createWave('katalogWaveAlphabet', $('katalogWaveContainer'), $('katalogListGrid'), items, document.scrollingElement || document.documentElement);
-        bindScrollReveal(window, 'katalogWaveAlphabet');
-
-        /* Bangun wave untuk katalog table */
+        rebuildKatalogListWave();
         rebuildKatalogTableWave();
     }
 
+    function rebuildKatalogListWave() {
+        var grid = $('katalogListGrid');
+        if (!grid) return;
+        var items = grid.querySelectorAll('.product-card');
+        if (items.length === 0) { $('katalogWaveAlphabet').innerHTML = ''; return; }
+        buildWave('katalogWaveAlphabet', 'katalogWaveBubble', items, window, grid.parentNode);
+        bindScrollReveal('katalogList', window, 'katalogWaveAlphabet');
+    }
+
     function rebuildKatalogTableWave() {
-        var items = katalogData[currentSheet] || [];
-        var query = searchInput.value.toLowerCase().trim();
-        if (query !== '') {
-            items = items.filter(function(item) {
-                var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-                return searchString.indexOf(query) !== -1;
-            });
-        }
-        if (items.length === 0) return;
-        createWave('katalogTableWaveAlphabet', $('katalogTableView'), document.body, items, document.scrollingElement || document.documentElement);
+        var tbody = $('katalogTableBody');
+        if (!tbody) return;
+        var rows = tbody.querySelectorAll('tr[data-first-letter]');
+        if (rows.length === 0) { $('katalogTableWaveAlphabet').innerHTML = ''; return; }
+        buildWave('katalogTableWaveAlphabet', 'katalogTableWaveBubble', rows, window, $('katalogTableView'));
+        bindScrollReveal('katalogTable', window, 'katalogTableWaveAlphabet');
     }
 
     /* ================================================================
@@ -2085,7 +2078,6 @@
         }
     }
 
-    /* Search sidebar PLU */
     var handleSidebarSearch = debounce(function() {
         renderSidebarPlu($('sidebarSearchPlu').value);
     }, 100);
