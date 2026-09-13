@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0073ea">
     <title>plukakang - hapalkeun euy!</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -54,146 +55,77 @@
             position: relative;
         }
 
+        /* ===== HEADER ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
-
-        .brand-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .brand-block { display: flex; align-items: center; gap: 12px; }
         .brand-icon {
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             background: linear-gradient(135deg, #0073ea, #4f46e5);
             border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 1.25rem;
+            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-size: 1.25rem;
             box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
         }
-
-        .brand-title-group h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.4px;
-            color: var(--text-main);
-            line-height: 1.1;
-        }
-
-        .brand-title-group span {
-            font-size: 0.74rem;
-            color: #0073ea;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-        }
-
+        .brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
+        .brand-title-group span { font-size: 0.74rem; color: #0073ea; font-weight: 700; }
         .icon-action-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--card-white);
-            border: 1px solid var(--card-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.15s ease;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--card-white); border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); font-size: 0.95rem; cursor: pointer;
+            box-shadow: var(--card-shadow); transition: transform 0.15s ease;
         }
         .icon-action-btn:active { transform: scale(0.92); }
 
-        #greetingWrapper.hidden {
-            display: none;
-        }
-
+        /* ===== GREETING ===== */
+        #greetingWrapper.hidden { display: none; }
         .greeting-container {
             background: linear-gradient(145deg, #ffffff, #f0f4ff);
-            border-radius: 24px;
-            padding: 20px 22px;
+            border-radius: 24px; padding: 20px 22px;
             border: 1px solid var(--card-border);
             box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 16px; position: relative; overflow: hidden;
         }
         .greeting-container::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -20%;
-            width: 200px;
-            height: 200px;
+            content: ''; position: absolute; top: -40%; right: -20%;
+            width: 200px; height: 200px;
             background: radial-gradient(circle, rgba(0,115,234,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
+            border-radius: 50%; pointer-events: none;
         }
         .greeting-date-time {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            position: relative;
-            z-index: 1;
-            flex-wrap: wrap;
-            gap: 6px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+            position: relative; z-index: 1; flex-wrap: wrap; gap: 6px;
         }
         .greeting-date-time .date-display {
-            color: var(--text-main);
-            font-weight: 600;
+            color: var(--text-main); font-weight: 600;
             background: rgba(0, 0, 0, 0.04);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
+            padding: 4px 14px; border-radius: 20px; font-size: 0.78rem;
         }
         .greeting-date-time .time-display {
-            font-family: var(--font-code);
-            color: var(--primary-blue);
-            font-size: 0.9rem;
+            font-family: var(--font-code); color: var(--primary-blue); font-size: 0.9rem;
             background: rgba(0, 115, 234, 0.07);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            padding: 4px 14px; border-radius: 20px; font-weight: 700;
         }
         .greeting-divider {
             height: 2px;
             background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
-            margin: 12px 0 10px 0;
-            border-radius: 2px;
-            position: relative;
-            z-index: 1;
+            margin: 12px 0 10px 0; border-radius: 2px;
         }
         .greeting-sapaan {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--text-main);
-            min-height: 32px;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.1rem; font-weight: 800; color: var(--text-main);
+            min-height: 32px; display: flex; align-items: center; gap: 10px;
         }
-        .greeting-sapaan .greeting-icon {
-            font-size: 1.4rem;
-        }
+        .greeting-sapaan .greeting-icon { font-size: 1.4rem; }
 
+        /* ===== SEARCH ===== */
         .sticky-search-bar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: sticky; top: 0; z-index: 50;
             padding: 6px 0 14px 0;
             background: linear-gradient(to bottom, 
                 rgba(246, 248, 252, 0.98) 0%, 
@@ -201,440 +133,227 @@
                 rgba(246, 248, 252, 0) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            margin-bottom: 0;
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            pointer-events: auto;
         }
-
-        .search-field {
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
+        .search-field { position: relative; display: flex; align-items: center; }
         .search-input {
-            width: 100%;
-            padding: 13px 40px 13px 16px;
-            background: var(--card-white);
-            border: 1.5px solid var(--card-border);
-            border-radius: 18px;
-            font-size: 0.88rem;
-            font-family: inherit;
-            font-weight: 600;
-            outline: none;
-            color: var(--text-main);
+            width: 100%; padding: 13px 40px 13px 16px;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            border-radius: 18px; font-size: 0.88rem; font-family: inherit;
+            font-weight: 600; outline: none; color: var(--text-main);
             box-shadow: var(--card-shadow);
         }
-
         .search-input:focus {
             border-color: var(--primary-blue);
             box-shadow: 0 4px 18px rgba(0, 115, 234, 0.18);
         }
-
         .search-clear-btn {
-            position: absolute;
-            right: 12px;
-            background: rgba(17, 24, 39, 0.08);
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
+            position: absolute; right: 12px;
+            background: rgba(17, 24, 39, 0.08); border: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            font-size: 0.72rem; color: var(--text-muted);
+            cursor: pointer; display: none;
+            align-items: center; justify-content: center;
         }
 
+        /* ===== SECTION ===== */
         .section-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
         }
-
-        .section-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.3px;
-        }
-
+        .section-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
         .item-count-chip {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            background: #e2e8f0;
-            padding: 4px 10px;
-            border-radius: 12px;
+            font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
+            background: #e2e8f0; padding: 4px 10px; border-radius: 12px;
         }
 
-        .toolbar-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .legend-bar {
-            display: flex;
-            gap: 12px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            background: var(--card-white);
-            padding: 5px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--card-shadow);
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .legend-box {
-            width: 12px;
-            height: 12px;
-            border-radius: 4px;
-            border: 1px solid;
-        }
-        .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
-        .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
-
-        .view-toggle {
-            display: flex;
-            gap: 6px;
-        }
-        .view-toggle .vt-btn {
-            background: var(--card-white);
-            border: 1px solid var(--card-border);
-            border-radius: 18px;
-            padding: 5px 12px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            box-shadow: var(--card-shadow);
-            transition: all 0.2s ease;
-        }
-        .view-toggle .vt-btn:active { transform: scale(0.95); }
-        .view-toggle .vt-btn.active {
-            background: var(--primary-blue);
-            color: #ffffff;
-            border-color: var(--primary-blue);
-        }
-
+        /* ===== BRAND GRID ===== */
         .brand-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 12px; margin-bottom: 24px;
         }
-
         .brand-card {
-            background: var(--card-white);
-            border-radius: 22px;
-            padding: 16px;
-            border: 1px solid var(--card-border);
+            background: var(--card-white); border-radius: 22px;
+            padding: 16px; border: 1px solid var(--card-border);
             box-shadow: var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 130px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 130px; cursor: pointer;
+            transition: transform 0.2s ease;
         }
         .brand-card:active { transform: scale(0.96); }
-
-        .brand-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
+        .brand-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
         .brand-card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
         }
-
-        .card-saybread { background: #fdf6f0; color: #8c5332; }
+        .card-saybread { background: #fdf6f0; }
         .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
-
-        .card-sayburger { background: #fff1f2; color: #e11d48; }
+        .card-sayburger { background: #fff1f2; }
         .card-sayburger .brand-card-icon { background: #e11d48; color: #fff; }
-
-        .card-yummychoice { background: #ffedd5; color: #c2410c; }
+        .card-yummychoice { background: #ffedd5; }
         .card-yummychoice .brand-card-icon { background: #f97316; color: #fff; }
-
-        .card-yummycoffee { background: #fffbeb; color: #d97706; }
+        .card-yummycoffee { background: #fffbeb; }
         .card-yummycoffee .brand-card-icon { background: #d97706; color: #fff; }
-
-        .card-pointcoffee { background: #dcfce7; color: #14532d; }
+        .card-pointcoffee { background: #dcfce7; }
         .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
-
-        .card-hambalanfc { background: #dbeafe; color: #1e40af; }
+        .card-hambalanfc { background: #dbeafe; }
         .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
-
-        .card-perishable { background: #ecfdf5; color: #065f46; }
+        .card-perishable { background: #ecfdf5; }
         .card-perishable .brand-card-icon { background: #059669; color: #fff; }
+        .brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        .brand-card-bottom h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.2; }
+        .brand-card-bottom p { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-        .brand-card-bottom {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .brand-card-bottom h3 {
-            font-size: 0.98rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.2;
-        }
-
-        .brand-card-bottom p {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
+        /* ===== PILLS ===== */
         .pills-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            margin-bottom: 12px;
-            padding-bottom: 4px;
+            display: flex; gap: 8px; overflow-x: auto;
+            scrollbar-width: none; margin-bottom: 12px; padding-bottom: 4px;
         }
         .pills-container::-webkit-scrollbar { display: none; }
-
         .pill-button {
-            background: var(--card-white);
-            border: 1px solid var(--card-border);
-            padding: 7px 14px;
-            border-radius: 18px;
-            font-size: 0.76rem;
-            font-family: inherit;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            user-select: none;
+            background: var(--card-white); border: 1px solid var(--card-border);
+            padding: 7px 14px; border-radius: 18px;
+            font-size: 0.76rem; font-family: inherit; font-weight: 700;
+            color: var(--text-muted); cursor: pointer; white-space: nowrap;
+            transition: all 0.2s ease; user-select: none;
         }
         .pill-button:active { transform: scale(0.95); }
         .pill-button.active {
-            background: var(--primary-blue);
-            color: #ffffff;
+            background: var(--primary-blue); color: #ffffff;
             border-color: var(--primary-blue);
-            box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
         }
 
+        /* ===== DETAIL VIEW ===== */
         .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
         }
         .back-btn {
-            background: var(--card-white);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 8px 14px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            cursor: pointer;
+            background: var(--card-white); border: 1px solid var(--card-border);
+            border-radius: 14px; padding: 8px 14px;
+            font-family: inherit; font-weight: 700; font-size: 0.8rem;
+            color: var(--text-main); cursor: pointer;
             box-shadow: var(--card-shadow);
             transition: transform 0.15s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: flex; align-items: center; gap: 6px;
         }
         .back-btn:active { transform: scale(0.95); }
 
-        .products-grid { display: flex; flex-direction: column; gap: 10px; }
-
-        .product-card {
-            background: var(--card-white);
-            border-radius: 18px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .toolbar-row {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+        }
+        .legend-bar {
+            display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700;
+            color: var(--text-muted); background: var(--card-white);
+            padding: 5px 12px; border-radius: 20px;
             border: 1px solid var(--card-border);
             box-shadow: var(--card-shadow);
-            gap: 12px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
+        .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
+        .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
+
+        .view-toggle { display: flex; gap: 6px; }
+        .view-toggle .vt-btn {
+            background: var(--card-white); border: 1px solid var(--card-border);
+            border-radius: 18px; padding: 5px 12px;
+            font-family: inherit; font-weight: 700; font-size: 0.7rem;
+            color: var(--text-muted); cursor: pointer;
+            box-shadow: var(--card-shadow); transition: all 0.2s ease;
+        }
+        .view-toggle .vt-btn:active { transform: scale(0.95); }
+        .view-toggle .vt-btn.active {
+            background: var(--primary-blue); color: #ffffff;
+            border-color: var(--primary-blue);
         }
 
-        .product-info-col {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        /* ===== PRODUCTS ===== */
+        .products-grid { display: flex; flex-direction: column; gap: 10px; }
+        .product-card {
+            background: var(--card-white); border-radius: 18px;
+            padding: 12px 16px; display: flex; align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow); gap: 12px;
         }
-
+        .product-info-col { display: flex; flex-direction: column; gap: 4px; }
         .brand-mini-tag {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--primary-blue);
-            display: inline-block;
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--primary-blue);
         }
-
-        .product-card-title {
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.35;
-        }
-
+        .product-card-title { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
         .plu-badges-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            align-items: flex-end;
-            flex-shrink: 0;
+            display: flex; flex-direction: column; gap: 4px;
+            align-items: flex-end; flex-shrink: 0;
         }
-
         .plu-badge-button {
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-family: var(--font-code);
-            font-size: 0.76rem;
-            font-weight: 700;
-            border: 1px solid transparent;
-            cursor: pointer;
+            padding: 5px 12px; border-radius: 8px;
+            font-family: var(--font-code); font-size: 0.76rem; font-weight: 700;
+            border: 1px solid transparent; cursor: pointer;
             transition: all 0.15s ease;
         }
         .plu-badge-button:active { transform: scale(0.95); }
-
         .plu-raw-style { background: var(--raw-bg); border-color: var(--raw-border); color: var(--raw-text); }
         .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
-        .plu-copied-style {
-            background: #dcfce7 !important;
-            border-color: #86efac !important;
-            color: #15803d !important;
-        }
+        .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
 
+        /* ===== TABLE ===== */
         .table-wrapper {
-            background: var(--card-white);
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-            overflow: hidden;
+            background: var(--card-white); border-radius: 16px;
+            border: 1px solid var(--card-border); overflow: hidden;
             box-shadow: var(--card-shadow);
         }
-        .table-scroll {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .table-scroll table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.78rem;
-            min-width: 340px;
-        }
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
         .table-scroll th {
-            text-align: left;
-            padding: 10px 12px 8px 12px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-light);
-            border-bottom: 2px solid var(--card-border);
-            background: #f8fafc;
+            text-align: left; padding: 10px 12px 8px 12px;
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.4px; color: var(--text-light);
+            border-bottom: 2px solid var(--card-border); background: #f8fafc;
         }
         .table-scroll td {
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--card-border);
-            color: var(--text-main);
+            padding: 8px 12px; border-bottom: 1px solid var(--card-border);
             vertical-align: middle;
         }
         .table-scroll tr:last-child td { border-bottom: none; }
-        .table-scroll tr:active { background: #f8fafc; }
         .table-scroll .plu-badge-button {
-            display: inline-block;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            margin: 1px 2px 1px 0;
+            display: inline-block; font-size: 0.65rem;
+            padding: 3px 8px; margin: 1px 2px 1px 0;
         }
         .table-scroll .row-number {
-            font-size: 0.65rem;
-            color: var(--text-light);
-            font-weight: 700;
-            width: 28px;
-            text-align: center;
+            font-size: 0.65rem; color: var(--text-light);
+            font-weight: 700; width: 28px; text-align: center;
         }
         .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
 
+        /* ===== SHEET TABS ===== */
         .sheet-tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            display: flex; gap: 6px; overflow-x: auto;
+            padding-bottom: 8px; margin-bottom: 12px;
             scrollbar-width: none;
             border-bottom: 2px solid var(--card-border);
         }
         .sheet-tabs::-webkit-scrollbar { display: none; }
-
         .sheet-tab {
-            padding: 8px 16px;
-            border-radius: 10px 10px 0 0;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            white-space: nowrap;
-            border: 1px solid transparent;
-            border-bottom: none;
-            transition: all 0.2s ease;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 8px 16px; border-radius: 10px 10px 0 0;
+            font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; white-space: nowrap;
+            border: 1px solid transparent; border-bottom: none;
+            transition: all 0.2s ease; background: transparent;
+            display: flex; align-items: center; gap: 6px;
         }
         .sheet-tab .tab-count {
-            font-size: 0.6rem;
-            color: var(--text-light);
-            background: var(--bg-app);
-            padding: 1px 8px;
-            border-radius: 10px;
+            font-size: 0.6rem; color: var(--text-light);
+            background: var(--bg-app); padding: 1px 8px; border-radius: 10px;
         }
         .sheet-tab.active {
-            color: var(--text-main);
-            background: var(--card-white);
-            border-color: var(--card-border);
-            font-weight: 800;
+            color: var(--text-main); background: var(--card-white);
+            border-color: var(--card-border); font-weight: 800;
         }
-        .sheet-tab.active .tab-count {
-            background: var(--primary-blue);
-            color: white;
-        }
+        .sheet-tab.active .tab-count { background: var(--primary-blue); color: white; }
         .sheet-tab:active { transform: scale(0.95); }
-
         .sheet-tab.bread.active { border-top: 3px solid #8c5332; }
         .sheet-tab.burger.active { border-top: 3px solid #e11d48; }
         .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
@@ -644,209 +363,143 @@
         .sheet-tab.perishable.active { border-top: 3px solid #059669; }
         .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
-        .section-header-group {
-            padding: 10px 0 6px 0;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--primary-blue);
-            border-bottom: 2px solid var(--card-border);
-            margin-bottom: 8px;
-            margin-top: 4px;
-        }
-
-        /* ===== KALKULATOR STYLES ===== */
-        .kalkulator-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 0 0 16px 0;
-        }
-
+        /* ===== KALKULATOR ===== */
         .kalkulator-card {
-            background: var(--card-white);
-            border-radius: 20px;
-            padding: 18px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--card-shadow);
+            background: var(--card-white); border-radius: 20px;
+            padding: 18px; border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow); margin-bottom: 16px;
         }
-
         .kalkulator-card .card-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 14px; font-weight: 700; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
         }
-
         .input-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 12px;
         }
-        .input-row label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
+        .input-row label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
         .input-row input {
-            background: #fef08a;
-            border: 1.5px solid #fde047;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            width: 110px;
-            text-align: right;
-            outline: none;
-            font-family: var(--font-main);
+            background: #fef08a; border: 1.5px solid #fde047;
+            padding: 8px 12px; border-radius: 12px;
+            font-size: 16px; font-weight: 700; width: 110px;
+            text-align: right; outline: none; font-family: var(--font-main);
         }
         .input-row input:focus {
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.15);
         }
-
         .hasil-box {
-            background: var(--bg-app);
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 6px;
+            background: var(--bg-app); padding: 12px;
+            border-radius: 12px; margin-top: 6px;
         }
-        .hasil-box .input-row {
-            margin-bottom: 6px;
-        }
-        .hasil-box .input-row:last-child {
-            margin-bottom: 0;
-        }
-        .hasil-box .hasil-label {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .hasil-box .hasil-value {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--text-main);
-        }
-        .hasil-box .hasil-value.primary {
-            color: var(--primary-blue);
-            font-size: 18px;
-        }
+        .hasil-box .input-row { margin-bottom: 6px; }
+        .hasil-box .input-row:last-child { margin-bottom: 0; }
+        .hasil-box .hasil-label { font-size: 12px; color: var(--text-muted); }
+        .hasil-box .hasil-value { font-weight: 700; font-size: 16px; }
+        .hasil-box .hasil-value.primary { color: var(--primary-blue); font-size: 18px; }
 
         .tabel-wadah-container {
-            max-height: 380px;
-            overflow-y: auto;
-            margin-top: 4px;
+            max-height: 380px; overflow-y: auto; margin-top: 4px;
         }
-        .tabel-wadah-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        .tabel-wadah-container::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 8px;
-        }
-        .tabel-wadah-container::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 8px;
-        }
-
-        .tabel-wadah-container table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.78rem;
-        }
+        .tabel-wadah-container::-webkit-scrollbar { width: 4px; }
+        .tabel-wadah-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .tabel-wadah-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .tabel-wadah-container table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
         .tabel-wadah-container th {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 8px 6px;
-            text-align: left;
+            font-size: 10px; text-transform: uppercase; color: var(--text-muted);
+            padding: 8px 6px; text-align: left;
             border-bottom: 1.5px solid var(--card-border);
-            font-weight: 700;
-            position: sticky;
-            top: 0;
-            background: #fff;
-            z-index: 2;
+            font-weight: 700; position: sticky; top: 0;
+            background: #fff; z-index: 2;
         }
         .tabel-wadah-container td {
-            padding: 7px 6px;
-            font-size: 12px;
+            padding: 7px 6px; font-size: 12px;
             border-bottom: 1px solid #f1f5f9;
         }
         .tabel-wadah-container th:nth-child(2),
         .tabel-wadah-container th:nth-child(3),
         .tabel-wadah-container td:nth-child(2),
-        .tabel-wadah-container td:nth-child(3) {
-            text-align: center;
-        }
+        .tabel-wadah-container td:nth-child(3) { text-align: center; }
         .tabel-wadah-container th:last-child,
-        .tabel-wadah-container td:last-child {
-            text-align: right;
+        .tabel-wadah-container td:last-child { text-align: right; }
+        .tabel-wadah-container .bold { font-weight: 700; }
+        .tabel-wadah-container .hasil-gramasi { font-weight: 700; color: var(--primary-blue); }
+
+        .seal-tip { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+        /* ===== SIDEBAR PLU ===== */
+        .plu-sidebar {
+            background: #f0f4ff; border-radius: 20px; padding: 16px;
+            border: 1px solid var(--card-border); margin-top: 16px;
         }
-        .tabel-wadah-container .bold {
-            font-weight: 700;
-            color: var(--text-main);
+        .plu-sidebar .sidebar-title {
+            font-size: 13px; font-weight: 700; color: var(--dark-green);
+            display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
         }
-        .tabel-wadah-container .hasil-gramasi {
-            font-weight: 700;
-            color: var(--primary-blue);
+        .plu-sidebar .sidebar-title span {
+            font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: auto;
+        }
+        .plu-sidebar .sidebar-search {
+            width: 100%; padding: 8px 12px; border-radius: 12px;
+            border: 1.5px solid var(--card-border); font-size: 13px;
+            font-family: inherit; outline: none; background: #fff; margin-bottom: 10px;
+        }
+        .plu-sidebar .sidebar-search:focus { border-color: var(--primary-blue); }
+        .plu-sidebar .sidebar-plu-list {
+            max-height: 300px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
+        .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
+        .plu-sidebar .sidebar-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .plu-sidebar .plu-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 6px 10px; background: #fff; border-radius: 10px;
+            font-size: 12px; border: 1px solid transparent;
+        }
+        .plu-sidebar .plu-item .plu-name {
+            font-weight: 600; font-size: 12px; flex: 1; margin-right: 6px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .plu-sidebar .plu-item .plu-code {
+            font-family: var(--font-code); font-size: 11px; font-weight: 700;
+            color: #1d4ed8; background: #eff6ff; padding: 2px 8px;
+            border-radius: 6px; cursor: pointer; white-space: nowrap;
+        }
+        .plu-sidebar .plu-item .plu-code:active { transform: scale(0.95); }
+        .plu-sidebar .plu-empty {
+            text-align: center; color: var(--text-muted);
+            font-size: 12px; padding: 20px 0;
         }
 
-        .seal-tip {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
+        /* ===== BOTTOM NAV ===== */
         .bottom-dock {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            height: 68px;
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px; height: 68px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--card-border);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            padding: 0 16px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 100; padding: 0 16px;
         }
-
         .dock-tab {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            color: var(--text-light);
-            font-size: 0.68rem;
-            font-weight: 700;
-            border: none;
-            background: none;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 4px; cursor: pointer; color: var(--text-light);
+            font-size: 0.68rem; font-weight: 700;
+            border: none; background: none;
         }
-
         .dock-tab.active { color: var(--primary-blue); }
         .dock-tab-icon { font-size: 1.2rem; }
 
+        /* ===== TOAST ===== */
         .toast-notification {
-            position: fixed;
-            bottom: 84px;
-            left: 50%;
+            position: fixed; bottom: 84px; left: 50%;
             transform: translateX(-50%) translateY(50px);
-            background: #111827;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            opacity: 0;
-            pointer-events: none;
+            background: #111827; color: #ffffff;
+            padding: 10px 20px; border-radius: 30px;
+            font-size: 0.8rem; font-weight: 700;
+            opacity: 0; pointer-events: none;
             transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 200;
         }
@@ -856,32 +509,19 @@
         }
 
         .empty-search-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            font-weight: 600;
-            background: var(--card-white);
-            border-radius: 20px;
-            border: 1px dashed var(--card-border);
+            text-align: center; padding: 40px 20px;
+            color: var(--text-muted); font-size: 0.88rem;
+            font-weight: 600; background: var(--card-white);
+            border-radius: 20px; border: 1px dashed var(--card-border);
         }
 
         .hidden { display: none !important; }
 
-        /* Responsive */
         @media (max-width: 480px) {
-            .input-row input {
-                width: 90px;
-                font-size: 14px;
-                padding: 6px 10px;
-            }
-            .tabel-wadah-container {
-                max-height: 280px;
-            }
-            .tabel-wadah-container td {
-                font-size: 11px;
-                padding: 5px 4px;
-            }
+            .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
+            .tabel-wadah-container { max-height: 250px; }
+            .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
+            .plu-sidebar .sidebar-plu-list { max-height: 200px; }
         }
     </style>
 </head>
@@ -889,8 +529,9 @@
 
     <div class="app-layout">
         
-        <div id="toastNotification" class="toast-notification">Kode PLU Disalin! ✓</div>
+        <div id="toastNotification" class="toast-notification">PLU Disalin! ✓</div>
 
+        <!-- HEADER -->
         <header class="app-header">
             <div class="brand-block">
                 <div class="brand-icon"><i class="fas fa-cubes"></i></div>
@@ -899,7 +540,7 @@
                     <span>hapalkeun euy!</span>
                 </div>
             </div>
-            <button class="icon-action-btn" onclick="showPLUKatalog()"><i class="fas fa-layer-group"></i></button>
+            <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
         </header>
 
         <!-- GREETING -->
@@ -930,90 +571,13 @@
             <div class="section-bar">
                 <span class="section-title">Kategori Brand</span>
             </div>
-            <section class="brand-grid">
-                <div class="brand-card" onclick="openBrandCategory('saybread')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-saybread"><i class="fas fa-bread-slice"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Say Bread</h3>
-                        <p>Bakery & Pastry</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('sayburger')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-sayburger"><i class="fas fa-hamburger"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Say Burger</h3>
-                        <p>Burger & Hotdog</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('yummychoice')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-yummychoice"><i class="fas fa-utensils"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Yummy Choice</h3>
-                        <p>Ready to Eat</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('yummycoffee')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-yummycoffee"><i class="fas fa-mug-hot"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Yummy Coffee Gold</h3>
-                        <p>Beverages & Coffee</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('pointcoffee')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-pointcoffee"><i class="fas fa-mug-saucer"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Point Coffee</h3>
-                        <p>Coffee & Beverages</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('hambalanfc')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-hambalanfc"><i class="fas fa-box"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Hambalan FC</h3>
-                        <p>Si Paling Hambalan</p>
-                    </div>
-                </div>
-
-                <div class="brand-card" onclick="openBrandCategory('perishable')">
-                    <div class="brand-card-top">
-                        <div class="brand-card-icon card-perishable"><i class="fas fa-seedling"></i></div>
-                        <i class="fas fa-chevron-right" style="color: var(--text-light); font-size: 0.85rem;"></i>
-                    </div>
-                    <div class="brand-card-bottom">
-                        <h3>Perishable</h3>
-                        <p>Buah & Sayur Segar</p>
-                    </div>
-                </div>
-            </section>
+            <section class="brand-grid" id="brandGrid"></section>
         </main>
 
         <!-- ===== DETAIL VIEW ===== -->
         <section id="detailView" style="display: none;">
             <div class="detail-header">
-                <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
             </div>
 
             <div class="section-bar">
@@ -1057,7 +621,7 @@
         <!-- ===== KATALOG VIEW ===== -->
         <section id="katalogView" style="display: none;">
             <div class="detail-header">
-                <button class="back-btn" onclick="goHomeView()"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
                 <span class="item-count-chip" id="katalogCounter">0 Item</span>
             </div>
 
@@ -1099,87 +663,71 @@
                 <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
             </div>
 
-            <div class="kalkulator-grid">
-
-                <!-- KARTU 1: INPUT GRAMASI -->
-                <div class="kalkulator-card">
-                    <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
-                    <div class="input-row" style="margin-bottom:0;">
-                        <label for="timbanganGramasi">Berat Timbangan (gr)</label>
-                        <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()">
-                    </div>
+            <!-- KARTU 1: INPUT GRAMASI -->
+            <div class="kalkulator-card">
+                <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
+                <div class="input-row" style="margin-bottom:0;">
+                    <label for="timbanganGramasi">Berat Timbangan (gr)</label>
+                    <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()">
                 </div>
-
-                <!-- KARTU 2: DAFTAR WADAH -->
-                <div class="kalkulator-card">
-                    <div class="card-title" style="justify-content: space-between; margin-bottom: 8px;">
-                        <span><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</span>
-                    </div>
-
-                    <div class="tabel-wadah-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>WADAH</th>
-                                    <th>TARE</th>
-                                    <th>MJ</th>
-                                    <th>BERSIH</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelGramasi"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- KARTU 3: SO BIANG KOPI -->
-                <div class="kalkulator-card">
-                    <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
-                    <div class="input-row">
-                        <label for="biangTimbangan">Total Timbangan</label>
-                        <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()">
-                    </div>
-                    <div class="input-row">
-                        <label for="biangBotol">Berat Botol Kosong</label>
-                        <input type="number" id="biangBotol" value="680" oninput="hitungBiang()">
-                    </div>
-
-                    <div class="hasil-box">
-                        <div class="input-row">
-                            <span class="hasil-label">Hasil Netto</span>
-                            <span class="hasil-value" id="resNetto">267</span>
-                        </div>
-                        <div class="input-row">
-                            <span class="hasil-label">Konversi Biji Kopi</span>
-                            <span class="hasil-value" id="resKopi">80</span>
-                        </div>
-                        <div class="input-row" style="margin-bottom:0;">
-                            <span class="hasil-label">Konversi Air Mineral</span>
-                            <span class="hasil-value" id="resAir">187</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU 4: PLASTIK SEAL -->
-                <div class="kalkulator-card">
-                    <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
-                    
-                    <div class="input-row">
-                        <div>
-                            <label for="inputTebalSeal">Tebal Sisa Roll (mm)</label>
-                            <div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div>
-                        </div>
-                        <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()">
-                    </div>
-
-                    <div class="hasil-box">
-                        <div class="input-row" style="margin-bottom:0;">
-                            <span class="hasil-label">Estimasi Jumlah Cup</span>
-                            <span class="hasil-value primary" id="resSealPcs">547</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- KARTU 2: DAFTAR WADAH -->
+            <div class="kalkulator-card">
+                <div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
+                <div class="tabel-wadah-container">
+                    <table>
+                        <thead><tr><th>WADAH</th><th>TARE</th><th>MJ</th><th>BERSIH</th></tr></thead>
+                        <tbody id="tabelGramasi"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- KARTU 3: SO BIANG KOPI -->
+            <div class="kalkulator-card">
+                <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
+                <div class="input-row">
+                    <label for="biangTimbangan">Total Timbangan</label>
+                    <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()">
+                </div>
+                <div class="input-row">
+                    <label for="biangBotol">Berat Botol Kosong</label>
+                    <input type="number" id="biangBotol" value="680" oninput="hitungBiang()">
+                </div>
+                <div class="hasil-box">
+                    <div class="input-row"><span class="hasil-label">Hasil Netto</span><span class="hasil-value" id="resNetto">267</span></div>
+                    <div class="input-row"><span class="hasil-label">Konversi Biji Kopi</span><span class="hasil-value" id="resKopi">80</span></div>
+                    <div class="input-row" style="margin-bottom:0;"><span class="hasil-label">Konversi Air Mineral</span><span class="hasil-value" id="resAir">187</span></div>
+                </div>
+            </div>
+
+            <!-- KARTU 4: PLASTIK SEAL -->
+            <div class="kalkulator-card">
+                <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
+                <div class="input-row">
+                    <div><label for="inputTebalSeal">Tebal Sisa Roll (mm)</label><div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div></div>
+                    <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()">
+                </div>
+                <div class="hasil-box">
+                    <div class="input-row" style="margin-bottom:0;">
+                        <span class="hasil-label">Estimasi Jumlah Cup</span>
+                        <span class="hasil-value primary" id="resSealPcs">547</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SIDEBAR PLU POINT COFFEE ===== -->
+            <div class="plu-sidebar" id="pluSidebar">
+                <div class="sidebar-title">
+                    <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> PLU Point Coffee
+                    <span id="pluCount">0</span>
+                </div>
+                <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari PLU Point Coffee..." oninput="filterSidebarPlu()">
+                <div class="sidebar-plu-list" id="sidebarPluList">
+                    <div class="plu-empty">Memuat data...</div>
+                </div>
+            </div>
+
         </section>
 
     </div>
@@ -1201,934 +749,800 @@
     </nav>
 
     <script>
-        // ================================================================
-        // DATA DEFAULT KALKULATOR
-        // ================================================================
-        var DEFAULT_WADAH = [
-            { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
-            { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
-            { nama: "Botol Kaca", tare: 418, mj: 0.74 },
-            { nama: "Botol Palm Sugar 1,3 kg", tare: 77, mj: 1 },
-            { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
-            { nama: "Botol Sauce", tare: 122, mj: 0.80 },
-            { nama: "Botol Sirup Bulat", tare: 83, mj: 0.80 },
-            { nama: "Botol Sirup Kotak", tare: 78, mj: 0.80 },
-            { nama: "Botol Squeeze", tare: 40, mj: 1 },
-            { nama: "Box Powder", tare: 62, mj: 1 },
-            { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
-            { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
-            { nama: "Ice Bulk 8 L", tare: 420, mj: 1 },
-            { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
-            { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
-            { nama: "Madu Uray", tare: 26.6, mj: 1 },
-            { nama: "Oreo / Pcs", tare: 0, mj: 1 },
-            { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
-            { nama: "Toples Coffee Jelly", tare: 70, mj: 1 },
-            { nama: "Toples Crumb", tare: 650, mj: 1 },
-            { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
-            { nama: "Toples Tropical Jelly", tare: 65, mj: 1 },
-            { nama: "Whip Cream", tare: 51, mj: 0.97 },
-            { nama: "Yakult / Pcs", tare: 0, mj: 65 }
-        ];
+    // ================================================================
+    // KONFIGURASI BRAND
+    // ================================================================
+    var BRAND_NAMES = {
+        'saybread': 'Say Bread', 'sayburger': 'Say Burger',
+        'yummychoice': 'Yummy Choice', 'yummycoffee': 'Yummy Coffee Gold',
+        'pointcoffee': 'Point Coffee', 'hambalanfc': 'Hambalan FC',
+        'perishable': 'Perishable'
+    };
 
-        var DEFAULT_SEAL = {
-            1: 54, 2: 108, 3: 163, 4: 217, 5: 271,
-            6: 326, 7: 381, 8: 437, 9: 492, 10: 547,
-            11: 603, 12: 659, 13: 715, 14: 771, 15: 827,
-            16: 884, 17: 942, 18: 999, 19: 1057, 20: 1114,
-            21: 1172, 22: 1230, 23: 1289, 24: 1347, 25: 1405,
-            26: 1465, 27: 1524, 28: 1584, 29: 1643, 30: 1703,
-            31: 1763, 32: 1823, 33: 1883, 34: 1943, 35: 2003
-        };
+    var BRAND_CARDS = [
+        { id: 'saybread', title: 'Say Bread', sub: 'Bakery & Pastry', icon: 'fa-bread-slice', cls: 'card-saybread' },
+        { id: 'sayburger', title: 'Say Burger', sub: 'Burger & Hotdog', icon: 'fa-hamburger', cls: 'card-sayburger' },
+        { id: 'yummychoice', title: 'Yummy Choice', sub: 'Ready to Eat', icon: 'fa-utensils', cls: 'card-yummychoice' },
+        { id: 'yummycoffee', title: 'Yummy Coffee Gold', sub: 'Beverages & Coffee', icon: 'fa-mug-hot', cls: 'card-yummycoffee' },
+        { id: 'pointcoffee', title: 'Point Coffee', sub: 'Coffee & Beverages', icon: 'fa-mug-saucer', cls: 'card-pointcoffee' },
+        { id: 'hambalanfc', title: 'Hambalan FC', sub: 'Si Paling Hambalan', icon: 'fa-box', cls: 'card-hambalanfc' },
+        { id: 'perishable', title: 'Perishable', sub: 'Buah & Sayur Segar', icon: 'fa-seedling', cls: 'card-perishable' }
+    ];
 
-        // ================================================================
-        // LOAD & SAVE DATA
-        // ================================================================
-        function loadWadah() {
+    var SUB_CONFIG = {
+        'saybread': [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }],
+        'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
+        'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Menu Utama' }, { id: 'sarana', label: 'Sarana' }],
+        'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Utama' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }],
+        'pointcoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
+        'hambalanfc': [{ id: 'minyak', label: 'Minyak' }, { id: 'beras', label: 'Beras' }, { id: 'gula', label: 'Gula' }, { id: 'mineral', label: 'Mineral' }, { id: 'beverage', label: 'Beverage' }],
+        'perishable': [{ id: 'all', label: 'Semua' }, { id: 'buah_sayur', label: 'Buah & Sayur' }]
+    };
+
+    var KATEGORI_LABEL = { 'snack_rte': 'Snack RTE', 'dimsum': 'Dimsum', 'pao': 'Pao', 'fried_chicken': 'Fried Chicken', 'frozen_fc': 'Frozen FC', 'sosis': 'Sosis', 'pizza': 'Pizza' };
+    var KATEGORI_LABEL_COFFEE = { 'jelly': 'Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'other': 'Other' };
+    var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
+    var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
+
+    // ================================================================
+    // STATE
+    // ================================================================
+    var DATABASE = [];
+    var pointCoffeeData = [];
+    var currentView = 'home';
+    var currentBrand = '';
+    var currentSub = 'all';
+    var currentKategori = 'all';
+    var detailViewMode = 'list';
+    var katalogViewMode = 'list';
+    var currentSheet = 'all';
+    var katalogData = {};
+
+    // ================================================================
+    // DATA KALKULATOR
+    // ================================================================
+    var DEFAULT_WADAH = [
+        { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
+        { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
+        { nama: "Botol Kaca", tare: 418, mj: 0.74 },
+        { nama: "Botol Palm Sugar 1,3 kg", tare: 77, mj: 1 },
+        { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
+        { nama: "Botol Sauce", tare: 122, mj: 0.80 },
+        { nama: "Botol Sirup Bulat", tare: 83, mj: 0.80 },
+        { nama: "Botol Sirup Kotak", tare: 78, mj: 0.80 },
+        { nama: "Botol Squeeze", tare: 40, mj: 1 },
+        { nama: "Box Powder", tare: 62, mj: 1 },
+        { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
+        { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
+        { nama: "Ice Bulk 8 L", tare: 420, mj: 1 },
+        { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
+        { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
+        { nama: "Madu Uray", tare: 26.6, mj: 1 },
+        { nama: "Oreo / Pcs", tare: 0, mj: 1 },
+        { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
+        { nama: "Toples Coffee Jelly", tare: 70, mj: 1 },
+        { nama: "Toples Crumb", tare: 650, mj: 1 },
+        { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
+        { nama: "Toples Tropical Jelly", tare: 65, mj: 1 },
+        { nama: "Whip Cream", tare: 51, mj: 0.97 },
+        { nama: "Yakult / Pcs", tare: 0, mj: 65 }
+    ];
+
+    var DEFAULT_SEAL = {
+        1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
+        11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
+        21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
+        31:1763,32:1823,33:1883,34:1943,35:2003
+    };
+
+    var dataWadah = (function() {
+        try {
             var saved = localStorage.getItem('plukakang_wadah');
-            if (saved) {
-                try { return JSON.parse(saved); }
-                catch(e) { return DEFAULT_WADAH; }
-            }
-            return DEFAULT_WADAH;
-        }
+            if (saved) return JSON.parse(saved);
+        } catch(e) {}
+        return DEFAULT_WADAH;
+    })();
 
-        function saveWadah(data) {
-            localStorage.setItem('plukakang_wadah', JSON.stringify(data));
-        }
-
-        function loadSeal() {
-            var saved = localStorage.getItem('plukakang_seal');
-            if (saved) {
-                try { return JSON.parse(saved); }
-                catch(e) { return DEFAULT_SEAL; }
-            }
-            return DEFAULT_SEAL;
-        }
-
-        var dataWadah = loadWadah();
-        var dataSeal = loadSeal();
-
-        // ================================================================
-        // KALKULATOR FUNGSI
-        // ================================================================
-        function hitungGramasi() {
-            var input = parseFloat(document.getElementById('timbanganGramasi').value) || 0;
-            var tbody = document.getElementById('tabelGramasi');
-            tbody.innerHTML = '';
-
-            dataWadah.forEach(function(item) {
-                var hasil = item.nama.includes("Yakult") 
-                    ? Math.round(input * item.mj) 
-                    : Math.round((input - item.tare) * item.mj);
-
-                var displayMj = (item.mj % 1 === 0) ? item.mj.toString() : item.mj.toString().replace('.', ',');
-
-                var row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="bold">${item.nama}</td>
-                    <td>${item.tare === 0 ? '-' : item.tare}</td>
-                    <td>${displayMj}</td>
-                    <td class="hasil-gramasi">${hasil}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function hitungBiang() {
-            var timbangan = parseFloat(document.getElementById('biangTimbangan').value) || 0;
-            var botol = parseFloat(document.getElementById('biangBotol').value) || 0;
-            var netto = Math.max(0, timbangan - botol);
-            var kopi = Math.round(netto * 0.3);
-            document.getElementById('resNetto').innerText = netto;
-            document.getElementById('resKopi').innerText = kopi;
-            document.getElementById('resAir').innerText = netto - kopi;
-        }
-
-        function hitungSeal() {
-            var inputSeal = parseInt(document.getElementById('inputTebalSeal').value);
-            var resEl = document.getElementById('resSealPcs');
-            
-            if (!inputSeal || inputSeal < 1) {
-                resEl.innerText = "0";
-                resEl.style.fontSize = "18px";
-                resEl.style.color = "var(--primary-blue)";
-            } else if (inputSeal > 35) {
-                resEl.innerText = "Maks 35 mm";
-                resEl.style.fontSize = "14px";
-                resEl.style.color = "var(--danger)";
-            } else {
-                resEl.innerText = dataSeal[inputSeal] || 0;
-                resEl.style.fontSize = "18px";
-                resEl.style.color = "var(--primary-blue)";
-            }
-        }
-
-        // ================================================================
-        // NAVIGASI
-        // ================================================================
-        var currentView = 'home';
-        var currentBrand = '';
-        var currentSub = 'all';
-        var currentKategori = 'all';
-        var detailViewMode = 'list';
-        var katalogViewMode = 'list';
-        var currentSheet = 'all';
-        var katalogData = {};
-
-        function switchTab(tab) {
-            // Sembunyikan semua view
-            document.getElementById('homeView').style.display = 'none';
-            document.getElementById('detailView').style.display = 'none';
-            document.getElementById('katalogView').style.display = 'none';
-            document.getElementById('kalkulatorView').style.display = 'none';
-            document.getElementById('greetingWrapper').classList.add('hidden');
-
-            // Tampilkan view sesuai tab
-            if (tab === 'home') {
-                document.getElementById('homeView').style.display = 'block';
-                document.getElementById('greetingWrapper').classList.remove('hidden');
-                currentView = 'home';
-            } else if (tab === 'katalog') {
-                document.getElementById('katalogView').style.display = 'block';
-                currentView = 'katalog';
-                renderKatalog();
-            } else if (tab === 'kalkulator') {
-                document.getElementById('kalkulatorView').style.display = 'block';
-                currentView = 'kalkulator';
-                hitungGramasi();
-                hitungBiang();
-                hitungSeal();
-            }
-
-            // Update active tab
-            var tabs = document.querySelectorAll('.dock-tab');
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            var activeTab = document.getElementById('dock-' + tab);
-            if (activeTab) activeTab.classList.add('active');
-
-            // Reset search jika bukan di home/katalog
-            if (tab !== 'katalog' && tab !== 'home') {
-                document.getElementById('searchInput').value = '';
-                document.getElementById('searchClearBtn').style.display = 'none';
-            }
-        }
-
-        function goHomeView() {
-            switchTab('home');
-        }
-
-        function showPLUKatalog() {
-            switchTab('katalog');
-        }
-
-        // ================================================================
-        // BRAND & KATALOG FUNGSI (existing)
-        // ================================================================
-        var BRAND_NAMES = {
-            'saybread': 'Say Bread',
-            'sayburger': 'Say Burger',
-            'yummychoice': 'Yummy Choice',
-            'yummycoffee': 'Yummy Coffee Gold',
-            'pointcoffee': 'Point Coffee',
-            'hambalanfc': 'Hambalan FC',
-            'perishable': 'Perishable'
-        };
-
-        var SUB_CONFIG = {
-            'saybread': [
-                { id: 'all', label: 'Semua' },
-                { id: 'dcf', label: 'Frozen Dough' },
-                { id: 'sarana', label: 'Sarana' }
-            ],
-            'sayburger': [
-                { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: 'Bahan Baku' },
-                { id: 'sarana', label: 'Sarana' }
-            ],
-            'yummychoice': [
-                { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: 'Menu Utama' },
-                { id: 'sarana', label: 'Sarana' }
-            ],
-            'yummycoffee': [
-                { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: 'Bahan Utama' },
-                { id: 'dcf', label: 'Bahan Tambahan' },
-                { id: 'sarana', label: 'Sarana' }
-            ],
-            'pointcoffee': [
-                { id: 'all', label: 'Semua' },
-                { id: 'bkl', label: 'Bahan Baku' },
-                { id: 'sarana', label: 'Sarana' }
-            ],
-            'hambalanfc': [
-                { id: 'minyak', label: 'Minyak' },
-                { id: 'beras', label: 'Beras' },
-                { id: 'gula', label: 'Gula' },
-                { id: 'mineral', label: 'Mineral' },
-                { id: 'beverage', label: 'Beverage' }
-            ],
-            'perishable': [
-                { id: 'all', label: 'Semua' },
-                { id: 'buah_sayur', label: 'Buah & Sayur' }
-            ]
-        };
-
-        var KATEGORI_LABEL = {
-            'snack_rte': 'Snack RTE',
-            'dimsum': 'Dimsum',
-            'pao': 'Pao',
-            'fried_chicken': 'Fried Chicken',
-            'frozen_fc': 'Frozen FC',
-            'sosis': 'Sosis',
-            'pizza': 'Pizza'
-        };
-
-        var KATEGORI_LABEL_COFFEE = {
-            'jelly': 'Jelly',
-            'syrup': 'Syrup',
-            'powder': 'Powder',
-            'other': 'Other'
-        };
-
-        var KATEGORI_LABEL_POINT = {
-            'coffee_bean': 'Coffee Bean',
-            'sauce': 'Sauce',
-            'topping_jelly': 'Topping Jelly',
-            'syrup': 'Syrup',
-            'powder': 'Powder',
-            'milk_dairy': 'Milk & Dairy',
-            'rtd_beverage': 'RTD Beverage',
-            'tea': 'Tea',
-            'sweetener': 'Sweetener',
-            'topping_crunches': 'Topping Crunches',
-            'rtd_coffee': 'RTD Coffee'
-        };
-
-        var KATEGORI_LABEL_PERISHABLE = {
-            'buah': 'Buah',
-            'sayur': 'Sayur',
-            'jus': 'Jus',
-            'bo': 'B/O',
-            'bp': 'B/P'
-        };
-
-        var DATABASE = [];
-
-        // ================================================================
-        // LOAD DATA JSON
-        // ================================================================
-        fetch('data.json')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                DATABASE = data;
-                renderDataGrid();
-                renderKatalog();
-            })
-            .catch(function(err) {
-                console.error('Gagal mengambil data.json:', err);
-            });
-
-        // ================================================================
-        // GREETING
-        // ================================================================
-        var sapaanIcon = document.getElementById('sapaanIcon');
-        var sapaanText = document.getElementById('sapaanText');
-
-        function updateClock() {
-            var now = new Date();
-            var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-            var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            
-            var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
-            document.getElementById('dateDisplay').innerText = '📅 ' + tanggal;
-            
-            var jam = String(now.getHours()).padStart(2, '0');
-            var menit = String(now.getMinutes()).padStart(2, '0');
-            var detik = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
-        }
-
-        function getSapaanData() {
-            var jam = new Date().getHours();
-            if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
-            if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
-            if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
-            if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
-            return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
-        }
-
-        function getCountdownGajian() {
-            var now = new Date();
-            var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
-            if (now > gajian) {
-                gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
-            }
-            var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
-            if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN! 🎉🎉🎉' };
-            if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
-            return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
-        }
-
-        var isSapaan = true;
-
-        function toggleSapaanCountdown() {
-            if (isSapaan) {
-                var s = getSapaanData();
-                sapaanIcon.innerText = s.icon;
-                sapaanText.innerText = s.text;
-                isSapaan = false;
-                setTimeout(toggleSapaanCountdown, 5000);
-            } else {
-                var g = getCountdownGajian();
-                sapaanIcon.innerText = g.icon;
-                sapaanText.innerText = g.text;
-                isSapaan = true;
-                setTimeout(toggleSapaanCountdown, 3000);
-            }
-        }
-
-        updateClock();
-        setInterval(updateClock, 1000);
-        toggleSapaanCountdown();
-
-        // ================================================================
-        // SEARCH
-        // ================================================================
-        var searchInput = document.getElementById('searchInput');
-        var searchClearBtn = document.getElementById('searchClearBtn');
-
-        searchInput.addEventListener('input', function() {
-            searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
-            
-            if (currentView === 'katalog') {
-                renderSheetData();
-            } else if (currentView === 'detail' || currentView === 'home') {
-                renderDataGrid();
-            }
-            
-            var query = searchInput.value.trim();
-            if (query !== '' && currentView === 'home' && currentBrand === '') {
-                document.getElementById('homeView').style.display = 'none';
-                document.getElementById('detailView').style.display = 'block';
-                document.getElementById('katalogView').style.display = 'none';
-                document.getElementById('kalkulatorView').style.display = 'none';
-                document.getElementById('greetingWrapper').classList.add('hidden');
-                document.getElementById('detailHeadingTitle').innerText = 'Hasil Pencarian';
-                document.getElementById('subPillsContainer').style.display = 'none';
-                document.getElementById('kategoriPillsContainer').style.display = 'none';
-                currentView = 'detail';
-            } else if (query === '' && currentView === 'detail' && currentBrand === '') {
-                document.getElementById('homeView').style.display = 'block';
-                document.getElementById('detailView').style.display = 'none';
-                document.getElementById('katalogView').style.display = 'none';
-                document.getElementById('kalkulatorView').style.display = 'none';
-                document.getElementById('greetingWrapper').classList.remove('hidden');
-                currentView = 'home';
-            }
+    // ================================================================
+    // UTILITY
+    // ================================================================
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+            return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
         });
+    }
 
-        function clearSearchInput() {
+    // ================================================================
+    // RENDER BRAND GRID
+    // ================================================================
+    function renderBrandGrid() {
+        var html = '';
+        BRAND_CARDS.forEach(function(b) {
+            html += '<div class="brand-card ' + b.cls + '" onclick="openBrandCategory(\'' + b.id + '\')">' +
+                '<div class="brand-card-top">' +
+                    '<div class="brand-card-icon"><i class="fas ' + b.icon + '"></i></div>' +
+                    '<i class="fas fa-chevron-right" style="color:var(--text-light); font-size:0.85rem;"></i>' +
+                '</div>' +
+                '<div class="brand-card-bottom">' +
+                    '<h3>' + b.title + '</h3>' +
+                    '<p>' + b.sub + '</p>' +
+                '</div>' +
+            '</div>';
+        });
+        $('brandGrid').innerHTML = html;
+    }
+
+    // ================================================================
+    // TAB SWITCHING
+    // ================================================================
+    function switchTab(tab) {
+        $('homeView').style.display = 'none';
+        $('detailView').style.display = 'none';
+        $('katalogView').style.display = 'none';
+        $('kalkulatorView').style.display = 'none';
+        $('greetingWrapper').classList.add('hidden');
+
+        if (tab === 'home') {
+            $('homeView').style.display = 'block';
+            $('greetingWrapper').classList.remove('hidden');
+            currentView = 'home';
+            currentBrand = '';
+        } else if (tab === 'katalog') {
+            $('katalogView').style.display = 'block';
+            currentView = 'katalog';
+            renderKatalog();
+        } else if (tab === 'kalkulator') {
+            $('kalkulatorView').style.display = 'block';
+            currentView = 'kalkulator';
+            hitungGramasi();
+            hitungBiang();
+            hitungSeal();
+            renderSidebarPlu('');
+        }
+
+        var tabs = document.querySelectorAll('.dock-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+        var activeTab = $('dock-' + tab);
+        if (activeTab) activeTab.classList.add('active');
+
+        if (tab === 'home' || tab === 'katalog') {
             searchInput.value = '';
             searchClearBtn.style.display = 'none';
-            if (currentView === 'katalog') {
-                renderSheetData();
-            } else if (currentView === 'detail' && currentBrand === '') {
-                document.getElementById('homeView').style.display = 'block';
-                document.getElementById('detailView').style.display = 'none';
-                document.getElementById('katalogView').style.display = 'none';
-                document.getElementById('kalkulatorView').style.display = 'none';
-                document.getElementById('greetingWrapper').classList.remove('hidden');
-                currentView = 'home';
+        }
+    }
+
+    // ================================================================
+    // KALKULATOR
+    // ================================================================
+    function hitungGramasi() {
+        var input = parseFloat($('timbanganGramasi').value) || 0;
+        var html = '';
+        dataWadah.forEach(function(item) {
+            var hasil = item.nama.includes("Yakult") 
+                ? Math.round(input * item.mj) 
+                : Math.round((input - item.tare) * item.mj);
+            var displayMj = (item.mj % 1 === 0) ? item.mj.toString() : item.mj.toString().replace('.', ',');
+            html += '<tr>' +
+                '<td class="bold">' + escapeHtml(item.nama) + '</td>' +
+                '<td>' + (item.tare === 0 ? '-' : item.tare) + '</td>' +
+                '<td>' + displayMj + '</td>' +
+                '<td class="hasil-gramasi">' + hasil + '</td>' +
+            '</tr>';
+        });
+        $('tabelGramasi').innerHTML = html;
+    }
+
+    function hitungBiang() {
+        var timbangan = parseFloat($('biangTimbangan').value) || 0;
+        var botol = parseFloat($('biangBotol').value) || 0;
+        var netto = Math.max(0, timbangan - botol);
+        var kopi = Math.round(netto * 0.3);
+        $('resNetto').innerText = netto;
+        $('resKopi').innerText = kopi;
+        $('resAir').innerText = netto - kopi;
+    }
+
+    function hitungSeal() {
+        var inputSeal = parseInt($('inputTebalSeal').value);
+        var resEl = $('resSealPcs');
+        if (!inputSeal || inputSeal < 1) {
+            resEl.innerText = "0";
+            resEl.style.color = "var(--primary-blue)";
+        } else if (inputSeal > 35) {
+            resEl.innerText = "Maks 35 mm";
+            resEl.style.fontSize = "14px";
+            resEl.style.color = "#ef4444";
+        } else {
+            resEl.innerText = DEFAULT_SEAL[inputSeal] || 0;
+            resEl.style.fontSize = "18px";
+            resEl.style.color = "var(--primary-blue)";
+        }
+    }
+
+    // ================================================================
+    // SIDEBAR PLU POINT COFFEE
+    // ================================================================
+    function renderSidebarPlu(filter) {
+        var list = $('sidebarPluList');
+        var count = $('pluCount');
+        
+        var items = pointCoffeeData;
+        if (filter) {
+            var f = filter.toLowerCase().trim();
+            items = items.filter(function(item) {
+                return item.nama.toLowerCase().indexOf(f) !== -1 || 
+                       (item.raw && item.raw.indexOf(f) !== -1) ||
+                       (item.konv && item.konv.indexOf(f) !== -1);
+            });
+        }
+
+        count.textContent = items.length;
+
+        if (items.length === 0) {
+            list.innerHTML = '<div class="plu-empty">' + 
+                (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + 
+            '</div>';
+            return;
+        }
+
+        var html = '';
+        items.forEach(function(item) {
+            var pluCode = item.raw || item.konv || '';
+            html += '<div class="plu-item">' +
+                '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
+                (pluCode ? '<span class="plu-code" onclick="copyPluFromSidebar(\'' + pluCode + '\', this)">' + pluCode + '</span>' : 
+                '<span style="font-size:10px;color:var(--text-light);">-</span>') +
+            '</div>';
+        });
+        list.innerHTML = html;
+    }
+
+    function filterSidebarPlu() {
+        renderSidebarPlu($('sidebarSearchPlu').value);
+    }
+
+    function copyPluFromSidebar(code, el) {
+        copyToClipboard(code).then(function() {
+            var original = el.innerText;
+            el.innerText = '✓';
+            el.style.background = '#dcfce7';
+            el.style.color = '#15803d';
+            showToast('PLU ' + code + ' Disalin! ✓');
+            setTimeout(function() {
+                el.innerText = original;
+                el.style.background = '';
+                el.style.color = '';
+            }, 1000);
+        });
+    }
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        // Fallback
+        return new Promise(function(resolve) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch(e) {}
+            document.body.removeChild(ta);
+            resolve();
+        });
+    }
+
+    function showToast(msg) {
+        var toast = $('toastNotification');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(function() {
+            toast.classList.remove('show');
+        }, 1500);
+    }
+
+    // ================================================================
+    // LOAD DATA JSON
+    // ================================================================
+    function loadData() {
+        fetch('data.json')
+            .then(function(res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function(data) {
+                DATABASE = data;
+                // Filter Point Coffee untuk sidebar
+                pointCoffeeData = data.filter(function(item) {
+                    return item.brand === 'pointcoffee' || item.brand === 'point coffee';
+                });
+                // Sort sidebar
+                pointCoffeeData.sort(function(a, b) {
+                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+                });
                 renderDataGrid();
-            } else {
-                renderDataGrid();
-            }
-        }
-
-        function focusSearchInput() {
-            searchInput.focus();
-            searchInput.select();
-        }
-
-        // ================================================================
-        // DETAIL VIEW
-        // ================================================================
-        function setDetailView(mode) {
-            detailViewMode = mode;
-            document.getElementById('viewListBtn').classList.toggle('active', mode === 'list');
-            document.getElementById('viewTableBtn').classList.toggle('active', mode === 'table');
-            document.getElementById('productGrid').classList.toggle('hidden', mode !== 'list');
-            document.getElementById('tableView').classList.toggle('hidden', mode !== 'table');
-            renderDataGrid();
-        }
-
-        function setKatalogView(mode) {
-            katalogViewMode = mode;
-            document.getElementById('katalogListBtn').classList.toggle('active', mode === 'list');
-            document.getElementById('katalogTableBtn').classList.toggle('active', mode === 'table');
-            renderSheetData();
-        }
-
-        function setDockTabActive(tabId) {
-            var tabs = document.querySelectorAll('.dock-tab');
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            var activeTab = document.getElementById('dock-' + tabId);
-            if (activeTab) activeTab.classList.add('active');
-        }
-
-        // ================================================================
-        // RENDER KATALOG
-        // ================================================================
-        function renderKatalog() {
-            var tabsContainer = document.getElementById('sheetTabs');
-            var counter = document.getElementById('katalogCounter');
-            var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
-            var totalItems = 0;
-
-            brands.forEach(function(b) {
-                var items = DATABASE.filter(function(item) { return item.brand === b; });
-                items.sort(function(a, b) {
-                    var nameA = a.nama.toLowerCase();
-                    var nameB = b.nama.toLowerCase();
-                    if (nameA < nameB) return -1;
-                    if (nameA > nameB) return 1;
-                    return 0;
-                });
-                katalogData[b] = items;
-                totalItems += items.length;
+                renderKatalog();
+                renderSidebarPlu('');
+            })
+            .catch(function(err) {
+                console.error('Gagal load data.json:', err);
+                $('sidebarPluList').innerHTML = 
+                    '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
             });
-            
-            var allData = DATABASE.slice();
-            allData.sort(function(a, b) {
-                var nameA = a.nama.toLowerCase();
-                var nameB = b.nama.toLowerCase();
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return 0;
-            });
-            katalogData['all'] = allData;
-            
-            counter.textContent = totalItems + ' Item';
+    }
 
-            tabsContainer.innerHTML = '';
+    // ================================================================
+    // DETAIL VIEW
+    // ================================================================
+    function setDetailView(mode) {
+        detailViewMode = mode;
+        $('viewListBtn').classList.toggle('active', mode === 'list');
+        $('viewTableBtn').classList.toggle('active', mode === 'table');
+        $('productGrid').classList.toggle('hidden', mode !== 'list');
+        $('tableView').classList.toggle('hidden', mode !== 'table');
+        renderDataGrid();
+    }
 
-            var allTab = document.createElement('div');
-            allTab.className = 'sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '');
-            allTab.innerHTML = '📋 Semua <span class="tab-count">' + totalItems + '</span>';
-            allTab.onclick = function() { switchSheet('all'); };
-            tabsContainer.appendChild(allTab);
+    function setKatalogView(mode) {
+        katalogViewMode = mode;
+        $('katalogListBtn').classList.toggle('active', mode === 'list');
+        $('katalogTableBtn').classList.toggle('active', mode === 'table');
+        renderSheetData();
+    }
 
-            brands.forEach(function(b) {
-                var colorClass = '';
-                if (b === 'saybread') colorClass = 'bread';
-                else if (b === 'sayburger') colorClass = 'burger';
-                else if (b === 'yummychoice') colorClass = 'yummy';
-                else if (b === 'yummycoffee') colorClass = 'coffee';
-                else if (b === 'pointcoffee') colorClass = 'pointcoffee';
-                else if (b === 'hambalanfc') colorClass = 'hambalanfc';
-                else if (b === 'perishable') colorClass = 'perishable';
+    function openBrandCategory(key) {
+        currentView = 'detail';
+        currentBrand = key;
+        currentSub = 'all';
+        currentKategori = 'all';
+        $('homeView').style.display = 'none';
+        $('detailView').style.display = 'block';
+        $('katalogView').style.display = 'none';
+        $('kalkulatorView').style.display = 'none';
+        $('greetingWrapper').classList.add('hidden');
+        $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
+        renderSubPills();
+        renderDataGrid();
+        
+        var tabs = document.querySelectorAll('.dock-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+        $('dock-home').classList.add('active');
+    }
 
-                var tab = document.createElement('div');
-                tab.className = 'sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '');
-                tab.innerHTML = BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span>';
-                tab.onclick = (function(brand) {
-                    return function() { switchSheet(brand); };
-                })(b);
-                tabsContainer.appendChild(tab);
-            });
+    function renderSubPills() {
+        var container = $('subPillsContainer');
+        container.innerHTML = '';
 
-            renderSheetData();
+        if (currentBrand === '' || currentBrand === 'all') {
+            container.style.display = 'none';
+            $('kategoriPillsContainer').style.display = 'none';
+            return;
         }
 
-        function switchSheet(brand) {
-            currentSheet = brand;
-            renderKatalog();
+        container.style.display = 'flex';
+        var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
+        
+        // Untuk Hambalan FC, tambah "Semua"
+        if (currentBrand === 'hambalanfc') {
+            pills = [{ id: 'all', label: 'Semua' }].concat(pills);
         }
 
-        function renderSheetData() {
-            var listGrid = document.getElementById('katalogListGrid');
-            var tableBody = document.getElementById('katalogTableBody');
-            
-            var query = searchInput.value.toLowerCase().trim();
-            var items = katalogData[currentSheet] || [];
-            
-            if (query !== '') {
-                items = items.filter(function(item) {
-                    var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-                    return searchString.indexOf(query) !== -1;
-                });
-            }
-
-            listGrid.innerHTML = '';
-            tableBody.innerHTML = '';
-
-            if (items.length === 0) {
-                var empty = '<div class="empty-search-state">' + 
-                    (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + 
-                    '</div>';
-                listGrid.innerHTML = empty;
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
-                document.getElementById('katalogCounter').textContent = '0 Item';
-                return;
-            }
-
-            document.getElementById('katalogCounter').textContent = items.length + ' Item';
-
-            var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
-            var kategoriSet = {};
-            if (needGrouping) {
-                items.forEach(function(item) {
-                    if (item.kategori && !kategoriSet[item.kategori]) {
-                        kategoriSet[item.kategori] = true;
-                    }
-                });
-            }
-            var kategoriKeys = Object.keys(kategoriSet);
-            var hasKategori = needGrouping && kategoriKeys.length > 0;
-
-            var labelMap = {};
-            if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
-            else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
-            else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
-            else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
-
-            if (katalogViewMode === 'list') {
-                document.getElementById('katalogListGrid').style.display = 'flex';
-                document.getElementById('katalogTableView').style.display = 'none';
-
-                if (hasKategori) {
-                    kategoriKeys.forEach(function(kat) {
-                        var katItems = items.filter(function(item) { return item.kategori === kat; });
-                        if (katItems.length === 0) return;
-
-                        katItems.sort(function(a, b) {
-                            var nameA = a.nama.toLowerCase();
-                            var nameB = b.nama.toLowerCase();
-                            if (nameA < nameB) return -1;
-                            if (nameA > nameB) return 1;
-                            return 0;
-                        });
-
-                        var headerDiv = document.createElement('div');
-                        headerDiv.className = 'section-bar';
-                        headerDiv.style.marginTop = '10px';
-                        var label = labelMap[kat] || kat;
-                        if (currentSheet === 'hambalanfc') {
-                            label = kat.charAt(0).toUpperCase() + kat.slice(1);
-                        }
-                        headerDiv.innerHTML = '<span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span>';
-                        listGrid.appendChild(headerDiv);
-
-                        katItems.forEach(function(item) {
-                            var card = document.createElement('div');
-                            card.className = 'product-card';
-                            var badges = '';
-                            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-                            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
-                            card.innerHTML =
-                                '<div class="product-info-col">' +
-                                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                                    '<div class="product-card-title">' + item.nama + '</div>' +
-                                '</div>' +
-                                '<div class="plu-badges-stack">' + badges + '</div>';
-                            listGrid.appendChild(card);
-                        });
-                    });
-                } else {
-                    items.forEach(function(item) {
-                        var card = document.createElement('div');
-                        card.className = 'product-card';
-                        var badges = '';
-                        if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-                        if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
-                        card.innerHTML =
-                            '<div class="product-info-col">' +
-                                '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                                '<div class="product-card-title">' + item.nama + '</div>' +
-                            '</div>' +
-                            '<div class="plu-badges-stack">' + badges + '</div>';
-                        listGrid.appendChild(card);
-                    });
-                }
-            } else {
-                document.getElementById('katalogListGrid').style.display = 'none';
-                document.getElementById('katalogTableView').style.display = 'block';
-
-                var rowCounter = 0;
-
-                if (hasKategori) {
-                    kategoriKeys.forEach(function(kat) {
-                        var katItems = items.filter(function(item) { return item.kategori === kat; });
-                        if (katItems.length === 0) return;
-
-                        katItems.sort(function(a, b) {
-                            var nameA = a.nama.toLowerCase();
-                            var nameB = b.nama.toLowerCase();
-                            if (nameA < nameB) return -1;
-                            if (nameA > nameB) return 1;
-                            return 0;
-                        });
-
-                        var headerRow = document.createElement('tr');
-                        var label = labelMap[kat] || kat;
-                        if (currentSheet === 'hambalanfc') {
-                            label = kat.charAt(0).toUpperCase() + kat.slice(1);
-                        }
-                        headerRow.innerHTML = '<td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td>';
-                        tableBody.appendChild(headerRow);
-
-                        katItems.forEach(function(item) {
-                            rowCounter++;
-                            var tr = document.createElement('tr');
-                            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-                            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
-                            tr.innerHTML =
-                                '<td class="row-number">' + rowCounter + '</td>' +
-                                '<td><div class="item-name">' + item.nama + '</div></td>' +
-                                '<td>' + rawHtml + '</td>' +
-                                '<td>' + konvHtml + '</td>';
-                            tableBody.appendChild(tr);
-                        });
-                    });
-                } else {
-                    items.forEach(function(item) {
-                        rowCounter++;
-                        var tr = document.createElement('tr');
-                        var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-                        var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
-                        tr.innerHTML =
-                            '<td class="row-number">' + rowCounter + '</td>' +
-                            '<td><div class="item-name">' + item.nama + '</div></td>' +
-                            '<td>' + rawHtml + '</td>' +
-                            '<td>' + konvHtml + '</td>';
-                        tableBody.appendChild(tr);
-                    });
-                }
-            }
-        }
-
-        // ================================================================
-        // BRAND NAVIGATION
-        // ================================================================
-        function openBrandCategory(key) {
-            currentView = 'detail';
-            currentBrand = key;
-            currentSub = 'all';
-            currentKategori = 'all';
-            document.getElementById('homeView').style.display = 'none';
-            document.getElementById('detailView').style.display = 'block';
-            document.getElementById('katalogView').style.display = 'none';
-            document.getElementById('kalkulatorView').style.display = 'none';
-            document.getElementById('greetingWrapper').classList.add('hidden');
-            document.getElementById('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
-            renderSubPills();
-            renderDataGrid();
-            
-            // Update active tab
-            var tabs = document.querySelectorAll('.dock-tab');
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            document.getElementById('dock-home').classList.add('active');
-        }
-
-        function renderSubPills() {
-            var container = document.getElementById('subPillsContainer');
-            container.innerHTML = '';
-
-            if (currentBrand === '' || currentBrand === 'all') {
-                container.style.display = 'none';
-                document.getElementById('kategoriPillsContainer').style.display = 'none';
-                return;
-            }
-
-            container.style.display = 'flex';
-            
-            if (currentBrand === 'hambalanfc') {
-                var allPill = document.createElement('button');
-                allPill.className = 'pill-button';
-                if (currentSub === 'all') allPill.classList.add('active');
-                allPill.innerText = 'Semua';
-                allPill.onclick = function() {
-                    var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
-                    for (var j = 0; j < allPills.length; j++) {
-                        allPills[j].classList.remove('active');
-                    }
-                    allPill.classList.add('active');
-                    currentSub = 'all';
-                    currentKategori = 'all';
-                    renderKategoriPills();
-                    renderDataGrid();
-                };
-                container.appendChild(allPill);
-            }
-
-            var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
-
-            for (var i = 0; i < pills.length; i++) {
-                var p = pills[i];
-                var el = document.createElement('button');
-                el.className = 'pill-button';
-                if (p.id === currentSub) el.classList.add('active');
-                el.innerText = p.label;
-                el.onclick = (function(id, btn) {
-                    return function() {
-                        var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
-                        for (var j = 0; j < allPills.length; j++) {
-                            allPills[j].classList.remove('active');
-                        }
-                        btn.classList.add('active');
-                        currentSub = id;
-                        currentKategori = 'all';
-                        renderKategoriPills();
-                        renderDataGrid();
-                    };
-                })(p.id, el);
-                container.appendChild(el);
-            }
-
-            renderKategoriPills();
-        }
-
-        function renderKategoriPills() {
-            var katContainer = document.getElementById('kategoriPillsContainer');
-            katContainer.innerHTML = '';
-
-            var labelMap = null;
-            if (currentBrand === 'yummychoice' && currentSub === 'bkl') {
-                labelMap = KATEGORI_LABEL;
-            } else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') {
-                labelMap = KATEGORI_LABEL_COFFEE;
-            } else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') {
-                labelMap = KATEGORI_LABEL_POINT;
-            } else if (currentBrand === 'hambalanfc') {
-                katContainer.style.display = 'none';
-                return;
-            } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') {
-                labelMap = KATEGORI_LABEL_PERISHABLE;
-            }
-
-            if (!labelMap) {
-                katContainer.style.display = 'none';
-                return;
-            }
-
-            katContainer.style.display = 'flex';
-
-            var allPill = document.createElement('button');
-            allPill.className = 'pill-button';
-            if (currentKategori === 'all') allPill.classList.add('active');
-            allPill.innerText = 'Semua';
-            allPill.onclick = function() {
-                var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-                for (var i = 0; i < pills.length; i++) {
-                    pills[i].classList.remove('active');
-                }
-                allPill.classList.add('active');
+        pills.forEach(function(p) {
+            var el = document.createElement('button');
+            el.className = 'pill-button';
+            if (p.id === currentSub) el.classList.add('active');
+            el.innerText = p.label;
+            el.onclick = function() {
+                var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
+                for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
+                el.classList.add('active');
+                currentSub = p.id;
                 currentKategori = 'all';
+                renderKategoriPills();
                 renderDataGrid();
             };
-            katContainer.appendChild(allPill);
+            container.appendChild(el);
+        });
 
-            var keys = Object.keys(labelMap);
-            for (var i = 0; i < keys.length; i++) {
-                var key = keys[i];
-                
-                if (currentBrand === 'pointcoffee' && key === 'sarana') {
-                    continue;
-                }
-                
-                var el = document.createElement('button');
-                el.className = 'pill-button';
-                if (key === currentKategori) el.classList.add('active');
-                el.innerText = labelMap[key];
-                el.onclick = (function(k, btn) {
-                    return function() {
-                        var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-                        for (var i = 0; i < pills.length; i++) {
-                            pills[i].classList.remove('active');
-                        }
-                        btn.classList.add('active');
-                        currentKategori = k;
-                        renderDataGrid();
-                    };
-                })(key, el);
-                katContainer.appendChild(el);
-            }
+        renderKategoriPills();
+    }
+
+    function renderKategoriPills() {
+        var katContainer = $('kategoriPillsContainer');
+        katContainer.innerHTML = '';
+
+        var labelMap = null;
+        if (currentBrand === 'yummychoice' && currentSub === 'bkl') labelMap = KATEGORI_LABEL;
+        else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_COFFEE;
+        else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_POINT;
+        else if (currentBrand === 'hambalanfc') {
+            katContainer.style.display = 'none';
+            return;
+        } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
+
+        if (!labelMap) {
+            katContainer.style.display = 'none';
+            return;
         }
 
-        // ================================================================
-        // RENDER DATA GRID
-        // ================================================================
-        function renderDataGrid() {
-            var query = searchInput.value.toLowerCase().trim();
-            var gridContainer = document.getElementById('productGrid');
-            var tableBody = document.getElementById('tableBody');
-            var counterBadge = document.getElementById('itemCounterBadge');
+        katContainer.style.display = 'flex';
 
-            gridContainer.innerHTML = '';
-            tableBody.innerHTML = '';
+        // "Semua" pill
+        var allPill = document.createElement('button');
+        allPill.className = 'pill-button';
+        if (currentKategori === 'all') allPill.classList.add('active');
+        allPill.innerText = 'Semua';
+        allPill.onclick = function() {
+            var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
+            for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
+            allPill.classList.add('active');
+            currentKategori = 'all';
+            renderDataGrid();
+        };
+        katContainer.appendChild(allPill);
 
-            if (currentBrand === '' && query === '' && currentView !== 'katalog') {
-                counterBadge.innerText = '0 Item';
-                return;
+        var keys = Object.keys(labelMap);
+        keys.forEach(function(key) {
+            // Skip sarana untuk Point Coffee
+            if (currentBrand === 'pointcoffee' && key === 'sarana') return;
+            
+            var el = document.createElement('button');
+            el.className = 'pill-button';
+            if (key === currentKategori) el.classList.add('active');
+            el.innerText = labelMap[key];
+            el.onclick = function() {
+                var pills = document.querySelectorAll('#kategoriPillsContainer .pill-button');
+                for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
+                el.classList.add('active');
+                currentKategori = key;
+                renderDataGrid();
+            };
+            katContainer.appendChild(el);
+        });
+    }
+
+    // ================================================================
+    // RENDER DATA GRID
+    // ================================================================
+    function renderDataGrid() {
+        var query = searchInput.value.toLowerCase().trim();
+        var gridContainer = $('productGrid');
+        var tableBody = $('tableBody');
+        var counterBadge = $('itemCounterBadge');
+
+        gridContainer.innerHTML = '';
+        tableBody.innerHTML = '';
+
+        if (currentBrand === '' && query === '' && currentView !== 'katalog') {
+            counterBadge.innerText = '0 Item';
+            return;
+        }
+
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+            var matchSub = (currentSub === 'all' || item.sub === currentSub);
+            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+            var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
+            return matchBrand && matchSub && matchKat && matchQuery;
+        });
+
+        filtered.sort(function(a, b) {
+            return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+        });
+
+        counterBadge.innerText = filtered.length + ' Item';
+
+        if (filtered.length === 0) {
+            gridContainer.innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
+            return;
+        }
+
+        var html = '';
+        var tableHtml = '';
+        filtered.forEach(function(item, i) {
+            var badgesHtml = '';
+            if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+            if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+
+            html += '<div class="product-card">' +
+                '<div class="product-info-col">' +
+                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
+                '</div>' +
+                '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
+            '</div>';
+
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+            tableHtml += '<tr>' +
+                '<td class="row-number">' + (i + 1) + '</td>' +
+                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
+                '<td>' + rawHtml + '</td>' +
+                '<td>' + konvHtml + '</td>' +
+            '</tr>';
+        });
+
+        gridContainer.innerHTML = html;
+        tableBody.innerHTML = tableHtml;
+    }
+
+    // ================================================================
+    // KATALOG
+    // ================================================================
+    function renderKatalog() {
+        var tabsContainer = $('sheetTabs');
+        var counter = $('katalogCounter');
+        var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
+        var totalItems = 0;
+
+        brands.forEach(function(b) {
+            var items = DATABASE.filter(function(item) { return item.brand === b; });
+            items.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
+            katalogData[b] = items;
+            totalItems += items.length;
+        });
+        
+        var allData = DATABASE.slice();
+        allData.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
+        katalogData['all'] = allData;
+        
+        counter.textContent = totalItems + ' Item';
+
+        var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" onclick="switchSheet(\'all\')">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
+        
+        brands.forEach(function(b) {
+            var colorClass = b === 'saybread' ? 'bread' : b === 'sayburger' ? 'burger' : b === 'yummychoice' ? 'yummy' : b === 'yummycoffee' ? 'coffee' : b === 'pointcoffee' ? 'pointcoffee' : b === 'hambalanfc' ? 'hambalanfc' : 'perishable';
+            tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" onclick="switchSheet(\'' + b + '\')">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
+        });
+
+        tabsContainer.innerHTML = tabsHtml;
+        renderSheetData();
+    }
+
+    function switchSheet(brand) {
+        currentSheet = brand;
+        // Update active class tanpa re-render semua
+        var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+        // Cari yang sesuai
+        for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].innerHTML.indexOf(BRAND_NAMES[brand] || 'Semua') !== -1 || 
+                (brand === 'all' && tabs[i].classList.contains('all-brand'))) {
+                tabs[i].classList.add('active');
+                break;
             }
+        }
+        renderSheetData();
+    }
 
-            var filtered = [];
-            for (var i = 0; i < DATABASE.length; i++) {
-                var item = DATABASE[i];
-                var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
-                var matchSub = (currentSub === 'all' || item.sub === currentSub);
-                var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+    function renderSheetData() {
+        var listGrid = $('katalogListGrid');
+        var tableBody = $('katalogTableBody');
+        
+        var query = searchInput.value.toLowerCase().trim();
+        var items = katalogData[currentSheet] || [];
+        
+        if (query !== '') {
+            items = items.filter(function(item) {
                 var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-                var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
-
-                if (matchBrand && matchSub && matchKat && matchQuery) {
-                    filtered.push(item);
-                }
-            }
-
-            filtered.sort(function(a, b) {
-                var nameA = a.nama.toLowerCase();
-                var nameB = b.nama.toLowerCase();
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return 0;
-            });
-
-            counterBadge.innerText = filtered.length + ' Item';
-
-            if (filtered.length === 0) {
-                var emptyHtml = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
-                gridContainer.innerHTML = emptyHtml;
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
-                return;
-            }
-
-            for (var i = 0; i < filtered.length; i++) {
-                var item = filtered[i];
-                var card = document.createElement('div');
-                card.className = 'product-card';
-
-                var badgesHtml = '';
-                if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
-                if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
-
-                card.innerHTML =
-                    '<div class="product-info-col">' +
-                        '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-                        '<div class="product-card-title">' + item.nama + '</div>' +
-                    '</div>' +
-                    '<div class="plu-badges-stack">' + badgesHtml + '</div>';
-
-                gridContainer.appendChild(card);
-
-                var tr = document.createElement('tr');
-                var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
-                var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
-                tr.innerHTML =
-                    '<td class="row-number">' + (i + 1) + '</td>' +
-                    '<td><div class="item-name">' + item.nama + '</div></td>' +
-                    '<td>' + rawHtml + '</td>' +
-                    '<td>' + konvHtml + '</td>';
-                tableBody.appendChild(tr);
-            }
-        }
-
-        // ================================================================
-        // COPY PLU
-        // ================================================================
-        function copyPLUCode(code, btnEl) {
-            navigator.clipboard.writeText(code).then(function() {
-                var originalText = btnEl.innerText;
-                btnEl.innerText = '✓';
-                btnEl.classList.add('plu-copied-style');
-
-                var toast = document.getElementById('toastNotification');
-                toast.innerText = 'PLU ' + code + ' Disalin! ✓';
-                toast.classList.add('show');
-
-                setTimeout(function() {
-                    btnEl.innerText = originalText;
-                    btnEl.classList.remove('plu-copied-style');
-                    toast.classList.remove('show');
-                }, 1000);
+                return searchString.indexOf(query) !== -1;
             });
         }
 
-        // ================================================================
-        // INIT
-        // ================================================================
-        // Hitung kalkulator saat pertama kali load
-        hitungGramasi();
-        hitungBiang();
-        hitungSeal();
+        listGrid.innerHTML = '';
+        tableBody.innerHTML = '';
+
+        if (items.length === 0) {
+            listGrid.innerHTML = '<div class="empty-search-state">' + 
+                (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + 
+            '</div>';
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
+            $('katalogCounter').textContent = '0 Item';
+            return;
+        }
+
+        $('katalogCounter').textContent = items.length + ' Item';
+
+        var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
+        var kategoriSet = {};
+        if (needGrouping) {
+            items.forEach(function(item) {
+                if (item.kategori && !kategoriSet[item.kategori]) kategoriSet[item.kategori] = true;
+            });
+        }
+        var kategoriKeys = Object.keys(kategoriSet);
+        var hasKategori = needGrouping && kategoriKeys.length > 0;
+
+        var labelMap = {};
+        if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
+        else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
+        else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
+        else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
+
+        var listHtml = '';
+        var tableHtml = '';
+        var rowCounter = 0;
+
+        function renderItem(item) {
+            var badges = '';
+            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>';
+            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>';
+            
+            listHtml += '<div class="product-card">' +
+                '<div class="product-info-col">' +
+                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
+                '</div>' +
+                '<div class="plu-badges-stack">' + badges + '</div>' +
+            '</div>';
+
+            rowCounter++;
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" onclick="copyPLUCode(\'' + item.raw + '\', this)">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" onclick="copyPLUCode(\'' + item.konv + '\', this)">' + item.konv + '</button>' : '-';
+            tableHtml += '<tr>' +
+                '<td class="row-number">' + rowCounter + '</td>' +
+                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
+                '<td>' + rawHtml + '</td>' +
+                '<td>' + konvHtml + '</td>' +
+            '</tr>';
+        }
+
+        if (hasKategori) {
+            kategoriKeys.forEach(function(kat) {
+                var katItems = items.filter(function(item) { return item.kategori === kat; });
+                if (katItems.length === 0) return;
+                katItems.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
+
+                var label = labelMap[kat] || kat;
+                if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
+
+                listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
+                tableHtml += '<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
+
+                katItems.forEach(renderItem);
+            });
+        } else {
+            items.sort(function(a, b) { return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase()); });
+            items.forEach(renderItem);
+        }
+
+        listGrid.innerHTML = listHtml;
+        tableBody.innerHTML = tableHtml;
+    }
+
+    // ================================================================
+    // COPY PLU
+    // ================================================================
+    function copyPLUCode(code, btnEl) {
+        copyToClipboard(code).then(function() {
+            var originalText = btnEl.innerText;
+            btnEl.innerText = '✓';
+            btnEl.classList.add('plu-copied-style');
+            showToast('PLU ' + code + ' Disalin! ✓');
+            setTimeout(function() {
+                btnEl.innerText = originalText;
+                btnEl.classList.remove('plu-copied-style');
+            }, 1000);
+        });
+    }
+
+    // ================================================================
+    // SEARCH
+    // ================================================================
+    var searchInput = $('searchInput');
+    var searchClearBtn = $('searchClearBtn');
+
+    searchInput.addEventListener('input', function() {
+        searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
+        
+        if (currentView === 'katalog') {
+            renderSheetData();
+        } else if (currentView === 'detail' || currentView === 'home') {
+            // Jika di home dan ada query, pindah ke detail view
+            var query = searchInput.value.trim();
+            if (query !== '' && currentView === 'home' && currentBrand === '') {
+                $('homeView').style.display = 'none';
+                $('detailView').style.display = 'block';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.add('hidden');
+                $('detailHeadingTitle').innerText = 'Hasil Pencarian';
+                $('subPillsContainer').style.display = 'none';
+                $('kategoriPillsContainer').style.display = 'none';
+                currentView = 'detail';
+            } else if (query === '' && currentView === 'detail' && currentBrand === '') {
+                $('homeView').style.display = 'block';
+                $('detailView').style.display = 'none';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+            }
+            renderDataGrid();
+        }
+    });
+
+    function clearSearchInput() {
+        searchInput.value = '';
+        searchClearBtn.style.display = 'none';
+        if (currentView === 'katalog') {
+            renderSheetData();
+        } else {
+            if (currentView === 'detail' && currentBrand === '') {
+                $('homeView').style.display = 'block';
+                $('detailView').style.display = 'none';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+            }
+            renderDataGrid();
+        }
+    }
+
+    // ================================================================
+    // GREETING & CLOCK
+    // ================================================================
+    function updateClock() {
+        var now = new Date();
+        var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
+        $('dateDisplay').innerText = '📅 ' + tanggal;
+        var jam = String(now.getHours()).padStart(2, '0');
+        var menit = String(now.getMinutes()).padStart(2, '0');
+        var detik = String(now.getSeconds()).padStart(2, '0');
+        $('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
+    }
+
+    function getSapaanData() {
+        var jam = new Date().getHours();
+        if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
+        if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
+        if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
+        if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
+        return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
+    }
+
+    function getCountdownGajian() {
+        var now = new Date();
+        var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
+        if (now > gajian) gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
+        var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
+        if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN! 🎉🎉🎉' };
+        if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
+        return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
+    }
+
+    var isSapaan = true;
+    function toggleSapaanCountdown() {
+        var s = isSapaan ? getSapaanData() : getCountdownGajian();
+        $('sapaanIcon').innerText = s.icon;
+        $('sapaanText').innerText = s.text;
+        isSapaan = !isSapaan;
+        setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    renderBrandGrid();
+    updateClock();
+    setInterval(updateClock, 1000);
+    toggleSapaanCountdown();
+    hitungGramasi();
+    hitungBiang();
+    hitungSeal();
+    loadData();
     </script>
 </body>
-    </html>
+</html>
