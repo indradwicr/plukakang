@@ -286,7 +286,7 @@ body {
 .plu-sidebar { background: #f0f4ff; border-radius: 20px; padding: 16px; border: 1px solid var(--card-border); margin-bottom: 16px; }
 .plu-sidebar .sidebar-title { font-size: 13px; font-weight: 700; color: var(--dark-green); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .plu-sidebar .sidebar-title span { background: var(--primary-blue); color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: auto; }
-.plu-sidebar .sidebar-search { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--card-border); font-size: 14px; font-family: inherit; outline: none; background: #fff; margin-bottom: 10px; }
+.plu-sidebar .sidebar-search { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--card-border); font-size: 14px; font-family: inherit; outline: none; background: #fff; margin-bottom: 6px; }
 .plu-sidebar .sidebar-search:focus { border-color: var(--primary-blue); }
 .plu-sidebar .sidebar-legend { display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; padding-left: 2px; }
 .plu-sidebar .sidebar-plu-list { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; contain: strict; }
@@ -301,6 +301,19 @@ body {
 .plu-sidebar .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
 .plu-sidebar .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
 .plu-sidebar .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
+
+/* MINI ALPHABET HORIZONTAL BAR (SIDEBAR POINT COFFEE) */
+.sidebar-alpha-bar {
+  display: flex; gap: 4px; overflow-x: auto; padding: 2px 0 8px 0;
+  scrollbar-width: none; margin-bottom: 6px;
+}
+.sidebar-alpha-bar::-webkit-scrollbar { display: none; }
+.sidebar-alpha-btn {
+  font-size: 0.65rem; font-weight: 800; color: var(--text-muted); background: #fff;
+  border: 1px solid var(--card-border); padding: 4px 9px; border-radius: 10px;
+  cursor: pointer; white-space: nowrap; transition: all 0.15s ease;
+}
+.sidebar-alpha-btn.active { background: var(--dark-green); color: #fff; border-color: var(--dark-green); }
 
 /* ===== BOTTOM NAV ===== */
 .bottom-dock {
@@ -323,22 +336,22 @@ body {
 .empty-search-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; background: var(--card-white); border-radius: 20px; border: 1px dashed var(--card-border); }
 .hidden { display: none !important; }
 
-/* ===== ALPHABET INDEX SIDEBAR (REVISI FINAL: POSISI & RESPONSIVITAS) ===== */
+/* ===== ALPHABET INDEX SIDEBAR (POSISI REVISI DIBATASI & ACCURATE TOUCH) ===== */
 .alphabet-nav {
   position: fixed; right: 4px;
-  top: 260px; /* Dibatasi persis di bawah garis filter/toolbar sesuai request Foto 2 */
+  top: 260px; /* Dibatasi di bawah toolbar filter */
   bottom: 84px;
   display: flex; flex-direction: column; align-items: center;
   justify-content: space-evenly;
-  z-index: 90; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(8px);
-  padding: 6px 4px; border-radius: 20px; border: 1px solid var(--card-border);
+  z-index: 90; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+  padding: 4px 2px; border-radius: 20px; border: 1px solid var(--card-border);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08); touch-action: none; display: none;
-  width: 26px; /* Touch target diperbesar agar jauh lebih responsif */
+  width: 24px;
 }
 .alpha-item {
-  font-size: 0.65rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
-  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; user-select: none; transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  font-size: 0.62rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; user-select: none; transition: all 0.15s ease;
 }
 .alpha-item.active {
   background: var(--primary-blue) !important; color: #ffffff !important;
@@ -491,6 +504,10 @@ body {
       <span id="pluCount">0</span>
     </div>
     <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
+    
+    <!-- BAR ALPHABET SIDEBAR POINT COFFEE -->
+    <div class="sidebar-alpha-bar" id="sidebarAlphaBar"></div>
+
     <div class="sidebar-legend">
       <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
       <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
@@ -867,6 +884,7 @@ function loadData() {
       renderDataGrid();
       renderKatalog();
       renderSidebarPlu('');
+      renderSidebarAlphabetBar(); // Inisialisasi baris A-Z di Point Coffee Sidebar
     })
     .catch(function(err) {
       console.error('Gagal load data.json:', err);
@@ -1040,7 +1058,7 @@ function renderDataGrid() {
   $('productGrid').innerHTML = html;
   $('tableBody').innerHTML = tableHtml;
   _renderCache.key = cacheKey;
-  renderAlphabetNav(); // Update abjad dinamis
+  renderAlphabetNav();
 }
 
 /* KATALOG */
@@ -1170,7 +1188,7 @@ function renderSheetData() {
   listGrid.innerHTML = listHtml;
   tableBody.innerHTML = tableHtml;
   _katalogCache.key = cacheKey;
-  renderAlphabetNav(); // Update abjad dinamis
+  renderAlphabetNav();
 }
 
 /* EVENT DELEGATION */
@@ -1243,6 +1261,27 @@ document.addEventListener('click', function(e) {
       }, 1000);
     });
     return;
+  }
+
+  // Event handler untuk baris A-Z di Point Coffee Sidebar
+  var sidebarAlphaBtn = e.target.closest('.sidebar-alpha-btn');
+  if (sidebarAlphaBtn) {
+    var letter = sidebarAlphaBtn.dataset.letter;
+    sidebarSelectedLetter = letter;
+    
+    var btns = document.querySelectorAll('.sidebar-alpha-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+    sidebarAlphaBtn.classList.add('active');
+
+    var filterInput = $('sidebarSearchPlu').value;
+    if (letter === 'ALL') {
+      renderSidebarPlu(filterInput);
+    } else {
+      var filtered = pointCoffeeData.filter(function(item) {
+        return item.nama.trim().toUpperCase().startsWith(letter);
+      });
+      renderSidebarPluFiltered(filtered);
+    }
   }
 });
 
@@ -1364,28 +1403,54 @@ function toggleSapaanCountdown() {
   _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
 }
 
-/* ===== LOGIC FITUR ALPHABET INDEX (DINAMIS & OPTIMAL RESPONSIVE) ===== */
+/* ===== LOGIC FITUR ALPHABET INDEX (DINAMIS 100% & RESPONSIVE) ===== */
 var activeAlphabet = [];
 var isManualTouch = false;
+var sidebarSelectedLetter = 'ALL';
 
-// 1. Ambil abjad yang HANYA ADA di daftar item aktif (Poin 3)
+// 1. Dapatkan Abjad yang HANYA ADA di daftar item aktif secara presisi
 function getAvailableAlphabet() {
-  var targets = document.querySelectorAll('.product-card-title, .item-name');
-  var set = {};
-  for (var i = 0; i < targets.length; i++) {
-    var text = targets[i].innerText.trim().toUpperCase();
-    if (text.length > 0) {
-      var char = text.charAt(0);
-      if (/[A-Z]/.test(char)) set[char] = true;
+  var lettersSet = {};
+  var items = [];
+
+  if (currentView === 'detail') {
+    var query = $('searchInput').value.toLowerCase().trim();
+    items = DATABASE.filter(function(item) {
+      var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+      var matchSub = (currentSub === 'all' || item.sub === currentSub);
+      var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+      var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+      var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
+      return matchBrand && matchSub && matchKat && matchQuery;
+    });
+  } else if (currentView === 'katalog') {
+    var queryKatalog = $('searchInput').value.toLowerCase().trim();
+    items = katalogData[currentSheet] || [];
+    if (queryKatalog !== '') {
+      items = items.filter(function(item) {
+        var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+        return searchString.indexOf(queryKatalog) !== -1;
+      });
     }
   }
-  return Object.keys(set).sort();
+
+  items.forEach(function(item) {
+    if (item.nama) {
+      var firstChar = item.nama.trim().toUpperCase().charAt(0);
+      if (/[A-Z]/.test(firstChar)) {
+        lettersSet[firstChar] = true;
+      }
+    }
+  });
+
+  return Object.keys(lettersSet).sort();
 }
 
-// 2. Render Sidebar secara dinamis sesuai abjad yang tersedia
+// 2. Render Sidebar A-Z Utama
 function renderAlphabetNav() {
   var nav = $('alphabetNav');
   if (!nav) return;
+  
   activeAlphabet = getAvailableAlphabet();
 
   if (activeAlphabet.length === 0) {
@@ -1411,7 +1476,7 @@ function toggleAlphabetNav() {
   }
 }
 
-// 3. Bersihkan SEMUA warna biru sebelum set aktif (Poin 1)
+// 3. Highlight Huruf Aktif
 function setActiveLetter(letter) {
   var items = document.querySelectorAll('.alpha-item');
   for (var i = 0; i < items.length; i++) {
@@ -1444,7 +1509,7 @@ function scrollToLetter(letter) {
   }
 }
 
-// 4. Deteksi scroll manual (Auto-highlight sync)
+// 4. Auto-Highlight pada saat Scroll Layar
 function updateActiveLetterOnScroll() {
   if (isManualTouch) return;
   
@@ -1453,7 +1518,7 @@ function updateActiveLetterOnScroll() {
   
   for (var i = 0; i < cards.length; i++) {
     var rect = cards[i].getBoundingClientRect();
-    if (rect.top >= 120 && rect.top <= window.innerHeight / 2) {
+    if (rect.top >= 100 && rect.top <= window.innerHeight / 2) {
       var text = cards[i].innerText.trim().toUpperCase();
       if (text.length > 0) {
         currentFirstLetter = text.charAt(0);
@@ -1467,7 +1532,53 @@ function updateActiveLetterOnScroll() {
   }
 }
 
-// 5. Touch Event Handler yang jauh lebih responsif (Poin 4)
+// 5. Fitur Alphabet Baris Horizontal (Sidebar Point Coffee)
+function renderSidebarAlphabetBar() {
+  var bar = $('sidebarAlphaBar');
+  if (!bar) return;
+
+  var set = {};
+  pointCoffeeData.forEach(function(item) {
+    if (item.nama) {
+      var c = item.nama.trim().toUpperCase().charAt(0);
+      if (/[A-Z]/.test(c)) set[c] = true;
+    }
+  });
+
+  var letters = Object.keys(set).sort();
+  var html = '<button class="sidebar-alpha-btn' + (sidebarSelectedLetter === 'ALL' ? ' active' : '') + '" data-letter="ALL">ALL</button>';
+  
+  letters.forEach(function(l) {
+    html += '<button class="sidebar-alpha-btn' + (sidebarSelectedLetter === l ? ' active' : '') + '" data-letter="' + l + '">' + l + '</button>';
+  });
+
+  bar.innerHTML = html;
+}
+
+function renderSidebarPluFiltered(items) {
+  var list = $('sidebarPluList');
+  var count = $('pluCount');
+  count.textContent = items.length;
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="plu-empty">Tidak ada data untuk huruf ini</div>';
+    return;
+  }
+
+  var html = '';
+  items.forEach(function(item) {
+    var badges = '';
+    if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
+    if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
+    html += '<div class="plu-item">' +
+      '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
+      (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+// Touch Event Navigation A-Z Utama
 function initAlphabetNavEvents() {
   var nav = $('alphabetNav');
   if (!nav) return;
@@ -1476,8 +1587,6 @@ function initAlphabetNavEvents() {
     e.preventDefault();
     isManualTouch = true;
     var touch = e.touches ? e.touches[0] : e;
-    
-    // Gunakan koordinat Y sentuhan untuk mencari elemen huruf terdekat
     var target = document.elementFromPoint(touch.clientX, touch.clientY);
     if (target && target.classList.contains('alpha-item')) {
       var letter = target.dataset.letter;
