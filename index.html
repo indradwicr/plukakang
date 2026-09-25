@@ -1,1624 +1,2177 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0073ea">
-<title>plukakang - hapalkeun euy!</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-app: #f6f8fc;
-  --text-main: #111827;
-  --text-muted: #4b5563;
-  --text-light: #9ca3af;
-  --primary-blue: #0073ea;
-  --card-white: #ffffff;
-  --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
-  --card-border: #e5e7eb;
-  --raw-bg: #eff6ff;
-  --raw-border: #bfdbfe;
-  --raw-text: #1d4ed8;
-  --konv-bg: #fefce8;
-  --konv-border: #fef08a;
-  --konv-text: #a16207;
-  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-code: 'JetBrains Mono', monospace;
-  --dark-green: #1b4d2e;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-  font-family: var(--font-main);
-  background-color: var(--bg-app);
-  color: var(--text-main);
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  -webkit-font-smoothing: antialiased;
-}
-.app-layout {
-  width: 100%;
-  max-width: 480px;
-  min-height: 100vh;
-  background: var(--bg-app);
-  padding: 16px 16px 88px 16px;
-  position: relative;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0073ea">
+    <title>plukakang - hapalkeun euy!</title>
 
-/* ===== HEADER ===== */
-.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.brand-block { display: flex; align-items: center; gap: 12px; }
-.brand-icon {
-  width: 44px; height: 44px; background: linear-gradient(135deg, #0073ea, #4f46e5);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  color: #ffffff; font-size: 1.25rem; box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
-}
-.brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
-.brand-title-group span { font-size: 0.74rem; color: #0073ea; font-weight: 700; }
-.icon-action-btn {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--card-white); border: 1px solid var(--card-border);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-main); font-size: 0.95rem; cursor: pointer;
-  box-shadow: var(--card-shadow); transition: transform 0.15s ease;
-}
-.icon-action-btn:active { transform: scale(0.92); }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 
-/* ===== GREETING ===== */
-#greetingWrapper.hidden { display: none; }
-.greeting-container {
-  background: linear-gradient(145deg, #ffffff, #f0f4ff);
-  border-radius: 24px; padding: 20px 22px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
-  margin-bottom: 16px; position: relative; overflow: hidden;
-}
-.greeting-container::before {
-  content: ""; position: absolute; top: -40%; right: -20%;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(0,115,234,0.06) 0%, transparent 70%);
-  border-radius: 50%; pointer-events: none;
-}
-.greeting-date-time {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
-  position: relative; z-index: 1; flex-wrap: wrap; gap: 6px;
-}
-.greeting-date-time .date-display {
-  color: var(--text-main); font-weight: 600; background: rgba(0, 0, 0, 0.04);
-  padding: 4px 14px; border-radius: 20px; font-size: 0.78rem;
-}
-.greeting-date-time .time-display {
-  font-family: var(--font-code); color: var(--primary-blue); font-size: 0.9rem;
-  background: rgba(0, 115, 234, 0.07); padding: 4px 14px; border-radius: 20px; font-weight: 700;
-}
-.greeting-divider {
-  height: 2px;
-  background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
-  margin: 12px 0 10px 0; border-radius: 2px;
-}
-.greeting-sapaan {
-  font-size: 1.1rem; font-weight: 800; color: var(--text-main);
-  min-height: 32px; display: flex; align-items: center; gap: 10px;
-}
-.greeting-sapaan .greeting-icon { font-size: 1.4rem; }
+    <style>
+        :root {
+            --bg-app: #f6f8fc;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --text-light: #9ca3af;
+            --primary-blue: #0073ea;
+            --card-white: #ffffff;
+            --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
+            --card-border: #e5e7eb;
+            --raw-bg: #eff6ff;
+            --raw-border: #bfdbfe;
+            --raw-text: #1d4ed8;
+            --konv-bg: #fefce8;
+            --konv-border: #fef08a;
+            --konv-text: #a16207;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --dark-green: #1b4d2e;
+        }
 
-/* ===== SEARCH ===== */
-.sticky-search-bar {
-  position: sticky; top: 0; z-index: 50; padding: 6px 0 14px 0;
-  background: linear-gradient(to bottom, rgba(246, 248, 252, 0.98) 0%, rgba(246, 248, 252, 0.92) 60%, rgba(246, 248, 252, 0) 100%);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-}
-.search-field { position: relative; display: flex; align-items: center; }
-.search-input {
-  width: 100%; padding: 13px 40px 13px 16px;
-  background: var(--card-white); border: 1.5px solid var(--card-border);
-  border-radius: 18px; font-size: 0.88rem; font-family: inherit;
-  font-weight: 600; outline: none; color: var(--text-main);
-  box-shadow: var(--card-shadow);
-}
-.search-input:focus { border-color: var(--primary-blue); box-shadow: 0 4px 18px rgba(0, 115, 234, 0.18); }
-.search-clear-btn {
-  position: absolute; right: 12px; background: rgba(17, 24, 39, 0.08); border: none;
-  width: 24px; height: 24px; border-radius: 50%; font-size: 0.72rem; color: var(--text-muted);
-  cursor: pointer; display: none; align-items: center; justify-content: center;
-}
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-/* ===== SECTION ===== */
-.section-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-.section-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
-.item-count-chip { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); background: #e2e8f0; padding: 4px 10px; border-radius: 12px; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            min-height: 100vh;
+            display: flex; justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
 
-/* ===== BRAND GRID ===== */
-.brand-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
-.brand-card {
-  background: var(--card-white); border-radius: 22px; padding: 16px;
-  border: 1px solid var(--card-border); box-shadow: var(--card-shadow);
-  display: flex; flex-direction: column; justify-content: space-between;
-  height: 130px; cursor: pointer; transition: transform 0.2s ease;
-}
-.brand-card:active { transform: scale(0.96); }
-.brand-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-.brand-card-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-.card-saybread { background: #fdf6f0; } .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
-.card-sayburger { background: #fff1f2; } .card-sayburger .brand-card-icon { background: #e11d48; color: #fff; }
-.card-yummychoice { background: #ffedd5; } .card-yummychoice .brand-card-icon { background: #f97316; color: #fff; }
-.card-yummycoffee { background: #fffbeb; } .card-yummycoffee .brand-card-icon { background: #d97706; color: #fff; }
-.card-pointcoffee { background: #dcfce7; } .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
-.card-hambalanfc { background: #dbeafe; } .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
-.card-perishable { background: #ecfdf5; } .card-perishable .brand-card-icon { background: #059669; color: #fff; }
-.brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
-.brand-card-bottom h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.2; }
-.brand-card-bottom p { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        .app-layout {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: var(--bg-app);
+            padding: 16px 16px 88px 16px;
+            position: relative;
+        }
 
-/* ===== PILLS ===== */
-.pills-container { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 12px; padding-bottom: 4px; }
-.pills-container::-webkit-scrollbar { display: none; }
-.pill-button {
-  background: var(--card-white); border: 1px solid var(--card-border);
-  padding: 7px 14px; border-radius: 18px; font-size: 0.76rem; font-family: inherit; font-weight: 700;
-  color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s ease; user-select: none;
-}
-.pill-button:active { transform: scale(0.95); }
-.pill-button.active { background: var(--primary-blue); color: #ffffff; border-color: var(--primary-blue); }
+        /* ===== HEADER ===== */
+        .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .brand-block { display: flex; align-items: center; gap: 12px; }
+        .brand-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #0073ea, #4f46e5);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-size: 1.25rem;
+            box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
+        }
+        .brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
+        .brand-title-group span { font-size: 0.74rem; color: #0073ea; font-weight: 700; }
+        .icon-action-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--card-white); border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); font-size: 0.95rem; cursor: pointer;
+            box-shadow: var(--card-shadow); transition: transform 0.15s ease;
+        }
+        .icon-action-btn:active { transform: scale(0.92); }
 
-/* ===== DETAIL VIEW ===== */
-.detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-.back-btn {
-  background: var(--card-white); border: 1px solid var(--card-border); border-radius: 14px; padding: 8px 14px;
-  font-family: inherit; font-weight: 700; font-size: 0.8rem; color: var(--text-main); cursor: pointer;
-  box-shadow: var(--card-shadow); transition: transform 0.15s ease; display: flex; align-items: center; gap: 6px;
-}
-.back-btn:active { transform: scale(0.95); }
-.toolbar-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.legend-bar {
-  display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700; color: var(--text-muted);
-  background: var(--card-white); padding: 5px 12px; border-radius: 20px;
-  border: 1px solid var(--card-border); box-shadow: var(--card-shadow);
-}
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
-.legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
-.legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
-.view-toggle { display: flex; gap: 6px; }
-.view-toggle .vt-btn {
-  background: var(--card-white); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 5px 12px;
-  font-family: inherit; font-weight: 700; font-size: 0.7rem; color: var(--text-muted); cursor: pointer;
-  box-shadow: var(--card-shadow); transition: all 0.2s ease;
-}
-.view-toggle .vt-btn:active { transform: scale(0.95); }
-.view-toggle .vt-btn.active { background: var(--primary-blue); color: #ffffff; border-color: var(--primary-blue); }
+        /* ===== GREETING ===== */
+        #greetingWrapper.hidden { display: none; }
+        .greeting-container {
+            background: linear-gradient(145deg, #ffffff, #f0f4ff);
+            border-radius: 24px; padding: 20px 22px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
+            margin-bottom: 16px; position: relative; overflow: hidden;
+        }
+        .greeting-container::before {
+            content: ''; position: absolute; top: -40%; right: -20%;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(0,115,234,0.06) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none;
+        }
+        .greeting-date-time {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+            position: relative; z-index: 1; flex-wrap: wrap; gap: 6px;
+        }
+        .greeting-date-time .date-display {
+            color: var(--text-main); font-weight: 600;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 4px 14px; border-radius: 20px; font-size: 0.78rem;
+        }
+        .greeting-date-time .time-display {
+            font-family: var(--font-code); color: var(--primary-blue); font-size: 0.9rem;
+            background: rgba(0, 115, 234, 0.07);
+            padding: 4px 14px; border-radius: 20px; font-weight: 700;
+        }
+        .greeting-divider {
+            height: 2px;
+            background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
+            margin: 12px 0 10px 0; border-radius: 2px;
+        }
+        .greeting-sapaan {
+            font-size: 1.1rem; font-weight: 800; color: var(--text-main);
+            min-height: 32px; display: flex; align-items: center; gap: 10px;
+        }
+        .greeting-sapaan .greeting-icon { font-size: 1.4rem; }
 
-/* ===== PRODUCTS ===== */
-.products-grid { display: flex; flex-direction: column; gap: 10px; }
-.product-card {
-  background: var(--card-white); border-radius: 18px; padding: 12px 16px; display: flex; align-items: center;
-  justify-content: space-between; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); gap: 12px;
-}
-.product-info-col { display: flex; flex-direction: column; gap: 4px; }
-.brand-mini-tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary-blue); }
-.product-card-title { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
-.plu-badges-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
-.plu-badge-button {
-  padding: 5px 12px; border-radius: 8px; font-family: var(--font-code); font-size: 0.76rem; font-weight: 700;
-  border: 1px solid transparent; cursor: pointer; transition: all 0.15s ease;
-}
-.plu-badge-button:active { transform: scale(0.95); }
-.plu-raw-style { background: var(--raw-bg); border-color: var(--raw-border); color: var(--raw-text); }
-.plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
-.plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
+        /* ===== SEARCH ===== */
+        .sticky-search-bar {
+            position: sticky; top: 0; z-index: 50;
+            padding: 6px 0 14px 0;
+            background: linear-gradient(to bottom,
+                rgba(246, 248, 252, 0.98) 0%,
+                rgba(246, 248, 252, 0.92) 60%,
+                rgba(246, 248, 252, 0) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .search-field { position: relative; display: flex; align-items: center; }
+        .search-input {
+            width: 100%; padding: 13px 40px 13px 16px;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            border-radius: 18px; font-size: 0.88rem; font-family: inherit;
+            font-weight: 600; outline: none; color: var(--text-main);
+            box-shadow: var(--card-shadow);
+        }
+        .search-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 18px rgba(0, 115, 234, 0.18);
+        }
+        .search-clear-btn {
+            position: absolute; right: 12px;
+            background: rgba(17, 24, 39, 0.08); border: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            font-size: 0.72rem; color: var(--text-muted);
+            cursor: pointer; display: none;
+            align-items: center; justify-content: center;
+        }
 
-/* ===== TABLE ===== */
-.table-wrapper { background: var(--card-white); border-radius: 16px; border: 1px solid var(--card-border); overflow: hidden; box-shadow: var(--card-shadow); }
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
-.table-scroll th {
-  text-align: left; padding: 10px 12px 8px 12px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.4px; color: var(--text-light); border-bottom: 2px solid var(--card-border); background: #f8fafc;
-}
-.table-scroll td { padding: 8px 12px; border-bottom: 1px solid var(--card-border); vertical-align: middle; }
-.table-scroll tr:last-child td { border-bottom: none; }
-.table-scroll .plu-badge-button { display: inline-block; font-size: 0.65rem; padding: 3px 8px; margin: 1px 2px 1px 0; }
-.table-scroll .row-number { font-size: 0.65rem; color: var(--text-light); font-weight: 700; width: 28px; text-align: center; }
-.table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
+        /* ===== SECTION ===== */
+        .section-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+        }
+        .section-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
+        .item-count-chip {
+            font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
+            background: #e2e8f0; padding: 4px 10px; border-radius: 12px;
+        }
 
-/* ===== SHEET TABS ===== */
-.sheet-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; border-bottom: 2px solid var(--card-border); }
-.sheet-tabs::-webkit-scrollbar { display: none; }
-.sheet-tab {
-  padding: 8px 16px; border-radius: 10px 10px 0 0; font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
-  cursor: pointer; white-space: nowrap; border: 1px solid transparent; border-bottom: none; transition: all 0.2s ease;
-  background: transparent; display: flex; align-items: center; gap: 6px;
-}
-.sheet-tab .tab-count { font-size: 0.6rem; color: var(--text-light); background: var(--bg-app); padding: 1px 8px; border-radius: 10px; }
-.sheet-tab.active { color: var(--text-main); background: var(--card-white); border-color: var(--card-border); font-weight: 800; }
-.sheet-tab.active .tab-count { background: var(--primary-blue); color: white; }
-.sheet-tab:active { transform: scale(0.95); }
-.sheet-tab.bread.active { border-top: 3px solid #8c5332; }
-.sheet-tab.burger.active { border-top: 3px solid #e11d48; }
-.sheet-tab.yummy.active { border-top: 3px solid #f97316; }
-.sheet-tab.coffee.active { border-top: 3px solid #d97706; }
-.sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
-.sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
-.sheet-tab.perishable.active { border-top: 3px solid #059669; }
-.sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
+        /* ===== BRAND GRID ===== */
+        .brand-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 12px; margin-bottom: 24px;
+        }
+        .brand-card {
+            background: var(--card-white); border-radius: 22px;
+            padding: 16px; border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 130px; cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .brand-card:active { transform: scale(0.96); }
+        .brand-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .brand-card-icon {
+            width: 44px; height: 44px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .card-saybread { background: #fdf6f0; }
+        .card-saybread .brand-card-icon { background: #8c5332; color: #fff; }
+        .card-sayburger { background: #fff1f2; }
+        .card-sayburger .brand-card-icon { background: #e11d48; color: #fff; }
+        .card-yummychoice { background: #ffedd5; }
+        .card-yummychoice .brand-card-icon { background: #f97316; color: #fff; }
+        .card-yummycoffee { background: #fffbeb; }
+        .card-yummycoffee .brand-card-icon { background: #d97706; color: #fff; }
+        .card-pointcoffee { background: #dcfce7; }
+        .card-pointcoffee .brand-card-icon { background: #15803d; color: #fff; }
+        .card-hambalanfc { background: #dbeafe; }
+        .card-hambalanfc .brand-card-icon { background: #1e40af; color: #fff; }
+        .card-perishable { background: #ecfdf5; }
+        .card-perishable .brand-card-icon { background: #059669; color: #fff; }
+        .brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        .brand-card-bottom h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.2; }
+        .brand-card-bottom p { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-/* ===== KALKULATOR ===== */
-.kalkulator-card { background: var(--card-white); border-radius: 20px; padding: 18px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 16px; }
-.kalkulator-card .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.input-row label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
-.input-row input {
-  background: #fef08a; border: 1.5px solid #fde047; padding: 8px 12px; border-radius: 12px;
-  font-size: 16px; font-weight: 700; width: 110px; text-align: right; outline: none; font-family: var(--font-main);
-}
-.input-row input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.15); }
-.hasil-box { background: var(--bg-app); padding: 12px; border-radius: 12px; margin-top: 6px; }
-.hasil-box .input-row { margin-bottom: 6px; }
-.hasil-box .input-row:last-child { margin-bottom: 0; }
-.hasil-box .hasil-label { font-size: 12px; color: var(--text-muted); }
-.hasil-box .hasil-value { font-weight: 700; font-size: 16px; }
-.hasil-box .hasil-value.primary { color: var(--primary-blue); font-size: 18px; }
+        /* ===== PILLS ===== */
+        .pills-container {
+            display: flex; gap: 8px; overflow-x: auto;
+            scrollbar-width: none; margin-bottom: 12px; padding-bottom: 4px;
+        }
+        .pills-container::-webkit-scrollbar { display: none; }
+        .pill-button {
+            background: var(--card-white); border: 1px solid var(--card-border);
+            padding: 7px 14px; border-radius: 18px;
+            font-size: 0.76rem; font-family: inherit; font-weight: 700;
+            color: var(--text-muted); cursor: pointer; white-space: nowrap;
+            transition: all 0.2s ease; user-select: none;
+        }
+        .pill-button:active { transform: scale(0.95); }
+        .pill-button.active {
+            background: var(--primary-blue); color: #ffffff;
+            border-color: var(--primary-blue);
+        }
 
-.tabel-wadah-container { max-height: 380px; overflow-y: auto; margin-top: 4px; }
-.tabel-wadah-container::-webkit-scrollbar { width: 4px; }
-.tabel-wadah-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
-.tabel-wadah-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-.tabel-wadah-container table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-.tabel-wadah-container th {
-  font-size: 10px; text-transform: uppercase; color: var(--text-muted); padding: 8px 6px; text-align: left;
-  border-bottom: 1.5px solid var(--card-border); font-weight: 700; position: sticky; top: 0; background: #fff; z-index: 2;
-}
-.tabel-wadah-container td { padding: 7px 6px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
-.tabel-wadah-container th:nth-child(2), .tabel-wadah-container th:nth-child(3),
-.tabel-wadah-container td:nth-child(2), .tabel-wadah-container td:nth-child(3) { text-align: center; }
-.tabel-wadah-container th:last-child, .tabel-wadah-container td:last-child { text-align: right; }
-.tabel-wadah-container .bold { font-weight: 700; }
-.tabel-wadah-container .hasil-gramasi { font-weight: 700; color: var(--primary-blue); }
-.seal-tip { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+        /* ===== DETAIL VIEW ===== */
+        .detail-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+        }
+        .back-btn {
+            background: var(--card-white); border: 1px solid var(--card-border);
+            border-radius: 14px; padding: 8px 14px;
+            font-family: inherit; font-weight: 700; font-size: 0.8rem;
+            color: var(--text-main); cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.15s ease;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .back-btn:active { transform: scale(0.95); }
 
-/* ===== SIDEBAR PLU ===== */
-.plu-sidebar { background: #f0f4ff; border-radius: 20px; padding: 16px; border: 1px solid var(--card-border); margin-bottom: 16px; }
-.plu-sidebar .sidebar-title { font-size: 13px; font-weight: 700; color: var(--dark-green); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.plu-sidebar .sidebar-title span { background: var(--primary-blue); color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: auto; }
-.plu-sidebar .sidebar-search { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--card-border); font-size: 14px; font-family: inherit; outline: none; background: #fff; margin-bottom: 6px; }
-.plu-sidebar .sidebar-search:focus { border-color: var(--primary-blue); }
-.plu-sidebar .sidebar-legend { display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; padding-left: 2px; }
-.plu-sidebar .sidebar-plu-list { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; contain: strict; }
-.plu-sidebar .sidebar-plu-list::-webkit-scrollbar { width: 4px; }
-.plu-sidebar .sidebar-plu-list::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
-.plu-sidebar .sidebar-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-.plu-sidebar .plu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border-radius: 10px; font-size: 12px; border: 1px solid transparent; gap: 8px; }
-.plu-sidebar .plu-item .plu-name { font-weight: 600; font-size: 12px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.plu-sidebar .plu-item .plu-badges { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
-.plu-sidebar .plu-item .plu-code { font-family: var(--font-code); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; cursor: pointer; white-space: nowrap; border: 1px solid transparent; transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease; }
-.plu-sidebar .plu-item .plu-code:active { transform: scale(0.95); }
-.plu-sidebar .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
-.plu-sidebar .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
-.plu-sidebar .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
+        .toolbar-row {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+        }
+        .legend-bar {
+            display: flex; gap: 12px; font-size: 0.68rem; font-weight: 700;
+            color: var(--text-muted); background: var(--card-white);
+            padding: 5px 12px; border-radius: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-box { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
+        .legend-box.raw { background: var(--raw-bg); border-color: var(--raw-border); }
+        .legend-box.konv { background: var(--konv-bg); border-color: var(--konv-border); }
 
-/* MINI ALPHABET HORIZONTAL BAR (SIDEBAR POINT COFFEE) */
-.sidebar-alpha-bar {
-  display: flex; gap: 4px; overflow-x: auto; padding: 2px 0 8px 0;
-  scrollbar-width: none; margin-bottom: 6px;
-}
-.sidebar-alpha-bar::-webkit-scrollbar { display: none; }
-.sidebar-alpha-btn {
-  font-size: 0.65rem; font-weight: 800; color: var(--text-muted); background: #fff;
-  border: 1px solid var(--card-border); padding: 4px 9px; border-radius: 10px;
-  cursor: pointer; white-space: nowrap; transition: all 0.15s ease;
-}
-.sidebar-alpha-btn.active { background: var(--dark-green); color: #fff; border-color: var(--dark-green); }
+        .view-toggle { display: flex; gap: 6px; }
+        .view-toggle .vt-btn {
+            background: var(--card-white); border: 1px solid var(--card-border);
+            border-radius: 18px; padding: 5px 12px;
+            font-family: inherit; font-weight: 700; font-size: 0.7rem;
+            color: var(--text-muted); cursor: pointer;
+            box-shadow: var(--card-shadow); transition: all 0.2s ease;
+        }
+        .view-toggle .vt-btn:active { transform: scale(0.95); }
+        .view-toggle .vt-btn.active {
+            background: var(--primary-blue); color: #ffffff;
+            border-color: var(--primary-blue);
+        }
 
-/* ===== BOTTOM NAV ===== */
-.bottom-dock {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px; height: 68px; background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid var(--card-border); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding: 0 16px;
-}
-.dock-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: var(--text-light); font-size: 0.68rem; font-weight: 700; border: none; background: none; }
-.dock-tab.active { color: var(--primary-blue); }
-.dock-tab-icon { font-size: 1.2rem; }
+        /* ===== PRODUCTS ===== */
+        .products-grid { display: flex; flex-direction: column; gap: 10px; }
+        .product-card {
+            background: var(--card-white); border-radius: 18px;
+            padding: 12px 16px; display: flex; align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow); gap: 12px;
+        }
+        .product-info-col { display: flex; flex-direction: column; gap: 4px; }
+        .brand-mini-tag {
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--primary-blue);
+        }
+        .product-card-title { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
+        .plu-badges-stack {
+            display: flex; flex-direction: column; gap: 4px;
+            align-items: flex-end; flex-shrink: 0;
+        }
+        .plu-badge-button {
+            padding: 5px 12px; border-radius: 8px;
+            font-family: var(--font-code); font-size: 0.76rem; font-weight: 700;
+            border: 1px solid transparent; cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .plu-badge-button:active { transform: scale(0.95); }
+        .plu-raw-style { background: var(--raw-bg); border-color: var(--raw-border); color: var(--raw-text); }
+        .plu-konv-style { background: var(--konv-bg); border-color: var(--konv-border); color: var(--konv-text); }
+        .plu-copied-style { background: #dcfce7 !important; border-color: #86efac !important; color: #15803d !important; }
 
-/* ===== TOAST ===== */
-.toast-notification {
-  position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%) translateY(50px);
-  background: #111827; color: #ffffff; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 700;
-  opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200;
-}
-.toast-notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.empty-search-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; background: var(--card-white); border-radius: 20px; border: 1px dashed var(--card-border); }
-.hidden { display: none !important; }
+        /* ===== TABLE ===== */
+        .table-wrapper {
+            background: var(--card-white); border-radius: 16px;
+            border: 1px solid var(--card-border); overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 340px; }
+        .table-scroll th {
+            text-align: left; padding: 10px 12px 8px 12px;
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.4px; color: var(--text-light);
+            border-bottom: 2px solid var(--card-border); background: #f8fafc;
+        }
+        .table-scroll td {
+            padding: 8px 12px; border-bottom: 1px solid var(--card-border);
+            vertical-align: middle;
+        }
+        .table-scroll tr:last-child td { border-bottom: none; }
+        .table-scroll .plu-badge-button {
+            display: inline-block; font-size: 0.65rem;
+            padding: 3px 8px; margin: 1px 2px 1px 0;
+        }
+        .table-scroll .row-number {
+            font-size: 0.65rem; color: var(--text-light);
+            font-weight: 700; width: 28px; text-align: center;
+        }
+        .table-scroll .item-name { font-weight: 700; font-size: 0.8rem; }
 
-/* ===== ALPHABET INDEX SIDEBAR (POSISI REVISI DIBATASI & ACCURATE TOUCH) ===== */
-.alphabet-nav {
-  position: fixed; right: 4px;
-  top: 260px; /* Dibatasi di bawah toolbar filter */
-  bottom: 84px;
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: space-evenly;
-  z-index: 90; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
-  padding: 4px 2px; border-radius: 20px; border: 1px solid var(--card-border);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08); touch-action: none; display: none;
-  width: 24px;
-}
-.alpha-item {
-  font-size: 0.62rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
-  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; user-select: none; transition: all 0.15s ease;
-}
-.alpha-item.active {
-  background: var(--primary-blue) !important; color: #ffffff !important;
-  font-weight: 800; transform: scale(1.15);
-}
+        /* ===== SHEET TABS ===== */
+        .sheet-tabs {
+            display: flex; gap: 6px; overflow-x: auto;
+            padding-bottom: 8px; margin-bottom: 12px;
+            scrollbar-width: none;
+            border-bottom: 2px solid var(--card-border);
+        }
+        .sheet-tabs::-webkit-scrollbar { display: none; }
+        .sheet-tab {
+            padding: 8px 16px; border-radius: 10px 10px 0 0;
+            font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; white-space: nowrap;
+            border: 1px solid transparent; border-bottom: none;
+            transition: all 0.2s ease; background: transparent;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .sheet-tab .tab-count {
+            font-size: 0.6rem; color: var(--text-light);
+            background: var(--bg-app); padding: 1px 8px; border-radius: 10px;
+        }
+        .sheet-tab.active {
+            color: var(--text-main); background: var(--card-white);
+            border-color: var(--card-border); font-weight: 800;
+        }
+        .sheet-tab.active .tab-count { background: var(--primary-blue); color: white; }
+        .sheet-tab:active { transform: scale(0.95); }
+        .sheet-tab.bread.active { border-top: 3px solid #8c5332; }
+        .sheet-tab.burger.active { border-top: 3px solid #e11d48; }
+        .sheet-tab.yummy.active { border-top: 3px solid #f97316; }
+        .sheet-tab.coffee.active { border-top: 3px solid #d97706; }
+        .sheet-tab.pointcoffee.active { border-top: 3px solid #15803d; }
+        .sheet-tab.hambalanfc.active { border-top: 3px solid #1e40af; }
+        .sheet-tab.perishable.active { border-top: 3px solid #059669; }
+        .sheet-tab.all-brand.active { border-top: 3px solid var(--primary-blue); }
 
-.alpha-bubble {
-  position: fixed; right: 54px; top: 50%; transform: translateY(-50%);
-  width: 48px; height: 48px; background: var(--primary-blue); color: #fff;
-  font-size: 1.4rem; font-weight: 800; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-  pointer-events: none; opacity: 0; transition: opacity 0.2s ease; z-index: 95;
-}
-.alpha-bubble.show { opacity: 1; }
+        /* ================================================================
+           KALKULATOR SO — SOFT BLUE ISLAND
+           ================================================================ */
+        #kalkulatorView .calc-shell {
+            height: calc(100vh - 160px); height: calc(100dvh - 160px);
+            min-height: 470px;
+            background: linear-gradient(145deg, #ffffff, #f0f4ff);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 30px rgba(0, 115, 234, 0.08);
+            border-radius: 24px;
+            padding: 14px;
+            display: flex; flex-direction: column;
+            overflow: hidden; color: var(--text-main);
+        }
+        .calc-display { text-align: center; flex-shrink: 0; }
+        .calc-context {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: var(--text-muted); font-size: 13px; font-weight: 700;
+            margin-bottom: 6px; max-width: 94%;
+        }
+        .calc-context b { color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-@media (max-width: 480px) {
-  .input-row input { width: 90px; font-size: 14px; padding: 6px 10px; }
-  .tabel-wadah-container { max-height: 250px; }
-  .tabel-wadah-container td { font-size: 11px; padding: 5px 4px; }
-  .plu-sidebar .sidebar-plu-list { height: 220px; }
-}
-</style>
+        .display-value {
+            font-size: 46px; font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+            font-variant-numeric: tabular-nums; color: var(--primary-blue);
+        }
+        .display-value .unit { font-size: 20px; font-weight: 700; color: var(--text-light); margin-left: 5px; }
+        .display-value.danger { color: #ef4444; font-size: 30px; }
+
+        .display-meta {
+            display: flex; justify-content: center; align-items: center;
+            gap: 7px; margin-top: 10px; flex-wrap: wrap;
+        }
+        .input-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-app); border: 1px solid var(--card-border);
+            color: var(--text-muted); font-size: 11.5px; font-weight: 700;
+            padding: 5px 12px; border-radius: 999px;
+            font-variant-numeric: tabular-nums;
+        }
+        .input-chip b { color: var(--text-main); }
+        .input-chip.amber b { color: #d97706; }
+        .input-chip.blue b { color: var(--primary-blue); }
+        .input-chip.danger, .input-chip.danger b { color: #ef4444; border-color: rgba(239,68,68,0.35); }
+        .display-divider {
+            height: 2px;
+            background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
+            margin-top: 12px; border-radius: 2px;
+        }
+        .kc-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 2px; }
+        .kc-dot.raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
+        .kc-dot.konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
+
+        .mode-pills {
+            display: flex; gap: 8px; overflow-x: auto;
+            scrollbar-width: none; flex-shrink: 0; padding: 12px 0 2px;
+        }
+        .mode-pills::-webkit-scrollbar { display: none; }
+        .mode-pill {
+            font-family: inherit; display: flex; align-items: center; gap: 7px;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 9px 16px; border-radius: 999px;
+            font-size: 13.5px; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; white-space: nowrap; user-select: none; flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .mode-pill:active { transform: scale(0.95); }
+        .mode-pill[data-mode="gramasi"].active { border-color: var(--primary-blue); color: var(--primary-blue); background: rgba(0,115,234,0.07); }
+        .mode-pill[data-mode="biang"].active   { border-color: #d97706; color: #d97706; background: rgba(217,119,6,0.07); }
+        .mode-pill[data-mode="seal"].active    { border-color: #6366f1; color: #6366f1; background: rgba(99,102,241,0.07); }
+
+        /* PILLS PILIH WADAH (semua wadah, tap langsung) */
+        .wadah-strip {
+            display: flex; gap: 8px; overflow-x: auto;
+            scrollbar-width: none; flex-shrink: 0; padding: 10px 2px 4px;
+        }
+        .wadah-strip::-webkit-scrollbar { display: none; }
+        .w-chip {
+            font-family: inherit; background: var(--card-white);
+            border: 1.5px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            color: var(--text-main); font-size: 12px; font-weight: 700;
+            padding: 8px 13px; border-radius: 999px;
+            cursor: pointer; user-select: none; flex-shrink: 0; white-space: nowrap;
+            transition: transform 0.1s ease, border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+        }
+        .w-chip:active { transform: scale(0.94); }
+        .w-chip.active {
+            border-color: var(--primary-blue); color: var(--primary-blue);
+            background: rgba(0,115,234,0.06);
+        }
+
+        .mode-content {
+            flex: 1; min-height: 0; overflow-y: auto;
+            padding: 10px 2px 4px;
+            overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        }
+        .mode-content::-webkit-scrollbar { width: 0; }
+        #mode-gramasi { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+
+        .field-chip {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            border-radius: 14px;
+            padding: 12px 14px; margin-bottom: 8px; cursor: pointer;
+            font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text-main);
+            transition: all 0.2s ease; user-select: none;
+        }
+        .field-chip:active { transform: scale(0.98); }
+        .field-chip .fc-left { display: flex; align-items: center; gap: 9px; color: var(--text-muted); }
+        .field-chip .fc-value { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .field-chip.active { border-color: #d97706; background: rgba(217,119,6,0.06); }
+        .field-chip.active .fc-left { color: #d97706; }
+
+        .seal-progress { height: 12px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin: 6px 0; }
+        .seal-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 999px; transition: width 0.25s ease; }
+        .seal-fill.danger { background: #ef4444; }
+        .seal-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); font-weight: 700; }
+        .seal-tip { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 16px; }
+
+        /* PLU Point Coffee (di dalam mode gramasi) */
+        .kc-search {
+            width: 100%; padding: 11px 14px; border-radius: 12px;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            color: var(--text-main); font-family: inherit; font-size: 15px; font-weight: 600;
+            outline: none; margin-bottom: 8px; flex-shrink: 0;
+        }
+        .kc-search:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.12); }
+        .kc-search::placeholder { color: var(--text-light); }
+        .kc-legend {
+            display: flex; gap: 14px; font-size: 11px; font-weight: 700;
+            color: var(--text-muted); padding: 0 2px 8px; flex-shrink: 0; align-items: center;
+        }
+        .kc-legend .plu-total { margin-left: auto; color: var(--primary-blue); }
+        .kc-plu-list {
+            flex: 1; overflow-y: auto; min-height: 0;
+            padding: 2px 30px 6px 2px;
+            overscroll-behavior: contain;
+        }
+        .kc-plu-list::-webkit-scrollbar { width: 4px; }
+        .kc-plu-list::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .kc-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .calc-shell .plu-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 9px 12px; background: var(--bg-app);
+            border: 1px solid var(--card-border); border-radius: 12px;
+            margin-bottom: 6px; gap: 8px;
+        }
+        .calc-shell .plu-item .plu-name {
+            font-weight: 600; font-size: 12.5px; flex: 1; min-width: 0;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);
+        }
+        .calc-shell .plu-item .plu-badges {
+            display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0;
+        }
+        .calc-shell .plu-item .plu-code {
+            font-family: var(--font-code); font-size: 11px; font-weight: 700;
+            padding: 3px 9px; border-radius: 7px; cursor: pointer;
+            white-space: nowrap; border: 1px solid transparent; transition: transform 0.1s ease;
+        }
+        .calc-shell .plu-item .plu-code:active { transform: scale(0.95); }
+        .calc-shell .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
+        .calc-shell .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
+        .calc-shell .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
+
+        /* Alphabet index vertikal (PLU di mode gramasi) */
+        .kc-plu-body { flex: 1; min-height: 0; display: flex; position: relative; }
+        .kc-alpha-nav {
+            position: absolute; right: 0; top: 0; bottom: 0;
+            width: 24px; z-index: 6;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: space-evenly;
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(6px);
+            border: 1px solid var(--card-border); border-radius: 12px;
+            touch-action: none;
+        }
+        .kc-alpha-item {
+            font-size: 0.55rem; font-weight: 800; color: var(--text-muted);
+            width: 20px; height: 13px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; user-select: none;
+            border-radius: 50%; transition: all 0.12s ease;
+        }
+        .kc-alpha-item.active { background: var(--primary-blue); color: #fff; transform: scale(1.2); }
+        .kc-alpha-bubble {
+            position: absolute; right: 34px; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; background: var(--primary-blue); color: #fff;
+            font-size: 1.25rem; font-weight: 800; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            pointer-events: none; opacity: 0; transition: opacity 0.2s ease; z-index: 7;
+        }
+        .kc-alpha-bubble.show { opacity: 1; }
+
+        /* Keypad */
+        .keypad {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 10px; flex-shrink: 0; padding-top: 8px;
+        }
+        .key {
+            height: 54px; border: 1px solid var(--card-border); border-radius: 14px;
+            background: var(--card-white); color: var(--text-main);
+            box-shadow: var(--card-shadow);
+            font-family: inherit; font-size: 23px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; user-select: none;
+            transition: transform 0.1s ease, background 0.15s ease;
+        }
+        .key:active { background: #f1f5f9; transform: scale(0.94); }
+        .key.func { color: var(--text-muted); font-size: 18px; }
+        .key.danger-func { color: #ef4444; }
+
+        /* ===== BOTTOM NAV ===== */
+        .bottom-dock {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px; height: 68px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--card-border);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 100; padding: 0 16px;
+        }
+        .dock-tab {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 4px; cursor: pointer; color: var(--text-light);
+            font-size: 0.68rem; font-weight: 700;
+            border: none; background: none;
+        }
+        .dock-tab.active { color: var(--primary-blue); }
+        .dock-tab-icon { font-size: 1.2rem; }
+
+        /* ===== TOAST ===== */
+        .toast-notification {
+            position: fixed; bottom: 84px; left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background: #111827; color: #ffffff;
+            padding: 10px 20px; border-radius: 30px;
+            font-size: 0.8rem; font-weight: 700;
+            opacity: 0; pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 200;
+        }
+        .toast-notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .empty-search-state {
+            text-align: center; padding: 40px 20px;
+            color: var(--text-muted); font-size: 0.88rem;
+            font-weight: 600; background: var(--card-white);
+            border-radius: 20px; border: 1px dashed var(--card-border);
+        }
+
+        .hidden { display: none !important; }
+
+        /* ===== PERFORMANCE ===== */
+        .products-grid { contain: layout style; }
+        .product-card { will-change: transform; }
+        .table-wrapper.hidden,
+        .products-grid.hidden { display: none !important; }
+
+        /* ===== ALPHABET INDEX SIDEBAR ===== */
+        .alphabet-nav {
+            position: fixed; right: 4px;
+            top: 260px;
+            bottom: 84px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: space-evenly;
+            z-index: 90; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+            padding: 4px 2px; border-radius: 20px; border: 1px solid var(--card-border);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08); touch-action: none; display: none;
+            width: 24px;
+        }
+        .alpha-item {
+            font-size: 0.62rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
+            width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; user-select: none; transition: all 0.15s ease;
+        }
+        .alpha-item.active {
+            background: var(--primary-blue) !important; color: #ffffff !important;
+            font-weight: 800; transform: scale(1.15);
+        }
+        .alpha-bubble {
+            position: fixed; right: 54px; top: 50%; transform: translateY(-50%);
+            width: 48px; height: 48px; background: var(--primary-blue); color: #fff;
+            font-size: 1.4rem; font-weight: 800; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            pointer-events: none; opacity: 0; transition: opacity 0.2s ease; z-index: 95;
+        }
+        .alpha-bubble.show { opacity: 1; }
+
+        @media (max-height: 700px) {
+            #kalkulatorView .calc-shell { height: calc(100dvh - 150px); min-height: 420px; }
+            .calc-shell .display-value { font-size: 34px; }
+            .calc-shell .key { height: 44px; font-size: 19px; }
+            .calc-shell .keypad { gap: 8px; }
+        }
+    </style>
 </head>
 <body>
-<div class="app-layout">
-<div id="toastNotification" class="toast-notification">PLU Disalin!</div>
 
-<!-- HEADER -->
-<header class="app-header">
-  <div class="brand-block">
-    <div class="brand-icon"><i class="fa fa-cubes"></i></div>
-    <div class="brand-title-group">
-      <h1>plukakang</h1>
-      <span>hapalkeun euy!</span>
+    <div class="app-layout">
+
+        <div id="toastNotification" class="toast-notification">PLU Disalin! ✓</div>
+
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="brand-block">
+                <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+                <div class="brand-title-group">
+                    <h1>plukakang</h1>
+                    <span>hapalkeun euy!</span>
+                </div>
+            </div>
+            <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
+        </header>
+
+        <!-- GREETING -->
+        <div id="greetingWrapper">
+            <div class="greeting-container">
+                <div class="greeting-date-time">
+                    <span class="date-display" id="dateDisplay">📅</span>
+                    <span class="time-display" id="timeDisplay">🕐</span>
+                </div>
+                <div class="greeting-divider"></div>
+                <div class="greeting-sapaan" id="sapaanDisplay">
+                    <span class="greeting-icon" id="sapaanIcon">☀️</span>
+                    <span id="sapaanText">Selamat Pagi, Tim PLU!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR GLOBAL -->
+        <div class="sticky-search-bar" id="globalSearchBar">
+            <div class="search-field">
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
+                <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">✕</button>
+            </div>
+        </div>
+
+        <!-- ===== HOME VIEW ===== -->
+        <main id="homeView">
+            <div class="section-bar">
+                <span class="section-title">Kategori Brand</span>
+            </div>
+            <section class="brand-grid" id="brandGrid"></section>
+        </main>
+
+        <!-- ===== DETAIL VIEW ===== -->
+        <section id="detailView" style="display: none;">
+            <div class="detail-header">
+                <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <div class="section-bar">
+                <span class="section-title" id="detailHeadingTitle">Say Bread</span>
+                <span class="item-count-chip" id="itemCounterBadge">0 Item</span>
+            </div>
+
+            <div class="toolbar-row">
+                <div class="legend-bar">
+                    <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
+                    <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+                </div>
+                <div class="view-toggle">
+                    <button class="vt-btn active" id="viewListBtn" onclick="setDetailView('list')"><i class="fas fa-list"></i> List</button>
+                    <button class="vt-btn" id="viewTableBtn" onclick="setDetailView('table')"><i class="fas fa-table"></i> Tabel</button>
+                </div>
+            </div>
+
+            <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
+            <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
+
+            <section class="products-grid" id="productGrid"></section>
+
+            <div id="tableView" class="table-wrapper hidden">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:28px;text-align:center;">#</th>
+                                <th>Nama Barang</th>
+                                <th>PLU RAW</th>
+                                <th>PLU KONV</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== KATALOG VIEW ===== -->
+        <section id="katalogView" style="display: none;">
+            <div class="detail-header">
+                <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <span class="item-count-chip" id="katalogCounter">0 Item</span>
+            </div>
+
+            <div class="sheet-tabs" id="sheetTabs"></div>
+
+            <div class="toolbar-row">
+                <div class="legend-bar">
+                    <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
+                    <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
+                </div>
+                <div class="view-toggle">
+                    <button class="vt-btn active" id="katalogListBtn" onclick="setKatalogView('list')"><i class="fas fa-list"></i> List</button>
+                    <button class="vt-btn" id="katalogTableBtn" onclick="setKatalogView('table')"><i class="fas fa-table"></i> Tabel</button>
+                </div>
+            </div>
+
+            <section class="products-grid" id="katalogListGrid"></section>
+
+            <div id="katalogTableView" class="table-wrapper hidden">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:28px;text-align:center;">#</th>
+                                <th>Nama Barang</th>
+                                <th>PLU RAW</th>
+                                <th>PLU KONV</th>
+                            </tr>
+                        </thead>
+                        <tbody id="katalogTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== KALKULATOR VIEW (SOFT BLUE ISLAND) ===== -->
+        <section id="kalkulatorView" style="display: none;">
+            <div class="calc-shell">
+
+                <div class="calc-display">
+                    <div class="calc-context"><span id="selectorPrefix">Bersih ·</span> <b id="selectorName">—</b></div>
+                    <div class="display-value" id="displayValue">0<span class="unit">gr</span></div>
+                    <div class="display-meta" id="displayMeta"></div>
+                    <div class="display-divider"></div>
+                </div>
+
+                <div class="mode-pills" id="modePills">
+                    <button class="mode-pill active" data-mode="gramasi">⚖️ Gramasi</button>
+                    <button class="mode-pill" data-mode="biang">☕ Biang Kopi</button>
+                    <button class="mode-pill" data-mode="seal">🥤 Plastik Seal</button>
+                </div>
+
+                <!-- PILLS PILIH WADAH (semua wadah, tap langsung) -->
+                <div class="wadah-strip" id="wadahStrip"></div>
+
+                <div class="mode-content" id="modeContent">
+
+                    <!-- MODE: GRAMASI (PLU Point Coffee di dalamnya) -->
+                    <div id="mode-gramasi">
+                        <input type="text" id="sidebarSearchPlu" class="kc-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
+                        <div class="kc-legend">
+                            <span><span class="kc-dot raw"></span> RAW</span>
+                            <span><span class="kc-dot konv"></span> KONV</span>
+                            <span class="plu-total" id="pluCount">0 PLU</span>
+                        </div>
+                        <div class="kc-plu-body">
+                            <div class="kc-plu-list" id="sidebarPluList">
+                                <div class="plu-empty">Memuat data...</div>
+                            </div>
+                            <div class="kc-alpha-nav" id="kcAlphaNav"></div>
+                            <div class="kc-alpha-bubble" id="kcAlphaBubble">A</div>
+                        </div>
+                    </div>
+
+                    <!-- MODE: BIANG KOPI -->
+                    <div id="mode-biang" class="hidden">
+                        <button class="field-chip active" id="chipTimbangan">
+                            <span class="fc-left"><i class="fas fa-weight-scale"></i> Total Timbangan</span>
+                            <span class="fc-value" id="chipValTimbangan">947</span>
+                        </button>
+                        <button class="field-chip" id="chipBotol">
+                            <span class="fc-left"><i class="fas fa-wine-bottle"></i> Berat Botol</span>
+                            <span class="fc-value" id="chipValBotol">680</span>
+                        </button>
+                    </div>
+
+                    <!-- MODE: PLASTIK SEAL -->
+                    <div id="mode-seal" class="hidden">
+                        <div class="seal-progress"><div class="seal-fill" id="sealFill"></div></div>
+                        <div class="seal-scale"><span>1 mm</span><span>35 mm</span></div>
+                        <div class="seal-tip">*Estimasi berdasarkan tabel HO</div>
+                    </div>
+
+                </div>
+
+                <div class="keypad" id="keypad">
+                    <button class="key" data-key="1">1</button>
+                    <button class="key" data-key="2">2</button>
+                    <button class="key" data-key="3">3</button>
+                    <button class="key" data-key="4">4</button>
+                    <button class="key" data-key="5">5</button>
+                    <button class="key" data-key="6">6</button>
+                    <button class="key" data-key="7">7</button>
+                    <button class="key" data-key="8">8</button>
+                    <button class="key" data-key="9">9</button>
+                    <button class="key func danger-func" data-key="C">C</button>
+                    <button class="key" data-key="0">0</button>
+                    <button class="key func" data-key="back"><i class="fas fa-arrow-left"></i></button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ALPHABET INDEX NAV & BUBBLE -->
+        <div id="alphabetNav" class="alphabet-nav"></div>
+        <div id="alphaBubble" class="alpha-bubble">A</div>
+
     </div>
-  </div>
-  <button class="icon-action-btn" onclick="switchTab('katalog')"><i class="fas fa-layer-group"></i></button>
-</header>
 
-<!-- GREETING -->
-<div id="greetingWrapper">
-  <div class="greeting-container">
-    <div class="greeting-date-time">
-      <span class="date-display" id="dateDisplay"></span>
-      <span class="time-display" id="timeDisplay"></span>
-    </div>
-    <div class="greeting-divider"></div>
-    <div class="greeting-sapaan" id="sapaanDisplay">
-      <span class="greeting-icon" id="sapaanIcon"></span>
-      <span id="sapaanText">Selamat Pagi, Tim PLU!</span>
-    </div>
-  </div>
-</div>
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-dock">
+        <button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
+            <i class="fas fa-home dock-tab-icon"></i>
+            <span>Home</span>
+        </button>
+        <button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
+            <i class="fas fa-layer-group dock-tab-icon"></i>
+            <span>Katalog</span>
+        </button>
+        <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
+            <i class="fas fa-calculator dock-tab-icon"></i>
+            <span>Kalkulator</span>
+        </button>
+    </nav>
 
-<!-- SEARCH BAR GLOBAL -->
-<div class="sticky-search-bar" id="globalSearchBar">
-  <div class="search-field">
-    <input type="text" id="searchInput" class="search-input" placeholder="Cari nama barang atau kode PLU..." autocomplete="off" spellcheck="false">
-    <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">×</button>
-  </div>
-</div>
+    <script>
+    /* ================================================================
+       KONFIGURASI BRAND
+       ================================================================ */
+    var BRAND_NAMES = {
+        'saybread': 'Say Bread', 'sayburger': 'Say Burger',
+        'yummychoice': 'Yummy Choice', 'yummycoffee': 'Yummy Coffee Gold',
+        'pointcoffee': 'Point Coffee', 'hambalanfc': 'Hambalan FC',
+        'perishable': 'Perishable'
+    };
 
-<!-- ===== HOME VIEW ===== -->
-<main id="homeView">
-  <div class="section-bar">
-    <span class="section-title">Kategori Brand</span>
-  </div>
-  <section class="brand-grid" id="brandGrid"></section>
-</main>
+    var BRAND_CARDS = [
+        { id: 'saybread', title: 'Say Bread', sub: 'Bakery & Pastry', icon: 'fa-bread-slice', cls: 'card-saybread' },
+        { id: 'sayburger', title: 'Say Burger', sub: 'Burger & Hotdog', icon: 'fa-hamburger', cls: 'card-sayburger' },
+        { id: 'yummychoice', title: 'Yummy Choice', sub: 'Ready to Eat', icon: 'fa-utensils', cls: 'card-yummychoice' },
+        { id: 'yummycoffee', title: 'Yummy Coffee Gold', sub: 'Beverages & Coffee', icon: 'fa-mug-hot', cls: 'card-yummycoffee' },
+        { id: 'pointcoffee', title: 'Point Coffee', sub: 'Coffee & Beverages', icon: 'fa-mug-saucer', cls: 'card-pointcoffee' },
+        { id: 'hambalanfc', title: 'Hambalan FC', sub: 'Si Paling Hambalan', icon: 'fa-box', cls: 'card-hambalanfc' },
+        { id: 'perishable', title: 'Perishable', sub: 'Buah & Sayur Segar', icon: 'fa-seedling', cls: 'card-perishable' }
+    ];
 
-<!-- ===== DETAIL VIEW ===== -->
-<section id="detailView" style="display: none;">
-  <div class="detail-header">
-    <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-  </div>
-  <div class="section-bar">
-    <span class="section-title" id="detailHeadingTitle">Say Bread</span>
-    <span class="item-count-chip" id="itemCounterBadge">0 Item</span>
-  </div>
-  <div class="toolbar-row">
-    <div class="legend-bar">
-      <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
-      <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
-    </div>
-    <div class="view-toggle">
-      <button class="vt-btn active" id="viewListBtn" onclick="setDetailView('list')"><i class="fas fa-list"></i> List</button>
-      <button class="vt-btn" id="viewTableBtn" onclick="setDetailView('table')"><i class="fas fa-table"></i> Tabel</button>
-    </div>
-  </div>
-  <div class="pills-container" id="subPillsContainer" style="display: none;"></div>
-  <div class="pills-container" id="kategoriPillsContainer" style="display: none;"></div>
-  <section class="products-grid" id="productGrid"></section>
-  <div id="tableView" class="table-wrapper hidden">
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:28px;text-align:center;">#</th>
-            <th>Nama Barang</th>
-            <th>PLU RAW</th>
-            <th>PLU KONV</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
+    var SUB_CONFIG = {
+        'saybread': [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }],
+        'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
+        'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Menu Utama' }, { id: 'sarana', label: 'Sarana' }],
+        'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Utama' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }],
+        'pointcoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
+        'hambalanfc': [{ id: 'minyak', label: 'Minyak' }, { id: 'beras', label: 'Beras' }, { id: 'gula', label: 'Gula' }, { id: 'mineral', label: 'Mineral' }, { id: 'beverage', label: 'Beverage' }],
+        'perishable': [{ id: 'all', label: 'Semua' }, { id: 'buah_sayur', label: 'Buah & Sayur' }]
+    };
 
-<!-- ===== KATALOG VIEW ===== -->
-<section id="katalogView" style="display: none;">
-  <div class="detail-header">
-    <button class="back-btn" onclick="switchTab('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-    <span class="item-count-chip" id="katalogCounter">0 Item</span>
-  </div>
-  <div class="sheet-tabs" id="sheetTabs"></div>
-  <div class="toolbar-row">
-    <div class="legend-bar">
-      <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
-      <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
-    </div>
-    <div class="view-toggle">
-      <button class="vt-btn active" id="katalogListBtn" onclick="setKatalogView('list')"><i class="fas fa-list"></i> List</button>
-      <button class="vt-btn" id="katalogTableBtn" onclick="setKatalogView('table')"><i class="fas fa-table"></i> Tabel</button>
-    </div>
-  </div>
-  <section class="products-grid" id="katalogListGrid"></section>
-  <div id="katalogTableView" class="table-wrapper hidden">
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:28px;text-align:center;">#</th>
-            <th>Nama Barang</th>
-            <th>PLU RAW</th>
-            <th>PLU KONV</th>
-          </tr>
-        </thead>
-        <tbody id="katalogTableBody"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
+    var KATEGORI_LABEL = { 'snack_rte': 'Snack RTE', 'dimsum': 'Dimsum', 'pao': 'Pao', 'fried_chicken': 'Fried Chicken', 'frozen_fc': 'Frozen FC', 'sosis': 'Sosis', 'pizza': 'Pizza' };
+    var KATEGORI_LABEL_COFFEE = { 'jelly': 'Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'other': 'Other' };
+    var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
+    var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
 
-<!-- ===== KALKULATOR VIEW ===== -->
-<section id="kalkulatorView" style="display: none;">
-  <div class="plu-sidebar" id="pluSidebar">
-    <div class="sidebar-title">
-      <i class="fas fa-mug-saucer" style="color:var(--dark-green);"></i> Cari PLU Point Coffee
-      <span id="pluCount">0</span>
-    </div>
-    <input type="text" id="sidebarSearchPlu" class="sidebar-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
-    
-    <!-- BAR ALPHABET SIDEBAR POINT COFFEE -->
-    <div class="sidebar-alpha-bar" id="sidebarAlphaBar"></div>
+    /* ================================================================
+       STATE
+       ================================================================ */
+    var DATABASE = [];
+    var pointCoffeeData = [];
+    var currentView = 'home';
+    var currentBrand = '';
+    var currentSub = 'all';
+    var currentKategori = 'all';
+    var detailViewMode = 'list';
+    var katalogViewMode = 'list';
+    var currentSheet = 'all';
+    var katalogData = {};
 
-    <div class="sidebar-legend">
-      <span class="legend-item"><span class="legend-box raw"></span> RAW</span>
-      <span class="legend-item"><span class="legend-box konv"></span> KONV</span>
-    </div>
-    <div class="sidebar-plu-list" id="sidebarPluList">
-      <div class="plu-empty">Memuat data...</div>
-    </div>
-  </div>
-  
-  <div class="section-bar" style="margin-top:16px;">
-    <span class="section-title"><i class="fas fa-calculator" style="color:var(--primary-blue);"></i> Kalkulator SO</span>
-  </div>
+    var _renderCache = { key: '' };
+    var _katalogCache = { key: '' };
 
-  <div class="kalkulator-card">
-    <div class="card-title"><i class="fas fa-weight-scale" style="color:var(--primary-blue);"></i> Kalkulator Gramasi</div>
-    <div class="input-row" style="margin-bottom:0;">
-      <label for="timbanganGramasi">Berat Timbangan (gr)</label>
-      <input type="number" id="timbanganGramasi" value="932" oninput="hitungGramasi()" inputmode="numeric">
-    </div>
-  </div>
+    /* ================================================================
+       DATA KALKULATOR
+       ================================================================ */
+    var DEFAULT_WADAH = [
+        { nama: "Sirup Kotak", tare: 78, mj: 0.80 },
+        { nama: "Sirup Bulat", tare: 83, mj: 0.80 },
+        { nama: "Palm Sugar", tare: 77, mj: 1 },
+        { nama: "Sauce", tare: 122, mj: 0.80 },
+        { nama: "Jelly", tare: 70, mj: 1 },
+        { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
+        { nama: "Box Powder", tare: 62, mj: 1 },
+        { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
+        { nama: "Whip Cream", tare: 51, mj: 0.97 },
+        { nama: "Yakult / Pcs", tare: 0, mj: 65 },
+        { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
+        { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
+        { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
+        { nama: "Madu Uray", tare: 26.6, mj: 1 },
+        { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
+        { nama: "Botol Squeeze", tare: 40, mj: 1 },
+        { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
+        { nama: "Botol Kaca", tare: 418, mj: 0.74 },
+        { nama: "Toples Crumb", tare: 650, mj: 1 },
+        { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
+        { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
+        { nama: "Ice Bulk 8 L", tare: 420, mj: 1 }
+    ];
 
-  <div class="kalkulator-card">
-    <div class="card-title"><i class="fas fa-list" style="color:var(--dark-green);"></i> Daftar Wadah</div>
-    <div class="tabel-wadah-container">
-      <table>
-        <thead><tr><th>WADAH</th><th>TARE</th><th>MJ</th><th>BERSIH</th></tr></thead>
-        <tbody id="tabelGramasi"></tbody>
-      </table>
-    </div>
-  </div>
+    var DEFAULT_SEAL = {
+        1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
+        11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
+        21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
+        31:1763,32:1823,33:1883,34:1943,35:2003
+    };
 
-  <div class="kalkulator-card">
-    <div class="card-title"><i class="fas fa-mug-hot" style="color:#d97706;"></i> SO Biang Kopi</div>
-    <div class="input-row">
-      <label for="biangTimbangan">Total Timbangan</label>
-      <input type="number" id="biangTimbangan" value="947" oninput="hitungBiang()" inputmode="numeric">
-    </div>
-    <div class="input-row">
-      <label for="biangBotol">Berat Botol Kosong</label>
-      <input type="number" id="biangBotol" value="680" oninput="hitungBiang()" inputmode="numeric">
-    </div>
-    <div class="hasil-box">
-      <div class="input-row"><span class="hasil-label">Hasil Netto</span><span class="hasil-value" id="resNetto">267</span></div>
-      <div class="input-row"><span class="hasil-label">Konversi Biji Kopi</span><span class="hasil-value" id="resKopi">80</span></div>
-      <div class="input-row" style="margin-bottom:0;"><span class="hasil-label">Konversi Air Mineral</span><span class="hasil-value" id="resAir">187</span></div>
-    </div>
-  </div>
+    var dataWadah = (function() {
+        try {
+            var saved = localStorage.getItem('plukakang_wadah');
+            if (saved) return JSON.parse(saved);
+        } catch(e) {}
+        return DEFAULT_WADAH;
+    })();
 
-  <div class="kalkulator-card">
-    <div class="card-title"><i class="fas fa-circle" style="color:#6366f1;"></i> Plastik Seal</div>
-    <div class="input-row">
-      <div><label for="inputTebalSeal">Tebal Sisa Roll (mm)</label><div class="seal-tip">*Berdasarkan tabel HO (1 - 35 mm)</div></div>
-      <input type="number" id="inputTebalSeal" value="10" min="1" max="35" oninput="hitungSeal()" inputmode="numeric">
-    </div>
-    <div class="hasil-box">
-      <div class="input-row" style="margin-bottom:0;">
-        <span class="hasil-label">Estimasi Jumlah Cup</span>
-        <span class="hasil-value primary" id="resSealPcs">547</span>
-      </div>
-    </div>
-  </div>
-</section>
-</div>
+    /* ================================================================
+       UTILITY
+       ================================================================ */
+    function $(id) { return document.getElementById(id); }
 
-<!-- ALPHABET INDEX NAV & BUBBLE -->
-<div id="alphabetNav" class="alphabet-nav"></div>
-<div id="alphaBubble" class="alpha-bubble">A</div>
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+            return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
+        });
+    }
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="bottom-dock">
-  <button class="dock-tab active" id="dock-home" onclick="switchTab('home')">
-    <i class="fa fa-home dock-tab-icon"></i>
-    <span>Home</span>
-  </button>
-  <button class="dock-tab" id="dock-katalog" onclick="switchTab('katalog')">
-    <i class="fas fa-layer-group dock-tab-icon"></i>
-    <span>Katalog</span>
-  </button>
-  <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
-    <i class="fa fa-calculator dock-tab-icon"></i>
-    <span>Kalkulator</span>
-  </button>
-</nav>
+    function debounce(fn, wait) {
+        var t;
+        return function() {
+            var ctx = this, args = arguments;
+            clearTimeout(t);
+            t = setTimeout(function() { fn.apply(ctx, args); }, wait);
+        };
+    }
 
-<script>
-/* KONFIGURASI BRAND */
-var BRAND_NAMES = {
-  'saybread': 'Say Bread', 'sayburger': 'Say Burger',
-  'yummychoice': 'Yummy Choice', 'yummycoffee': 'Yummy Coffee Gold',
-  'pointcoffee': 'Point Coffee', 'hambalanfc': 'Hambalan FC',
-  'perishable': 'Perishable'
-};
-var BRAND_CARDS = [
-  { id: 'saybread', title: 'Say Bread', sub: 'Bakery & Pastry', icon: 'fa-bread-slice', cls: 'card-saybread' },
-  { id: 'sayburger', title: 'Say Burger', sub: 'Burger & Hotdog', icon: 'fa-hamburger', cls: 'card-sayburger' },
-  { id: 'yummychoice', title: 'Yummy Choice', sub: 'Ready to Eat', icon: 'fa-utensils', cls: 'card-yummychoice' },
-  { id: 'yummycoffee', title: 'Yummy Coffee Gold', sub: 'Beverages & Coffee', icon: 'fa-mug-hot', cls: 'card-yummycoffee' },
-  { id: 'pointcoffee', title: 'Point Coffee', sub: 'Coffee & Beverages', icon: 'fa-mug-saucer', cls: 'card-pointcoffee' },
-  { id: 'hambalanfc', title: 'Hambalan FC', sub: 'Si Paling Hambalan', icon: 'fa-box', cls: 'card-hambalanfc' },
-  { id: 'perishable', title: 'Perishable', sub: 'Buah & Sayur Segar', icon: 'fa-seedling', cls: 'card-perishable' }
-];
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch(e) {}
+            document.body.removeChild(ta);
+            resolve();
+        });
+    }
 
-var SUB_CONFIG = {
-  'saybread': [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }],
-  'sayburger': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
-  'yummychoice': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Menu Utama' }, { id: 'sarana', label: 'Sarana' }],
-  'yummycoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Utama' }, { id: 'dcf', label: 'Bahan Tambahan' }, { id: 'sarana', label: 'Sarana' }],
-  'pointcoffee': [{ id: 'all', label: 'Semua' }, { id: 'bkl', label: 'Bahan Baku' }, { id: 'sarana', label: 'Sarana' }],
-  'hambalanfc': [{ id: 'minyak', label: 'Minyak' }, { id: 'beras', label: 'Beras' }, { id: 'gula', label: 'Gula' }, { id: 'mineral', label: 'Mineral' }, { id: 'beverage', label: 'Beverage' }],
-  'perishable': [{ id: 'all', label: 'Semua' }, { id: 'buah_sayur', label: 'Buah & Sayur' }]
-};
+    var _toastTimer;
+    function showToast(msg) {
+        var toast = $('toastNotification');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(function() {
+            toast.classList.remove('show');
+        }, 1500);
+    }
 
-var KATEGORI_LABEL = { 'snack_rte': 'Snack RTE', 'dimsum': 'Dimsum', 'pao': 'Pao', 'fried_chicken': 'Fried Chicken', 'frozen_fc': 'Frozen FC', 'sosis': 'Sosis', 'pizza': 'Pizza' };
-var KATEGORI_LABEL_COFFEE = { 'jelly': 'Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'other': 'Other' };
-var KATEGORI_LABEL_POINT = { 'coffee_bean': 'Coffee Bean', 'sauce': 'Sauce', 'topping_jelly': 'Topping Jelly', 'syrup': 'Syrup', 'powder': 'Powder', 'milk_dairy': 'Milk & Dairy', 'rtd_beverage': 'RTD Beverage', 'tea': 'Tea', 'sweetener': 'Sweetener', 'topping_crunches': 'Topping Crunches', 'rtd_coffee': 'RTD Coffee' };
-var KATEGORI_LABEL_PERISHABLE = { 'buah': 'Buah', 'sayur': 'Sayur', 'jus': 'Jus', 'bo': 'B/O', 'bp': 'B/P' };
+    /* ================================================================
+       RENDER BRAND GRID
+       ================================================================ */
+    function renderBrandGrid() {
+        var html = '';
+        BRAND_CARDS.forEach(function(b) {
+            html += '<div class="brand-card ' + b.cls + '" data-brand="' + b.id + '">' +
+                '<div class="brand-card-top">' +
+                    '<div class="brand-card-icon"><i class="fas ' + b.icon + '"></i></div>' +
+                    '<i class="fas fa-chevron-right" style="color:var(--text-light); font-size:0.85rem;"></i>' +
+                '</div>' +
+                '<div class="brand-card-bottom">' +
+                    '<h3>' + b.title + '</h3>' +
+                    '<p>' + b.sub + '</p>' +
+                '</div>' +
+            '</div>';
+        });
+        $('brandGrid').innerHTML = html;
+    }
 
-/* STATE */
-var DATABASE = [];
-var pointCoffeeData = [];
-var currentView = 'home';
-var currentBrand = '';
-var currentSub = 'all';
-var currentKategori = 'all';
-var detailViewMode = 'list';
-var katalogViewMode = 'list';
-var currentSheet = 'all';
-var katalogData = {};
-var _renderCache = { key: "" };
-var _katalogCache = { key: "" };
+    /* ================================================================
+       TAB SWITCHING
+       ================================================================ */
+    function switchTab(tab) {
+        $('homeView').style.display = 'none';
+        $('detailView').style.display = 'none';
+        $('katalogView').style.display = 'none';
+        $('kalkulatorView').style.display = 'none';
+        $('greetingWrapper').classList.add('hidden');
 
-/* DATA KALKULATOR */
-var DEFAULT_WADAH = [
-  { nama: "Biscoff Crunchy", tare: 33, mj: 1 },
-  { nama: "Botol Bening (Korken)", tare: 608, mj: 1 },
-  { nama: "Botol Kaca", tare: 418, mj: 0.74 },
-  { nama: "Botol Palm Sugar 1,3 kg", tare: 77, mj: 1 },
-  { nama: "Botol Pure Kiwi", tare: 305, mj: 0.80 },
-  { nama: "Botol Sauce", tare: 122, mj: 0.80 },
-  { nama: "Botol Sirup Bulat", tare: 83, mj: 0.80 },
-  { nama: "Botol Sirup Kotak", tare: 78, mj: 0.80 },
-  { nama: "Botol Squeeze", tare: 40, mj: 1 },
-  { nama: "Box Powder", tare: 62, mj: 1 },
-  { nama: "Box Powder Seasoning", tare: 38, mj: 1 },
-  { nama: "Freshmilk 950 ml", tare: 34, mj: 0.97 },
-  { nama: "Ice Bulk 8 L", tare: 420, mj: 1 },
-  { nama: "Indomilk SKM / Pcs", tare: 15, mj: 1 },
-  { nama: "Kompan Gula Cair 5 kg", tare: 250, mj: 1 },
-  { nama: "Madu Uray", tare: 26.6, mj: 1 },
-  { nama: "Oreo / Pcs", tare: 0, mj: 1 },
-  { nama: "Ovomaltine Spread", tare: 37, mj: 1 },
-  { nama: "Toples Coffee Jelly", tare: 70, mj: 1 },
-  { nama: "Toples Crumb", tare: 650, mj: 1 },
-  { nama: "Toples Kaca Oreo", tare: 727, mj: 1 },
-  { nama: "Toples Tropical Jelly", tare: 65, mj: 1 },
-  { nama: "Whip Cream", tare: 51, mj: 0.97 },
-  { nama: "Yakult / Pcs", tare: 0, mj: 65 }
-];
+        if (tab === 'home') {
+            $('homeView').style.display = 'block';
+            $('greetingWrapper').classList.remove('hidden');
+            $('globalSearchBar').style.display = '';
+            currentView = 'home';
+            currentBrand = '';
+        } else if (tab === 'katalog') {
+            $('katalogView').style.display = 'block';
+            $('globalSearchBar').style.display = '';
+            currentView = 'katalog';
+            renderKatalog();
+        } else if (tab === 'kalkulator') {
+            $('kalkulatorView').style.display = 'block';
+            $('globalSearchBar').style.display = 'none';
+            currentView = 'kalkulator';
+            calcRender();
+            renderSidebarPlu($('sidebarSearchPlu').value || '');
+        }
 
-var DEFAULT_SEAL = {
-  1:54,2:108,3:163,4:217,5:271,6:326,7:381,8:437,9:492,10:547,
-  11:603,12:659,13:715,14:771,15:827,16:884,17:942,18:999,19:1057,20:1114,
-  21:1172,22:1230,23:1289,24:1347,25:1405,26:1465,27:1524,28:1584,29:1643,30:1703,
-  31:1763,32:1823,33:1883,34:1943,35:2003
-};
+        var tabs = document.querySelectorAll('.dock-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+        var activeTab = $('dock-' + tab);
+        if (activeTab) activeTab.classList.add('active');
 
-var dataWadah = (function() {
-  try {
-    var saved = localStorage.getItem('plukakang_wadah');
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  return DEFAULT_WADAH;
-})();
+        if (tab !== 'kalkulator') {
+            $('searchInput').value = '';
+            $('searchClearBtn').style.display = 'none';
+        }
+        toggleAlphabetNav();
+    }
 
-/* UTILITY */
-function $(id) { return document.getElementById(id); }
+    /* ================================================================
+       KALKULATOR SO (SOFT BLUE ISLAND)
+       ================================================================ */
+    var calcState = {
+        mode: 'gramasi',
+        gramasi: '932',
+        wadahAktif: dataWadah[0].nama,
+        biangTimbangan: '947',
+        biangBotol: '680',
+        biangField: 'timbangan',
+        seal: '10'
+    };
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/[&<>"']/g, function(m) {
-    return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
-  });
-}
+    (function() {
+        try {
+            var s = localStorage.getItem('plukakang_kalk_v4');
+            if (s) {
+                var o = JSON.parse(s);
+                for (var k in calcState) {
+                    if (o[k] !== undefined && o[k] !== null) calcState[k] = o[k];
+                }
+                var found = dataWadah.some(function(w) { return w.nama === calcState.wadahAktif; });
+                if (!found) calcState.wadahAktif = dataWadah[0].nama;
+            }
+        } catch(e) {}
+        if (['gramasi', 'biang', 'seal'].indexOf(calcState.mode) === -1) calcState.mode = 'gramasi';
+    })();
 
-function debounce(fn, wait) {
-  var t;
-  return function() {
-    var ctx = this, args = arguments;
-    clearTimeout(t);
-    t = setTimeout(function() { fn.apply(ctx, args); }, wait);
-  };
-}
+    function calcPersist() {
+        try { localStorage.setItem('plukakang_kalk_v4', JSON.stringify(calcState)); } catch(e) {}
+    }
 
-function copyToClipboard(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    return navigator.clipboard.writeText(text);
-  }
-  return new Promise(function(resolve) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta);
-    resolve();
-  });
-}
+    function fmt(n) { return n.toLocaleString('id-ID'); }
+    function vibrate() { try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {} }
 
-var _toastTimer;
-function showToast(msg) {
-  var toast = $('toastNotification');
-  toast.innerText = msg;
-  toast.classList.add('show');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 1500);
-}
+    function findWadah(nama) {
+        for (var i = 0; i < dataWadah.length; i++) {
+            if (dataWadah[i].nama === nama) return dataWadah[i];
+        }
+        return null;
+    }
 
-/* RENDER BRAND GRID */
-function renderBrandGrid() {
-  var html = '';
-  BRAND_CARDS.forEach(function(b) {
-    html += '<div class="brand-card ' + b.cls + '" data-brand="' + b.id + '">' +
-      '<div class="brand-card-top">' +
-        '<div class="brand-card-icon"><i class="fas ' + b.icon + '"></i></div>' +
-        '<i class="fas fa-chevron-right" style="color:var(--text-light); font-size:0.85rem;"></i>' +
-      '</div>' +
-      '<div class="brand-card-bottom">' +
-        '<h3>' + b.title + '</h3>' +
-        '<p>' + b.sub + '</p>' +
-      '</div>' +
-    '</div>';
-  });
-  $('brandGrid').innerHTML = html;
-}
+    function hitungBersih(w, input) {
+        var isYakult = w.nama.indexOf('Yakult') !== -1;
+        return isYakult ? Math.round(input * w.mj) : Math.round((input - w.tare) * w.mj);
+    }
 
-/* TAB SWITCHING */
-function switchTab(tab) {
-  $('homeView').style.display = 'none';
-  $('detailView').style.display = 'none';
-  $('katalogView').style.display = 'none';
-  $('kalkulatorView').style.display = 'none';
-  $('greetingWrapper').classList.add('hidden');
-  
-  if (tab === 'home') {
-    $('homeView').style.display = 'block';
-    $('greetingWrapper').classList.remove('hidden');
-    $('globalSearchBar').style.display = '';
-    currentView = 'home';
-    currentBrand = '';
-  } else if (tab === 'katalog') {
-    $('katalogView').style.display = 'block';
-    $('globalSearchBar').style.display = '';
-    currentView = 'katalog';
-    renderKatalog();
-  } else if (tab === 'kalkulator') {
-    $('kalkulatorView').style.display = 'block';
-    $('globalSearchBar').style.display = 'none';
-    currentView = 'kalkulator';
-    hitungGramasi();
-    hitungBiang();
-    hitungSeal();
-    renderSidebarPlu($('sidebarSearchPlu').value || '');
-  }
+    function mjDisplay(mj) {
+        return (mj % 1 === 0) ? mj.toString() : mj.toString().replace('.', ',');
+    }
 
-  var tabs = document.querySelectorAll('.dock-tab');
-  for (var i=0; i < tabs.length; i++) tabs[i].classList.remove('active');
-  var activeTab = $('dock-' + tab);
-  if (activeTab) activeTab.classList.add('active');
+    function calcActiveField() {
+        if (calcState.mode === 'gramasi') return 'gramasi';
+        if (calcState.mode === 'seal') return 'seal';
+        return calcState.biangField === 'botol' ? 'biangBotol' : 'biangTimbangan';
+    }
 
-  if (tab !== 'kalkulator') {
-    $('searchInput').value = '';
-    $('searchClearBtn').style.display = 'none';
-  }
-  toggleAlphabetNav();
-}
+    function pressKey(k) {
+        vibrate();
+        var f = calcActiveField();
+        var cur = calcState[f];
 
-/* KALKULATOR */
-function hitungGramasi() {
-  var input = parseFloat($('timbanganGramasi').value) || 0;
-  var html = '';
-  dataWadah.forEach(function(item) {
-    var hasil = item.nama.includes("Yakult")
-      ? Math.round(input * item.mj)
-      : Math.round((input - item.tare) * item.mj);
-    var displayMj = (item.mj % 1 === 0) ? item.mj.toString() : item.mj.toString().replace('.', ',');
-    html += '<tr>' +
-      '<td class="bold">' + escapeHtml(item.nama) + '</td>' +
-      '<td>' + (item.tare === 0 ? '-' : item.tare) + '</td>' +
-      '<td>' + displayMj + '</td>' +
-      '<td class="hasil-gramasi">' + hasil + '</td>' +
-    '</tr>';
-  });
-  $('tabelGramasi').innerHTML = html;
-}
+        if (k === 'C') cur = '0';
+        else if (k === 'back') cur = cur.length > 1 ? cur.slice(0, -1) : '0';
+        else {
+            if (cur === '0') cur = k;
+            else if (cur.length < 6) cur += k;
+            else return;
+        }
 
-function hitungBiang() {
-  var timbangan = parseFloat($('biangTimbangan').value) || 0;
-  var botol = parseFloat($('biangBotol').value) || 0;
-  var netto = Math.max(0, timbangan - botol);
-  var kopi = Math.round(netto * 0.3);
-  $('resNetto').innerText = netto;
-  $('resKopi').innerText = kopi;
-  $('resAir').innerText = netto - kopi;
-}
+        calcState[f] = cur;
+        calcPersist();
+        calcRender();
+    }
 
-function hitungSeal() {
-  var inputSeal = parseInt($('inputTebalSeal').value);
-  var resEl = $('resSealPcs');
-  if (!inputSeal || inputSeal < 1) {
-    resEl.innerText = '0';
-    resEl.style.color = "var(--primary-blue)";
-  } else if (inputSeal > 35) {
-    resEl.innerText = "Maks 35 mm";
-    resEl.style.fontSize = "14px";
-    resEl.style.color = "#ef4444";
-  } else {
-    resEl.innerText = DEFAULT_SEAL[inputSeal] || 0;
-    resEl.style.fontSize = "18px";
-    resEl.style.color = "var(--primary-blue)";
-  }
-}
+    function calcRender() {
+        var value = $('displayValue');
+        var meta = $('displayMeta');
+        var prefix = $('selectorPrefix');
 
-/* SIDEBAR PLU POINT COFFEE */
-function renderSidebarPlu(filter) {
-  var list = $('sidebarPluList');
-  var count = $('pluCount');
-  var items = pointCoffeeData;
-  if (filter) {
-    var f = filter.toLowerCase().trim();
-    items = items.filter(function(item) {
-      return item.nama.toLowerCase().indexOf(f) !== -1 ||
-        (item.raw && item.raw.indexOf(f) !== -1) ||
-        (item.konv && item.konv.indexOf(f) !== -1);
+        if (calcState.mode === 'gramasi') {
+            prefix.innerText = 'Bersih ·';
+            var w = findWadah(calcState.wadahAktif) || dataWadah[0];
+            var input = parseFloat(calcState.gramasi) || 0;
+            var bersih = hitungBersih(w, input);
+
+            $('selectorName').innerText = w.nama;
+            value.innerHTML = fmt(bersih) + '<span class="unit">gr</span>';
+            value.classList.toggle('danger', bersih < 0);
+
+            meta.innerHTML =
+                '<span class="input-chip"><i class="fas fa-weight-scale"></i> Timbangan <b>' + escapeHtml(calcState.gramasi) + ' gr</b></span>' +
+                '<span class="input-chip">Tare <b>' + (w.tare === 0 ? '-' : w.tare) + '</b></span>' +
+                '<span class="input-chip">MJ <b>' + mjDisplay(w.mj) + '</b></span>' +
+                (bersih < 0 ? '<span class="input-chip danger">Berat di bawah tare!</span>' : '');
+
+        } else if (calcState.mode === 'biang') {
+            prefix.innerText = 'Netto ·';
+            var t = parseFloat(calcState.biangTimbangan) || 0;
+            var b = parseFloat(calcState.biangBotol) || 0;
+            var netto = Math.max(0, t - b);
+            var kopi = Math.round(netto * 0.3);
+
+            $('selectorName').innerText = 'SO Biang Kopi';
+            value.innerHTML = fmt(netto) + '<span class="unit">gr</span>';
+            value.classList.remove('danger');
+            meta.innerHTML =
+                '<span class="input-chip amber">☕ Biji Kopi <b>' + fmt(kopi) + ' gr</b></span>' +
+                '<span class="input-chip blue">💧 Air Mineral <b>' + fmt(netto - kopi) + ' gr</b></span>';
+
+            $('chipValTimbangan').innerText = calcState.biangTimbangan;
+            $('chipValBotol').innerText = calcState.biangBotol;
+
+        } else { /* seal */
+            prefix.innerText = 'Cup ·';
+            var v = parseInt(calcState.seal) || 0;
+            var over = v > 35;
+            var fill = $('sealFill');
+
+            fill.style.width = (Math.min(Math.max(v, 0), 35) / 35 * 100) + '%';
+            fill.classList.toggle('danger', over);
+
+            $('selectorName').innerText = 'Plastik Seal';
+            if (over) {
+                value.innerHTML = 'Maks 35 mm';
+                value.classList.add('danger');
+                meta.innerHTML = '<span class="input-chip danger">Tebalan <b>' + escapeHtml(calcState.seal) + ' mm</b> — melebihi batas</span>';
+            } else {
+                value.innerHTML = (v ? fmt(DEFAULT_SEAL[v]) : '0') + '<span class="unit">cup</span>';
+                value.classList.remove('danger');
+                meta.innerHTML = '<span class="input-chip">Tebalan roll <b>' + escapeHtml(calcState.seal) + ' mm</b></span>';
+            }
+        }
+    }
+
+    function setCalcMode(mode) {
+        calcState.mode = mode;
+        calcPersist();
+
+        var pills = document.querySelectorAll('#modePills .mode-pill');
+        for (var i = 0; i < pills.length; i++) {
+            pills[i].classList.toggle('active', pills[i].dataset.mode === mode);
+        }
+
+        var isGramasi = (mode === 'gramasi');
+        $('wadahStrip').classList.toggle('hidden', !isGramasi);
+        $('mode-gramasi').classList.toggle('hidden', !isGramasi);
+        $('mode-biang').classList.toggle('hidden', mode !== 'biang');
+        $('mode-seal').classList.toggle('hidden', mode !== 'seal');
+
+        $('modeContent').scrollTop = 0;
+        calcRender();
+    }
+
+    /* PILLS PILIH WADAH — semua wadah, tap langsung pilih */
+    function renderWadahStrip() {
+        var html = '';
+        dataWadah.forEach(function(w) {
+            html += '<button class="w-chip' + (w.nama === calcState.wadahAktif ? ' active' : '') +
+                    '" data-nama="' + escapeHtml(w.nama) + '">' + escapeHtml(w.nama) + '</button>';
+        });
+        $('wadahStrip').innerHTML = html;
+    }
+
+    function scrollWadahAktif() {
+        var chip = document.querySelector('#wadahStrip .w-chip.active');
+        if (chip && chip.scrollIntoView) {
+            chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    function pilihWadah(nama) {
+        vibrate();
+        calcState.wadahAktif = nama;
+        calcPersist();
+        renderWadahStrip();
+        scrollWadahAktif();
+        calcRender();
+    }
+
+    function syncBiangChips() {
+        $('chipTimbangan').classList.toggle('active', calcState.biangField === 'timbangan');
+        $('chipBotol').classList.toggle('active', calcState.biangField === 'botol');
+    }
+
+    function attachCalcEvents() {
+        $('keypad').addEventListener('click', function(e) {
+            var k = e.target.closest('.key');
+            if (k) pressKey(k.dataset.key);
+        });
+
+        $('modePills').addEventListener('click', function(e) {
+            var p = e.target.closest('.mode-pill');
+            if (p && p.dataset.mode !== calcState.mode) setCalcMode(p.dataset.mode);
+        });
+
+        /* Tap chip wadah = langsung pilih */
+        $('wadahStrip').addEventListener('click', function(e) {
+            var chip = e.target.closest('.w-chip');
+            if (chip && chip.dataset.nama) pilihWadah(chip.dataset.nama);
+        });
+
+        $('chipTimbangan').addEventListener('click', function() {
+            vibrate(); calcState.biangField = 'timbangan';
+            syncBiangChips(); calcPersist(); calcRender();
+        });
+        $('chipBotol').addEventListener('click', function() {
+            vibrate(); calcState.biangField = 'botol';
+            syncBiangChips(); calcPersist(); calcRender();
+        });
+    }
+
+    function calcInit() {
+        syncBiangChips();
+        renderWadahStrip();
+        attachCalcEvents();
+        initKcAlpha();
+        setCalcMode(calcState.mode);
+        scrollWadahAktif();
+    }
+
+    /* ================================================================
+       PLU POINT COFFEE (di dalam mode Gramasi)
+       ================================================================ */
+    function renderSidebarPlu(filter) {
+        var list = $('sidebarPluList');
+        var items = pointCoffeeData;
+        if (filter) {
+            var f = filter.toLowerCase().trim();
+            items = items.filter(function(item) {
+                return item.nama.toLowerCase().indexOf(f) !== -1 ||
+                       (item.raw && item.raw.indexOf(f) !== -1) ||
+                       (item.konv && item.konv.indexOf(f) !== -1);
+            });
+        }
+        $('pluCount').innerText = items.length + ' PLU';
+
+        if (items.length === 0) {
+            list.innerHTML = '<div class="plu-empty">' +
+                (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') +
+            '</div>';
+            return;
+        }
+
+        var html = '';
+        items.forEach(function(item) {
+            var badges = '';
+            if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
+            if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
+
+            html += '<div class="plu-item">' +
+                '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
+                (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
+            '</div>';
+        });
+        list.innerHTML = html;
+    }
+
+    /* ================================================================
+       LOAD DATA JSON
+       ================================================================ */
+    function loadData() {
+        fetch('data.json')
+            .then(function(res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function(data) {
+                data.sort(function(a, b) {
+                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+                });
+                DATABASE = data;
+
+                pointCoffeeData = data.filter(function(item) {
+                    return (item.brand === 'pointcoffee' || item.brand === 'point coffee') && item.sub !== 'sarana';
+                });
+                pointCoffeeData.sort(function(a, b) {
+                    return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+                });
+
+                renderDataGrid();
+                renderKatalog();
+                renderSidebarPlu('');
+                renderSidebarAlphaNav();
+            })
+            .catch(function(err) {
+                console.error('Gagal load data.json:', err);
+                $('sidebarPluList').innerHTML =
+                    '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+            });
+    }
+
+    /* ================================================================
+       DETAIL VIEW
+       ================================================================ */
+    function setDetailView(mode) {
+        detailViewMode = mode;
+        $('viewListBtn').classList.toggle('active', mode === 'list');
+        $('viewTableBtn').classList.toggle('active', mode === 'table');
+
+        if (mode === 'list') {
+            $('productGrid').classList.remove('hidden');
+            $('tableView').classList.add('hidden');
+        } else {
+            $('productGrid').classList.add('hidden');
+            $('tableView').classList.remove('hidden');
+        }
+    }
+
+    function setKatalogView(mode) {
+        katalogViewMode = mode;
+        $('katalogListBtn').classList.toggle('active', mode === 'list');
+        $('katalogTableBtn').classList.toggle('active', mode === 'table');
+
+        if (mode === 'list') {
+            $('katalogListGrid').classList.remove('hidden');
+            $('katalogTableView').classList.add('hidden');
+        } else {
+            $('katalogListGrid').classList.add('hidden');
+            $('katalogTableView').classList.remove('hidden');
+        }
+    }
+
+    function openBrandCategory(key) {
+        currentView = 'detail';
+        currentBrand = key;
+        currentSub = 'all';
+        currentKategori = 'all';
+        $('homeView').style.display = 'none';
+        $('detailView').style.display = 'block';
+        $('katalogView').style.display = 'none';
+        $('kalkulatorView').style.display = 'none';
+        $('greetingWrapper').classList.add('hidden');
+        $('globalSearchBar').style.display = '';
+        $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
+
+        detailViewMode = 'list';
+        $('viewListBtn').classList.add('active');
+        $('viewTableBtn').classList.remove('active');
+        $('productGrid').classList.remove('hidden');
+        $('tableView').classList.add('hidden');
+
+        renderSubPills();
+        _renderCache.key = '';
+        renderDataGrid();
+
+        var tabs = document.querySelectorAll('.dock-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+        $('dock-home').classList.add('active');
+        toggleAlphabetNav();
+    }
+
+    function renderSubPills() {
+        var container = $('subPillsContainer');
+        container.innerHTML = '';
+
+        if (currentBrand === '' || currentBrand === 'all') {
+            container.style.display = 'none';
+            $('kategoriPillsContainer').style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'flex';
+        var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
+
+        if (currentBrand === 'hambalanfc') {
+            pills = [{ id: 'all', label: 'Semua' }].concat(pills);
+        }
+
+        pills.forEach(function(p) {
+            var el = document.createElement('button');
+            el.className = 'pill-button';
+            if (p.id === currentSub) el.classList.add('active');
+            el.innerText = p.label;
+            el.dataset.pillId = p.id;
+            container.appendChild(el);
+        });
+
+        renderKategoriPills();
+    }
+
+    function renderKategoriPills() {
+        var katContainer = $('kategoriPillsContainer');
+        katContainer.innerHTML = '';
+
+        var labelMap = null;
+        if (currentBrand === 'yummychoice' && currentSub === 'bkl') labelMap = KATEGORI_LABEL;
+        else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_COFFEE;
+        else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_POINT;
+        else if (currentBrand === 'hambalanfc') {
+            katContainer.style.display = 'none';
+            return;
+        } else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
+
+        if (!labelMap) {
+            katContainer.style.display = 'none';
+            return;
+        }
+
+        katContainer.style.display = 'flex';
+
+        var allPill = document.createElement('button');
+        allPill.className = 'pill-button' + (currentKategori === 'all' ? ' active' : '');
+        allPill.innerText = 'Semua';
+        allPill.dataset.katId = 'all';
+        katContainer.appendChild(allPill);
+
+        var keys = Object.keys(labelMap);
+        keys.forEach(function(key) {
+            if (currentBrand === 'pointcoffee' && key === 'sarana') return;
+            var el = document.createElement('button');
+            el.className = 'pill-button' + (key === currentKategori ? ' active' : '');
+            el.innerText = labelMap[key];
+            el.dataset.katId = key;
+            katContainer.appendChild(el);
+        });
+    }
+
+    /* ================================================================
+       RENDER DATA GRID
+       ================================================================ */
+    function renderDataGrid() {
+        var query = $('searchInput').value.toLowerCase().trim();
+        var counterBadge = $('itemCounterBadge');
+
+        if (currentBrand === '' && query === '' && currentView !== 'katalog') {
+            counterBadge.innerText = '0 Item';
+            renderAlphabetNav();
+            return;
+        }
+
+        var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
+        if (cacheKey === _renderCache.key) return;
+
+        var filtered = DATABASE.filter(function(item) {
+            var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+            var matchSub = (currentSub === 'all' || item.sub === currentSub);
+            var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+            var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+            var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
+            return matchBrand && matchSub && matchKat && matchQuery;
+        });
+
+        counterBadge.innerText = filtered.length + ' Item';
+
+        if (filtered.length === 0) {
+            $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
+            $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
+            _renderCache.key = cacheKey;
+            renderAlphabetNav();
+            return;
+        }
+
+        var html = '';
+        var tableHtml = '';
+        filtered.forEach(function(item, i) {
+            var badgesHtml = '';
+            if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
+            if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
+
+            html += '<div class="product-card">' +
+                '<div class="product-info-col">' +
+                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
+                '</div>' +
+                '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
+            '</div>';
+
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
+            tableHtml += '<tr>' +
+                '<td class="row-number">' + (i + 1) + '</td>' +
+                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
+                '<td>' + rawHtml + '</td>' +
+                '<td>' + konvHtml + '</td>' +
+            '</tr>';
+        });
+
+        $('productGrid').innerHTML = html;
+        $('tableBody').innerHTML = tableHtml;
+
+        _renderCache.key = cacheKey;
+        renderAlphabetNav();
+    }
+
+    /* ================================================================
+       KATALOG
+       ================================================================ */
+    function renderKatalog() {
+        var tabsContainer = $('sheetTabs');
+        var counter = $('katalogCounter');
+        var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
+        var totalItems = 0;
+
+        brands.forEach(function(b) {
+            var items = DATABASE.filter(function(item) { return item.brand === b; });
+            katalogData[b] = items;
+            totalItems += items.length;
+        });
+
+        katalogData['all'] = DATABASE.slice();
+        counter.textContent = totalItems + ' Item';
+
+        var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" data-sheet="all">📋 Semua <span class="tab-count">' + totalItems + '</span></div>';
+
+        brands.forEach(function(b) {
+            var colorClass = b === 'saybread' ? 'bread' : b === 'sayburger' ? 'burger' : b === 'yummychoice' ? 'yummy' : b === 'yummycoffee' ? 'coffee' : b === 'pointcoffee' ? 'pointcoffee' : b === 'hambalanfc' ? 'hambalanfc' : 'perishable';
+            tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" data-sheet="' + b + '">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
+        });
+
+        tabsContainer.innerHTML = tabsHtml;
+        _katalogCache.key = '';
+        renderSheetData();
+    }
+
+    function switchSheet(brand) {
+        currentSheet = brand;
+        var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.toggle('active', tabs[i].dataset.sheet === brand);
+        }
+        _katalogCache.key = '';
+        renderSheetData();
+    }
+
+    function renderSheetData() {
+        var listGrid = $('katalogListGrid');
+        var tableBody = $('katalogTableBody');
+
+        var query = $('searchInput').value.toLowerCase().trim();
+        var items = katalogData[currentSheet] || [];
+
+        if (query !== '') {
+            items = items.filter(function(item) {
+                var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+                return searchString.indexOf(query) !== -1;
+            });
+        }
+
+        var cacheKey = currentSheet + '|' + query + '|' + items.length;
+        if (cacheKey === _katalogCache.key) return;
+
+        if (items.length === 0) {
+            listGrid.innerHTML = '<div class="empty-search-state">' +
+                (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') +
+            '</div>';
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
+            $('katalogCounter').textContent = '0 Item';
+            _katalogCache.key = cacheKey;
+            renderAlphabetNav();
+            return;
+        }
+
+        $('katalogCounter').textContent = items.length + ' Item';
+
+        var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
+        var kategoriSet = {};
+        if (needGrouping) {
+            items.forEach(function(item) {
+                if (item.kategori && !kategoriSet[item.kategori]) kategoriSet[item.kategori] = true;
+            });
+        }
+        var kategoriKeys = Object.keys(kategoriSet);
+        var hasKategori = needGrouping && kategoriKeys.length > 0;
+
+        var labelMap = {};
+        if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
+        else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
+        else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
+        else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
+
+        var listHtml = '';
+        var tableHtml = '';
+        var rowCounter = 0;
+
+        function renderItem(item) {
+            var badges = '';
+            if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
+            if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
+
+            listHtml += '<div class="product-card">' +
+                '<div class="product-info-col">' +
+                    '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
+                    '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
+                '</div>' +
+                '<div class="plu-badges-stack">' + badges + '</div>' +
+            '</div>';
+
+            rowCounter++;
+            var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
+            var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
+            tableHtml += '<tr>' +
+                '<td class="row-number">' + rowCounter + '</td>' +
+                '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
+                '<td>' + rawHtml + '</td>' +
+                '<td>' + konvHtml + '</td>' +
+            '</tr>';
+        }
+
+        if (hasKategori) {
+            kategoriKeys.forEach(function(kat) {
+                var katItems = items.filter(function(item) { return item.kategori === kat; });
+                if (katItems.length === 0) return;
+
+                var label = labelMap[kat] || kat;
+                if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
+
+                listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
+                tableHtml += '<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8rem;color:var(--primary-blue);background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
+
+                katItems.forEach(renderItem);
+            });
+        } else {
+            items.forEach(renderItem);
+        }
+
+        listGrid.innerHTML = listHtml;
+        tableBody.innerHTML = tableHtml;
+
+        _katalogCache.key = cacheKey;
+        renderAlphabetNav();
+    }
+
+    /* ================================================================
+       EVENT DELEGATION
+       ================================================================ */
+    document.addEventListener('click', function(e) {
+        var brandCard = e.target.closest('.brand-card');
+        if (brandCard && brandCard.dataset.brand) {
+            openBrandCategory(brandCard.dataset.brand);
+            return;
+        }
+
+        var pill = e.target.closest('#subPillsContainer .pill-button');
+        if (pill) {
+            var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
+            for (var j = 0; j < allPills.length; j++) allPills[j].classList.remove('active');
+            pill.classList.add('active');
+            currentSub = pill.dataset.pillId;
+            currentKategori = 'all';
+            _renderCache.key = '';
+            renderKategoriPills();
+            renderDataGrid();
+            return;
+        }
+
+        var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
+        if (katPill) {
+            var allKat = document.querySelectorAll('#kategoriPillsContainer .pill-button');
+            for (var k = 0; k < allKat.length; k++) allKat[k].classList.remove('active');
+            katPill.classList.add('active');
+            currentKategori = katPill.dataset.katId;
+            _renderCache.key = '';
+            renderDataGrid();
+            return;
+        }
+
+        var sheetTab = e.target.closest('#sheetTabs .sheet-tab');
+        if (sheetTab) {
+            switchSheet(sheetTab.dataset.sheet);
+            return;
+        }
+
+        var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
+        if (pluBtn) {
+            var code = pluBtn.dataset.plu;
+            copyToClipboard(code).then(function() {
+                var originalText = pluBtn.innerText;
+                pluBtn.innerText = '✓';
+                pluBtn.classList.add('plu-copied-style');
+                showToast('PLU ' + code + ' Disalin! ✓');
+                setTimeout(function() {
+                    pluBtn.innerText = originalText;
+                    pluBtn.classList.remove('plu-copied-style');
+                }, 1000);
+            });
+            return;
+        }
+
+        var sidebarPlu = e.target.closest('.plu-code[data-plu]');
+        if (sidebarPlu) {
+            var code2 = sidebarPlu.dataset.plu;
+            copyToClipboard(code2).then(function() {
+                var original = sidebarPlu.innerText;
+                sidebarPlu.innerText = '✓';
+                sidebarPlu.style.background = '#dcfce7';
+                sidebarPlu.style.color = '#15803d';
+                showToast('PLU ' + code2 + ' Disalin! ✓');
+                setTimeout(function() {
+                    sidebarPlu.innerText = original;
+                    sidebarPlu.style.background = '';
+                    sidebarPlu.style.color = '';
+                }, 1000);
+            });
+            return;
+        }
     });
-  }
-  count.textContent = items.length;
-  if (items.length === 0) {
-    list.innerHTML = '<div class="plu-empty">' + (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') + '</div>';
-    return;
-  }
-  var html = '';
-  items.forEach(function(item) {
-    var badges = '';
-    if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
-    if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
-    html += '<div class="plu-item">' +
-      '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
-      (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
-    '</div>';
-  });
-  list.innerHTML = html;
-}
 
-/* LOAD DATA JSON */
-function loadData() {
-  fetch('data.json')
-    .then(function(res) {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json();
-    })
-    .then(function(data) {
-      data.sort(function(a, b) {
-        return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-      });
-      DATABASE = data;
-      pointCoffeeData = data.filter(function(item) {
-        return item.brand === 'pointcoffee' || item.brand === 'point coffee';
-      });
-      pointCoffeeData.sort(function(a, b) {
-        return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
-      });
-      renderDataGrid();
-      renderKatalog();
-      renderSidebarPlu('');
-      renderSidebarAlphabetBar(); // Inisialisasi baris A-Z di Point Coffee Sidebar
-    })
-    .catch(function(err) {
-      console.error('Gagal load data.json:', err);
-      $('sidebarPluList').innerHTML = '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+    /* ================================================================
+       SEARCH
+       ================================================================ */
+    var searchInput = $('searchInput');
+    var searchClearBtn = $('searchClearBtn');
+
+    var handleSearch = debounce(function() {
+        if (currentView === 'katalog') {
+            _katalogCache.key = '';
+            renderSheetData();
+        } else if (currentView === 'detail' || currentView === 'home') {
+            var query = searchInput.value.trim();
+            if (query !== '' && currentView === 'home' && currentBrand === '') {
+                $('homeView').style.display = 'none';
+                $('detailView').style.display = 'block';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.add('hidden');
+                $('globalSearchBar').style.display = '';
+                $('detailHeadingTitle').innerText = 'Hasil Pencarian';
+                $('subPillsContainer').style.display = 'none';
+                $('kategoriPillsContainer').style.display = 'none';
+                currentView = 'detail';
+            } else if (query === '' && currentView === 'detail' && currentBrand === '') {
+                $('homeView').style.display = 'block';
+                $('detailView').style.display = 'none';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+            }
+            _renderCache.key = '';
+            renderDataGrid();
+        }
+        toggleAlphabetNav();
+    }, 120);
+
+    searchInput.addEventListener('input', function() {
+        searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
+        handleSearch();
     });
-}
 
-/* DETAIL VIEW */
-function setDetailView(mode) {
-  detailViewMode = mode;
-  $('viewListBtn').classList.toggle('active', mode === 'list');
-  $('viewTableBtn').classList.toggle('active', mode === 'table');
-  if (mode === 'list') {
-    $('productGrid').classList.remove('hidden');
-    $('tableView').classList.add('hidden');
-  } else {
-    $('productGrid').classList.add('hidden');
-    $('tableView').classList.remove('hidden');
-  }
-}
-
-function setKatalogView(mode) {
-  katalogViewMode = mode;
-  $('katalogListBtn').classList.toggle('active', mode === 'list');
-  $('katalogTableBtn').classList.toggle('active', mode === 'table');
-  if (mode === 'list') {
-    $('katalogListGrid').classList.remove('hidden');
-    $('katalogTableView').classList.add('hidden');
-  } else {
-    $('katalogListGrid').classList.add('hidden');
-    $('katalogTableView').classList.remove('hidden');
-  }
-}
-
-function openBrandCategory(key) {
-  currentView = 'detail';
-  currentBrand = key;
-  currentSub = 'all';
-  currentKategori = 'all';
-  $('homeView').style.display = 'none';
-  $('detailView').style.display = 'block';
-  $('katalogView').style.display = 'none';
-  $('kalkulatorView').style.display = 'none';
-  $('greetingWrapper').classList.add('hidden');
-  $('globalSearchBar').style.display = '';
-  $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
-  detailViewMode = 'list';
-  $('viewListBtn').classList.add('active');
-  $('viewTableBtn').classList.remove('active');
-  $('productGrid').classList.remove('hidden');
-  $('tableView').classList.add('hidden');
-  
-  renderSubPills();
-  _renderCache.key = '';
-  renderDataGrid();
-  
-  var tabs = document.querySelectorAll('.dock-tab');
-  for (var i=0; i < tabs.length; i++) tabs[i].classList.remove('active');
-  $('dock-home').classList.add('active');
-  toggleAlphabetNav();
-}
-
-function renderSubPills() {
-  var container = $('subPillsContainer');
-  container.innerHTML = '';
-  if (currentBrand === '' || currentBrand === 'all') {
-    container.style.display = 'none';
-    $('kategoriPillsContainer').style.display = 'none';
-    return;
-  }
-  container.style.display = 'flex';
-  var pills = SUB_CONFIG[currentBrand] || [{ id: 'all', label: 'Semua' }];
-  pills.forEach(function(p) {
-    var el = document.createElement('button');
-    el.className = 'pill-button' + (p.id === currentSub ? ' active' : '');
-    el.innerText = p.label;
-    el.dataset.pillid = p.id;
-    container.appendChild(el);
-  });
-  renderKategoriPills();
-}
-
-function renderKategoriPills() {
-  var katContainer = $('kategoriPillsContainer');
-  katContainer.innerHTML = '';
-  var labelMap = null;
-  if (currentBrand === 'yummychoice' && currentSub === 'bkl') labelMap = KATEGORI_LABEL;
-  else if (currentBrand === 'yummycoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_COFFEE;
-  else if (currentBrand === 'pointcoffee' && currentSub === 'bkl') labelMap = KATEGORI_LABEL_POINT;
-  else if (currentBrand === 'hambalanfc') { katContainer.style.display = 'none'; return; }
-  else if (currentBrand === 'perishable' && currentSub === 'buah_sayur') labelMap = KATEGORI_LABEL_PERISHABLE;
-
-  if (!labelMap) { katContainer.style.display = 'none'; return; }
-
-  katContainer.style.display = 'flex';
-  var allPill = document.createElement('button');
-  allPill.className = 'pill-button' + (currentKategori === 'all' ? ' active' : '');
-  allPill.innerText = 'Semua';
-  allPill.dataset.katid = 'all';
-  katContainer.appendChild(allPill);
-
-  Object.keys(labelMap).forEach(function(key) {
-    if (currentBrand === 'pointcoffee' && key === 'sarana') return;
-    var el = document.createElement('button');
-    el.className = 'pill-button' + (key === currentKategori ? ' active' : '');
-    el.innerText = labelMap[key];
-    el.dataset.katid = key;
-    katContainer.appendChild(el);
-  });
-}
-
-/* RENDER DATA GRID */
-function renderDataGrid() {
-  var query = $('searchInput').value.toLowerCase().trim();
-  var counterBadge = $('itemCounterBadge');
-
-  if (currentBrand === '' && query === '' && currentView !== 'katalog') {
-    counterBadge.innerText = '0 Item';
-    renderAlphabetNav();
-    return;
-  }
-
-  var cacheKey = currentBrand + '|' + currentSub + '|' + currentKategori + '|' + query;
-  if (cacheKey === _renderCache.key) return;
-
-  var filtered = DATABASE.filter(function(item) {
-    var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
-    var matchSub = (currentSub === 'all' || item.sub === currentSub);
-    var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
-    var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-    var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
-    return matchBrand && matchSub && matchKat && matchQuery;
-  });
-
-  counterBadge.innerText = filtered.length + ' Item';
-
-  if (filtered.length === 0) {
-    $('productGrid').innerHTML = '<div class="empty-search-state">Barang yang Anda cari tidak ditemukan.</div>';
-    $('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Barang tidak ditemukan</td></tr>';
-    _renderCache.key = cacheKey;
-    renderAlphabetNav();
-    return;
-  }
-
-  var html = '';
-  var tableHtml = '';
-  filtered.forEach(function(item, i) {
-    var badgesHtml = '';
-    if (item.raw) badgesHtml += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
-    if (item.konv) badgesHtml += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
-    
-    html += '<div class="product-card">' +
-      '<div class="product-info-col">' +
-        '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-        '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
-      '</div>' +
-      '<div class="plu-badges-stack">' + badgesHtml + '</div>' +
-    '</div>';
-
-    var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
-    var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-
-    tableHtml += '<tr>' +
-      '<td class="row-number">' + (i + 1) + '</td>' +
-      '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
-      '<td>' + rawHtml + '</td>' +
-      '<td>' + konvHtml + '</td>' +
-    '</tr>';
-  });
-
-  $('productGrid').innerHTML = html;
-  $('tableBody').innerHTML = tableHtml;
-  _renderCache.key = cacheKey;
-  renderAlphabetNav();
-}
-
-/* KATALOG */
-function renderKatalog() {
-  var tabsContainer = $('sheetTabs');
-  var counter = $('katalogCounter');
-  var brands = ['saybread', 'sayburger', 'yummychoice', 'yummycoffee', 'pointcoffee', 'hambalanfc', 'perishable'];
-  var totalItems = 0;
-
-  brands.forEach(function(b) {
-    var items = DATABASE.filter(function(item) { return item.brand === b; });
-    katalogData[b] = items;
-    totalItems += items.length;
-  });
-  katalogData['all'] = DATABASE.slice();
-  counter.textContent = totalItems + ' Item';
-
-  var tabsHtml = '<div class="sheet-tab all-brand' + (currentSheet === 'all' ? ' active' : '') + '" data-sheet="all">Semua <span class="tab-count">' + totalItems + '</span></div>';
-  brands.forEach(function(b) {
-    var colorClass = b === 'saybread'? 'bread' : b === 'sayburger'? 'burger': b === 'yummychoice' ? 'yummy': b === 'yummycoffee'? 'coffee': b === 'pointcoffee'? 'pointcoffee': b === 'hambalanfc'? 'hambalanfc': 'perishable';
-    tabsHtml += '<div class="sheet-tab ' + colorClass + (currentSheet === b ? ' active' : '') + '" data-sheet="' + b + '">' + BRAND_NAMES[b] + ' <span class="tab-count">' + katalogData[b].length + '</span></div>';
-  });
-
-  tabsContainer.innerHTML = tabsHtml;
-  _katalogCache.key = '';
-  renderSheetData();
-}
-
-function switchSheet(brand) {
-  currentSheet = brand;
-  var tabs = document.querySelectorAll('#sheetTabs .sheet-tab');
-  for (var i=0; i < tabs.length; i++) {
-    tabs[i].classList.toggle('active', tabs[i].dataset.sheet === brand);
-  }
-  _katalogCache.key = '';
-  renderSheetData();
-}
-
-function renderSheetData() {
-  var listGrid = $('katalogListGrid');
-  var tableBody = $('katalogTableBody');
-  var query = $('searchInput').value.toLowerCase().trim();
-  var items = katalogData[currentSheet] || [];
-
-  if (query !== '') {
-    items = items.filter(function(item) {
-      var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-      return searchString.indexOf(query) !== -1;
-    });
-  }
-
-  var cacheKey = currentSheet + '|' + query + '|' + items.length;
-  if (cacheKey === _katalogCache.key) return;
-
-  if (items.length === 0) {
-    listGrid.innerHTML = '<div class="empty-search-state">' + (query !== '' ? 'Barang yang Anda cari tidak ditemukan.' : 'Tidak ada PLU di brand ini.') + '</div>';
-    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Tidak ada data</td></tr>';
-    $('katalogCounter').textContent = '0 Item';
-    _katalogCache.key = cacheKey;
-    renderAlphabetNav();
-    return;
-  }
-
-  $('katalogCounter').textContent = items.length + ' Item';
-
-  var needGrouping = (currentSheet === 'yummychoice' || currentSheet === 'yummycoffee' || currentSheet === 'pointcoffee' || currentSheet === 'hambalanfc' || currentSheet === 'perishable');
-  var kategoriSet = {};
-  if (needGrouping) {
-    items.forEach(function(item) {
-      if (item.kategori && !kategoriSet[item.kategori]) kategoriSet[item.kategori] = true;
-    });
-  }
-
-  var kategoriKeys = Object.keys(kategoriSet);
-  var hasKategori = needGrouping && kategoriKeys.length > 0;
-  var labelMap = {};
-  if (currentSheet === 'yummychoice') labelMap = KATEGORI_LABEL;
-  else if (currentSheet === 'yummycoffee') labelMap = KATEGORI_LABEL_COFFEE;
-  else if (currentSheet === 'pointcoffee') labelMap = KATEGORI_LABEL_POINT;
-  else if (currentSheet === 'perishable') labelMap = KATEGORI_LABEL_PERISHABLE;
-
-  var listHtml = '';
-  var tableHtml = '';
-  var rowCounter = 0;
-
-  function renderItem(item) {
-    var badges = '';
-    if (item.raw) badges += '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>';
-    if (item.konv) badges += '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>';
-    
-    listHtml += '<div class="product-card">' +
-      '<div class="product-info-col">' +
-        '<span class="brand-mini-tag">' + (BRAND_NAMES[item.brand] || item.brand) + '</span>' +
-        '<div class="product-card-title">' + escapeHtml(item.nama) + '</div>' +
-      '</div>' +
-      '<div class="plu-badges-stack">' + badges + '</div>' +
-    '</div>';
-
-    rowCounter++;
-    var rawHtml = item.raw ? '<button class="plu-badge-button plu-raw-style" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</button>' : '-';
-    var konvHtml = item.konv ? '<button class="plu-badge-button plu-konv-style" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
-
-    tableHtml += '<tr>' +
-      '<td class="row-number">' + rowCounter + '</td>' +
-      '<td><div class="item-name">' + escapeHtml(item.nama) + '</div></td>' +
-      '<td>' + rawHtml + '</td>' +
-      '<td>' + konvHtml + '</td>' +
-    '</tr>';
-  }
-
-  if (hasKategori) {
-    kategoriKeys.forEach(function(kat) {
-      var katItems = items.filter(function(item) { return item.kategori === kat; });
-      if (katItems.length === 0) return;
-      var label = labelMap[kat] || kat;
-      if (currentSheet === 'hambalanfc') label = kat.charAt(0).toUpperCase() + kat.slice(1);
-      
-      listHtml += '<div class="section-bar" style="margin-top:10px;"><span class="section-title" style="font-size:0.85rem;color:var(--primary-blue);">' + label + ' (' + katItems.length + ')</span></div>';
-      tableHtml += '<tr><td colspan="4" style="padding:8px 12px 4px 12px;font-weight:800;font-size:0.8em;color:var(--primary-blue); background:#f8fafc;border-bottom:2px solid var(--card-border);">' + label + ' (' + katItems.length + ')</td></tr>';
-      
-      katItems.forEach(renderItem);
-    });
-  } else {
-    items.forEach(renderItem);
-  }
-
-  listGrid.innerHTML = listHtml;
-  tableBody.innerHTML = tableHtml;
-  _katalogCache.key = cacheKey;
-  renderAlphabetNav();
-}
-
-/* EVENT DELEGATION */
-document.addEventListener('click', function(e) {
-  var brandCard = e.target.closest('.brand-card');
-  if (brandCard && brandCard.dataset.brand) {
-    openBrandCategory(brandCard.dataset.brand);
-    return;
-  }
-
-  var pill = e.target.closest('#subPillsContainer .pill-button');
-  if (pill) {
-    var allPills = document.querySelectorAll('#subPillsContainer .pill-button');
-    for (var j=0; j < allPills.length; j++) allPills[j].classList.remove('active');
-    pill.classList.add('active');
-    currentSub = pill.dataset.pillid;
-    currentKategori = 'all';
-    _renderCache.key = '';
-    renderKategoriPills();
-    renderDataGrid();
-    return;
-  }
-
-  var katPill = e.target.closest('#kategoriPillsContainer .pill-button');
-  if (katPill) {
-    var allKat = document.querySelectorAll('#kategoriPillsContainer .pill-button');
-    for (var k=0; k < allKat.length; k++) allKat[k].classList.remove('active');
-    katPill.classList.add('active');
-    currentKategori = katPill.dataset.katid;
-    _renderCache.key = '';
-    renderDataGrid();
-    return;
-  }
-
-  var sheetTab = e.target.closest('#sheetTabs .sheet-tab');
-  if (sheetTab) {
-    switchSheet(sheetTab.dataset.sheet);
-    return;
-  }
-
-  var pluBtn = e.target.closest('.plu-badge-button[data-plu]');
-  if (pluBtn) {
-    var code = pluBtn.dataset.plu;
-    copyToClipboard(code).then(function() {
-      var originalText = pluBtn.innerText;
-      pluBtn.innerText = '✓';
-      pluBtn.classList.add('plu-copied-style');
-      showToast('PLU ' + code + ' Disalin!');
-      setTimeout(function() {
-        pluBtn.innerText = originalText;
-        pluBtn.classList.remove('plu-copied-style');
-      }, 1000);
-    });
-    return;
-  }
-
-  var sidebarPlu = e.target.closest('.plu-code[data-plu]');
-  if (sidebarPlu) {
-    var code2 = sidebarPlu.dataset.plu;
-    copyToClipboard(code2).then(function() {
-      var original = sidebarPlu.innerText;
-      sidebarPlu.innerText = '✓';
-      sidebarPlu.style.background = '#dcfce7';
-      sidebarPlu.style.color = '#15803d';
-      showToast('PLU ' + code2 + ' Disalin!');
-      setTimeout(function() {
-        sidebarPlu.innerText = original;
-        sidebarPlu.style.background = '';
-        sidebarPlu.style.color = '';
-      }, 1000);
-    });
-    return;
-  }
-
-  // Event handler untuk baris A-Z di Point Coffee Sidebar
-  var sidebarAlphaBtn = e.target.closest('.sidebar-alpha-btn');
-  if (sidebarAlphaBtn) {
-    var letter = sidebarAlphaBtn.dataset.letter;
-    sidebarSelectedLetter = letter;
-    
-    var btns = document.querySelectorAll('.sidebar-alpha-btn');
-    for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
-    sidebarAlphaBtn.classList.add('active');
-
-    var filterInput = $('sidebarSearchPlu').value;
-    if (letter === 'ALL') {
-      renderSidebarPlu(filterInput);
-    } else {
-      var filtered = pointCoffeeData.filter(function(item) {
-        return item.nama.trim().toUpperCase().startsWith(letter);
-      });
-      renderSidebarPluFiltered(filtered);
+    function clearSearchInput() {
+        searchInput.value = '';
+        searchClearBtn.style.display = 'none';
+        _renderCache.key = '';
+        _katalogCache.key = '';
+        if (currentView === 'katalog') {
+            renderSheetData();
+        } else {
+            if (currentView === 'detail' && currentBrand === '') {
+                $('homeView').style.display = 'block';
+                $('detailView').style.display = 'none';
+                $('katalogView').style.display = 'none';
+                $('kalkulatorView').style.display = 'none';
+                $('greetingWrapper').classList.remove('hidden');
+                currentView = 'home';
+            }
+            renderDataGrid();
+        }
+        toggleAlphabetNav();
     }
-  }
-});
 
-/* SEARCH */
-var searchInput = $('searchInput');
-var searchClearBtn = $('searchClearBtn');
-var handleSearch = debounce(function() {
-  if (currentView === 'katalog') {
-    _katalogCache.key = '';
-    renderSheetData();
-  } else if (currentView === 'detail' || currentView === 'home') {
-    var query = searchInput.value.trim();
-    if (query !== '' && currentView === 'home' && currentBrand === '') {
-      $('homeView').style.display = 'none';
-      $('detailView').style.display = 'block';
-      $('katalogView').style.display = 'none';
-      $('kalkulatorView').style.display = 'none';
-      $('greetingWrapper').classList.add('hidden');
-      $('globalSearchBar').style.display = '';
-      $('detailHeadingTitle').innerText = 'Hasil Pencarian';
-      $('subPillsContainer').style.display = 'none';
-      $('kategoriPillsContainer').style.display = 'none';
-      currentView = 'detail';
-    } else if (query === '' && currentView === 'detail' && currentBrand === '') {
-      $('homeView').style.display = 'block';
-      $('detailView').style.display = 'none';
-      $('katalogView').style.display = 'none';
-      $('kalkulatorView').style.display = 'none';
-      $('greetingWrapper').classList.remove('hidden');
-      currentView = 'home';
+    /* Search PLU (mode gramasi) */
+    var handleSidebarSearch = debounce(function() {
+        renderSidebarPlu($('sidebarSearchPlu').value);
+    }, 100);
+    $('sidebarSearchPlu').addEventListener('input', handleSidebarSearch);
+
+    /* ================================================================
+       GREETING & CLOCK
+       ================================================================ */
+    var _lastClockSecond = -1;
+    function updateClock() {
+        var now = new Date();
+        if (now.getSeconds() === _lastClockSecond) return;
+        _lastClockSecond = now.getSeconds();
+
+        var hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        var bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
+        $('dateDisplay').innerText = '📅 ' + tanggal;
+        var jam = String(now.getHours()).padStart(2, '0');
+        var menit = String(now.getMinutes()).padStart(2, '0');
+        var detik = String(now.getSeconds()).padStart(2, '0');
+        $('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
     }
-    _renderCache.key = '';
-    renderDataGrid();
-  }
-  toggleAlphabetNav();
-}, 120);
-
-searchInput.addEventListener('input', function() {
-  searchClearBtn.style.display = searchInput.value.trim() !== '' ? 'flex' : 'none';
-  handleSearch();
-});
-
-function clearSearchInput() {
-  searchInput.value = '';
-  searchClearBtn.style.display = 'none';
-  _renderCache.key = '';
-  _katalogCache.key = '';
-  if (currentView === 'katalog') {
-    renderSheetData();
-  } else {
-    if (currentView === 'detail' && currentBrand === '') {
-      $('homeView').style.display = 'block';
-      $('detailView').style.display = 'none';
-      $('katalogView').style.display = 'none';
-      $('kalkulatorView').style.display = 'none';
-      $('greetingWrapper').classList.remove('hidden');
-      currentView = 'home';
+    function clockLoop() {
+        updateClock();
+        requestAnimationFrame(clockLoop);
     }
-    renderDataGrid();
-  }
-  toggleAlphabetNav();
-}
 
-/* SEARCH SIDEBAR PLU */
-var handleSidebarSearch = debounce(function() {
-  renderSidebarPlu($('sidebarSearchPlu').value);
-}, 100);
-$('sidebarSearchPlu').addEventListener('input', handleSidebarSearch);
-
-/* GREETING & CLOCK */
-var _lastClockSecond = -1;
-function updateClock() {
-  var now = new Date();
-  if (now.getSeconds() === _lastClockSecond) return;
-  _lastClockSecond = now.getSeconds();
-  var hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  var bulan = ['Januari', 'Februari','Maret','April','Mei','Juni','Juli','Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  var tanggal = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
-  $('dateDisplay').innerText = tanggal;
-  
-  var jam = String(now.getHours()).padStart(2, '0');
-  var menit = String(now.getMinutes()).padStart(2, '0');
-  var detik = String(now.getSeconds()).padStart(2, '0');
-  $('timeDisplay').innerText = jam + ':' + menit + ':' + detik;
-}
-
-function clockLoop() {
-  updateClock();
-  requestAnimationFrame(clockLoop);
-}
-
-function getSapaanData() {
-  var jam = new Date().getHours();
-  if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
-  if (jam >= 5 && jam < 11) return { icon: '☕', text: 'gas urang pulcep!' };
-  if (jam >= 11 && jam < 15) return { icon: '☀️', text: 'aduh, kurang lincah wa!' };
-  if (jam >= 15 && jam < 18) return { icon: '🌆', text: 'bau-bau balik burit' };
-  return { icon: '🌌', text: 'astaghfirullah, masih gadag wayah gini.' };
-}
-
-function getCountdownGajian() {
-  var now = new Date();
-  var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
-  if (now > gajian) gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
-  var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
-  if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN!' };
-  if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
-  return { icon: '💸', text: selisih + ' hari menuju gajian!' };
-}
-
-var isSapaan = true;
-var _sapaanTimer;
-function toggleSapaanCountdown() {
-  var s = isSapaan ? getSapaanData() : getCountdownGajian();
-  $('sapaanIcon').innerText = s.icon;
-  $('sapaanText').innerText = s.text;
-  isSapaan = !isSapaan;
-  clearTimeout(_sapaanTimer);
-  _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
-}
-
-/* ===== LOGIC FITUR ALPHABET INDEX (DINAMIS 100% & RESPONSIVE) ===== */
-var activeAlphabet = [];
-var isManualTouch = false;
-var sidebarSelectedLetter = 'ALL';
-
-// 1. Dapatkan Abjad yang HANYA ADA di daftar item aktif secara presisi
-function getAvailableAlphabet() {
-  var lettersSet = {};
-  var items = [];
-
-  if (currentView === 'detail') {
-    var query = $('searchInput').value.toLowerCase().trim();
-    items = DATABASE.filter(function(item) {
-      var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
-      var matchSub = (currentSub === 'all' || item.sub === currentSub);
-      var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
-      var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-      var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
-      return matchBrand && matchSub && matchKat && matchQuery;
-    });
-  } else if (currentView === 'katalog') {
-    var queryKatalog = $('searchInput').value.toLowerCase().trim();
-    items = katalogData[currentSheet] || [];
-    if (queryKatalog !== '') {
-      items = items.filter(function(item) {
-        var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
-        return searchString.indexOf(queryKatalog) !== -1;
-      });
+    function getSapaanData() {
+        var jam = new Date().getHours();
+        if (jam >= 0 && jam < 5) return { icon: '🌙', text: 'rek naon ente?' };
+        if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
+        if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
+        if (jam >= 15 && jam < 18) return { icon: '🌅', text: 'bau-bau balik burit 😂' };
+        return { icon: '🌙', text: 'astaghfirullah, masih gadag wayah gini.' };
     }
-  }
 
-  items.forEach(function(item) {
-    if (item.nama) {
-      var firstChar = item.nama.trim().toUpperCase().charAt(0);
-      if (/[A-Z]/.test(firstChar)) {
-        lettersSet[firstChar] = true;
-      }
+    function getCountdownGajian() {
+        var now = new Date();
+        var gajian = new Date(now.getFullYear(), now.getMonth(), 28);
+        if (now > gajian) gajian = new Date(now.getFullYear(), now.getMonth() + 1, 28);
+        var selisih = Math.ceil((gajian - now) / (1000 * 60 * 60 * 24));
+        if (selisih === 0) return { icon: '🎉', text: 'HARI INI GAJIAN! 🎉🎉🎉' };
+        if (selisih === 1) return { icon: '💰', text: '1 hari menuju gajian!' };
+        return { icon: '💰', text: selisih + ' hari menuju gajian! 🎉' };
     }
-  });
 
-  return Object.keys(lettersSet).sort();
-}
-
-// 2. Render Sidebar A-Z Utama
-function renderAlphabetNav() {
-  var nav = $('alphabetNav');
-  if (!nav) return;
-  
-  activeAlphabet = getAvailableAlphabet();
-
-  if (activeAlphabet.length === 0) {
-    nav.style.display = 'none';
-    return;
-  }
-
-  var html = '';
-  activeAlphabet.forEach(function(letter) {
-    html += '<div class="alpha-item" data-letter="' + letter + '" id="alpha-' + letter + '">' + letter + '</div>';
-  });
-  nav.innerHTML = html;
-  toggleAlphabetNav();
-}
-
-function toggleAlphabetNav() {
-  var nav = $('alphabetNav');
-  if (!nav) return;
-  if ((currentView === 'detail' || currentView === 'katalog') && activeAlphabet.length > 0) {
-    nav.style.display = 'flex';
-  } else {
-    nav.style.display = 'none';
-  }
-}
-
-// 3. Highlight Huruf Aktif
-function setActiveLetter(letter) {
-  var items = document.querySelectorAll('.alpha-item');
-  for (var i = 0; i < items.length; i++) {
-    items[i].classList.remove('active');
-  }
-  var activeEl = $('alpha-' + letter);
-  if (activeEl) activeEl.classList.add('active');
-}
-
-function scrollToLetter(letter) {
-  setActiveLetter(letter);
-  
-  var bubble = $('alphaBubble');
-  if (bubble) {
-    bubble.innerText = letter;
-    bubble.classList.add('show');
-    clearTimeout(window._bubbleTimer);
-    window._bubbleTimer = setTimeout(function() {
-      bubble.classList.remove('show');
-    }, 700);
-  }
-
-  var targets = document.querySelectorAll('.product-card-title, .item-name');
-  for (var i = 0; i < targets.length; i++) {
-    var text = targets[i].innerText.trim().toUpperCase();
-    if (text.startsWith(letter)) {
-      targets[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      break;
+    var isSapaan = true;
+    var _sapaanTimer;
+    function toggleSapaanCountdown() {
+        var s = isSapaan ? getSapaanData() : getCountdownGajian();
+        $('sapaanIcon').innerText = s.icon;
+        $('sapaanText').innerText = s.text;
+        isSapaan = !isSapaan;
+        clearTimeout(_sapaanTimer);
+        _sapaanTimer = setTimeout(toggleSapaanCountdown, isSapaan ? 3000 : 5000);
     }
-  }
-}
 
-// 4. Auto-Highlight pada saat Scroll Layar
-function updateActiveLetterOnScroll() {
-  if (isManualTouch) return;
-  
-  var cards = document.querySelectorAll('.product-card-title, .item-name');
-  var currentFirstLetter = '';
-  
-  for (var i = 0; i < cards.length; i++) {
-    var rect = cards[i].getBoundingClientRect();
-    if (rect.top >= 100 && rect.top <= window.innerHeight / 2) {
-      var text = cards[i].innerText.trim().toUpperCase();
-      if (text.length > 0) {
-        currentFirstLetter = text.charAt(0);
-        break;
-      }
+    /* ================================================================
+       LOGIC FITUR ALPHABET INDEX (Detail/Katalog)
+       ================================================================ */
+    var activeAlphabet = [];
+    var isManualTouch = false;
+
+    function getAvailableAlphabet() {
+        var lettersSet = {};
+        var items = [];
+
+        if (currentView === 'detail') {
+            var query = $('searchInput').value.toLowerCase().trim();
+            items = DATABASE.filter(function(item) {
+                var matchBrand = (currentBrand === '' || currentBrand === 'all' || item.brand === currentBrand);
+                var matchSub = (currentSub === 'all' || item.sub === currentSub);
+                var matchKat = (currentKategori === 'all' || item.kategori === currentKategori);
+                var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+                var matchQuery = (query === '' || searchString.indexOf(query) !== -1);
+                return matchBrand && matchSub && matchKat && matchQuery;
+            });
+        } else if (currentView === 'katalog') {
+            var queryKatalog = $('searchInput').value.toLowerCase().trim();
+            items = katalogData[currentSheet] || [];
+            if (queryKatalog !== '') {
+                items = items.filter(function(item) {
+                    var searchString = (item.nama + ' ' + (item.raw || '') + ' ' + (item.konv || '')).toLowerCase();
+                    return searchString.indexOf(queryKatalog) !== -1;
+                });
+            }
+        }
+
+        items.forEach(function(item) {
+            if (item.nama) {
+                var firstChar = item.nama.trim().toUpperCase().charAt(0);
+                if (/[A-Z]/.test(firstChar)) {
+                    lettersSet[firstChar] = true;
+                }
+            }
+        });
+
+        return Object.keys(lettersSet).sort();
     }
-  }
-  
-  if (currentFirstLetter && activeAlphabet.indexOf(currentFirstLetter) !== -1) {
-    setActiveLetter(currentFirstLetter);
-  }
-}
 
-// 5. Fitur Alphabet Baris Horizontal (Sidebar Point Coffee)
-function renderSidebarAlphabetBar() {
-  var bar = $('sidebarAlphaBar');
-  if (!bar) return;
+    function renderAlphabetNav() {
+        var nav = $('alphabetNav');
+        if (!nav) return;
 
-  var set = {};
-  pointCoffeeData.forEach(function(item) {
-    if (item.nama) {
-      var c = item.nama.trim().toUpperCase().charAt(0);
-      if (/[A-Z]/.test(c)) set[c] = true;
+        activeAlphabet = getAvailableAlphabet();
+
+        if (activeAlphabet.length === 0) {
+            nav.style.display = 'none';
+            return;
+        }
+
+        var html = '';
+        activeAlphabet.forEach(function(letter) {
+            html += '<div class="alpha-item" data-letter="' + letter + '" id="alpha-' + letter + '">' + letter + '</div>';
+        });
+        nav.innerHTML = html;
+        toggleAlphabetNav();
     }
-  });
 
-  var letters = Object.keys(set).sort();
-  var html = '<button class="sidebar-alpha-btn' + (sidebarSelectedLetter === 'ALL' ? ' active' : '') + '" data-letter="ALL">ALL</button>';
-  
-  letters.forEach(function(l) {
-    html += '<button class="sidebar-alpha-btn' + (sidebarSelectedLetter === l ? ' active' : '') + '" data-letter="' + l + '">' + l + '</button>';
-  });
-
-  bar.innerHTML = html;
-}
-
-function renderSidebarPluFiltered(items) {
-  var list = $('sidebarPluList');
-  var count = $('pluCount');
-  count.textContent = items.length;
-
-  if (items.length === 0) {
-    list.innerHTML = '<div class="plu-empty">Tidak ada data untuk huruf ini</div>';
-    return;
-  }
-
-  var html = '';
-  items.forEach(function(item) {
-    var badges = '';
-    if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' + item.raw + '</span>';
-    if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) + '">' + item.konv + '</span>';
-    html += '<div class="plu-item">' +
-      '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
-      (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
-    '</div>';
-  });
-  list.innerHTML = html;
-}
-
-// Touch Event Navigation A-Z Utama
-function initAlphabetNavEvents() {
-  var nav = $('alphabetNav');
-  if (!nav) return;
-
-  function handleTouch(e) {
-    e.preventDefault();
-    isManualTouch = true;
-    var touch = e.touches ? e.touches[0] : e;
-    var target = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (target && target.classList.contains('alpha-item')) {
-      var letter = target.dataset.letter;
-      if (letter) scrollToLetter(letter);
+    function toggleAlphabetNav() {
+        var nav = $('alphabetNav');
+        if (!nav) return;
+        if ((currentView === 'detail' || currentView === 'katalog') && activeAlphabet.length > 0) {
+            nav.style.display = 'flex';
+        } else {
+            nav.style.display = 'none';
+        }
     }
-  }
 
-  nav.addEventListener('click', function(e) {
-    var item = e.target.closest('.alpha-item');
-    if (item && item.dataset.letter) {
-      scrollToLetter(item.dataset.letter);
+    function setActiveLetter(letter) {
+        var items = document.querySelectorAll('.alpha-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('active');
+        }
+        var activeEl = $('alpha-' + letter);
+        if (activeEl) activeEl.classList.add('active');
     }
-  });
 
-  nav.addEventListener('touchstart', handleTouch, { passive: false });
-  nav.addEventListener('touchmove', handleTouch, { passive: false });
-  nav.addEventListener('touchend', function() {
-    setTimeout(function() { isManualTouch = false; }, 400);
-  });
+    function scrollToLetter(letter) {
+        setActiveLetter(letter);
 
-  window.addEventListener('scroll', debounce(updateActiveLetterOnScroll, 40));
-}
+        var bubble = $('alphaBubble');
+        if (bubble) {
+            bubble.innerText = letter;
+            bubble.classList.add('show');
+            clearTimeout(window._bubbleTimer);
+            window._bubbleTimer = setTimeout(function() {
+                bubble.classList.remove('show');
+            }, 700);
+        }
 
-/* INIT */
-renderBrandGrid();
-clockLoop();
-toggleSapaanCountdown();
-hitungGramasi();
-hitungBiang();
-hitungSeal();
-loadData();
-initAlphabetNavEvents();
-</script>
+        var targets = document.querySelectorAll('.product-card-title, .item-name');
+        for (var i = 0; i < targets.length; i++) {
+            var text = targets[i].innerText.trim().toUpperCase();
+            if (text.startsWith(letter)) {
+                targets[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                break;
+            }
+        }
+    }
+
+    function updateActiveLetterOnScroll() {
+        if (isManualTouch) return;
+
+        var cards = document.querySelectorAll('.product-card-title, .item-name');
+        var currentFirstLetter = '';
+
+        for (var i = 0; i < cards.length; i++) {
+            var rect = cards[i].getBoundingClientRect();
+            if (rect.top >= 100 && rect.top <= window.innerHeight / 2) {
+                var text = cards[i].innerText.trim().toUpperCase();
+                if (text.length > 0) {
+                    currentFirstLetter = text.charAt(0);
+                    break;
+                }
+            }
+        }
+
+        if (currentFirstLetter && activeAlphabet.indexOf(currentFirstLetter) !== -1) {
+            setActiveLetter(currentFirstLetter);
+        }
+    }
+
+    /* Touch Event Navigation A-Z Utama */
+    function initAlphabetNavEvents() {
+        var nav = $('alphabetNav');
+        if (!nav) return;
+
+        function handleTouch(e) {
+            e.preventDefault();
+            isManualTouch = true;
+            var touch = e.touches ? e.touches[0] : e;
+            var target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('alpha-item')) {
+                var letter = target.dataset.letter;
+                if (letter) scrollToLetter(letter);
+            }
+        }
+
+        nav.addEventListener('click', function(e) {
+            var item = e.target.closest('.alpha-item');
+            if (item && item.dataset.letter) {
+                scrollToLetter(item.dataset.letter);
+            }
+        });
+
+        nav.addEventListener('touchstart', handleTouch, { passive: false });
+        nav.addEventListener('touchmove', handleTouch, { passive: false });
+        nav.addEventListener('touchend', function() {
+            setTimeout(function() { isManualTouch = false; }, 400);
+        });
+
+        window.addEventListener('scroll', debounce(updateActiveLetterOnScroll, 40));
+    }
+
+    /* ================================================================
+       ALPHABET INDEX VERTIKAL (PLU di mode Gramasi)
+       ================================================================ */
+    var kcManualTouch = false;
+
+    function renderSidebarAlphaNav() {
+        var nav = $('kcAlphaNav');
+        if (!nav) return;
+        var set = {};
+        pointCoffeeData.forEach(function(item) {
+            if (item.nama) {
+                var c = item.nama.trim().toUpperCase().charAt(0);
+                if (/[A-Z]/.test(c)) set[c] = true;
+            }
+        });
+        var letters = Object.keys(set).sort();
+        var html = '';
+        letters.forEach(function(l) {
+            html += '<div class="kc-alpha-item" data-letter="' + l + '">' + l + '</div>';
+        });
+        nav.innerHTML = html;
+    }
+
+    function kcSetActive(letter) {
+        var items = $('kcAlphaNav').querySelectorAll('.kc-alpha-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.toggle('active', items[i].dataset.letter === letter);
+        }
+    }
+
+    function kcScrollTo(letter) {
+        kcSetActive(letter);
+        var bubble = $('kcAlphaBubble');
+        bubble.innerText = letter;
+        bubble.classList.add('show');
+        clearTimeout(window._kcBubbleTimer);
+        window._kcBubbleTimer = setTimeout(function() {
+            bubble.classList.remove('show');
+        }, 700);
+
+        var names = $('sidebarPluList').querySelectorAll('.plu-name');
+        for (var i = 0; i < names.length; i++) {
+            if (names[i].innerText.trim().toUpperCase().startsWith(letter)) {
+                names[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                break;
+            }
+        }
+    }
+
+    function initKcAlpha() {
+        var nav = $('kcAlphaNav');
+        if (!nav) return;
+
+        nav.addEventListener('click', function(e) {
+            var it = e.target.closest('.kc-alpha-item');
+            if (it && it.dataset.letter) kcScrollTo(it.dataset.letter);
+        });
+
+        function kcHandleTouch(e) {
+            e.preventDefault();
+            kcManualTouch = true;
+            var touch = e.touches ? e.touches[0] : e;
+            var target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('kc-alpha-item') && target.dataset.letter) {
+                kcScrollTo(target.dataset.letter);
+            }
+        }
+        nav.addEventListener('touchstart', kcHandleTouch, { passive: false });
+        nav.addEventListener('touchmove', kcHandleTouch, { passive: false });
+        nav.addEventListener('touchend', function() {
+            setTimeout(function() { kcManualTouch = false; }, 400);
+        });
+
+        /* Auto-highlight huruf saat list di-scroll */
+        $('sidebarPluList').addEventListener('scroll', debounce(function() {
+            if (kcManualTouch) return;
+            var list = $('sidebarPluList');
+            var lr = list.getBoundingClientRect();
+            var names = list.querySelectorAll('.plu-name');
+            var cur = '';
+            for (var i = 0; i < names.length; i++) {
+                var r = names[i].getBoundingClientRect();
+                if (r.top >= lr.top && r.top <= lr.top + lr.height / 2) {
+                    cur = names[i].innerText.trim().toUpperCase().charAt(0);
+                    break;
+                }
+            }
+            if (cur && /[A-Z]/.test(cur)) kcSetActive(cur);
+        }, 40));
+    }
+
+    /* ================================================================
+       INIT
+       ================================================================ */
+    renderBrandGrid();
+    clockLoop();
+    toggleSapaanCountdown();
+    calcInit();
+    loadData();
+    initAlphabetNavEvents();
+    </script>
 </body>
 </html>
