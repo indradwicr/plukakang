@@ -405,9 +405,6 @@
             background: linear-gradient(to right, rgba(0,115,234,0.08), rgba(0,115,234,0.25), rgba(0,115,234,0.08));
             margin-top: 12px; border-radius: 2px;
         }
-        .kc-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 2px; }
-        .kc-dot.raw { background: var(--raw-bg); border: 1px solid var(--raw-border); }
-        .kc-dot.konv { background: var(--konv-bg); border: 1px solid var(--konv-border); }
 
         .mode-pills {
             display: flex; gap: 8px; overflow-x: auto;
@@ -428,7 +425,7 @@
         .mode-pill[data-mode="biang"].active   { border-color: #d97706; color: #d97706; background: rgba(217,119,6,0.07); }
         .mode-pill[data-mode="seal"].active    { border-color: #6366f1; color: #6366f1; background: rgba(99,102,241,0.07); }
 
-        /* PILLS PILIH WADAH (semua wadah, tap langsung) */
+        /* PILLS PILIH WADAH */
         .wadah-strip {
             display: flex; gap: 8px; overflow-x: auto;
             scrollbar-width: none; flex-shrink: 0; padding: 10px 2px 4px;
@@ -449,13 +446,31 @@
             background: rgba(0,115,234,0.06);
         }
 
+        /* TOMBOL BUKA SHEET PLU */
+        .plu-open-row { flex-shrink: 0; padding: 6px 2px 2px; }
+        .plu-open-btn {
+            width: 100%; display: flex; align-items: center; gap: 10px;
+            background: var(--card-white); border: 1.5px solid var(--card-border);
+            box-shadow: var(--card-shadow); border-radius: 14px;
+            padding: 13px 16px; cursor: pointer; font-family: inherit;
+            color: var(--text-main); font-size: 13.5px; font-weight: 700;
+            transition: transform 0.12s ease;
+        }
+        .plu-open-btn:active { transform: scale(0.98); }
+        .plu-open-btn .fa-mug-saucer { color: #15803d; font-size: 16px; flex-shrink: 0; }
+        .plu-open-btn .po-label { flex: 1; text-align: left; }
+        .plu-open-btn .po-count {
+            background: #15803d; color: #fff; font-size: 11px; font-weight: 800;
+            padding: 2px 9px; border-radius: 10px; flex-shrink: 0;
+        }
+        .plu-open-btn .po-chev { color: var(--text-light); font-size: 12px; flex-shrink: 0; }
+
         .mode-content {
             flex: 1; min-height: 0; overflow-y: auto;
             padding: 10px 2px 4px;
             overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
         }
         .mode-content::-webkit-scrollbar { width: 0; }
-        #mode-gramasi { display: flex; flex-direction: column; height: 100%; min-height: 0; }
 
         .field-chip {
             width: 100%; display: flex; justify-content: space-between; align-items: center;
@@ -478,55 +493,105 @@
         .seal-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); font-weight: 700; }
         .seal-tip { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 16px; }
 
-        /* PLU Point Coffee (di dalam mode gramasi) */
-        .kc-search {
-            width: 100%; padding: 11px 14px; border-radius: 12px;
+        /* ===== BOTTOM SHEET (SHEET PLU) ===== */
+        .sheet-backdrop {
+            position: fixed; inset: 0; z-index: 150;
+            background: rgba(17,24,39,0.45);
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+            display: flex; align-items: flex-end; justify-content: center;
+        }
+        .sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+        .sheet {
+            width: 100%; max-width: 480px;
+            height: 82vh; height: 82dvh;
+            background: var(--card-white);
+            border: 1px solid var(--card-border); border-bottom: none;
+            box-shadow: 0 -10px 40px rgba(17,24,39,0.18);
+            border-radius: 24px 24px 0 0;
+            display: flex; flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .sheet-backdrop.open .sheet { transform: translateY(0); }
+        .sheet-grab { padding: 10px 0 4px; flex-shrink: 0; touch-action: none; }
+        .sheet-grab-bar { width: 40px; height: 5px; border-radius: 99px; background: #e5e7eb; margin: 0 auto; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 20px 12px; flex-shrink: 0; }
+        .sheet-title { font-size: 17px; font-weight: 800; color: var(--text-main); }
+        .sheet-title span { font-size: 12px; color: var(--text-light); font-weight: 700; margin-left: 6px; }
+        .sheet-close {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--bg-app); border: 1px solid var(--card-border);
+            color: var(--text-muted); font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sheet-close:active { transform: scale(0.92); }
+        .sheet-search-wrap { padding: 0 20px 12px; flex-shrink: 0; }
+        .sheet-search {
+            width: 100%; padding: 12px 16px; border-radius: 14px;
             background: var(--card-white); border: 1.5px solid var(--card-border);
-            color: var(--text-main); font-family: inherit; font-size: 15px; font-weight: 600;
-            outline: none; margin-bottom: 8px; flex-shrink: 0;
+            color: var(--text-main); font-family: inherit; font-size: 16px; font-weight: 600; outline: none;
         }
-        .kc-search:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.12); }
-        .kc-search::placeholder { color: var(--text-light); }
-        .kc-legend {
-            display: flex; gap: 14px; font-size: 11px; font-weight: 700;
-            color: var(--text-muted); padding: 0 2px 8px; flex-shrink: 0; align-items: center;
+        .sheet-search:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0, 115, 234, 0.12); }
+        .sheet-search::placeholder { color: var(--text-light); }
+        .sheet-recent { padding: 0 20px 6px; flex-shrink: 0; }
+        .sheet-recent-label {
+            font-size: 10px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.6px; color: var(--text-light); margin-bottom: 8px;
         }
-        .kc-legend .plu-total { margin-left: auto; color: var(--primary-blue); }
+        .sheet-recent-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 6px; }
+        .sheet-recent-chips::-webkit-scrollbar { display: none; }
+
+        /* Chips riwayat PLU (di dalam sheet) */
+        .plu-chip {
+            font-family: inherit; background: var(--card-white);
+            border: 1.5px solid var(--card-border); box-shadow: var(--card-shadow);
+            color: var(--text-main); font-size: 11.5px; font-weight: 700;
+            padding: 8px 12px; border-radius: 999px;
+            cursor: pointer; user-select: none; flex-shrink: 0;
+            display: inline-flex; align-items: center; gap: 6px;
+            white-space: nowrap; max-width: 230px;
+            transition: transform 0.1s ease;
+        }
+        .plu-chip:active { transform: scale(0.94); }
+        .plu-chip .pc-name { overflow: hidden; text-overflow: ellipsis; }
+        .plu-chip .pc-code { font-family: var(--font-code); color: var(--primary-blue); }
+
+        /* List PLU + alphabet index (di dalam sheet) */
+        .kc-plu-body { flex: 1; min-height: 0; display: flex; position: relative; }
         .kc-plu-list {
             flex: 1; overflow-y: auto; min-height: 0;
-            padding: 2px 30px 6px 2px;
+            padding: 2px 30px 6px 20px;
             overscroll-behavior: contain;
         }
         .kc-plu-list::-webkit-scrollbar { width: 4px; }
         .kc-plu-list::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
         .kc-plu-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-        .calc-shell .plu-item {
+        .plu-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 9px 12px; background: var(--bg-app);
+            padding: 10px 12px; background: var(--bg-app);
             border: 1px solid var(--card-border); border-radius: 12px;
             margin-bottom: 6px; gap: 8px;
         }
-        .calc-shell .plu-item .plu-name {
-            font-weight: 600; font-size: 12.5px; flex: 1; min-width: 0;
+        .plu-item .plu-name {
+            font-weight: 600; font-size: 13px; flex: 1; min-width: 0;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);
         }
-        .calc-shell .plu-item .plu-badges {
+        .plu-item .plu-badges {
             display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0;
         }
-        .calc-shell .plu-item .plu-code {
-            font-family: var(--font-code); font-size: 11px; font-weight: 700;
+        .plu-item .plu-code {
+            font-family: var(--font-code); font-size: 11.5px; font-weight: 700;
             padding: 3px 9px; border-radius: 7px; cursor: pointer;
             white-space: nowrap; border: 1px solid transparent; transition: transform 0.1s ease;
         }
-        .calc-shell .plu-item .plu-code:active { transform: scale(0.95); }
-        .calc-shell .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
-        .calc-shell .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
-        .calc-shell .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
+        .plu-item .plu-code:active { transform: scale(0.95); }
+        .plu-item .plu-code.raw { color: var(--raw-text); background: var(--raw-bg); border-color: var(--raw-border); }
+        .plu-item .plu-code.konv { color: var(--konv-text); background: var(--konv-bg); border-color: var(--konv-border); }
+        .plu-empty { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; }
 
-        /* Alphabet index vertikal (PLU di mode gramasi) */
-        .kc-plu-body { flex: 1; min-height: 0; display: flex; position: relative; }
         .kc-alpha-nav {
-            position: absolute; right: 0; top: 0; bottom: 0;
+            position: absolute; right: 6px; top: 0; bottom: 0;
             width: 24px; z-index: 6;
             display: flex; flex-direction: column; align-items: center;
             justify-content: space-evenly;
@@ -543,7 +608,7 @@
         }
         .kc-alpha-item.active { background: var(--primary-blue); color: #fff; transform: scale(1.2); }
         .kc-alpha-bubble {
-            position: absolute; right: 34px; top: 50%; transform: translateY(-50%);
+            position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
             width: 44px; height: 44px; background: var(--primary-blue); color: #fff;
             font-size: 1.25rem; font-weight: 800; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -618,7 +683,7 @@
         .table-wrapper.hidden,
         .products-grid.hidden { display: none !important; }
 
-        /* ===== ALPHABET INDEX SIDEBAR ===== */
+        /* ===== ALPHABET INDEX SIDEBAR (Detail/Katalog) ===== */
         .alphabet-nav {
             position: fixed; right: 4px;
             top: 260px;
@@ -653,6 +718,7 @@
             .calc-shell .display-value { font-size: 34px; }
             .calc-shell .key { height: 44px; font-size: 19px; }
             .calc-shell .keypad { gap: 8px; }
+            .calc-shell .plu-open-btn { padding: 10px 14px; }
         }
     </style>
 </head>
@@ -805,47 +871,38 @@
                     <button class="mode-pill" data-mode="seal">🥤 Plastik Seal</button>
                 </div>
 
-                <!-- PILLS PILIH WADAH (semua wadah, tap langsung) -->
+                <!-- PILLS PILIH WADAH (tap langsung pilih) -->
                 <div class="wadah-strip" id="wadahStrip"></div>
 
+                <!-- TOMBOL BUKA SHEET PLU -->
+                <div class="plu-open-row" id="pluOpenRow">
+                    <button class="plu-open-btn" id="pluOpenBtn">
+                        <i class="fas fa-mug-saucer"></i>
+                        <span class="po-label">PLU Point Coffee</span>
+                        <span class="po-count" id="pluCountBtn">0</span>
+                        <i class="fas fa-chevron-right po-chev"></i>
+                    </button>
+                </div>
+
                 <div class="mode-content" id="modeContent">
+                    <div id="mode-gramasi" class="hidden"></div>
 
-                    <!-- MODE: GRAMASI (PLU Point Coffee di dalamnya) -->
-                    <div id="mode-gramasi">
-                        <input type="text" id="sidebarSearchPlu" class="kc-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
-                        <div class="kc-legend">
-                            <span><span class="kc-dot raw"></span> RAW</span>
-                            <span><span class="kc-dot konv"></span> KONV</span>
-                            <span class="plu-total" id="pluCount">0 PLU</span>
-                        </div>
-                        <div class="kc-plu-body">
-                            <div class="kc-plu-list" id="sidebarPluList">
-                                <div class="plu-empty">Memuat data...</div>
-                            </div>
-                            <div class="kc-alpha-nav" id="kcAlphaNav"></div>
-                            <div class="kc-alpha-bubble" id="kcAlphaBubble">A</div>
-                        </div>
-                    </div>
-
-                    <!-- MODE: BIANG KOPI -->
                     <div id="mode-biang" class="hidden">
                         <button class="field-chip active" id="chipTimbangan">
                             <span class="fc-left"><i class="fas fa-weight-scale"></i> Total Timbangan</span>
-                            <span class="fc-value" id="chipValTimbangan">947</span>
+                            <span class="fc-value" id="chipValTimbangan">0</span>
                         </button>
                         <button class="field-chip" id="chipBotol">
                             <span class="fc-left"><i class="fas fa-wine-bottle"></i> Berat Botol</span>
-                            <span class="fc-value" id="chipValBotol">680</span>
+                            <span class="fc-value" id="chipValBotol">608</span>
                         </button>
                     </div>
 
-                    <!-- MODE: PLASTIK SEAL -->
                     <div id="mode-seal" class="hidden">
                         <div class="seal-progress"><div class="seal-fill" id="sealFill"></div></div>
                         <div class="seal-scale"><span>1 mm</span><span>35 mm</span></div>
                         <div class="seal-tip">*Estimasi berdasarkan tabel HO</div>
                     </div>
-
                 </div>
 
                 <div class="keypad" id="keypad">
@@ -864,9 +921,34 @@
                 </div>
 
             </div>
+
+            <!-- ===== SHEET PLU POINT COFFEE ===== -->
+            <div class="sheet-backdrop" id="pluSheetBackdrop">
+                <div class="sheet" id="pluSheet">
+                    <div class="sheet-grab" id="pluSheetGrab"><div class="sheet-grab-bar"></div></div>
+                    <div class="sheet-header">
+                        <div class="sheet-title">PLU Point Coffee <span id="pluCount"></span></div>
+                        <button class="sheet-close" id="pluSheetClose"><i class="fas fa-xmark"></i></button>
+                    </div>
+                    <div class="sheet-search-wrap">
+                        <input type="text" id="sidebarSearchPlu" class="sheet-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
+                    </div>
+                    <div class="sheet-recent" id="pluSheetRecent">
+                        <div class="sheet-recent-label">Terakhir dipakai</div>
+                        <div class="sheet-recent-chips" id="pluRecentChips"></div>
+                    </div>
+                    <div class="kc-plu-body">
+                        <div class="kc-plu-list" id="sidebarPluList">
+                            <div class="plu-empty">Memuat data...</div>
+                        </div>
+                        <div class="kc-alpha-nav" id="kcAlphaNav"></div>
+                        <div class="kc-alpha-bubble" id="kcAlphaBubble">A</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- ALPHABET INDEX NAV & BUBBLE -->
+        <!-- ALPHABET INDEX NAV & BUBBLE (Detail/Katalog) -->
         <div id="alphabetNav" class="alphabet-nav"></div>
         <div id="alphaBubble" class="alpha-bubble">A</div>
 
@@ -1079,7 +1161,6 @@
             $('globalSearchBar').style.display = 'none';
             currentView = 'kalkulator';
             calcRender();
-            renderSidebarPlu($('sidebarSearchPlu').value || '');
         }
 
         var tabs = document.querySelectorAll('.dock-tab');
@@ -1099,17 +1180,18 @@
        ================================================================ */
     var calcState = {
         mode: 'gramasi',
-        gramasi: '932',
+        gramasi: '0',
         wadahAktif: dataWadah[0].nama,
-        biangTimbangan: '947',
-        biangBotol: '680',
+        biangTimbangan: '0',
+        biangBotol: '608',
         biangField: 'timbangan',
-        seal: '10'
+        seal: '0',
+        pluRecent: []
     };
 
     (function() {
         try {
-            var s = localStorage.getItem('plukakang_kalk_v4');
+            var s = localStorage.getItem('plukakang_kalk_v6');
             if (s) {
                 var o = JSON.parse(s);
                 for (var k in calcState) {
@@ -1120,10 +1202,13 @@
             }
         } catch(e) {}
         if (['gramasi', 'biang', 'seal'].indexOf(calcState.mode) === -1) calcState.mode = 'gramasi';
+        calcState.pluRecent = (calcState.pluRecent || []).filter(function(p) {
+            return p && typeof p.code === 'string' && p.code !== '';
+        }).slice(0, 6);
     })();
 
     function calcPersist() {
-        try { localStorage.setItem('plukakang_kalk_v4', JSON.stringify(calcState)); } catch(e) {}
+        try { localStorage.setItem('plukakang_kalk_v6', JSON.stringify(calcState)); } catch(e) {}
     }
 
     function fmt(n) { return n.toLocaleString('id-ID'); }
@@ -1179,16 +1264,17 @@
             var w = findWadah(calcState.wadahAktif) || dataWadah[0];
             var input = parseFloat(calcState.gramasi) || 0;
             var bersih = hitungBersih(w, input);
+            var belumTimbang = (input === 0);
 
             $('selectorName').innerText = w.nama;
-            value.innerHTML = fmt(bersih) + '<span class="unit">gr</span>';
-            value.classList.toggle('danger', bersih < 0);
+            value.innerHTML = fmt(belumTimbang ? 0 : bersih) + '<span class="unit">gr</span>';
+            value.classList.toggle('danger', !belumTimbang && bersih < 0);
 
             meta.innerHTML =
                 '<span class="input-chip"><i class="fas fa-weight-scale"></i> Timbangan <b>' + escapeHtml(calcState.gramasi) + ' gr</b></span>' +
                 '<span class="input-chip">Tare <b>' + (w.tare === 0 ? '-' : w.tare) + '</b></span>' +
                 '<span class="input-chip">MJ <b>' + mjDisplay(w.mj) + '</b></span>' +
-                (bersih < 0 ? '<span class="input-chip danger">Berat di bawah tare!</span>' : '');
+                (!belumTimbang && bersih < 0 ? '<span class="input-chip danger">Berat di bawah tare!</span>' : '');
 
         } else if (calcState.mode === 'biang') {
             prefix.innerText = 'Netto ·';
@@ -1240,6 +1326,7 @@
 
         var isGramasi = (mode === 'gramasi');
         $('wadahStrip').classList.toggle('hidden', !isGramasi);
+        $('pluOpenRow').classList.toggle('hidden', !isGramasi);
         $('mode-gramasi').classList.toggle('hidden', !isGramasi);
         $('mode-biang').classList.toggle('hidden', mode !== 'biang');
         $('mode-seal').classList.toggle('hidden', mode !== 'seal');
@@ -1279,6 +1366,48 @@
         $('chipBotol').classList.toggle('active', calcState.biangField === 'botol');
     }
 
+    /* ================================================================
+       SHEET PLU POINT COFFEE
+       ================================================================ */
+    function openPluSheet() {
+        vibrate();
+        $('sidebarSearchPlu').value = '';
+        renderSidebarPlu('');
+        renderPluRecentChips();
+        $('pluSheetBackdrop').classList.add('open');
+    }
+
+    function closePluSheet() {
+        $('pluSheetBackdrop').classList.remove('open');
+        $('sidebarSearchPlu').blur();
+    }
+
+    function renderPluRecentChips() {
+        var sec = $('pluSheetRecent');
+        var box = $('pluRecentChips');
+        if (!calcState.pluRecent.length) {
+            sec.style.display = 'none';
+            return;
+        }
+        sec.style.display = '';
+        var html = '';
+        calcState.pluRecent.forEach(function(p) {
+            html += '<button class="plu-chip" data-code="' + escapeHtml(p.code) + '" data-nama="' + escapeHtml(p.nama || '') + '">' +
+                '<span class="pc-name">' + escapeHtml(p.nama || '') + '</span>' +
+                '<span class="pc-code">' + escapeHtml(p.code) + '</span>' +
+            '</button>';
+        });
+        box.innerHTML = html;
+    }
+
+    function recordPluCopy(code, nama) {
+        calcState.pluRecent = calcState.pluRecent.filter(function(p) { return p.code !== code; });
+        calcState.pluRecent.unshift({ nama: nama, code: code });
+        calcState.pluRecent = calcState.pluRecent.slice(0, 6);
+        calcPersist();
+        renderPluRecentChips();
+    }
+
     function attachCalcEvents() {
         $('keypad').addEventListener('click', function(e) {
             var k = e.target.closest('.key');
@@ -1296,6 +1425,26 @@
             if (chip && chip.dataset.nama) pilihWadah(chip.dataset.nama);
         });
 
+        /* Buka sheet PLU */
+        $('pluOpenBtn').addEventListener('click', openPluSheet);
+
+        /* Tutup sheet PLU */
+        $('pluSheetBackdrop').addEventListener('click', function(e) {
+            if (e.target === this) closePluSheet();
+        });
+        $('pluSheetClose').addEventListener('click', closePluSheet);
+
+        /* Tap chip riwayat PLU = copy ulang */
+        $('pluRecentChips').addEventListener('click', function(e) {
+            var chip = e.target.closest('.plu-chip');
+            if (chip && chip.dataset.code) {
+                recordPluCopy(chip.dataset.code, chip.dataset.nama || '');
+                copyToClipboard(chip.dataset.code).then(function() {
+                    showToast('PLU ' + chip.dataset.code + ' Disalin! ✓');
+                });
+            }
+        });
+
         $('chipTimbangan').addEventListener('click', function() {
             vibrate(); calcState.biangField = 'timbangan';
             syncBiangChips(); calcPersist(); calcRender();
@@ -1303,6 +1452,31 @@
         $('chipBotol').addEventListener('click', function() {
             vibrate(); calcState.biangField = 'botol';
             syncBiangChips(); calcPersist(); calcRender();
+        });
+
+        /* Swipe-down tutup sheet PLU */
+        var startY = null;
+        var sheet = $('pluSheet');
+        var grab = $('pluSheetGrab');
+
+        grab.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+            sheet.style.transition = 'none';
+        }, { passive: true });
+
+        grab.addEventListener('touchmove', function(e) {
+            if (startY === null) return;
+            var dy = e.touches[0].clientY - startY;
+            if (dy > 0) sheet.style.transform = 'translateY(' + dy + 'px)';
+        }, { passive: true });
+
+        grab.addEventListener('touchend', function(e) {
+            if (startY === null) return;
+            var dy = e.changedTouches[0].clientY - startY;
+            sheet.style.transition = '';
+            sheet.style.transform = '';
+            if (dy > 70) closePluSheet();
+            startY = null;
         });
     }
 
@@ -1316,7 +1490,7 @@
     }
 
     /* ================================================================
-       PLU POINT COFFEE (di dalam mode Gramasi)
+       PLU POINT COFFEE (isi sheet)
        ================================================================ */
     function renderSidebarPlu(filter) {
         var list = $('sidebarPluList');
@@ -1329,7 +1503,8 @@
                        (item.konv && item.konv.indexOf(f) !== -1);
             });
         }
-        $('pluCount').innerText = items.length + ' PLU';
+        $('pluCount').innerText = '(' + items.length + ')';
+        $('pluCountBtn').innerText = pointCoffeeData.length;
 
         if (items.length === 0) {
             list.innerHTML = '<div class="plu-empty">' +
@@ -1776,6 +1951,9 @@
         var sidebarPlu = e.target.closest('.plu-code[data-plu]');
         if (sidebarPlu) {
             var code2 = sidebarPlu.dataset.plu;
+            var pluItem = sidebarPlu.closest('.plu-item');
+            var nm = pluItem && pluItem.querySelector('.plu-name') ? pluItem.querySelector('.plu-name').innerText : '';
+            recordPluCopy(code2, nm);
             copyToClipboard(code2).then(function() {
                 var original = sidebarPlu.innerText;
                 sidebarPlu.innerText = '✓';
@@ -1855,7 +2033,7 @@
         toggleAlphabetNav();
     }
 
-    /* Search PLU (mode gramasi) */
+    /* Search PLU (dalam sheet) */
     var handleSidebarSearch = debounce(function() {
         renderSidebarPlu($('sidebarSearchPlu').value);
     }, 100);
@@ -2040,7 +2218,6 @@
         }
     }
 
-    /* Touch Event Navigation A-Z Utama */
     function initAlphabetNavEvents() {
         var nav = $('alphabetNav');
         if (!nav) return;
@@ -2073,7 +2250,7 @@
     }
 
     /* ================================================================
-       ALPHABET INDEX VERTIKAL (PLU di mode Gramasi)
+       ALPHABET INDEX VERTIKAL (dalam Sheet PLU)
        ================================================================ */
     var kcManualTouch = false;
 
