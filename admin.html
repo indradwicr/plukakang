@@ -23,15 +23,13 @@
             --card-border: #e5e7eb;
             --green: #15803d;
             --red: #ef4444;
-            --amber: #d97706;
-            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
         body {
-            font-family: var(--font-main);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-app);
             color: var(--text-main);
             min-height: 100vh;
@@ -39,15 +37,8 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        .app-layout {
-            width: 100%;
-            max-width: 520px;
-            min-height: 100vh;
-            background: var(--bg-app);
-            padding: 16px 16px 48px 16px;
-        }
+        .app-layout { width: 100%; max-width: 520px; min-height: 100vh; padding: 16px 16px 48px 16px; }
 
-        /* ===== HEADER ===== */
         .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
         .brand-block { display: flex; align-items: center; gap: 12px; }
         .brand-icon {
@@ -61,37 +52,29 @@
         .brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
         .brand-title-group span { font-size: 0.74rem; color: var(--primary-blue); font-weight: 700; }
 
-        /* ===== CARD ===== */
         .card {
             background: var(--card-white); border-radius: 20px;
             padding: 16px; border: 1px solid var(--card-border);
             box-shadow: var(--card-shadow); margin-bottom: 14px;
         }
-        .card-title {
-            font-size: 14px; font-weight: 800; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-        }
-        .tag { font-size: 0.62rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; }
-        .tag-amber { background: #fef3c7; color: #a16207; }
-        .tag-blue { background: rgba(0,115,234,0.08); color: var(--primary-blue); }
-        .tag-green { background: #dcfce7; color: #15803d; }
+        .card-title { font-size: 14px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .tag { font-size: 0.62rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; background: #fef3c7; color: #a16207; }
 
         .btn {
             border: none; border-radius: 14px; padding: 12px 16px;
             font-family: inherit; font-size: 0.82rem; font-weight: 800;
             cursor: pointer; transition: transform 0.12s ease;
-            display: inline-flex; align-items: center; gap: 7px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 7px;
         }
         .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--primary-blue); color: #fff; }
         .btn-green { background: var(--green); color: #fff; }
         .btn-light { background: var(--bg-app); border: 1px solid var(--card-border); color: var(--text-main); }
         .btn-danger { background: var(--red); color: #fff; }
-        .btn-block { width: 100%; justify-content: center; }
+        .btn-block { width: 100%; }
 
-        /* ===== LOAD CARD ===== */
         .load-row { display: flex; flex-wrap: wrap; gap: 8px; }
-        .load-row .btn { flex: 1; min-width: calc(50% - 4px); justify-content: center; }
+        .load-row .btn { flex: 1; min-width: calc(50% - 4px); }
         .stat {
             margin-top: 12px; background: var(--bg-app);
             border: 1px solid var(--card-border); border-radius: 12px;
@@ -100,7 +83,6 @@
         }
         .stat b { color: var(--primary-blue); }
 
-        /* ===== SEARCH & CHIPS ===== */
         .search-input {
             width: 100%; padding: 12px 16px; border-radius: 14px;
             border: 1.5px solid var(--card-border);
@@ -109,10 +91,7 @@
         }
         .search-input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0,115,234,0.12); }
 
-        .chips {
-            display: flex; gap: 8px; overflow-x: auto;
-            scrollbar-width: none; padding: 10px 2px 4px;
-        }
+        .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 10px 2px 4px; }
         .chips::-webkit-scrollbar { display: none; }
         .chip {
             flex-shrink: 0; border: 1.5px solid var(--card-border);
@@ -124,7 +103,6 @@
         .chip:active { transform: scale(0.95); }
         .chip.active { border-color: var(--primary-blue); color: var(--primary-blue); background: rgba(0,115,234,0.06); }
 
-        /* ===== ITEM LIST ===== */
         .item {
             background: var(--card-white); border: 1px solid var(--card-border);
             border-radius: 16px; padding: 13px 15px; margin-bottom: 9px;
@@ -133,20 +111,14 @@
         .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
         .item-name { font-size: 0.88rem; font-weight: 800; line-height: 1.35; }
         .item-sub { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 3px; }
-        .bchip {
-            flex-shrink: 0; font-size: 0.6rem; font-weight: 800;
-            padding: 4px 10px; border-radius: 9px; color: #fff;
-        }
+        .bchip { flex-shrink: 0; font-size: 0.6rem; font-weight: 800; padding: 4px 10px; border-radius: 9px; color: #fff; }
         .codes { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
-        .code {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
-            font-weight: 700; padding: 3px 10px; border-radius: 8px; border: 1px solid;
-        }
+        .code { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 8px; border: 1px solid; }
         .code.raw { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
         .code.konv { color: #a16207; background: #fefce8; border-color: #fef08a; }
         .code.none { color: var(--text-light); border-color: var(--card-border); }
         .item-btns { display: flex; gap: 8px; margin-top: 11px; }
-        .item-btns .btn { flex: 1; justify-content: center; padding: 10px; font-size: 0.75rem; }
+        .item-btns .btn { flex: 1; padding: 10px; font-size: 0.75rem; }
 
         .empty-state {
             text-align: center; color: var(--text-muted);
@@ -155,24 +127,16 @@
             border: 1px dashed var(--card-border); border-radius: 16px;
         }
 
-        /* ===== DUP CARD ===== */
         .mini-btn {
             border: none; background: var(--bg-app);
             border-radius: 8px; padding: 4px 10px;
             font-size: 0.65rem; font-weight: 800; color: var(--primary-blue);
             cursor: pointer; font-family: inherit; margin-left: auto;
         }
-        ul.dup-list {
-            list-style: none; margin-top: 10px; max-height: 260px;
-            overflow-y: auto; border: 1px solid var(--card-border); border-radius: 12px;
-        }
-        ul.dup-list li {
-            padding: 9px 12px; font-size: 0.72rem; line-height: 1.55;
-            color: var(--text-muted); border-bottom: 1px solid #f1f5f9;
-        }
+        ul.dup-list { list-style: none; margin-top: 10px; max-height: 260px; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 12px; }
+        ul.dup-list li { padding: 9px 12px; font-size: 0.72rem; line-height: 1.55; color: var(--text-muted); border-bottom: 1px solid #f1f5f9; }
         ul.dup-list li:last-child { border-bottom: none; }
 
-        /* ===== BOTTOM SHEET FORM ===== */
         .backdrop {
             position: fixed; inset: 0; z-index: 150;
             background: rgba(17,24,39,0.45);
@@ -191,10 +155,7 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
         .backdrop.open .sheet { transform: translateY(0); }
-        .sheet-head {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 18px 20px 12px; flex-shrink: 0;
-        }
+        .sheet-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px 12px; flex-shrink: 0; }
         .sheet-head b { font-size: 1.05rem; font-weight: 800; }
         .x {
             width: 34px; height: 34px; border-radius: 50%;
@@ -207,10 +168,7 @@
             display: flex; flex-direction: column; gap: 5px;
             overscroll-behavior: contain;
         }
-        .sheet-body label {
-            font-size: 0.7rem; font-weight: 800; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 0.4px; margin-top: 10px;
-        }
+        .sheet-body label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 10px; }
         .sheet-body select, .sheet-body input {
             width: 100%; padding: 12px 14px; border-radius: 12px;
             border: 1.5px solid var(--card-border);
@@ -225,7 +183,6 @@
         }
         .sheet-body .btn { margin-top: 16px; }
 
-        /* ===== TOAST ===== */
         .toast {
             position: fixed; bottom: 28px; left: 50%;
             transform: translateX(-50%) translateY(60px);
@@ -253,7 +210,6 @@
         </div>
     </header>
 
-    <!-- LOAD -->
     <div class="card">
         <div class="load-row">
             <button id="btnLoad" class="btn btn-light"><i class="fas fa-rotate"></i> Muat Live</button>
@@ -265,7 +221,6 @@
         <div class="stat" id="stats">Belum ada data dimuat…</div>
     </div>
 
-    <!-- EDITOR -->
     <div id="editor" style="display:none">
 
         <div class="card">
@@ -278,9 +233,8 @@
             </div>
         </div>
 
-        <!-- DUP CARD -->
         <div class="card" id="dupCard">
-            <div class="card-title">⚠️ Cek Duplikat <span class="tag tag-amber" id="dupCount">0</span>
+            <div class="card-title">⚠️ Cek Duplikat <span class="tag" id="dupCount">0</span>
                 <button id="dupToggle" class="mini-btn">tampilkan</button>
             </div>
             <ul id="dupList" class="dup-list" style="display:none"></ul>
@@ -290,7 +244,6 @@
     </div>
 </div>
 
-<!-- FORM SHEET -->
 <div class="backdrop" id="formBackdrop">
     <div class="sheet">
         <div class="sheet-head">
@@ -316,7 +269,6 @@
     </div>
 </div>
 
-<!-- IMPORT SHEET -->
 <div class="backdrop" id="impBackdrop">
     <div class="sheet" style="height:auto;max-height:78vh;">
         <div class="sheet-head">
@@ -433,7 +385,7 @@ function renderStats() {
 function renderChips() {
     var html = '<button class="chip' + (curBrand==='all'?' active':'') + '" data-b="all">Semua (' + items.length + ')</button>';
     CONFIG.brands.forEach(function(b){
-        var n = items.filter(function(it){ return it.brand === b; }).length
+        var n = items.filter(function(it){ return it.brand === b; }).length;
         html += '<button class="chip' + (curBrand===b?' active':'') + '" data-b="' + b + '">' + esc(CONFIG.brandNames[b]) + ' (' + n + ')</button>';
     });
     $('brandChips').innerHTML = html;
@@ -467,8 +419,8 @@ function renderList() {
         var subL = CONFIG.subLabels[it.sub] || it.sub || '—';
         var codes = '';
         if (it.raw) codes += '<span class="code raw">RAW ' + esc(it.raw) + '</span>';
-        if (it.konv) codes += '</codes><span class="code konv">KONV ' + esc(it.konv) + '</span>';
-        if (!it.raw && !it.konv) codes = '<span class="code none">tanpa PLU ⚠️</span>';
+        if (it.konv) codes += '<span class="code konv">KONV ' + esc(it.konv) + '</span>';
+        if (!codes) codes = '<span class="code none">tanpa PLU ⚠️</span>';
         return '<div class="item">' +
             '<div class="item-top"><div><div class="item-name">' + esc(it.nama) + '</div>' +
             '<div class="item-sub">' + esc(subL) + '</div></div>' +
@@ -492,7 +444,7 @@ function renderList() {
         if (confirm('Hapus "' + it.nama + '"?')) {
             items.splice(i,1);
             renderAll();
-            showToast('🗑️ "' + it.nama + '" dihapus (belum tersimpan — jangan lupa Export/Copy)');
+            showToast('🗑️ Dihapus — jangan lupa Export/Copy');
         }
     }
 });
@@ -576,7 +528,7 @@ function closeForm(){ $('formBackdrop').classList.remove('open'); editing = null
     items.forEach(function(it, i){
         if (editing !== null && i === editing) return;
         if (raw && it.raw === raw) dups.push('PLU RAW ' + raw + ' sudah dipakai: ' + it.nama);
-        if (konv && it.konv === konv) dups.push('PLU KONV ' + konv + ' sudah dipakai: ' + it.nama;
+        if (konv && it.konv === konv) dups.push('PLU KONV ' + konv + ' sudah dipakai: ' + it.nama);
         if (it.brand === brand && it.nama.toLowerCase() === nama.toLowerCase()) dups.push('Nama sama: ' + it.nama);
     });
     if (dups.length && !confirm('⚠️ ' + dups.length + ' peringatan:\n\n• ' + dups.join('\n• ') + '\n\nSimpan tetap?')) return;
@@ -600,14 +552,14 @@ function scanDup() {
         });
     });
     Object.keys(byName).forEach(function(k){
-        if (byName[k].length > 1) out.push('👥 <b>Duplikat nama</b>: ' + byName[k][0].brand + ' · "' + esc(byName[k][0].nama) + '" ×' + byName[k].length);
+        if (byName[k].length > 1) out.push('👥 <b>Duplikat nama</b>: ' + esc(byName[k][0].brand) + ' · "' + esc(byName[k][0].nama) + '" ×' + byName[k].length);
     });
     Object.keys(byCode).forEach(function(c){
         var u = byCode[c].filter(function(v,i,a){ return a.indexOf(v) === i; });
         if (u.length > 1) out.push('🔢 <b>PLU ' + esc(c) + '</b> dipakai oleh: ' + esc(u.join(' & ')));
     });
     items.forEach(function(it){
-        if (it.raw && it.konv && it.raw === it.konv) out.push('🟡 <b>RAW = KONV</b>: ' + it.brand + ' · ' + esc(it.nama) + ' (' + it.raw + ')');
+        if (it.raw && it.konv && it.raw === it.konv) out.push('🟡 <b>RAW = KONV</b>: ' + esc(it.brand) + ' · ' + esc(it.nama) + ' (' + esc(it.raw) + ')');
     });
     return out;
 }
@@ -682,7 +634,7 @@ function fallbackCopy(text, cb) {
                 parsed.push({ brand:o.brand, sub:o.sub||'', kategori:o.kategori||'', nama:o.nama, raw:o.raw||'', konv:o.konv||'' });
             });
             if (!parsed.length) {
-                showToast('⚠️ Tidak ada baris valid (cek header: brand, sub, kategori, nama, raw, konv)');
+                showToast('⚠️ Tidak ada baris valid (cek header Excel)');
                 return;
             }
             pendingImport = parsed;
@@ -692,7 +644,7 @@ function fallbackCopy(text, cb) {
                 'Dilewati: ' + skipped + '<br>' +
                 'Data saat ini: <b>' + items.length + '</b> item';
             $('impBackdrop').classList.add('open');
-        } catch(err) { showToast('⚠️ Gagal baca file: ' + err.message); }
+        } catch(err) { showToast('⚠️ Gagal baca file'); }
     };
     r.readAsArrayBuffer(f);
     e.target.value = '';
@@ -703,13 +655,13 @@ function fallbackCopy(text, cb) {
     items = pendingImport.slice();
     $('impBackdrop').classList.remove('open');
     renderAll();
-    showToast('✓ ' + items.length + ' item dari Excel (belum tersimpan — jangan lupa Export/Copy)');
+    showToast('✓ ' + items.length + ' item dari Excel — jangan lupa Export/Copy');
 });
  $('impAppend').addEventListener('click', function(){
     items = items.concat(pendingImport);
     $('impBackdrop').classList.remove('open');
     renderAll();
-    showToast('✓ Digabungkan (belum tersimpan — jangan lupa Export/Copy)');
+    showToast('✓ Digabungkan — jangan lupa Export/Copy');
 });
 
 /* ---------- INIT ---------- */
