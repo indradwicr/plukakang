@@ -1,332 +1,561 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0073ea">
-<title>Admin PLU — plukakang</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#f6f8fc;--card:#fff;--border:#e5e7eb;--muted:#4b5563;--light:#9ca3af;--blue:#0073ea;--green:#15803d;--red:#ef4444;--amber:#d97706;}
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-  html{-webkit-text-size-adjust:100%;}
-  body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:#111827;display:flex;justify-content:center;padding:16px 12px 48px;-webkit-font-smoothing:antialiased;}
-  .wrap{width:100%;max-width:520px;}
-  h1{font-size:1.2rem;font-weight:800;letter-spacing:-.3px;}
-  .sub{font-size:.75rem;color:var(--muted);margin:4px 0 14px;line-height:1.55;}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(17,24,39,.04);}
-  .btn{border:none;border-radius:12px;padding:12px 14px;font-family:inherit;font-size:.83rem;font-weight:800;cursor:pointer;transition:transform .12s ease;}
-  .btn:active{transform:scale(.97);}
-  .btn-primary{background:var(--blue);color:#fff;}
-  .btn-green{background:var(--green);color:#fff;}
-  .btn-danger{background:var(--red);color:#fff;}
-  .btn-light{background:var(--bg);border:1px solid var(--border);color:#111827;}
-  .load-row{display:flex;flex-wrap:wrap;gap:8px;}
-  .stat{margin-top:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:.72rem;font-weight:700;color:var(--muted);line-height:1.6;}
-  .stat b{color:var(--blue);}
-  .inp{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);font-family:inherit;font-size:15px;font-weight:600;outline:none;background:var(--card);color:#111827;}
-  .inp:focus{border-color:var(--blue);}
-  .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:10px 0;padding-bottom:2px;}
-  .chips::-webkit-scrollbar{display:none;}
-  .chip{flex-shrink:0;border:1.5px solid var(--border);background:var(--card);border-radius:999px;padding:7px 12px;font-size:.72rem;font-weight:800;color:var(--muted);cursor:pointer;font-family:inherit;}
-  .chip.active{border-color:var(--blue);color:var(--blue);background:rgba(0,115,234,.06);}
-  .row-btns{display:flex;gap:8px;margin-top:4px;}
-  .row-btns .btn{flex:1;}
-  h2{font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  .tag{font-size:.62rem;font-weight:800;padding:2px 9px;border-radius:8px;background:#fef3c7;color:#a16207;}
-  .mini{border:none;background:var(--bg);border-radius:8px;padding:4px 10px;font-size:.68rem;font-weight:800;color:var(--blue);cursor:pointer;font-family:inherit;margin-left:auto;}
-  ul.dup{list-style:none;margin-top:8px;max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;}
-  ul.dup li{padding:8px 12px;font-size:.71rem;line-height:1.5;color:var(--muted);border-bottom:1px solid #f1f5f9;}
-  ul.dup li:last-child{border-bottom:none;}
-  .item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:8px;box-shadow:0 2px 8px rgba(17,24,39,.04);}
-  .item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
-  .item-name{font-size:.85rem;font-weight:800;line-height:1.35;}
-  .bchip{flex-shrink:0;font-size:.6rem;font-weight:800;padding:3px 9px;border-radius:8px;color:#fff;}
-  .item-sub{font-size:.68rem;color:var(--muted);font-weight:600;margin-top:2px;}
-  .codes{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
-  .code{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:7px;border:1px solid;}
-  .code.raw{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe;}
-  .code.konv{color:#a16207;background:#fefce8;border-color:#fef08a;}
-  .item-btns{display:flex;gap:8px;margin-top:9px;}
-  .item-btns .btn{flex:1;padding:9px;font-size:.75rem;}
-  .empty{ text-align:center;color:var(--muted);font-size:.8rem;font-weight:600;padding:24px 10px;background:var(--card);border:1px dashed var(--border);border-radius:14px;}
-  .backdrop{position:fixed;inset:0;z-index:150;background:rgba(17,24,39,.45);opacity:0;pointer-events:none;transition:opacity .25s ease;display:flex;align-items:flex-end;justify-content:center;}
-  .backdrop.open{opacity:1;pointer-events:auto;}
-  .sheet{width:100%;max-width:520px;height:88vh;background:var(--card);border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);}
-  .backdrop.open .sheet{transform:translateY(0);}
-  .sheet-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 10px;}
-  .sheet-head b{font-size:1rem;}
-  .x{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;}
-  .sheet-body{flex:1;overflow-y:auto;padding:4px 20px 30px;display:flex;flex-direction:column;gap:6px;}
-  .sheet-body label{font-size:.72rem;font-weight:800;color:var(--muted);margin-top:8px;}
-  .sheet-body select,.sheet-body input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);font-family:inherit;font-size:15px;font-weight:600;outline:none;background:var(--card);color:#111827;}
-  .sheet-body select:focus,.sheet-body input:focus{border-color:var(--blue);}
-  .sheet-body .btn{margin-top:14px;}
-  .warn{background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:10px 12px;font-size:.72rem;color:#a16207;font-weight:700;line-height:1.55;margin-top:10px;}
-  .impinfo{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:.78rem;font-weight:600;color:var(--muted);line-height:1.6;margin-bottom:6px;}
-  .impinfo b{color:var(--blue);}
-  .impbtns{display:flex;flex-direction:column;gap:8px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0073ea">
+    <title>plukakang admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-app: #f6f8fc;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --text-light: #9ca3af;
+            --primary-blue: #0073ea;
+            --card-white: #ffffff;
+            --card-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
+            --card-border: #e5e7eb;
+            --green: #15803d;
+            --red: #ef4444;
+            --amber: #d97706;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-layout {
+            width: 100%;
+            max-width: 520px;
+            min-height: 100vh;
+            background: var(--bg-app);
+            padding: 16px 16px 48px 16px;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .brand-block { display: flex; align-items: center; gap: 12px; }
+        .brand-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #0073ea, #4f46e5);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-size: 1.25rem;
+            box-shadow: 0 4px 14px rgba(0, 115, 234, 0.28);
+        }
+        .brand-title-group h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.1; }
+        .brand-title-group span { font-size: 0.74rem; color: var(--primary-blue); font-weight: 700; }
+
+        /* ===== CARD ===== */
+        .card {
+            background: var(--card-white); border-radius: 20px;
+            padding: 16px; border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow); margin-bottom: 14px;
+        }
+        .card-title {
+            font-size: 14px; font-weight: 800; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .tag { font-size: 0.62rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; }
+        .tag-amber { background: #fef3c7; color: #a16207; }
+        .tag-blue { background: rgba(0,115,234,0.08); color: var(--primary-blue); }
+        .tag-green { background: #dcfce7; color: #15803d; }
+
+        .btn {
+            border: none; border-radius: 14px; padding: 12px 16px;
+            font-family: inherit; font-size: 0.82rem; font-weight: 800;
+            cursor: pointer; transition: transform 0.12s ease;
+            display: inline-flex; align-items: center; gap: 7px;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--primary-blue); color: #fff; }
+        .btn-green { background: var(--green); color: #fff; }
+        .btn-light { background: var(--bg-app); border: 1px solid var(--card-border); color: var(--text-main); }
+        .btn-danger { background: var(--red); color: #fff; }
+        .btn-block { width: 100%; justify-content: center; }
+
+        /* ===== LOAD CARD ===== */
+        .load-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .load-row .btn { flex: 1; min-width: calc(50% - 4px); justify-content: center; }
+        .stat {
+            margin-top: 12px; background: var(--bg-app);
+            border: 1px solid var(--card-border); border-radius: 12px;
+            padding: 10px 14px; font-size: 0.74rem; font-weight: 700;
+            color: var(--text-muted); line-height: 1.7;
+        }
+        .stat b { color: var(--primary-blue); }
+
+        /* ===== SEARCH & CHIPS ===== */
+        .search-input {
+            width: 100%; padding: 12px 16px; border-radius: 14px;
+            border: 1.5px solid var(--card-border);
+            font-family: inherit; font-size: 15px; font-weight: 600;
+            outline: none; background: var(--card-white); color: var(--text-main);
+        }
+        .search-input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0,115,234,0.12); }
+
+        .chips {
+            display: flex; gap: 8px; overflow-x: auto;
+            scrollbar-width: none; padding: 10px 2px 4px;
+        }
+        .chips::-webkit-scrollbar { display: none; }
+        .chip {
+            flex-shrink: 0; border: 1.5px solid var(--card-border);
+            background: var(--card-white); border-radius: 999px;
+            padding: 8px 13px; font-size: 0.72rem; font-weight: 800;
+            color: var(--text-muted); cursor: pointer; font-family: inherit;
+            white-space: nowrap; transition: all 0.15s ease;
+        }
+        .chip:active { transform: scale(0.95); }
+        .chip.active { border-color: var(--primary-blue); color: var(--primary-blue); background: rgba(0,115,234,0.06); }
+
+        /* ===== ITEM LIST ===== */
+        .item {
+            background: var(--card-white); border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 13px 15px; margin-bottom: 9px;
+            box-shadow: var(--card-shadow);
+        }
+        .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .item-name { font-size: 0.88rem; font-weight: 800; line-height: 1.35; }
+        .item-sub { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 3px; }
+        .bchip {
+            flex-shrink: 0; font-size: 0.6rem; font-weight: 800;
+            padding: 4px 10px; border-radius: 9px; color: #fff;
+        }
+        .codes { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+        .code {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+            font-weight: 700; padding: 3px 10px; border-radius: 8px; border: 1px solid;
+        }
+        .code.raw { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+        .code.konv { color: #a16207; background: #fefce8; border-color: #fef08a; }
+        .code.none { color: var(--text-light); border-color: var(--card-border); }
+        .item-btns { display: flex; gap: 8px; margin-top: 11px; }
+        .item-btns .btn { flex: 1; justify-content: center; padding: 10px; font-size: 0.75rem; }
+
+        .empty-state {
+            text-align: center; color: var(--text-muted);
+            font-size: 0.82rem; font-weight: 600;
+            padding: 32px 16px; background: var(--card-white);
+            border: 1px dashed var(--card-border); border-radius: 16px;
+        }
+
+        /* ===== DUP CARD ===== */
+        .mini-btn {
+            border: none; background: var(--bg-app);
+            border-radius: 8px; padding: 4px 10px;
+            font-size: 0.65rem; font-weight: 800; color: var(--primary-blue);
+            cursor: pointer; font-family: inherit; margin-left: auto;
+        }
+        ul.dup-list {
+            list-style: none; margin-top: 10px; max-height: 260px;
+            overflow-y: auto; border: 1px solid var(--card-border); border-radius: 12px;
+        }
+        ul.dup-list li {
+            padding: 9px 12px; font-size: 0.72rem; line-height: 1.55;
+            color: var(--text-muted); border-bottom: 1px solid #f1f5f9;
+        }
+        ul.dup-list li:last-child { border-bottom: none; }
+
+        /* ===== BOTTOM SHEET FORM ===== */
+        .backdrop {
+            position: fixed; inset: 0; z-index: 150;
+            background: rgba(17,24,39,0.45);
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+            display: flex; align-items: flex-end; justify-content: center;
+        }
+        .backdrop.open { opacity: 1; pointer-events: auto; }
+        .sheet {
+            width: 100%; max-width: 520px;
+            height: 90vh; height: 90dvh;
+            background: var(--card-white);
+            border-radius: 24px 24px 0 0;
+            display: flex; flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .backdrop.open .sheet { transform: translateY(0); }
+        .sheet-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 20px 12px; flex-shrink: 0;
+        }
+        .sheet-head b { font-size: 1.05rem; font-weight: 800; }
+        .x {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--bg-app); border: 1px solid var(--card-border);
+            color: var(--text-muted); font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sheet-body {
+            flex: 1; overflow-y: auto; padding: 4px 20px 30px;
+            display: flex; flex-direction: column; gap: 5px;
+            overscroll-behavior: contain;
+        }
+        .sheet-body label {
+            font-size: 0.7rem; font-weight: 800; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.4px; margin-top: 10px;
+        }
+        .sheet-body select, .sheet-body input {
+            width: 100%; padding: 12px 14px; border-radius: 12px;
+            border: 1.5px solid var(--card-border);
+            font-family: inherit; font-size: 15px; font-weight: 600;
+            outline: none; background: var(--card-white); color: var(--text-main);
+        }
+        .sheet-body select:focus, .sheet-body input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0,115,234,0.12); }
+        .warn {
+            margin-top: 12px; background: #fef3c7; border: 1px solid #fde68a;
+            border-radius: 12px; padding: 11px 13px;
+            font-size: 0.72rem; color: #a16207; font-weight: 700; line-height: 1.6;
+        }
+        .sheet-body .btn { margin-top: 16px; }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed; bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            background: #111827; color: #fff;
+            padding: 10px 20px; border-radius: 30px;
+            font-size: 0.8rem; font-weight: 700;
+            opacity: 0; pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 300; max-width: 90%; text-align: center;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>🛠️ Admin PLU</h1>
-  <p class="sub">Editor data.json. Semua proses <b>100% di perangkatmu</b> — halaman ini tidak bisa menulis ke server, jadi aman walau diakses siapa pun. Perubahan masuk ke app setelah <b>Export → push data.json ke GitHub</b>.</p>
 
-  <div class="card">
-    <div class="load-row">
-      <button id="btnLoad" class="btn btn-light">🔄 Muat data live</button>
-      <label class="btn btn-light" for="fileJson">📂 File JSON</label>
-      <input type="file" id="fileJson" accept=".json" hidden>
-      <label class="btn btn-light" for="fileXlsx">📊 Import Excel</label>
-      <input type="file" id="fileXlsx" accept=".xlsx,.xls,.csv" hidden>
-    </div>
-    <div class="stat" id="stats">Belum ada data dimuat…</div>
-  </div>
+<div class="app-layout">
 
-  <div id="editor" style="display:none">
+    <header class="app-header">
+        <div class="brand-block">
+            <div class="brand-icon"><i class="fas fa-sliders"></i></div>
+            <div class="brand-title-group">
+                <h1>plukakang admin</h1>
+                <span>editor data PLU</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- LOAD -->
     <div class="card">
-      <input id="search" class="inp" placeholder="🔍 Cari nama / PLU RAW / PLU KONV…">
-      <div class="chips" id="brandChips"></div>
-      <div class="row-btns">
-        <button id="btnAdd" class="btn btn-primary">＋ Tambah Item</button>
-        <button id="btnExport" class="btn btn-green">💾 Export data.json</button>
-      </div>
+        <div class="load-row">
+            <button id="btnLoad" class="btn btn-light"><i class="fas fa-rotate"></i> Muat Live</button>
+            <label class="btn btn-light" for="fileJson"><i class="fas fa-file-code"></i> File JSON</label>
+            <input type="file" id="fileJson" accept=".json" hidden>
+            <label class="btn btn-light" for="fileXlsx"><i class="fas fa-file-excel"></i> Excel</label>
+            <input type="file" id="fileXlsx" accept=".xlsx,.xls,.csv" hidden>
+        </div>
+        <div class="stat" id="stats">Belum ada data dimuat…</div>
     </div>
 
-    <div class="card" id="dupCard">
-      <h2>⚠️ Cek Duplikat <span class="tag" id="dupCount">0</span><button id="dupToggle" class="mini">tampilkan</button></h2>
-      <ul id="dupList" class="dup" style="display:none"></ul>
-    </div>
+    <!-- EDITOR -->
+    <div id="editor" style="display:none">
 
-    <div id="list"></div>
-  </div>
+        <div class="card">
+            <input id="search" class="search-input" placeholder="🔍 Cari nama / PLU…">
+            <div class="chips" id="brandChips"></div>
+            <div class="load-row" style="margin-top:4px;">
+                <button id="btnAdd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+                <button id="btnExport" class="btn btn-green"><i class="fas fa-download"></i> Export</button>
+                <button id="btnCopy" class="btn btn-light"><i class="fas fa-copy"></i> Copy JSON</button>
+            </div>
+        </div>
+
+        <!-- DUP CARD -->
+        <div class="card" id="dupCard">
+            <div class="card-title">⚠️ Cek Duplikat <span class="tag tag-amber" id="dupCount">0</span>
+                <button id="dupToggle" class="mini-btn">tampilkan</button>
+            </div>
+            <ul id="dupList" class="dup-list" style="display:none"></ul>
+        </div>
+
+        <div id="list"></div>
+    </div>
 </div>
 
-<!-- FORM TAMBAH/EDIT -->
+<!-- FORM SHEET -->
 <div class="backdrop" id="formBackdrop">
-  <div class="sheet">
-    <div class="sheet-head"><b id="formTitle">Tambah Item</b><button class="x" id="formClose">✕</button></div>
-    <div class="sheet-body">
-      <label>Brand *</label><select id="fBrand"></select>
-      <label>Sub *</label><select id="fSub"></select>
-      <label>Kategori</label><select id="fKat"></select>
-      <label>Nama barang *</label><input id="fNama" placeholder="cth: Salt Bread Sesame (28)">
-      <label>PLU RAW</label><input id="fRaw" inputmode="numeric" placeholder="cth: 20141111">
-      <label>PLU KONV</label><input id="fKonv" inputmode="numeric" placeholder="cth: 20141112 — kosongkan jika tidak ada">
-      <div id="formWarn" class="warn" style="display:none"></div>
-      <button id="formSave" class="btn btn-primary">💾 Simpan</button>
+    <div class="sheet">
+        <div class="sheet-head">
+            <b id="formTitle">Tambah Item</b>
+            <button class="x" id="formClose"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="sheet-body">
+            <label>Brand *</label>
+            <select id="fBrand"></select>
+            <label>Sub *</label>
+            <select id="fSub"></select>
+            <label>Kategori</label>
+            <select id="fKat"></select>
+            <label>Nama Barang *</label>
+            <input id="fNama" placeholder="cth: Salt Bread Sesame (28)">
+            <label>PLU RAW</label>
+            <input id="fRaw" inputmode="numeric" placeholder="cth: 20141111">
+            <label>PLU KONV</label>
+            <input id="fKonv" inputmode="numeric" placeholder="kosongkan jika tidak ada">
+            <div id="formWarn" class="warn" style="display:none"></div>
+            <button id="formSave" class="btn btn-primary btn-block">💾 Simpan</button>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- IMPORT EXCEL -->
+<!-- IMPORT SHEET -->
 <div class="backdrop" id="impBackdrop">
-  <div class="sheet" style="height:auto;max-height:80vh;">
-    <div class="sheet-head"><b>📊 Import Excel</b><button class="x" id="impClose">✕</button></div>
-    <div class="sheet-body">
-      <div class="impinfo" id="impInfo"></div>
-      <div class="impbtns">
-        <button id="impReplace" class="btn btn-danger">🔁 GANTI semua data</button>
-        <button id="impAppend" class="btn btn-light">➕ Gabungkan (tambah di akhir)</button>
-      </div>
+    <div class="sheet" style="height:auto;max-height:78vh;">
+        <div class="sheet-head">
+            <b>📊 Import Excel</b>
+            <button class="x" id="impClose"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="sheet-body">
+            <div class="stat" id="impInfo"></div>
+            <label style="margin-top:14px;">Mode Import</label>
+            <button id="impReplace" class="btn btn-danger btn-block"><i class="fas fa-arrows-rotate"></i> Ganti Semua Data</button>
+            <button id="impAppend" class="btn btn-light btn-block"><i class="fas fa-plus"></i> Gabungkan ke Akhir</button>
+            <p style="font-size:.68rem;color:var(--text-light);font-weight:600;margin-top:10px;text-align:center;">
+                Header Excel harus: <b>brand, sub, kategori, nama, raw, konv</b> (huruf kecil)
+            </p>
+        </div>
     </div>
-  </div>
 </div>
+
+<div class="toast" id="toast">✓</div>
 
 <script>
 /* ================================================================
-   KONFIGURASI — edit di sini kalau brand/sub/kategori berubah.
-   Harus sama dengan yang ada di index.html.
+   KONFIGURASI — harus sama dengan index.html.
+   Edit di sini kalau brand/sub/kategori berubah.
    ================================================================ */
 var CONFIG = {
-  brands: ['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'],
-  brandNames: { saybread:'Say Bread', sayburger:'Say Burger', yummychoice:'Yummy Choice', yummycoffee:'Yummy Coffee Gold', pointcoffee:'Point Coffee', hambalanfc:'Hambalan FC', perishable:'Perishable' },
-  brandColors: { saybread:'#8c5332', sayburger:'#e11d48', yummychoice:'#f97316', yummycoffee:'#d97706', pointcoffee:'#15803d', hambalanfc:'#1e40af', perishable:'#059669' },
-  subs: {
-    saybread: ['dcf','sarana'],
-    sayburger: ['bkl','sarana'],
-    yummychoice: ['bkl','sarana'],
-    yummycoffee: ['bkl','dcf','sarana'],
-    pointcoffee: ['bkl','sarana'],
-    hambalanfc: ['minyak','beras','gula','mineral','beverage'],
-    perishable: ['buah_sayur']
-  },
-  subLabels: { dcf:'Frozen Dough', sarana:'Sarana', bkl:'Bahan Baku', minyak:'Minyak', beras:'Beras', gula:'Gula', mineral:'Mineral', beverage:'Beverage', buah_sayur:'Buah & Sayur' },
-  kategoriMaps: {
-    'yummychoice|bkl': { snack_rte:'Snack RTE', dimsum:'Dimsum', pao:'Pao', fried_chicken:'Fried Chicken', frozen_fc:'Frozen FC', sosis:'Sosis', pizza:'Pizza' },
-    'yummycoffee|bkl': { jelly:'Jelly', syrup:'Syrup', powder:'Powder', other:'Other' },
-    'pointcoffee|bkl': { coffee_bean:'Coffee Bean', sauce:'Sauce', topping_jelly:'Topping Jelly', syrup:'Syrup', powder:'Powder', milk_dairy:'Milk & Dairy', rtd_beverage:'RTD Beverage', tea:'Tea', sweetener:'Sweetener', topping_crunches:'Topping Crunches', rtd_coffee:'RTD Coffee' },
-    'perishable|buah_sayur': { buah:'Buah', sayur:'Sayur', jus:'Jus', bo:'B/O', bp:'B/P' }
-  }
+    brands: ['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'],
+    brandNames: { saybread:'Say Bread', sayburger:'Say Burger', yummychoice:'Yummy Choice', yummycoffee:'Yummy Coffee Gold', pointcoffee:'Point Coffee', hambalanfc:'Hambalan FC', perishable:'Perishable' },
+    brandColors: { saybread:'#8c5332', sayburger:'#e11d48', yummychoice:'#f97316', yummycoffee:'#d97706', pointcoffee:'#15803d', hambalanfc:'#1e40af', perishable:'#059669' },
+    subs: {
+        saybread: ['dcf','sarana'],
+        sayburger: ['bkl','sarana'],
+        yummychoice: ['bkl','sarana'],
+        yummycoffee: ['bkl','dcf','sarana'],
+        pointcoffee: ['bkl','sarana'],
+        hambalanfc: ['minyak','beras','gula','mineral','beverage'],
+        perishable: ['buah_sayur']
+    },
+    subLabels: { dcf:'Frozen Dough', sarana:'Sarana', bkl:'Bahan Baku', minyak:'Minyak', beras:'Beras', gula:'Gula', mineral:'Mineral', beverage:'Beverage', buah_sayur:'Buah & Sayur' },
+    kategoriMaps: {
+        'yummychoice|bkl': { snack_rte:'Snack RTE', dimsum:'Dimsum', pao:'Pao', fried_chicken:'Fried Chicken', frozen_fc:'Frozen FC', sosis:'Sosis', pizza:'Pizza' },
+        'yummycoffee|bkl': { jelly:'Jelly', syrup:'Syrup', powder:'Powder', other:'Other' },
+        'pointcoffee|bkl': { coffee_bean:'Coffee Bean', sauce:'Sauce', topping_jelly:'Topping Jelly', syrup:'Syrup', powder:'Powder', milk_dairy:'Milk & Dairy', rtd_beverage:'RTD Beverage', tea:'Tea', sweetener:'Sweetener', topping_crunches:'Topping Crunches', rtd_coffee:'RTD Coffee' },
+        'perishable|buah_sayur': { buah:'Buah', sayur:'Sayur', jus:'Jus', bo:'B/O', bp:'B/P' }
+    }
 };
 
 /* ================================================================ */
 var $ = function(id){ return document.getElementById(id); };
 var items = [];
-var editing = null;   // index item yang sedang diedit, null = mode tambah
+var editing = null;
 var curBrand = 'all';
 var pendingImport = null;
 
+function esc(s) {
+    return String(s||'').replace(/[&<>"']/g, function(m){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+}
+
+var _toastTimer;
+function showToast(msg) {
+    var t = $('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
 /* ---------- LOAD ---------- */
 function setData(d) {
-  items = d.map(function(it){
-    return { brand:it.brand||'', sub:it.sub||'', kategori:it.kategori||'', nama:it.nama||'', raw:it.raw||'', konv:it.konv||'' };
-  });
-  $('editor').style.display = '';
-  renderAll();
+    items = (d || []).map(function(it){
+        return { brand:it.brand||'', sub:it.sub||'', kategori:it.kategori||'', nama:it.nama||'', raw:it.raw||'', konv:it.konv||'' };
+    });
+    $('editor').style.display = '';
+    renderAll();
+    showToast('✓ ' + items.length + ' item dimuat');
 }
 
 function loadLive() {
-  fetch('data.json?v=' + Date.now())
-    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(d){ setData(d); })
-    .catch(function(){
-      alert('Gagal memuat data.json.\n\nKalau kamu membuka halaman ini langsung dari file (bukan lewat vercel.app), pakai tombol "📂 File JSON" untuk memilih data.json dari perangkatmu.');
-    });
+    fetch('data.json?v=' + Date.now())
+        .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(setData)
+        .catch(function(){
+            showToast('⚠️ Gagal load live — pakai tombol File JSON');
+        });
 }
  $('btnLoad').addEventListener('click', loadLive);
  $('fileJson').addEventListener('change', function(e){
-  var f = e.target.files[0]; if(!f) return;
-  var r = new FileReader();
-  r.onload = function(ev){
-    try { setData(JSON.parse(ev.target.result)); }
-    catch(err){ alert('File bukan JSON valid:\n' + err.message); }
-  };
-  r.readAsText(f);
-  e.target.value = '';
+    var f = e.target.files[0]; if(!f) return;
+    var r = new FileReader();
+    r.onload = function(ev){
+        try { setData(JSON.parse(ev.target.result)); }
+        catch(err){ showToast('⚠️ JSON tidak valid'); }
+    };
+    r.readAsText(f);
+    e.target.value = '';
 });
 
 /* ---------- RENDER ---------- */
-function renderAll() {
-  renderStats(); renderChips(); renderList(); renderDup();
-}
+function renderAll(){ renderStats(); renderChips(); renderList(); renderDup(); }
 
 function renderStats() {
-  var per = {};
-  CONFIG.brands.forEach(function(b){ per[b] = 0; });
-  items.forEach(function(it){ if (per[it.brand] !== undefined) per[it.brand]++; });
-  var html = 'Total: <b>' + items.length + '</b> item — ';
-  html += CONFIG.brands.map(function(b){ return CONFIG.brandNames[b].split(' ')[0] + ' <b>' + per[b] + '</b>'; }).join(' · ');
-  $('stats').innerHTML = html;
+    var per = {};
+    CONFIG.brands.forEach(function(b){ per[b] = 0; });
+    items.forEach(function(it){ if (per[it.brand] !== undefined) per[it.brand]++; });
+    var html = 'Total: <b>' + items.length + '</b> item · ';
+    html += CONFIG.brands.map(function(b){
+        return CONFIG.brandNames[b].split(' ')[0] + ' <b>' + per[b] + '</b>';
+    }).join(' · ');
+    $('stats').innerHTML = html;
 }
 
 function renderChips() {
-  var html = '<button class="chip' + (curBrand==='all'?' active':'') + '" data-b="all">Semua (' + items.length + ')</button>';
-  CONFIG.brands.forEach(function(b){
-    var n = items.filter(function(it){ return it.brand === b; }).length;
-    html += '<button class="chip' + (curBrand===b?' active':'') + '" data-b="' + b + '">' + CONFIG.brandNames[b] + ' (' + n + ')</button>';
-  });
-  $('brandChips').innerHTML = html;
+    var html = '<button class="chip' + (curBrand==='all'?' active':'') + '" data-b="all">Semua (' + items.length + ')</button>';
+    CONFIG.brands.forEach(function(b){
+        var n = items.filter(function(it){ return it.brand === b; }).length
+        html += '<button class="chip' + (curBrand===b?' active':'') + '" data-b="' + b + '">' + esc(CONFIG.brandNames[b]) + ' (' + n + ')</button>';
+    });
+    $('brandChips').innerHTML = html;
 }
  $('brandChips').addEventListener('click', function(e){
-  var c = e.target.closest('.chip'); if(!c) return;
-  curBrand = c.dataset.b;
-  renderChips(); renderList();
+    var c = e.target.closest('.chip'); if(!c) return;
+    curBrand = c.dataset.b;
+    renderChips(); renderList();
 });
 
 function renderList() {
-  var q = $('search').value.toLowerCase().trim();
-  var list = items.map(function(it,i){ return {it:it, i:i}; }).filter(function(o){
-    var it = o.it;
-    if (curBrand !== 'all' && it.brand !== curBrand) return false;
-    if (!q) return true;
-    return ((it.nama+' '+(it.raw||'')+' '+(it.konv||'')).toLowerCase().indexOf(q) !== -1);
-  });
+    var q = $('search').value.toLowerCase().trim();
+    var list = items.map(function(it,i){ return {it:it, i:i}; }).filter(function(o){
+        var it = o.it;
+        if (curBrand !== 'all' && it.brand !== curBrand) return false;
+        if (!q) return true;
+        return ((it.nama+' '+(it.raw||'')+' '+(it.konv||'')).toLowerCase().indexOf(q) !== -1);
+    });
 
-  if (!list.length) {
-    $('list').innerHTML = '<div class="empty">' + (items.length ? 'Tidak ada yang cocok dengan pencarian/filter.' : 'Belum ada data. Muat dulu lewat tombol di atas.') + '</div>';
-    return;
-  }
+    if (!list.length) {
+        $('list').innerHTML = '<div class="empty-state">' +
+            (items.length ? 'Tidak ada yang cocok dengan pencarian.' : 'Belum ada data. Muat dulu lewat tombol di atas.') +
+        '</div>';
+        return;
+    }
 
-  $('list').innerHTML = list.map(function(o){
-    var it = o.it;
-    var color = CONFIG.brandColors[it.brand] || '#6b7280';
-    var bname = CONFIG.brandNames[it.brand] || it.brand;
-    var subL = CONFIG.subLabels[it.sub] || it.sub || '—';
-    var katL = it.kategori ? it.kategori : '';
-    var codes = '';
-    if (it.raw) codes += '<span class="code raw">RAW ' + it.raw + '</span>';
-    if (it.konv) codes += '<span class="code konv">KONV ' + it.konv + '</span>';
-    if (!codes) codes = '<span class="code" style="color:#9ca3af;border-color:#e5e7eb;">tanpa PLU ⚠️</span>';
-    return '<div class="item">' +
-      '<div class="item-top"><div><div class="item-name">' + esc(it.nama) + '</div>' +
-      '<div class="item-sub">' + subL + (katL ? ' · ' + esc(katL) : '') + '</div></div>' +
-      '<span class="bchip" style="background:' + color + '">' + esc(bname) + '</span></div>' +
-      '<div class="codes">' + codes + '</div>' +
-      '<div class="item-btns">' +
-        '<button class="btn btn-light" data-edit="' + o.i + '">✏️ Edit</button>' +
-        '<button class="btn btn-light" style="color:var(--red);" data-del="' + o.i + '">🗑️ Hapus</button>' +
-      '</div></div>';
-  }).join('');
+    $('list').innerHTML = list.map(function(o){
+        var it = o.it;
+        var color = CONFIG.brandColors[it.brand] || '#6b7280';
+        var bname = CONFIG.brandNames[it.brand] || it.brand;
+        var subL = CONFIG.subLabels[it.sub] || it.sub || '—';
+        var codes = '';
+        if (it.raw) codes += '<span class="code raw">RAW ' + esc(it.raw) + '</span>';
+        if (it.konv) codes += '</codes><span class="code konv">KONV ' + esc(it.konv) + '</span>';
+        if (!it.raw && !it.konv) codes = '<span class="code none">tanpa PLU ⚠️</span>';
+        return '<div class="item">' +
+            '<div class="item-top"><div><div class="item-name">' + esc(it.nama) + '</div>' +
+            '<div class="item-sub">' + esc(subL) + '</div></div>' +
+            '<span class="bchip" style="background:' + color + '">' + esc(bname) + '</span></div>' +
+            '<div class="codes">' + codes + '</div>' +
+            '<div class="item-btns">' +
+                '<button class="btn btn-light" data-edit="' + o.i + '">✏️ Edit</button>' +
+                '<button class="btn btn-light" style="color:var(--red);" data-del="' + o.i + '">🗑️ Hapus</button>' +
+            '</div></div>';
+    }).join('');
 }
 
  $('search').addEventListener('input', renderList);
  $('list').addEventListener('click', function(e){
-  var ed = e.target.closest('[data-edit]');
-  if (ed) { openForm(parseInt(ed.dataset.edit,10)); return; }
-  var dl = e.target.closest('[data-del]');
-  if (dl) {
-    var i = parseInt(dl.dataset.del,10);
-    var it = items[i];
-    if (confirm('Hapus "' + it.nama + '"?\n(' + (CONFIG.brandNames[it.brand]||it.brand) + ' · RAW ' + (it.raw||'-') + ')')) {
-      items.splice(i,1);
-      renderAll();
+    var ed = e.target.closest('[data-edit]');
+    if (ed) { openForm(parseInt(ed.dataset.edit,10)); return; }
+    var dl = e.target.closest('[data-del]');
+    if (dl) {
+        var i = parseInt(dl.dataset.del,10);
+        var it = items[i];
+        if (confirm('Hapus "' + it.nama + '"?')) {
+            items.splice(i,1);
+            renderAll();
+            showToast('🗑️ "' + it.nama + '" dihapus (belum tersimpan — jangan lupa Export/Copy)');
+        }
     }
-  }
 });
 
-/* ---------- FORM TAMBAH/EDIT ---------- */
+/* ---------- FORM ---------- */
 function fillSub(brand, current) {
-  var sel = $('fSub'); sel.innerHTML = '';
-  (CONFIG.subs[brand] || []).forEach(function(s){
-    var op = document.createElement('option');
-    op.value = s; op.textContent = CONFIG.subLabels[s] || s;
-    if (s === current) op.selected = true;
-    sel.appendChild(op);
-  });
+    var sel = $('fSub'); sel.innerHTML = '';
+    (CONFIG.subs[brand] || []).forEach(function(s){
+        var op = document.createElement('option');
+        op.value = s; op.textContent = CONFIG.subLabels[s] || s;
+        if (s === current) op.selected = true;
+        sel.appendChild(op);
+    });
 }
 function fillKat(brand, sub, current) {
-  var sel = $('fKat'); sel.innerHTML = '';
-  var map = CONFIG.kategoriMaps[brand + '|' + sub];
-  var opts = [];
-  if (!map) {
-    opts.push({v:'', l:'(kosong)'});
-    if (current) opts.push({v:current, l:current + ' (nilai lama)'});
-  } else {
-    Object.keys(map).forEach(function(k){ opts.push({v:k, l:map[k]}); });
-    if (current && !map[current]) opts.push({v:current, l:current + ' (nilai lama)'});
-  }
-  opts.forEach(function(o){
-    var op = document.createElement('option');
-    op.value = o.v; op.textContent = o.l;
-    if (o.v === (current || '')) op.selected = true;
-    sel.appendChild(op);
-  });
+    var sel = $('fKat'); sel.innerHTML = '';
+    var map = CONFIG.kategoriMaps[brand + '|' + sub];
+    if (!map) {
+        var op = document.createElement('option');
+        op.value = ''; op.textContent = '(kosong)';
+        sel.appendChild(op);
+        if (current) {
+            var op2 = document.createElement('option');
+            op2.value = current; op2.textContent = current + ' (nilai lama)';
+            sel.appendChild(op2);
+        }
+        return;
+    }
+    Object.keys(map).forEach(function(k){
+        var op = document.createElement('option');
+        op.value = k; op.textContent = map[k];
+        if (k === current) op.selected = true;
+        sel.appendChild(op);
+    });
+    if (current && !map[current]) {
+        var opL = document.createElement('option');
+        opL.value = current; opL.textContent = current + ' (nilai lama)';
+        sel.appendChild(opL);
+    }
 }
 
 function openForm(idx) {
-  editing = (idx === undefined || idx === null) ? null : idx;
-  var it = editing !== null ? items[editing] : {brand:curBrand!=='all'?curBrand:CONFIG.brands[0], sub:'', kategori:'', nama:'', raw:'', konv:''};
+    editing = (idx === undefined || idx === null) ? null : idx;
+    var it = editing !== null ? items[editing] :
+        { brand: curBrand !== 'all' ? curBrand : CONFIG.brands[0], sub:'', kategori:'', nama:'', raw:'', konv:'' };
 
-  $('formTitle').innerText = editing !== null ? '✏️ Edit Item' : '＋ Tambah Item';
-  var fb = $('fBrand'); fb.innerHTML = '';
-  CONFIG.brands.forEach(function(b){
-    var op = document.createElement('option');
-    op.value = b; op.textContent = CONFIG.brandNames[b];
-    if (b === it.brand) op.selected = true;
-    fb.appendChild(op);
-  });
-  fillSub(fb.value, it.sub);
-  fillKat(fb.value, $('fSub').value, it.kategori);
-  $('fNama').value = it.nama;
-  $('fRaw').value = it.raw;
-  $('fKonv').value = it.konv;
-  $('formWarn').style.display = 'none';
+    $('formTitle').innerText = editing !== null ? '✏️ Edit Item' : '＋ Tambah Item';
+    var fb = $('fBrand'); fb.innerHTML = '';
+    CONFIG.brands.forEach(function(b){
+        var op = document.createElement('option');
+        op.value = b; op.textContent = CONFIG.brandNames[b];
+        if (b === it.brand) op.selected = true;
+        fb.appendChild(op);
+    });
+    fillSub(fb.value, it.sub);
+    fillKat(fb.value, $('fSub').value, it.kategori);
+    $('fNama').value = it.nama;
+    $('fRaw').value = it.raw;
+    $('fKonv').value = it.konv;
+    $('formWarn').style.display = 'none';
 
-  $('formBackdrop').classList.add('open');
-  if (editing === null) setTimeout(function(){ $('fNama').focus(); }, 350);
+    $('formBackdrop').classList.add('open');
+    if (editing === null) setTimeout(function(){ $('fNama').focus(); }, 350);
 }
 function closeForm(){ $('formBackdrop').classList.remove('open'); editing = null; }
 
@@ -337,125 +566,151 @@ function closeForm(){ $('formBackdrop').classList.remove('open'); editing = null
  $('formBackdrop').addEventListener('click', function(e){ if (e.target === this) closeForm(); });
 
  $('formSave').addEventListener('click', function(){
-  var brand = $('fBrand').value, sub = $('fSub').value, kat = $('fKat').value;
-  var nama = $('fNama').value.trim(), raw = $('fRaw').value.trim(), konv = $('fKonv').value.trim();
+    var brand = $('fBrand').value, sub = $('fSub').value, kat = $('fKat').value;
+    var nama = $('fNama').value.trim(), raw = $('fRaw').value.trim(), konv = $('fKonv').value.trim();
 
-  if (!nama) { alert('Nama barang wajib diisi.'); return; }
-  if (!raw && !konv) { alert('Isi minimal salah satu: PLU RAW atau PLU KONV.'); return; }
+    if (!nama) { showToast('⚠️ Nama wajib diisi'); return; }
+    if (!raw && !konv) { showToast('⚠️ Isi minimal salah satu PLU'); return; }
 
-  /* deteksi duplikat (kecuali item yang sedang diedit sendiri) */
-  var dups = [];
-  items.forEach(function(it, i){
-    if (editing !== null && i === editing) return;
-    if (raw && it.raw === raw) dups.push('PLU RAW ' + raw + ' sudah dipakai oleh: ' + it.nama);
-    if (konv && it.konv === konv) dups.push('PLU KONV ' + konv + ' sudah dipakai oleh: ' + it.nama);
-    if (it.brand === brand && it.nama.toLowerCase() === nama.toLowerCase()) dups.push('Nama sama sudah ada: ' + it.nama);
-  });
-  if (dups.length && !confirm('⚠️ Ditemukan:\n• ' + dups.join('\n• ') + '\n\nSimpan tetap?')) return;
+    var dups = [];
+    items.forEach(function(it, i){
+        if (editing !== null && i === editing) return;
+        if (raw && it.raw === raw) dups.push('PLU RAW ' + raw + ' sudah dipakai: ' + it.nama);
+        if (konv && it.konv === konv) dups.push('PLU KONV ' + konv + ' sudah dipakai: ' + it.nama;
+        if (it.brand === brand && it.nama.toLowerCase() === nama.toLowerCase()) dups.push('Nama sama: ' + it.nama);
+    });
+    if (dups.length && !confirm('⚠️ ' + dups.length + ' peringatan:\n\n• ' + dups.join('\n• ') + '\n\nSimpan tetap?')) return;
 
-  var obj = { brand:brand, sub:sub, kategori:kat, nama:nama, raw:raw, konv:konv };
-  if (editing === null) items.push(obj);
-  else items[editing] = obj;
+    var obj = { brand:brand, sub:sub, kategori:kat, nama:nama, raw:raw, konv:konv };
+    if (editing === null) { items.push(obj); showToast('✓ Ditambahkan'); }
+    else { items[editing] = obj; showToast('✓ Diperbarui'); }
 
-  closeForm();
-  renderAll();
+    closeForm();
+    renderAll();
 });
 
-/* ---------- DUPLIKAT SCAN ---------- */
+/* ---------- DUPLICATE SCAN ---------- */
 function scanDup() {
-  var out = [], byName = {}, byCode = {};
-  items.forEach(function(it){
-    var k = it.brand + '|' + it.nama.toLowerCase();
-    (byName[k] = byName[k] || []).push(it);
-    ['raw','konv'].forEach(function(f){
-      var c = it[f]; if (c) (byCode[c] = byCode[c] || []).push(it.brand + ' · ' + it.nama);
+    var out = [], byName = {}, byCode = {};
+    items.forEach(function(it){
+        var k = it.brand + '|' + it.nama.toLowerCase();
+        (byName[k] = byName[k] || []).push(it);
+        ['raw','konv'].forEach(function(f){
+            var c = it[f]; if (c) (byCode[c] = byCode[c] || []).push(it.brand + ' · ' + it.nama);
+        });
     });
-  });
-  Object.keys(byName).forEach(function(k){
-    if (byName[k].length > 1) out.push('👥 Duplikat nama: ' + byName[k][0].brand + ' · "' + byName[k][0].nama + '" ×' + byName[k].length);
-  });
-  Object.keys(byCode).forEach(function(c){
-    var u = byCode[c].filter(function(v,i,a){ return a.indexOf(v) === i; });
-    if (u.length > 1) out.push('🔢 PLU ' + c + ' dipakai oleh: ' + u.join(' & '));
-  });
-  items.forEach(function(it){
-    if (it.raw && it.konv && it.raw === it.konv) out.push('🟡 RAW = KONV: ' + it.brand + ' · ' + it.nama + ' (' + it.raw + ')');
-  });
-  return out;
+    Object.keys(byName).forEach(function(k){
+        if (byName[k].length > 1) out.push('👥 <b>Duplikat nama</b>: ' + byName[k][0].brand + ' · "' + esc(byName[k][0].nama) + '" ×' + byName[k].length);
+    });
+    Object.keys(byCode).forEach(function(c){
+        var u = byCode[c].filter(function(v,i,a){ return a.indexOf(v) === i; });
+        if (u.length > 1) out.push('🔢 <b>PLU ' + esc(c) + '</b> dipakai oleh: ' + esc(u.join(' & ')));
+    });
+    items.forEach(function(it){
+        if (it.raw && it.konv && it.raw === it.konv) out.push('🟡 <b>RAW = KONV</b>: ' + it.brand + ' · ' + esc(it.nama) + ' (' + it.raw + ')');
+    });
+    return out;
 }
 function renderDup() {
-  var d = scanDup();
-  $('dupCount').innerText = d.length;
-  $('dupList').innerHTML = d.length
-    ? d.map(function(t){ return '<li>' + t + '</li>'; }).join('')
-    : '<li>Tidak ada duplikat terdeteksi 👍</li>';
+    var d = scanDup();
+    $('dupCount').innerText = d.length;
+    $('dupList').innerHTML = d.length
+        ? d.map(function(t){ return '<li>' + t + '</li>'; }).join('')
+        : '<li>Tidak ada duplikat terdeteksi 👍</li>';
 }
  $('dupToggle').addEventListener('click', function(){
-  var l = $('dupList');
-  var open = l.style.display !== 'none';
-  l.style.display = open ? 'none' : '';
-  this.innerText = open ? 'tampilkan' : 'sembunyikan';
+    var l = $('dupList');
+    var open = l.style.display !== 'none';
+    l.style.display = open ? 'none' : '';
+    this.innerText = open ? 'tampilkan' : 'sembunyikan';
 });
 
-/* ---------- EXPORT ---------- */
+/* ---------- EXPORT & COPY ---------- */
+function buildJsonText() {
+    var out = '[\n' + items.map(function(it){
+        return '  ' + JSON.stringify({ brand:it.brand, sub:it.sub, kategori:it.kategori, nama:it.nama, raw:it.raw, konv:it.konv });
+    }).join(',\n') + '\n]';
+    return out;
+}
+
  $('btnExport').addEventListener('click', function(){
-  var out = '[\n' + items.map(function(it){
-    return '  ' + JSON.stringify({ brand:it.brand, sub:it.sub, kategori:it.kategori, nama:it.nama, raw:it.raw, konv:it.konv });
-  }).join(',\n') + '\n]';
-  var blob = new Blob([out], { type:'application/json' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'data.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+    var blob = new Blob([buildJsonText()], { type:'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('✓ data.json ter-download');
 });
+
+ $('btnCopy').addEventListener('click', function(){
+    var text = buildJsonText();
+
+    function sukses() { showToast('✓ JSON tersalin! Paste di GitHub'); }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(sukses).catch(function(){ fallbackCopy(text, sukses); });
+    } else {
+        fallbackCopy(text, sukses);
+    }
+});
+
+function fallbackCopy(text, cb) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e) { showToast('⚠️ Gagal copy — pakai Export'); }
+    document.body.removeChild(ta);
+}
 
 /* ---------- IMPORT EXCEL ---------- */
  $('fileXlsx').addEventListener('change', function(e){
-  var f = e.target.files[0]; if (!f) return;
-  var r = new FileReader();
-  r.onload = function(ev){
-    try {
-      var wb = XLSX.read(new Uint8Array(ev.target.result), { type:'array' });
-      var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval:'' });
-      var parsed = [], skipped = 0;
-      rows.forEach(function(row){
-        var o = {};
-        Object.keys(row).forEach(function(k){ o[String(k).toLowerCase().trim()] = String(row[k]).trim(); });
-        if (!o.nama || !o.brand) { skipped++; return; }
-        parsed.push({ brand:o.brand, sub:o.sub||'', kategori:o.kategori||'', nama:o.nama, raw:o.raw||'', konv:o.konv||'' });
-      });
-      if (!parsed.length) {
-        alert('Tidak ada baris valid terbaca.\n\nPastikan header kolom di Excel persis: brand, sub, kategori, nama, raw, konv (huruf kecil).');
-        return;
-      }
-      pendingImport = parsed;
-      $('impInfo').innerHTML = 'File: <b>' + esc(f.name) + '</b><br>Baris valid: <b>' + parsed.length + '</b><br>Dilewati (brand/nama kosong): ' + skipped + '<br><br>Data saat ini: <b>' + items.length + '</b> item.<br>Pilih cara memasukkan:';
-      $('impBackdrop').classList.add('open');
-    } catch(err) { alert('Gagal membaca file: ' + err.message); }
-  };
-  r.readAsArrayBuffer(f);
-  e.target.value = '';
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function(ev){
+        try {
+            var wb = XLSX.read(new Uint8Array(ev.target.result), { type:'array' });
+            var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval:'' });
+            var parsed = [], skipped = 0;
+            rows.forEach(function(row){
+                var o = {};
+                Object.keys(row).forEach(function(k){ o[String(k).toLowerCase().trim()] = String(row[k]).trim(); });
+                if (!o.nama || !o.brand) { skipped++; return; }
+                parsed.push({ brand:o.brand, sub:o.sub||'', kategori:o.kategori||'', nama:o.nama, raw:o.raw||'', konv:o.konv||'' });
+            });
+            if (!parsed.length) {
+                showToast('⚠️ Tidak ada baris valid (cek header: brand, sub, kategori, nama, raw, konv)');
+                return;
+            }
+            pendingImport = parsed;
+            $('impInfo').innerHTML =
+                '📄 <b>' + esc(f.name) + '</b><br>' +
+                'Baris valid: <b>' + parsed.length + '</b><br>' +
+                'Dilewati: ' + skipped + '<br>' +
+                'Data saat ini: <b>' + items.length + '</b> item';
+            $('impBackdrop').classList.add('open');
+        } catch(err) { showToast('⚠️ Gagal baca file: ' + err.message); }
+    };
+    r.readAsArrayBuffer(f);
+    e.target.value = '';
 });
  $('impClose').addEventListener('click', function(){ $('impBackdrop').classList.remove('open'); });
  $('impReplace').addEventListener('click', function(){
-  if (!confirm('GANTI seluruh ' + items.length + ' item saat ini dengan ' + pendingImport.length + ' item dari Excel?')) return;
-  items = pendingImport.slice();
-  $('impBackdrop').classList.remove('open');
-  renderAll();
+    if (!confirm('GANTI seluruh ' + items.length + ' item dengan ' + pendingImport.length + ' item dari Excel?')) return;
+    items = pendingImport.slice();
+    $('impBackdrop').classList.remove('open');
+    renderAll();
+    showToast('✓ ' + items.length + ' item dari Excel (belum tersimpan — jangan lupa Export/Copy)');
 });
  $('impAppend').addEventListener('click', function(){
-  items = items.concat(pendingImport);
-  $('impBackdrop').classList.remove('open');
-  renderAll();
+    items = items.concat(pendingImport);
+    $('impBackdrop').classList.remove('open');
+    renderAll();
+    showToast('✓ Digabungkan (belum tersimpan — jangan lupa Export/Copy)');
 });
-
-function esc(s){
-  return String(s||'').replace(/[&<>"']/g, function(m){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
-  });
-}
 
 /* ---------- INIT ---------- */
 loadLive();
