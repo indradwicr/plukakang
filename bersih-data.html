@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bersih-data — plukakang</title>
+<style>
+  :root{--bg:#f6f8fc;--card:#fff;--border:#e5e7eb;--muted:#4b5563;--light:#9ca3af;--blue:#0073ea;--red:#ef4444;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:#111827;display:flex;justify-content:center;padding:20px 12px 48px;}
+  .wrap{width:100%;max-width:520px;}
+  h1{font-size:1.15rem;font-weight:800;letter-spacing:-.3px;}
+  .sub{font-size:.78rem;color:var(--muted);margin:4px 0 16px;line-height:1.5;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(17,24,39,.04);}
+  .drop{display:block;border:2px dashed #cbd5e1;border-radius:14px;padding:26px 16px;text-align:center;color:var(--muted);font-weight:700;font-size:.85rem;cursor:pointer;}
+  .drop:active{border-color:var(--blue);color:var(--blue);}
+  .stat{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .stat span{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:6px 12px;font-size:.72rem;font-weight:700;color:var(--muted);}
+  .stat b{color:var(--blue);}
+  h2{font-size:.85rem;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .tag{font-size:.62rem;font-weight:800;padding:2px 9px;border-radius:8px;}
+  .tag-fix{background:#dcfce7;color:#15803d;}
+  .tag-rev{background:#fef3c7;color:#a16207;}
+  ul{list-style:none;max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;}
+  li{padding:8px 12px;font-size:.73rem;line-height:1.45;border-bottom:1px solid #f1f5f9;color:var(--muted);}
+  li:last-child{border-bottom:none;}
+  li b{color:#111827;}
+  .btn{width:100%;border:none;border-radius:14px;padding:14px;font-family:inherit;font-size:.92rem;font-weight:800;cursor:pointer;transition:transform .12s ease;}
+  .btn:active{transform:scale(.98);}
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn:disabled{opacity:.35;cursor:default;transform:none;}
+  .note{font-size:.7rem;color:var(--muted);margin-top:10px;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🧹 Bersih-bersih data.json</h1>
+  <p class="sub">Alat sekali pakai untuk membersihkan data PLU. <b>Semua proses 100% di perangkatmu</b> — data tidak dikirim ke mana pun.</p>
+
+  <div class="card">
+    <label class="drop" for="file">📂 Tap untuk pilih data.json</label>
+    <input type="file" id="file" accept=".json,application/json" style="display:none">
+    <div class="stat" id="stats" style="display:none"></div>
+  </div>
+
+  <div class="card" id="fixCard" style="display:none">
+    <h2>✅ Diperbaiki otomatis <span class="tag tag-fix" id="fixCount">0</span></h2>
+    <ul id="fixList"></ul>
+  </div>
+
+  <div class="card" id="revCard" style="display:none">
+    <h2>👀 Perlu keputusanmu <span class="tag tag-rev" id="revCount">0</span></h2>
+    <ul id="revList"></ul>
+    <p class="note">Yang ada di daftar ini <b>sengaja tidak diubah otomatis</b> — bisa saja memang disengaja (PLU beda untuk batch beda, SKU sama dipakai lintas brand, dll). Cukup dicatat, nanti dikelola lewat admin.</p>
+  </div>
+
+  <button class="btn btn-primary" id="dl" disabled>⬇️ Download data.json (bersih)</button>
+  <p class="note"><b>Langkah:</b> pilih file → cek laporan → download → ganti data.json di repo → commit &amp; push → Vercel rebuild otomatis. Format keluaran tetap 1 baris per item (enak buat diff GitHub).</p>
+</div>
+
+<script>
+(function() {
+  var $ = function(id){ return document.getElementById(id); };
+  var KEY_ORDER = ['brand','sub','kategori','nama','raw','konv'];
+
+  /* [regex, pengganti, keterangan] — hanya ejaan/format yang jelas salah */
+  var TYPO_FIX = [
+    [/Pasific/g,       'Pacific',       'ejaan Pasific → Pacific'],
+    [/Sunkist Nevel/g, 'Sunkist Navel', 'ejaan Nevel → Navel'],
+    [/Aust\(80\/88$/,  'Aust(80/88)',   'kurung ditutup'],
+    [/Fuji Nz\b/g,     'Fuji NZ',       'Nz → NZ'],
+    [/Fuji Rrc\b/g,    'Fuji RRC',      'Rrc → RRC'],
+    [/Blackpaper/g,    'Blackpepper',   'Blackpaper → Blackpepper'],
+    [/Healty/g,        'Healthy',       'Healty → Healthy'],
+    [/Alfafa/g,        'Alfalfa',       'Alfafa → Alfalfa'],
+    [/Sproud/g,        'Sprout',        'Sproud → Sprout'],
+    [/Frape/g,         'Frappe',        'Frape → Frappe'],
+    [/Rock \( Merah/g, 'Rock (Merah',   'spasi nyasar'],
+    [/–/g,             '-',             'tanda pisah panjang → hyphen']
+  ];
+
+  function cleanNama(nama) {
+    var s = String(nama || '').replace(/\s+/g, ' ').trim();
+    var notes = [];
+    TYPO_FIX.forEach(function(f) {
+      if (s.match(f[0])) {
+        s = s.replace(f[0], f[1]);
+        notes.push(f[2]);
+      }
+    });
+    return { nama: s, notes: notes };
+  }
+
+  function clean(fileText) {
+    var data;
+    try { data = JSON.parse(fileText); }
+    catch(e) { alert('File bukan JSON yang valid:\n' + e.message); return; }
+    if (!Array.isArray(data)) { alert('Format tidak dikenal: harus array of items.'); return; }
+
+    var fixes = [], reviews = [];
+    var cleaned = [], brandFix = 0, ghost = 0;
+
+    data.forEach(function(item) {
+      var out = {};
+
+      /* 1. Susun ulang key + buang kolom hantu "" */
+      KEY_ORDER.forEach(function(k) {
+        if (item[k] !== undefined) out[k] = item[k];
+      });
+      Object.keys(item).forEach(function(k) {
+        if (k === '') { ghost++; return; }
+        if (KEY_ORDER.indexOf(k) === -1) out[k] = item[k]; /* kolom tak dikenal: dipertahankan */
+      });
+
+      /* 2. Trim semua string */
+      KEY_ORDER.forEach(function(k) {
+        if (typeof out[k] === 'string') out[k] = out[k].trim();
+      });
+
+      /* 3. Rapikan ejaan brand */
+      if (out.brand === 'point coffee') { out.brand = 'pointcoffee'; brandFix++; }
+
+      /* 4. Perbaiki ejaan nama */
+      if (out.nama) {
+        var r = cleanNama(out.nama);
+        if (r.notes.length) {
+          fixes.push('"' + out.nama + '" → "' + r.nama + '" <span style="color:#9ca3af">(' + r.notes.join(', ') + ')</span>');
+          out.nama = r.nama;
+        }
+      }
+
+      cleaned.push(out);
+    });
+
+    /* 5. DETEKSI (tidak diubah) — duplikat nama dalam brand yang sama */
+    var byName = {};
+    cleaned.forEach(function(it) {
+      var key = (it.brand + '|' + String(it.nama || '').toLowerCase());
+      (byName[key] = byName[key] || []).push(it);
+    });
+    Object.keys(byName).forEach(function(k) {
+      if (byName[k].length > 1) {
+        var codes = byName[k].map(function(it){ return it.raw || it.konv || '(tanpa PLU)'; }).join(', ');
+        reviews.push('<b>Duplikat nama</b> — ' + byName[k][0].brand + ' · "' + byName[k][0].nama + '" ×' + byName[k].length + ' — PLU: ' + codes);
+      }
+    });
+
+    /* 6. DETEKSI (tidak diubah) — PLU yang sama dipakai lebih dari satu item */
+    var byCode = {};
+    cleaned.forEach(function(it) {
+      ['raw','konv'].forEach(function(f) {
+        var c = it[f];
+        if (c) (byCode[c] = byCode[c] || []).push(it.brand + ' · ' + it.nama);
+      });
+    });
+    Object.keys(byCode).forEach(function(c) {
+      var uniq = byCode[c].filter(function(v,i,a){ return a.indexOf(v) === i; });
+      if (uniq.length > 1) reviews.push('<b>PLU sama</b> <b>' + c + '</b> dipakai oleh: ' + uniq.join(' &amp; '));
+    });
+
+    /* 7. DETEKSI (tidak diubah) — RAW identik dengan KONV */
+    cleaned.forEach(function(it) {
+      if (it.raw && it.konv && it.raw === it.konv) {
+        reviews.push('<b>RAW = KONV</b> — ' + it.brand + ' · "' + it.nama + '" (' + it.raw + ')');
+      }
+    });
+
+    render(data.length, cleaned.length, ghost, brandFix, fixes, reviews, cleaned);
+  }
+
+  function render(before, after, ghost, brandFix, fixes, reviews, cleaned) {
+    var st = $('stats');
+    st.style.display = 'flex';
+    st.innerHTML =
+      '<span>Item: <b>' + before + '</b> → <b>' + after + '</b> (tidak ada yang dihapus)</span>' +
+      '<span>Kolom hantu dibuang: <b>' + ghost + '</b></span>' +
+      '<span>Brand dirapikan: <b>' + brandFix + '</b></span>';
+
+    var fc = $('fixCard'), fl = $('fixList');
+    fc.style.display = '';
+    $('fixCount').innerText = fixes.length;
+    fl.innerHTML = '';
+    fixes.forEach(function(t) {
+      var li = document.createElement('li'); li.innerHTML = '✓ ' + t; fl.appendChild(li);
+    });
+    if (!fixes.length) { var li = document.createElement('li'); li.innerText = 'Tidak ada ejaan yang perlu diperbaiki 👍'; fl.appendChild(li); }
+
+    var rc = $('revCard'), rl = $('revList');
+    rc.style.display = reviews.length ? '' : 'none';
+    $('revCount').innerText = reviews.length;
+    rl.innerHTML = '';
+    reviews.forEach(function(t) {
+      var li = document.createElement('li'); li.innerHTML = '• ' + t; rl.appendChild(li);
+    });
+    if (!reviews.length) { var li2 = document.createElement('li'); li2.innerText = 'Tidak ada kasus yang butuh keputusan 👍'; rl.appendChild(li2); }
+
+    $('dl').disabled = false;
+    $('dl').onclick = function() {
+      var out = '[\n' + cleaned.map(function(it){ return '  ' + JSON.stringify(it); }).join(',\n') + '\n]';
+      var blob = new Blob([out], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'data.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+  }
+
+  $('file').addEventListener('change', function(e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) { clean(ev.target.result); };
+    reader.readAsText(f);
+  });
+})();
+</script>
+</body>
+                                                        </html>
