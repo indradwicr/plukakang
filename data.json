@@ -1226,5 +1226,6 @@
   {"brand":"perishable","sub":"buah_sayur","kategori":"sayur","nama":"Ubi Ungu Manis (murasaki / Mo) Pck","raw":"20048723","konv":""},
   {"brand":"perishable","sub":"buah_sayur","kategori":"sayur","nama":"Wortel Baby Carrots Pck","raw":"20091822","konv":""},
   {"brand":"perishable","sub":"buah_sayur","kategori":"sayur","nama":"Wortel Baby Lokal (bkl) Pck","raw":"20040241","konv":""},
-  {"brand":"perishable","sub":"buah_sayur","kategori":"sayur","nama":"Wortel Brastagi (bkl) Pck","raw":"20052389","konv":""}
+  {"brand":"perishable","sub":"buah_sayur","kategori":"sayur","nama":"Wortel Brastagi (bkl) Pck","raw":"20052389","konv":""},
+  {"brand":"hambalanfc","sub":"beverage","kategori":"","nama":"Golda Aren Latte","raw":"20143270","konv":""}
 ]
