@@ -1,7 +1,8 @@
 /* ================================================================
-   plukakang — Telegram Bot v3 (Vercel Function)
-   Percakapan tombol: /add /edit /hapus — tanpa hafalan format.
-   Perintah cepat gaya pipe tetap didukung.
+   plukakang — Telegram Bot v3.1 FINAL (Vercel Function)
+   Mode tombol: /add /edit /hapus via percakapan tap-tap
+   Cepat: cache data.json 60 detik + indikator typing
+   Perintah pipe lama tetap jalan. Restore file via reply.
    ================================================================ */
 
 const REPO = process.env.GITHUB_REPO;
@@ -12,38 +13,16 @@ const CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || '');
 const FILE_PATH = 'data.json';
 const API = 'https://api.github.com';
 
-const CONFIG = {
-  brands: ['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'],
-  brandNames: { saybread:'🍞 Say Bread', sayburger:'🍔 Say Burger', yummychoice:'🍽️ Yummy Choice', yummycoffee:'☕ Yummy Coffee Gold', pointcoffee:'🟢 Point Coffee', hambalanfc:'📦 Hambalan FC', perishable:'🥬 Perishable' },
-  subs: {
-    saybread: ['dcf','sarana'],
-    sayburger: ['bkl','sarana'],
-    yummychoice: ['bkl','sarana'],
-    yummycoffee: ['bkl','dcf','sarana'],
-    pointcoffee: ['bkl','sarana'],
-    hambalanfc: ['minyak','beras','gula','mineral','beverage'],
-    perishable: ['buah_sayur']
-  },
-  subLabels: { dcf:'Frozen Dough', sarana:'Sarana', bkl:'Bahan Baku', minyak:'Minyak', beras:'Beras', gula:'Gula', mineral:'Mineral', beverage:'Beverage', buah_sayur:'Buah & Sayur' },
-  kategoriMaps: {
-    'yummychoice|bkl': { snack_rte:'Snack RTE', dimsum:'Dimsum', pao:'Pao', fried_chicken:'Fried Chicken', frozen_fc:'Frozen FC', sosis:'Sosis', pizza:'Pizza' },
-    'yummycoffee|bkl': { jelly:'Jelly', syrup:'Syrup', powder:'Powder', other:'Other' },
-    'pointcoffee|bkl': { coffee_bean:'Coffee Bean', sauce:'Sauce', topping_jelly:'Topping Jelly', syrup:'Syrup', powder:'Powder', milk_dairy:'Milk & Dairy', rtd_beverage:'RTD Beverage', tea:'Tea', sweetener:'Sweetener', topping_crunches:'Topping Crunches', rtd_coffee:'RTD Coffee' },
-    'perishable|buah_sayur': { buah:'Buah', sayur:'Sayur', jus:'Jus', bo:'B/O', bp:'B/P' }
-  }
-};
+/* ---------- Cache data.json (memori, TTL 60 detik) ---------- */
+let _cache = { ts: 0, sha: '', content: '' };
+const CACHE_TTL = 60 * 1000;
 
-/* ---------- Sesi percakapan (memori, TTL 15 menit) ---------- */
-const sessions = new Map();
-const TTL = 15 * 60 * 1000;
-function getSession(chatId) {
-  const s = sessions.get(chatId);
-  if (s && Date.now() - s.ts < TTL) return s;
-  sessions.delete(chatId);
-  return null;
+async function tgTyping(chatId) {
+  try { await fetch(`https://api.telegram.org/bot${BOT}/sendChatAction`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, action: 'typing' })
+  }); } catch {}
 }
-function setSession(chatId, s) { s.ts = Date.now(); sessions.set(chatId, s); }
-function clearSession(chatId) { sessions.delete(chatId); }
 
 /* ---------- Telegram helpers ---------- */
 async function tgSend(chatId, text, keyboard) {
@@ -81,14 +60,19 @@ async function tgSendFile(chatId, content) {
   await fetch(`https://api.telegram.org/bot${BOT}/sendDocument`, { method: 'POST', body: form });
 }
 
-/* ---------- GitHub helpers ---------- */
-async function ghGetData() {
+/* ---------- GitHub helpers (dengan cache) ---------- */
+async function ghGetData(force) {
+  const now = Date.now();
+  if (!force && _cache.ts && (now - _cache.ts) < CACHE_TTL) {
+    return { sha: _cache.sha, content: _cache.content };
+  }
   const res = await fetch(`${API}/repos/${REPO}/contents/${FILE_PATH}`, {
     headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/vnd.github+json' }
   });
   if (!res.ok) throw new Error('GitHub GET: ' + res.status + (res.status === 401 ? ' (token salah/expired)' : res.status === 404 ? ' (cek GITHUB_REPO)' : ''));
   const j = await res.json();
-  return { sha: j.sha, content: Buffer.from(j.content, 'base64').toString('utf8') };
+  _cache = { ts: now, sha: j.sha, content: Buffer.from(j.content, 'base64').toString('utf8') };
+  return { sha: j.sha, content: _cache.content };
 }
 
 async function ghSave(newContent, sha, message) {
@@ -101,8 +85,13 @@ async function ghSave(newContent, sha, message) {
     const t = await res.text();
     throw new Error('GitHub PUT: ' + res.status + ' ' + t.slice(0, 200));
   }
+  try {
+    const j = await res.json();
+    _cache = { ts: Date.now(), sha: j.content ? j.content.sha : _cache.sha, content: newContent };
+  } catch {}
 }
 
+/* ---------- Utility ---------- */
 function buildJsonText(items) {
   return '[\n' + items.map(it => '  ' + JSON.stringify({
     brand: it.brand || '', sub: it.sub || '', kategori: it.kategori || '',
@@ -110,20 +99,49 @@ function buildJsonText(items) {
   })).join(',\n') + '\n]';
 }
 
-/* ---------- Util ---------- */
 function bName(k) { return CONFIG.brandNames[k] || k; }
 function sName(k) { return CONFIG.subLabels[k] || k || '(kosong)'; }
 function kName(k) { return k || '(kosong)'; }
-
-function itemSummary(it) {
-  return `📦 <b>${esc(it.nama)}</b>\n${bName(it.brand)} · ${sName(it.sub)} · ${kName(it.kategori)}\nRAW: <code>${it.raw || '-'}</code> · KONV: <code>${it.konv || '-'}</code>`;
-}
 function esc(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 function findIndexByItem(items, t) {
   return items.findIndex(it => it.brand === t.brand && it.nama === t.nama && (it.raw || '') === (t.raw || '') && (it.konv || '') === (t.konv || ''));
 }
+
+/* ---------- Sesi percakapan (memori, TTL 15 menit) ---------- */
+const sessions = new Map();
+const SESSION_TTL = 15 * 60 * 1000;
+function getSession(chatId) {
+  const s = sessions.get(chatId);
+  if (s && Date.now() - s.ts < SESSION_TTL) return s;
+  sessions.delete(chatId);
+  return null;
+}
+function setSession(chatId, s) { s.ts = Date.now(); sessions.set(chatId, s); }
+function clearSession(chatId) { sessions.delete(chatId); }
+
+/* ---------- CONFIG brand/sub/kategori (harus sama dengan index.html) ---------- */
+const CONFIG = {
+  brands: ['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'],
+  brandNames: { saybread:'🍞 Say Bread', sayburger:'🍔 Say Burger', yummychoice:'🍽️ Yummy Choice', yummycoffee:'☕ Yummy Coffee Gold', pointcoffee:'🟢 Point Coffee', hambalanfc:'📦 Hambalan FC', perishable:'🥬 Perishable' },
+  subs: {
+    saybread: ['dcf','sarana'],
+    sayburger: ['bkl','sarana'],
+    yummychoice: ['bkl','sarana'],
+    yummycoffee: ['bkl','dcf','sarana'],
+    pointcoffee: ['bkl','sarana'],
+    hambalanfc: ['minyak','beras','gula','mineral','beverage'],
+    perishable: ['buah_sayur']
+  },
+  subLabels: { dcf:'Frozen Dough', sarana:'Sarana', bkl:'Bahan Baku', minyak:'Minyak', beras:'Beras', gula:'Gula', mineral:'Mineral', beverage:'Beverage', buah_sayur:'Buah & Sayur' },
+  kategoriMaps: {
+    'yummychoice|bkl': { snack_rte:'Snack RTE', dimsum:'Dimsum', pao:'Pao', fried_chicken:'Fried Chicken', frozen_fc:'Frozen FC', sosis:'Sosis', pizza:'Pizza' },
+    'yummycoffee|bkl': { jelly:'Jelly', syrup:'Syrup', powder:'Powder', other:'Other' },
+    'pointcoffee|bkl': { coffee_bean:'Coffee Bean', sauce:'Sauce', topping_jelly:'Topping Jelly', syrup:'Syrup', powder:'Powder', milk_dairy:'Milk & Dairy', rtd_beverage:'RTD Beverage', tea:'Tea', sweetener:'Sweetener', topping_crunches:'Topping Crunches', rtd_coffee:'RTD Coffee' },
+    'perishable|buah_sayur': { buah:'Buah', sayur:'Sayur', jus:'Jus', bo:'B/O', bp:'B/P' }
+  }
+};
 
 /* ================================================================
    ALUR: /add (tombol)
@@ -198,28 +216,27 @@ async function addSave(chatId, msgId) {
 /* ================================================================
    ALUR: /hapus (cari → pilih → konfirmasi)
    ================================================================ */
-function hapusResults(chatId, q, msgId) {
-  return ghGetData().then(({ content }) => {
-    const items = JSON.parse(content);
-    const ql = q.toLowerCase();
-    const found = items.filter(it => String(it.nama || '').toLowerCase().includes(ql) || String(it.raw || '').includes(q) || String(it.konv || '').includes(q));
-    if (!found.length) {
-      clearSession(chatId);
-      const t = `❌ Tidak ditemukan: "${esc(q)}"`;
-      if (msgId) tgEdit(chatId, msgId, t); else tgSend(chatId, t);
-      return;
-    }
-    if (found.length > 1) {
-      setSession(chatId, { flow: 'hapus', step: 'select', candidates: found.slice(0, 10) });
-      const kb = found.slice(0, 10).map((it, i) => [{ text: it.nama + ' (' + (it.raw || '-') + ')', callback_data: 'hs:' + i }]);
-      kb.push([{ text: '❌ Batal', callback_data: 'ax' }]);
-      const t = `⚠️ Ditemukan ${found.length} item. Pilih yang mau dihapus:`;
-      if (msgId) tgEdit(chatId, msgId, t, kb); else tgSend(chatId, t, kb);
-      return;
-    }
-    setSession(chatId, { flow: 'hapus', step: 'confirm', candidates: found });
-    hapusConfirm(chatId, msgId);
-  });
+async function hapusResults(chatId, q, msgId) {
+  const { content } = await ghGetData();
+  const items = JSON.parse(content);
+  const ql = q.toLowerCase();
+  const found = items.filter(it => String(it.nama || '').toLowerCase().includes(ql) || String(it.raw || '').includes(q) || String(it.konv || '').includes(q));
+  if (!found.length) {
+    clearSession(chatId);
+    const t = `❌ Tidak ditemukan: "${esc(q)}"`;
+    if (msgId) tgEdit(chatId, msgId, t); else tgSend(chatId, t);
+    return;
+  }
+  if (found.length > 1) {
+    setSession(chatId, { flow: 'hapus', step: 'select', candidates: found.slice(0, 10) });
+    const kb = found.slice(0, 10).map((it, i) => [{ text: it.nama + ' (' + (it.raw || '-') + ')', callback_data: 'hs:' + i }]);
+    kb.push([{ text: '❌ Batal', callback_data: 'ax' }]);
+    const t = `⚠️ Ditemukan ${found.length} item. Pilih yang mau dihapus:`;
+    if (msgId) tgEdit(chatId, msgId, t, kb); else tgSend(chatId, t, kb);
+    return;
+  }
+  setSession(chatId, { flow: 'hapus', step: 'confirm', candidates: found });
+  hapusConfirm(chatId, msgId);
 }
 
 function hapusConfirm(chatId, msgId) {
@@ -247,38 +264,41 @@ async function hapusDo(chatId, msgId, candIdx) {
   }
 }
 
+function itemSummary(it) {
+  return `📦 <b>${esc(it.nama)}</b>\n${bName(it.brand)} · ${sName(it.sub)} · ${kName(it.kategori)}\nRAW: <code>${it.raw || '-'}</code> · KONV: <code>${it.konv || '-'}</code>`;
+}
+
 /* ================================================================
    ALUR: /edit (cari → pilih → ubah field → simpan)
    ================================================================ */
-function editResults(chatId, q, msgId) {
-  return ghGetData().then(({ content }) => {
-    const items = JSON.parse(content);
-    const ql = q.toLowerCase();
-    const found = items.filter(it => String(it.nama || '').toLowerCase().includes(ql) || String(it.raw || '').includes(q) || String(it.konv || '').includes(q));
-    if (!found.length) {
-      clearSession(chatId);
-      const t = `❌ Tidak ditemukan: "${esc(q)}"`;
-      if (msgId) tgEdit(chatId, msgId, t); else tgSend(chatId, t);
-      return;
-    }
-    setSession(chatId, { flow: 'edit', step: 'select', candidates: found.slice(0, 10), target: null, changed: {}, field: null });
-    const kb = found.slice(0, 10).map((it, i) => [{ text: it.nama + ' (' + (it.raw || '-') + ')', callback_data: 'eq:' + i }]);
-    kb.push([{ text: '❌ Batal', callback_data: 'ax' }]);
-    const t = `✏️ Ditemukan ${found.length} item. Pilih yang mau diedit:`;
-    if (msgId) tgEdit(chatId, msgId, t, kb); else tgSend(chatId, t, kb);
-  });
+async function editResults(chatId, q, msgId) {
+  const { content } = await ghGetData();
+  const items = JSON.parse(content);
+  const ql = q.toLowerCase();
+  const found = items.filter(it => String(it.nama || '').toLowerCase().includes(ql) || String(it.raw || '').includes(q) || String(it.konv || '').includes(q));
+  if (!found.length) {
+    clearSession(chatId);
+    const t = `❌ Tidak ditemukan: "${esc(q)}"`;
+    if (msgId) tgEdit(chatId, msgId, t); else tgSend(chatId, t);
+    return;
+  }
+  setSession(chatId, { flow: 'edit', step: 'select', candidates: found.slice(0, 10), target: null, changed: {}, field: null });
+  const kb = found.slice(0, 10).map((it, i) => [{ text: it.nama + ' (' + (it.raw || '-') + ')', callback_data: 'eq:' + i }]);
+  kb.push([{ text: '❌ Batal', callback_data: 'ax' }]);
+  const t = `✏️ Ditemukan ${found.length} item. Pilih yang mau diedit:`;
+  if (msgId) tgEdit(chatId, msgId, t, kb); else tgSend(chatId, t, kb);
 }
 
 function editFields(chatId, msgId) {
   const s = getSession(chatId); if (!s) { tgSend(chatId, '⌛ Sesi habis. Ketik /edit untuk mulai lagi.'); return; }
   s.step = 'fields'; s.field = null;
-  const t = it => itemSummary(Object.assign({}, it, s.changed));
+  const shown = Object.assign({}, s.target, s.changed);
   const kb = [
     [{ text: '🏷️ Brand', callback_data: 'ef:brand' }, { text: '📁 Sub', callback_data: 'ef:sub' }, { text: '🏷️ Kategori', callback_data: 'ef:kat' }],
     [{ text: '📝 Nama', callback_data: 'ef:nama' }, { text: '🔵 RAW', callback_data: 'ef:raw' }, { text: '🟡 KONV', callback_data: 'ef:konv' }],
     [{ text: '✅ SIMPAN', callback_data: 'esave:yes' }, { text: '❌ Batal', callback_data: 'ax' }]
   ];
-  tgEdit(chatId, msgId, '✏️ <b>Edit Item</b>\n\n' + t(s.target) + '\n\nPilih bagian yang mau diubah:', kb);
+  tgEdit(chatId, msgId, '✏️ <b>Edit Item</b>\n\n' + itemSummary(shown) + '\n\nPilih bagian yang mau diubah:', kb);
 }
 
 async function editDoSave(chatId, msgId) {
@@ -292,7 +312,7 @@ async function editDoSave(chatId, msgId) {
     items[idx] = Object.assign({}, items[idx], s.changed);
     await ghSave(buildJsonText(items), sha, 'bot: edit ' + s.target.nama);
     clearSession(chatId);
-    await tgEdit(chatId, msgId, `✅ <b>Tersimpan!</b>\n\nApp ter-update dalam ±1 menit. 🚀`);
+    await tgEdit(chatId, msgId, '✅ <b>Tersimpan!</b>\n\nApp ter-update dalam ±1 menit. 🚀');
   } catch (err) {
     await tgEdit(chatId, msgId, '❌ Gagal: ' + esc(String(err.message || err).slice(0, 200)));
   }
@@ -312,13 +332,35 @@ function menu(chatId, msgId) {
 }
 
 /* ================================================================
+   Restore file (reply /backup dengan file JSON)
+   ================================================================ */
+async function handleRestore(msg) {
+  try {
+    const fileId = msg.document.file_id;
+    const info = await (await fetch(`https://api.telegram.org/bot${BOT}/getFile?file_id=${fileId}`)).json();
+    if (!info.ok) throw new Error('getFile gagal');
+    const fileResp = await fetch(`https://api.telegram.org/file/bot${BOT}/${info.result.file_path}`);
+    const text = await fileResp.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch { await tgSend(CHAT_ID, '❌ File bukan JSON valid.'); return; }
+    if (!Array.isArray(data)) { await tgSend(CHAT_ID, '❌ JSON harus berupa array of items.'); return; }
+    const { sha } = await ghGetData(true);
+    await ghSave(buildJsonText(data), sha, 'bot: restore data.json via Telegram');
+    await tgSend(CHAT_ID, `✅ data.json diganti (${data.length} item)! App ter-update ±1 menit. 🚀`);
+  } catch (err) {
+    await tgSend(CHAT_ID, '❌ Restore gagal: ' + String(err.message || err).slice(0, 200));
+  }
+}
+
+/* ================================================================
    ROUTER UTAMA
    ================================================================ */
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
       ok: true,
-      status: 'plukakang bot v3 berjalan ✅ (mode tombol)',
+      status: 'plukakang bot v3.1 berjalan ✅ (tombol + cache)',
       env: {
         TELEGRAM_BOT_TOKEN: BOT ? '✅' : '❌',
         TELEGRAM_CHAT_ID: CHAT_ID ? '✅' : '❌',
@@ -340,8 +382,11 @@ export default async function handler(req, res) {
       await tgAnswer(cb.id);
 
       if (chatId !== CHAT_ID) { await tgSend(chatId, '🚫 Kamu tidak memiliki akses.'); return res.status(200).json({ ok: true }); }
+      await tgTyping(chatId);
 
-      const [head, tail] = [data.slice(0, data.indexOf(':')), data.slice(data.indexOf(':') + 1)];
+      const colonIdx = data.indexOf(':');
+      const head = colonIdx === -1 ? data : data.slice(0, colonIdx);
+      const tail = colonIdx === -1 ? '' : data.slice(colonIdx + 1);
 
       if (head === 'm') {
         if (tail === 'add') addStart(chatId, msgId);
@@ -359,28 +404,25 @@ export default async function handler(req, res) {
         else if (tail === 'backup') {
           const { content } = await ghGetData();
           await tgSendFile(chatId, content);
-          tgEdit(chatId, msgId, '💾 Backup terkirim di chat (lihat pesan file di atas).');
+          tgEdit(chatId, msgId, '💾 Backup terkirim (lihat pesan file di atas).');
         }
         return res.status(200).json({ ok: true });
       }
 
       if (head === 'ax') { clearSession(chatId); tgEdit(chatId, msgId, '❌ Dibatalkan. Ketik /start untuk mulai lagi.'); return res.status(200).json({ ok: true }); }
 
-      /* add */
-      if (head === 'ab') return (addBrand(chatId, msgId, tail), res.status(200).json({ ok: true }));
-      if (head === 'as') return (addSub(chatId, msgId, tail), res.status(200).json({ ok: true }));
-      if (head === 'ak') return (addKat(chatId, msgId, tail), res.status(200).json({ ok: true }));
-      if (head === 'aa' && tail === 'save') return (addSave(chatId, msgId), res.status(200).json({ ok: true }));
+      if (head === 'ab') { addBrand(chatId, msgId, tail); return res.status(200).json({ ok: true }); }
+      if (head === 'as') { addSub(chatId, msgId, tail); return res.status(200).json({ ok: true }); }
+      if (head === 'ak') { addKat(chatId, msgId, tail); return res.status(200).json({ ok: true }); }
+      if (head === 'aa' && tail === 'save') { await addSave(chatId, msgId); return res.status(200).json({ ok: true }); }
 
-      /* hapus */
       if (head === 'hs') {
         const s = getSession(chatId);
         if (s && s.flow === 'hapus') { s.candidates = [s.candidates[parseInt(tail, 10)]]; s.step = 'confirm'; hapusConfirm(chatId, msgId); }
         return res.status(200).json({ ok: true });
       }
-      if (head === 'hd' && tail === 'yes') return (hapusDo(chatId, msgId, 0), res.status(200).json({ ok: true }));
+      if (head === 'hd' && tail === 'yes') { await hapusDo(chatId, msgId, 0); return res.status(200).json({ ok: true }); }
 
-      /* edit */
       if (head === 'eq') {
         const s = getSession(chatId);
         if (s && s.flow === 'edit') { s.target = s.candidates[parseInt(tail, 10)]; s.changed = {}; editFields(chatId, msgId); }
@@ -389,6 +431,7 @@ export default async function handler(req, res) {
       if (head === 'ef') {
         const s = getSession(chatId);
         if (s && s.flow === 'edit') {
+          if (tail === 'back') { s.step = 'fields'; s.field = null; editFields(chatId, msgId); return res.status(200).json({ ok: true }); }
           s.field = tail;
           if (tail === 'brand') {
             s.step = 'pick-brand';
@@ -397,7 +440,7 @@ export default async function handler(req, res) {
             tgEdit(chatId, msgId, 'Pilih <b>Brand</b> baru:', kb);
           } else if (tail === 'sub') {
             s.step = 'pick-sub';
-            const kb = CONFIG.subs[s.target.brand].map(x => [{ text: sName(x), callback_data: 'eu:' + x }]);
+            const kb = (CONFIG.subs[s.target.brand] || []).map(x => [{ text: sName(x), callback_data: 'eu:' + x }]);
             kb.push([{ text: '↩️ Kembali', callback_data: 'ef:back' }]);
             tgEdit(chatId, msgId, 'Pilih <b>Sub</b> baru:', kb);
           } else if (tail === 'kat') {
@@ -416,8 +459,7 @@ export default async function handler(req, res) {
       if (head === 'eb') { const s = getSession(chatId); if (s) { s.changed.brand = tail; editFields(chatId, msgId); } return res.status(200).json({ ok: true }); }
       if (head === 'eu') { const s = getSession(chatId); if (s) { s.changed.sub = tail; editFields(chatId, msgId); } return res.status(200).json({ ok: true }); }
       if (head === 'ek') { const s = getSession(chatId); if (s) { s.changed.kategori = tail === '__skip' ? '' : tail; editFields(chatId, msgId); } return res.status(200).json({ ok: true }); }
-      if (data === 'ef:back') { const s = getSession(chatId); if (s) { s.step = 'fields'; s.field = null; editFields(chatId, msgId); } return res.status(200).json({ ok: true }); }
-      if (head === 'esave' && tail === 'yes') return (editDoSave(chatId, msgId), res.status(200).json({ ok: true }));
+      if (head === 'esave' && tail === 'yes') { await editDoSave(chatId, msgId); return res.status(200).json({ ok: true }); }
 
       return res.status(200).json({ ok: true });
     }
@@ -425,26 +467,26 @@ export default async function handler(req, res) {
     /* ---------- MESSAGE (teks dari user) ---------- */
     const msg = update.message;
     if (!msg || !msg.text) {
-      /* file JSON dikirim sebagai reply → restore */
-      if (msg && msg.document && msg.reply_to_message) { await handleRestore(msg); }
+      if (msg && msg.document && msg.reply_to_message) { await tgTyping(CHAT_ID); await handleRestore(msg); }
       return res.status(200).json({ ok: true });
     }
     const chatId = String(msg.chat.id);
     if (chatId !== CHAT_ID) { await tgSend(chatId, '🚫 Kamu tidak memiliki akses ke bot ini.'); return res.status(200).json({ ok: true }); }
 
     const text = (msg.text || '').trim();
+
     if (text.startsWith('/')) {
       const [cmdRaw, ...rest] = text.split(/\s+/);
       const cmd = cmdRaw.toLowerCase().replace(/@.*$/, '');
       const arg = rest.join(' ').trim();
       clearSession(chatId);
+      await tgTyping(chatId);
 
       if (cmd === '/start' || cmd === '/help') { menu(chatId, null); return res.status(200).json({ ok: true }); }
       if (cmd === '/ping') { await tgSend(chatId, '🏓 Pong! Bot hidup.'); return res.status(200).json({ ok: true }); }
 
       if (cmd === '/add') {
         if (arg && arg.includes('|')) {
-          /* mode pipe lama tetap jalan */
           const { sha, content } = await ghGetData();
           const items = JSON.parse(content);
           const p = arg.split('|').map(x => x.trim());
@@ -502,7 +544,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-    /* ---- Teks biasa:路由 sesi percakapan ---- */
+    /* ---- Teks biasa: lanjutan sesi percakapan ---- */
+    await tgTyping(chatId);
     const s = getSession(chatId);
     if (!s) { menu(chatId, null); return res.status(200).json({ ok: true }); }
 
@@ -512,7 +555,7 @@ export default async function handler(req, res) {
         await tgSend(chatId, `Nama: <b>${esc(text)}</b> ✅\n\n5/6 · Ketik <b>PLU RAW</b> (angka saja):`);
       } else if (s.step === 'raw') {
         if (text.toLowerCase() === 'batal') { clearSession(chatId); await tgSend(chatId, '❌ Dibatalkan.'); return res.status(200).json({ ok: true }); }
-        s.raw = text === 'skip' ? '' : text.replace(/\D/g, '');
+        s.raw = text.toLowerCase() === 'skip' ? '' : text.replace(/\D/g, '');
         s.step = 'konv';
         await tgSend(chatId, `RAW: <b>${s.raw || '-'}</b> ✅\n\n6/6 · Ketik <b>PLU KONV</b> (atau ketik: <code>skip</code>):`);
       } else if (s.step === 'konv') {
@@ -525,13 +568,11 @@ export default async function handler(req, res) {
     }
 
     if (s.flow === 'hapus' && s.step === 'query') {
-      await tgSend(chatId, '🔎 Mencari…');
       await hapusResults(chatId, text, null);
       return res.status(200).json({ ok: true });
     }
 
     if (s.flow === 'edit' && s.step === 'query') {
-      await tgSend(chatId, '🔎 Mencari…');
       await editResults(chatId, text, null);
       return res.status(200).json({ ok: true });
     }
@@ -564,25 +605,5 @@ export default async function handler(req, res) {
     console.error(err);
     try { await tgSend(CHAT_ID, '❌ Error: ' + String(err.message || err).slice(0, 300)); } catch {}
     return res.status(200).json({ ok: true });
-  }
-}
-
-/* ---------- Restore file (reply /backup dengan file JSON) ---------- */
-async function handleRestore(msg) {
-  try {
-    const fileId = msg.document.file_id;
-    const info = await (await fetch(`https://api.telegram.org/bot${BOT}/getFile?file_id=${fileId}`)).json();
-    if (!info.ok) throw new Error('getFile gagal');
-    const fileResp = await fetch(`https://api.telegram.org/file/bot${BOT}/${info.result.file_path}`);
-    const text = await fileResp.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch { await tgSend(CHAT_ID, '❌ File bukan JSON valid.'); return; }
-    if (!Array.isArray(data)) { await tgSend(CHAT_ID, '❌ JSON harus berupa array of items.'); return; }
-    const { sha } = await ghGetData();
-    await ghSave(buildJsonText(data), sha, 'bot: restore data.json via Telegram');
-    await tgSend(CHAT_ID, `✅ data.json diganti (${data.length} item)! App ter-update ±1 menit. 🚀`);
-  } catch (err) {
-    await tgSend(CHAT_ID, '❌ Restore gagal: ' + String(err.message || err).slice(0, 200));
   }
 }
