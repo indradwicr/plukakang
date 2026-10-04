@@ -1,12 +1,12 @@
 /* ================================================================
-   plukakang — Telegram Bot (Vercel Function)
-   Perintah: /start /total /cari <kata> /add /hapus <nama>
-             /backup   (kirim file .json untuk restore)
+   plukakang — Telegram Bot (Vercel Function) — v2 FIXED
+   Perintah: /start /help /ping /total /cari /add /hapus /backup
+             + restore: reply pesan backup dengan file data.json
    ================================================================ */
 
-const REPO = process.env.GITHUB_REPO;            // "username/nama-repo"
-const TOKEN = process.env.GITHUB_TOKEN;          // fine-grained token
-const BOT = process.env.TELEGRAM_BOT_TOKEN;      // token BotFather
+const REPO = process.env.GITHUB_REPO;
+const TOKEN = process.env.GITHUB_TOKEN;
+const BOT = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = String(process.env.TELEGRAM_CHAT_ID || '');
 
 const FILE_PATH = 'data.json';
@@ -24,7 +24,7 @@ async function tgSend(chatId, text) {
 async function tgSendFile(chatId, content) {
   const form = new FormData();
   form.append('chat_id', chatId);
-  form.append('caption', '💾 data.json (backup) — balas pesan ini dengan file JSON untuk mengganti data');
+  form.append('caption', '💾 data.json (backup) — balas (reply) pesan ini dengan file JSON untuk mengganti data');
   const blob = new Blob([content], { type: 'application/json' });
   form.append('document', blob, 'data.json');
   await fetch(`https://api.telegram.org/bot${BOT}/sendDocument`, {
@@ -41,7 +41,7 @@ async function ghGetData() {
       Accept: 'application/vnd.github+json'
     }
   });
-  if (!res.ok) throw new Error('GitHub GET: ' + res.status);
+  if (!res.ok) throw new Error('GitHub GET: ' + res.status + (res.status === 401 ? ' (token salah/expired)' : res.status === 404 ? ' (cek GITHUB_REPO: username/nama-repo)' : ''));
   const j = await res.json();
   return { sha: j.sha, content: Buffer.from(j.content, 'base64').toString('utf8') };
 }
@@ -66,7 +66,7 @@ async function ghSave(newContent, sha, message) {
   }
 }
 
-/* ---------- JSON text builder (format sama dengan admin.html) ---------- */
+/* ---------- Utility ---------- */
 function buildJsonText(items) {
   return '[\n' + items.map(it => '  ' + JSON.stringify({
     brand: it.brand || '', sub: it.sub || '', kategori: it.kategori || '',
@@ -74,16 +74,13 @@ function buildJsonText(items) {
   })).join(',\n') + '\n]';
 }
 
-/* ---------- Perintah: /total ---------- */
 function cmdTotal(items) {
   const per = {};
   items.forEach(it => { per[it.brand] = (per[it.brand] || 0) + 1; });
-  const lines = Object.keys(per).sort()
-    .map(b => `• ${b}: <b>${per[b]}</b>`);
+  const lines = Object.keys(per).sort().map(b => `• ${b}: <b>${per[b]}</b>`);
   return `📊 Total: <b>${items.length}</b> item\n\n${lines.join('\n')}`;
 }
 
-/* ---------- Perintah: /cari ---------- */
 function cmdCari(items, q) {
   const ql = q.toLowerCase();
   const found = items.filter(it =>
@@ -98,7 +95,6 @@ function cmdCari(items, q) {
   return `🔎 Hasil "${q}" (${found.length}):\n\n${lines.join('\n\n')}`;
 }
 
-/* ---------- Perintah: /add brand|sub|kategori|nama|raw|konv ---------- */
 function cmdAdd(items, arg) {
   const p = arg.split('|').map(s => s.trim());
   if (p.length < 6) {
@@ -118,7 +114,6 @@ function cmdAdd(items, arg) {
   return { items, msg: `✅ Ditambahkan:\n\n📦 <b>${nama}</b>\n${brand} · ${sub}${kategori ? ' · ' + kategori : ''}\nRAW: ${raw || '-'} | KONV: ${konv || '-'}\n\n⏳ Sedang disimpan…` };
 }
 
-/* ---------- Perintah: /hapus ---------- */
 function cmdHapus(items, q) {
   const ql = q.toLowerCase();
   const found = items.filter(it =>
@@ -139,87 +134,105 @@ function cmdHapus(items, q) {
 
 /* ================================================================ */
 export default async function handler(req, res) {
-  let update;
-  try { update = await req.json(); }
-  catch { return res.status(400).json({ ok: true }); }
+  /* Halaman status — buka di browser untuk cek env vars (tanpa bocor rahasia) */
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      ok: true,
+      status: 'plukakang bot berjalan ✅',
+      env: {
+        TELEGRAM_BOT_TOKEN: BOT ? '✅ terisi' : '❌ belum diisi',
+        TELEGRAM_CHAT_ID: CHAT_ID ? '✅ terisi' : '❌ belum diisi',
+        GITHUB_TOKEN: TOKEN ? '✅ terisi' : '❌ belum diisi',
+        GITHUB_REPO: REPO ? '✅ terisi' : '❌ belum diisi'
+      }
+    });
+  }
+
+  /* ⭐ FIX UTAMA: Telegram kirim JSON — Vercel otomatis parse ke req.body.
+     (versi lama pakai req.json() yang tidak ada di Node function = crash) */
+  const update = req.body || {};
+  const msg = update.message || update.edited_message;
 
   try {
-    const msg = update.message || update.edited_message;
-    if (!msg || !msg.text) {
-      // Kemungkinan: file JSON dikirim sebagai reply → restore
-      if (msg && msg.document && msg.reply_to_message) {
-        if (String(msg.chat.id) !== CHAT_ID) return res.status(200).json({ ok: true });
-        const r = await handleRestore(msg);
-        return res.status(200).json({ ok: true });
-      }
-      return res.status(200).json({ ok: true });
-    }
-
+    if (!msg) return res.status(200).json({ ok: true });
     const chatId = String(msg.chat.id);
+
+    /* Keamanan: hanya chat_id pemilik */
     if (chatId !== CHAT_ID) {
       await tgSend(chatId, '🚫 Kamu tidak memiliki akses ke bot ini.');
       return res.status(200).json({ ok: true });
     }
 
+    /* File JSON dikirim sebagai reply → restore */
+    if (msg.document && msg.reply_to_message) {
+      await handleRestore(msg);
+      return res.status(200).json({ ok: true });
+    }
+
     const text = (msg.text || '').trim();
+    if (!text) return res.status(200).json({ ok: true });
+
     const [cmdRaw, ...rest] = text.split(/\s+/);
-    const cmd = cmdRaw.toLowerCase().replace(/@.*$/, ''); // buang @username bot
+    const cmd = cmdRaw.toLowerCase().replace(/@.*$/, '');
     const arg = rest.join(' ').trim();
 
-    // Ambil data terbaru dari GitHub
+    /* ---- Perintah yang TIDAK butuh GitHub (cepat & untuk diagnosa) ---- */
+    if (cmd === '/start' || cmd === '/help') {
+      await tgSend(chatId,
+        `👋 <b>plukakang admin bot</b>\n\n` +
+        `📊 /total — rekap jumlah item\n` +
+        `🔎 /cari &lt;kata&gt; — cari item\n` +
+        `➕ /add brand|sub|kategori|nama|raw|konv — tambah item\n` +
+        `🗑️ /hapus &lt;kata&gt; — hapus item (perlu nama unik)\n` +
+        `💾 /backup — unduh data.json ke chat ini\n` +
+        `📥 <b>Restore:</b> balas (reply) pesan backup dengan file data.json baru\n` +
+        `🏓 /ping — cek bot hidup\n\n` +
+        `Semua perubahan otomatis di-commit &amp; app ter-update ±1 menit.`);
+      return res.status(200).json({ ok: true });
+    }
+
+    if (cmd === '/ping') {
+      await tgSend(chatId, '🏓 Pong! Bot hidup & webhook jalan. Kalau /total tidak merespons, masalahnya di GitHub token/repo.');
+      return res.status(200).json({ ok: true });
+    }
+
+    /* ---- Perintah yang butuh GitHub ---- */
     const { sha, content } = await ghGetData();
     let items;
     try { items = JSON.parse(content); }
     catch { await tgSend(chatId, '❌ data.json di repo tidak valid (bukan array JSON).'); return res.status(200).json({ ok: true }); }
 
     let result;
-    let reply;
 
     switch (cmd) {
-      case '/start':
-      case '/help':
-        reply =
-          `👋 <b>plukakang admin bot</b>\n\n` +
-          `📊 /total — rekap jumlah item\n` +
-          `🔎 /cari &lt;kata&gt; — cari item\n` +
-          `➕ /add brand|sub|kategori|nama|raw|konv — tambah item\n` +
-          `🗑️ /hapus &lt;kata&gt; — hapus item (perlu nama unik)\n` +
-          `💾 /backup — unduh data.json ke chat ini\n` +
-          `📥 <b>Restore:</b> balas (reply) pesan backup ini dengan file data.json baru\n\n` +
-          `Semua perubahan otomatis di-commit &amp; app ter-update ±1 menit.`;
-        await tgSend(chatId, reply);
-        return res.status(200).json({ ok: true });
-
       case '/total':
-        reply = cmdTotal(items);
-        await tgSend(chatId, reply);
+        await tgSend(chatId, cmdTotal(items));
         return res.status(200).json({ ok: true });
 
       case '/cari':
         if (!arg) { await tgSend(chatId, 'Ketik: <code>/cari salt bread</code>'); return res.status(200).json({ ok: true }); }
-        reply = cmdCari(items, arg);
-        await tgSend(chatId, reply);
+        await tgSend(chatId, cmdCari(items, arg));
         return res.status(200).json({ ok: true });
 
-      case '/add':
+      case '/add': {
         if (!arg) { await tgSend(chatId, 'Ketik: <code>/add brand|sub|kategori|nama|raw|konv</code>'); return res.status(200).json({ ok: true }); }
         result = cmdAdd(items, arg);
         if (typeof result === 'string') { await tgSend(chatId, result); return res.status(200).json({ ok: true }); }
-        items = result.items;
         await tgSend(chatId, result.msg);
-        await ghSave(buildJsonText(items), sha, 'bot: add ' + items[items.length - 1].nama);
+        await ghSave(buildJsonText(result.items), sha, 'bot: add ' + result.items[result.items.length - 1].nama);
         await tgSend(chatId, '✅ Tersimpan ke GitHub! App ter-update dalam ±1 menit. 🚀');
         return res.status(200).json({ ok: true });
+      }
 
-      case '/hapus':
+      case '/hapus': {
         if (!arg) { await tgSend(chatId, 'Ketik: <code>/hapus nama item</code>'); return res.status(200).json({ ok: true }); }
         result = cmdHapus(items, arg);
         if (typeof result === 'string') { await tgSend(chatId, result); return res.status(200).json({ ok: true }); }
-        items = result.items;
         await tgSend(chatId, result.msg);
-        await ghSave(buildJsonText(items), sha, 'bot: hapus ' + arg);
+        await ghSave(buildJsonText(result.items), sha, 'bot: hapus ' + arg);
         await tgSend(chatId, '✅ Tersimpan ke GitHub! App ter-update dalam ±1 menit. 🚀');
         return res.status(200).json({ ok: true });
+      }
 
       case '/backup':
         await tgSendFile(chatId, content);
