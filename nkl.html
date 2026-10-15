@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#EEF1F8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Kalkulator NKL SO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F8;
+  --ink:#1B2032;--sub:#5D6480;--faint:#9BA1B8;
+  --glass:rgba(255,255,255,.58);
+  --glass2:rgba(255,255,255,.42);
+  --gline:rgba(255,255,255,.75);
+  --shadow:0 8px 32px rgba(31,38,84,.10);
+  --accentA:#5B5BF6;--accentB:#8B5CF6;
+  --amber:#F59E0B;--amberd:#9A5B00;
+  --red:#E5484D;
+  --darkglass:linear-gradient(135deg,rgba(28,26,66,.92),rgba(71,36,128,.88));
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html{-webkit-text-size-adjust:100%;height:100%}
+body{height:100%;height:100dvh;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden;position:relative;user-select:none;-webkit-user-select:none}
+/* aurora background */
+body::before{content:'';position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(42% 38% at 12% 8%,rgba(167,180,255,.55),transparent 60%),
+    radial-gradient(40% 36% at 88% 14%,rgba(255,196,222,.45),transparent 60%),
+    radial-gradient(46% 40% at 78% 88%,rgba(160,238,222,.42),transparent 60%),
+    radial-gradient(40% 40% at 8% 92%,rgba(200,186,255,.45),transparent 60%);
+}
+#app{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:16px 14px 10px}
+.wrap{max-width:520px;margin:0 auto}
+/* tabs glass pill */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(255,255,255,.35);border:1px solid var(--gline);border-radius:16px;padding:4px;margin-bottom:2px;box-shadow:var(--shadow);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+.tab{border:none;background:transparent;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--sub);padding:9px 0;border-radius:12px;cursor:pointer;transition:all .18s}
+.tab.on{background:rgba(255,255,255,.92);color:var(--ink);box-shadow:0 2px 10px rgba(31,38,84,.14)}
+.pane.hidden{display:none}
+.hero{padding:16px 6px 16px}
+.hlabel{font-size:12px;font-weight:600;color:var(--sub);letter-spacing:.2px}
+.hvalue{font-size:36px;font-weight:800;letter-spacing:-.8px;font-variant-numeric:tabular-nums;line-height:1.12;margin-top:3px;color:var(--ink)}
+.hvalue.neg{color:var(--red)}
+/* glass card */
+.card{background:var(--glass);border:1px solid var(--gline);border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+.card.soft{background:var(--glass2)}
+.card.final{background:var(--darkglass);border-color:rgba(255,255,255,.28);color:#fff}
+.ct{font-size:13.5px;font-weight:700;margin-bottom:10px;line-height:1.4;color:var(--ink)}
+.card.final .ct{color:#fff}
+.ch{font-size:11.5px;font-weight:500;color:var(--faint);margin-left:6px}
+.card.final .ch{color:rgba(255,255,255,.55)}
+.tri{display:grid;grid-template-columns:1fr 1fr 1.18fr;gap:8px}
+.cell label{display:block;font-size:11px;font-weight:600;color:var(--sub);margin-bottom:5px}
+.card.final .cell label{color:rgba(255,255,255,.55)}
+.irow{display:flex;gap:8px;align-items:flex-end}
+.irow .cell{flex:1}
+.irow .cell.wide{flex:1.6}
+.f{width:100%;height:46px;background:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.85);border-radius:14px;padding:0 10px;font-family:inherit;font-size:16px;font-weight:600;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;cursor:pointer;outline:none;transition:all .15s}
+.f::placeholder{color:#B9BECE;font-weight:500}
+.f.act{border-color:#A5A6FF;background:rgba(235,236,255,.9);box-shadow:0 0 0 3.5px rgba(122,108,255,.22)}
+.val{height:46px;background:rgba(255,255,255,.5);border:1.5px solid transparent;border-radius:14px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.val.big{font-weight:700;color:var(--amberd)}
+.val.neg{color:var(--red)}
+.card.final .val{background:rgba(255,255,255,.12);color:#fff}
+.card.final .val.big{background:linear-gradient(135deg,#FFD166,#F59E0B);color:#3A2A05;box-shadow:0 4px 14px rgba(245,158,11,.35)}
+.card.final .val.big.neg{background:linear-gradient(135deg,#FF7A72,#E5484D);color:#fff;box-shadow:0 4px 14px rgba(229,72,77,.35)}
+/* BA NL */
+.bagrid{display:grid;grid-template-columns:1.15fr .78fr 1.12fr;gap:8px;align-items:center;margin-bottom:8px}
+.bagrid:last-child{margin-bottom:0}
+.bahead div{font-size:11px;font-weight:600;color:var(--faint)}
+.balbl{font-size:12px;font-weight:600;color:#3A4059;line-height:1.25}
+/* rak */
+.rakhead{display:grid;grid-template-columns:22px 1fr 1fr 34px;gap:8px;margin-bottom:6px}
+.rakhead span{font-size:11px;font-weight:600;color:var(--faint)}
+.rakhead span:first-child{text-align:center}
+.rak{display:grid;grid-template-columns:22px 1fr 1fr 34px;gap:8px;align-items:center;margin-bottom:8px}
+.rak .no{text-align:center;font-size:11.5px;font-weight:700;color:var(--faint)}
+.rakdel{height:46px;border:1.5px solid rgba(255,255,255,.85);background:rgba(255,255,255,.5);border-radius:14px;color:var(--red);font-size:13px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.addrow{width:100%;border:1.5px dashed rgba(91,91,246,.4);background:rgba(255,255,255,.25);border-radius:14px;padding:10px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--accentA);cursor:pointer}
+/* primary button */
+.paneBtn{width:100%;height:52px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--accentA),var(--accentB));color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;margin:2px 0 10px;box-shadow:0 10px 24px rgba(107,92,240,.35);transition:transform .12s}
+.paneBtn:active{transform:scale(.97)}
+/* riwayat */
+details.hist{padding:0;overflow:hidden}
+details.hist summary{list-style:none;padding:14px;font-size:13.5px;font-weight:700;cursor:pointer;color:#3A4059;display:flex;justify-content:space-between;align-items:center}
+details.hist summary::-webkit-details-marker{display:none}
+details.hist summary:after{content:'▸';color:var(--faint);font-size:11px}
+details.hist[open] summary:after{content:'▾'}
+details.hist .hbody{padding:0 14px 12px}
+.hitem{display:flex;align-items:center;gap:8px;border-top:1px solid rgba(255,255,255,.7);padding:9px 0;font-size:12.5px}
+.hl{flex:1;line-height:1.4}
+.hl span{color:var(--faint);font-size:11.5px}
+.hload{background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:10px;padding:6px 12px;font-family:inherit;font-size:11.5px;font-weight:700;color:#3A4059;cursor:pointer}
+.hdel{background:rgba(255,235,235,.8);border:1px solid rgba(255,200,200,.9);border-radius:10px;padding:6px 9px;font-family:inherit;font-size:11.5px;font-weight:700;color:var(--red);cursor:pointer}
+.empty{font-size:12px;color:var(--faint)}
+/* ===== BOTTOM SHEET glass ===== */
+#bottom{flex:0 0 auto;background:rgba(255,255,255,.62);border-radius:30px 30px 0 0;box-shadow:0 -14px 44px rgba(31,38,84,.16);user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;border:1px solid var(--gline);border-bottom:none;backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%)}
+#sheetFull{padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px))}
+#sheetMini{display:none;grid-template-columns:1.4fr 1fr .8fr;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px))}
+#bottom.min #sheetFull{display:none}
+#bottom.min #sheetMini{display:grid}
+.mbtn{height:46px;border:none;border-radius:16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.mbtn.kbd{background:linear-gradient(135deg,var(--accentA),var(--accentB));color:#fff;box-shadow:0 8px 20px rgba(107,92,240,.3)}
+.mbtn.ghost{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);color:#3A4059}
+.grab{width:40px;height:5px;border-radius:3px;background:rgba(27,32,50,.18);margin:0 auto 8px}
+.bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:34px;padding:0 2px 8px}
+.blabel{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bbtns{display:flex;gap:6px;flex:none}
+.bbtns button{border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.65);font-family:inherit;font-size:12px;font-weight:700;color:#3A4059;padding:8px 12px;border-radius:12px;cursor:pointer}
+.bbtns button:active{background:rgba(255,255,255,.95)}
+/* keypad glossy */
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.k{height:54px;border:none;border-radius:16px;font-family:inherit;font-size:23px;font-weight:600;color:var(--ink);cursor:pointer;touch-action:manipulation;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.55));
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 2px 6px rgba(31,38,84,.08),inset 0 1px 0 rgba(255,255,255,1);
+  transition:transform .1s,box-shadow .1s}
+.k:active{transform:scale(.94) translateY(1px);box-shadow:0 1px 3px rgba(31,38,84,.12),inset 0 2px 6px rgba(31,38,84,.08);background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(240,242,255,.7))}
+.kf{font-size:15px;font-weight:700;color:var(--sub)}
+.kf.red{color:var(--red)}
+.kf.am{color:var(--amberd)}
+.kf.am.on{background:linear-gradient(180deg,rgba(255,244,214,.99),rgba(255,231,179,.8));box-shadow:inset 0 0 0 2px var(--amber),0 2px 6px rgba(245,158,11,.25);color:var(--amberd)}
+.kf.dis{opacity:.3;pointer-events:none}
+.knext{grid-column:span 2;background:linear-gradient(135deg,var(--accentA),var(--accentB));color:#fff;border:none;box-shadow:0 6px 14px rgba(107,92,240,.28);font-size:13px;font-weight:700;letter-spacing:.2px}
+.knext:active{transform:scale(.96);box-shadow:0 3px 8px rgba(107,92,240,.28)}
+.bsave{width:100%;height:50px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--accentA),var(--accentB));color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;box-shadow:0 10px 24px rgba(107,92,240,.35);transition:transform .12s}
+.bsave:active{transform:scale(.97)}
+.bnav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}
+.bnav button{border:none;background:transparent;font-family:inherit;font-size:11.5px;font-weight:600;color:var(--sub);padding:8px 0;cursor:pointer;border-radius:12px}
+.bnav button:active{background:rgba(255,255,255,.8)}
+/* toast */
+.toast{position:fixed;left:50%;transform:translateX(-50%);background:rgba(27,32,50,.88);color:#fff;padding:11px 20px;border-radius:999px;font-size:13px;font-weight:600;z-index:120;font-family:inherit;box-shadow:0 12px 32px rgba(16,24,40,.35);white-space:nowrap;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15)}
+@supports not (backdrop-filter:blur(1px)){
+  .card,#bottom,.tabs{background:rgba(255,255,255,.88)}
+}
+@media (max-height:720px){.k{height:48px;font-size:21px}.bsave{height:46px}}
+@media (max-height:640px){.k{height:42px;font-size:19px}.bnav{display:none}.grab{display:none}}
+@media print{
+  body{display:block;height:auto;overflow:visible;background:#fff}
+  body::before,#bottom,.paneBtn{display:none!important}
+  #app{overflow:visible;padding:0}
+  .card{background:#fff;border:1px solid #bbb;box-shadow:none;backdrop-filter:none}
+  .card.final{background:#fff;border:1.5px solid #000}
+  .card.final .ct,.card.final .val{color:#000}
+  .card.final .val{background:#F1F2F6}
+  .card.final .val.big{background:#000;color:#fff}
+  .card.final .cell label{color:#555}
+  .val,.f{background:#fff;border-color:#ccc;color:#000}
+  .val.big{color:#000}
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="wrap">
+
+<div class="tabs">
+  <button class="tab on" id="tabBtnNkl" type="button">NKL</button>
+  <button class="tab" id="tabBtnBanl" type="button">BA NL</button>
+</div>
+
+<div class="hero">
+  <div class="hlabel" id="heroLabel">NKL Akhir</div>
+  <div class="hvalue" id="heroValue">0</div>
+</div>
+
+<!-- ================= TAB NKL ================= -->
+<div id="tabNKL" class="pane">
+
+<div class="card">
+  <div class="ct">NKL SOBIC</div>
+  <div class="tri">
+    <div class="cell"><label>NK</label><input class="f" id="s_nk" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-sign="neg" data-label="NKL SOBIC · NK"></div>
+    <div class="cell"><label>NL</label><input class="f" id="s_nl" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-sign="pos" data-label="NKL SOBIC · NL"></div>
+    <div class="cell"><label>NKL</label><div class="val big" id="s_nkl">0</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">Kontainer <span class="ch">1 = Rp 170.000</span></div>
+  <div class="irow">
+    <div class="cell"><label>Qty</label><input class="f" id="k_qty" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Kontainer · Qty"></div>
+    <div class="cell wide"><label>Rp</label><div class="val" id="k_rp"></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">Krat Roti <span class="ch">1 = Rp 80.000</span></div>
+  <div class="irow">
+    <div class="cell"><label>Qty</label><input class="f" id="r_qty" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Krat Roti · Qty"></div>
+    <div class="cell wide"><label>Rp</label><div class="val" id="r_rp"></div></div>
+  </div>
+</div>
+
+<div class="card soft">
+  <div class="ct">NKL Nett di Luar Item Kontainer + Krat Roti</div>
+  <div class="tri">
+    <div class="cell"><label>NK</label><div class="val" id="n1_nk">0</div></div>
+    <div class="cell"><label>NL</label><div class="val" id="n1_nl">0</div></div>
+    <div class="cell"><label>NKL</label><div class="val big" id="n1_nkl">0</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">NKL Point Coffee</div>
+  <div class="rakhead"><span>#</span><span>NK</span><span>NL</span><span></span></div>
+  <div id="pcRows"></div>
+  <button class="addrow" type="button" id="btnAdd">+ Tambah rak</button>
+  <div class="tri" style="margin-top:12px">
+    <div class="cell"><label>Total NK</label><div class="val" id="pc_nk"></div></div>
+    <div class="cell"><label>Total NL</label><div class="val" id="pc_nl"></div></div>
+    <div class="cell"><label>NKL</label><div class="val big" id="pc_nkl"></div></div>
+  </div>
+</div>
+
+<div class="card final">
+  <div class="ct">NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee</div>
+  <div class="tri">
+    <div class="cell"><label>NKL BIC</label><div class="val" id="f_bic">0</div></div>
+    <div class="cell"><label>NKL PC</label><div class="val" id="f_pc"></div></div>
+    <div class="cell"><label>NKL</label><div class="val big" id="f_nkl">0</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">NKL SOBIC <span class="ch">setelah dikurangi item</span></div>
+  <div class="tri">
+    <div class="cell"><label>NK</label><div class="val" id="b_nk">0</div></div>
+    <div class="cell"><label>NL</label><div class="val" id="b_nl">0</div></div>
+    <div class="cell"><label>NKL</label><div class="val big" id="b_nkl">0</div></div>
+  </div>
+</div>
+
+<button class="paneBtn jsCopy" type="button">Salin NKL</button>
+
+<details class="card hist" id="histBox">
+  <summary>Riwayat NKL</summary>
+  <div class="hbody" id="histList"></div>
+</details>
+
+</div>
+
+<!-- ================= TAB BA NL ================= -->
+<div id="tabBANL" class="pane hidden">
+
+<div class="card">
+  <div class="ct">BA NL</div>
+  <div class="bagrid bahead"><div></div><div>Qty</div><div>Rp</div></div>
+  <div class="bagrid">
+    <div class="balbl">NL</div>
+    <input class="f" id="ba_nl_q" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="NL · Qty">
+    <input class="f" id="ba_nl_r" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="NL · Rp">
+  </div>
+  <div class="bagrid">
+    <div class="balbl">NL Berpasangan</div>
+    <input class="f" id="ba_bp_q" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Berpasangan · Qty">
+    <input class="f" id="ba_bp_r" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Berpasangan · Rp">
+  </div>
+  <div class="bagrid">
+    <div class="balbl">NL Tidak Berpasangan</div>
+    <input class="f" id="ba_tb_q" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Tidak Berpasangan · Qty">
+    <input class="f" id="ba_tb_r" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Tidak Berpasangan · Rp">
+  </div>
+  <div class="bagrid">
+    <div class="balbl">NL Promosi yang Tidak Berpasangan</div>
+    <input class="f" id="ba_pr_q" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Promosi Tidak Berpasangan · Qty">
+    <input class="f" id="ba_pr_r" readonly tabindex="-1" inputmode="none" autocomplete="off" placeholder="0" data-free="1" data-label="Promosi Tidak Berpasangan · Rp">
+  </div>
+</div>
+
+<button class="paneBtn jsCopy" type="button">Salin BA NL</button>
+
+<details class="card hist" id="histBoxBA">
+  <summary>Riwayat BA NL</summary>
+  <div class="hbody" id="histListBA"></div>
+</details>
+
+</div>
+
+</div></div>
+
+<div id="bottom">
+  <div id="sheetFull">
+    <div class="grab"></div>
+    <div class="bhead">
+      <div class="blabel" id="padLabel"></div>
+      <div class="bbtns">
+        <button id="padDone" type="button" style="display:none">Selesai</button>
+        <button id="padHide" type="button">Sembunyikan ⌄</button>
+      </div>
+    </div>
+    <div class="kgrid" id="kgrid">
+      <button class="k" type="button" data-k="1">1</button>
+      <button class="k" type="button" data-k="2">2</button>
+      <button class="k" type="button" data-k="3">3</button>
+      <button class="k kf" type="button" data-k="B">⌫</button>
+      <button class="k" type="button" data-k="4">4</button>
+      <button class="k" type="button" data-k="5">5</button>
+      <button class="k" type="button" data-k="6">6</button>
+      <button class="k kf red" type="button" data-k="C">C</button>
+      <button class="k" type="button" data-k="7">7</button>
+      <button class="k" type="button" data-k="8">8</button>
+      <button class="k" type="button" data-k="9">9</button>
+      <button class="k kf am" type="button" id="kpm" data-k="PM">+/−</button>
+      <button class="k kf" type="button" data-k="T">000</button>
+      <button class="k" type="button" data-k="0">0</button>
+      <button class="k knext" type="button" id="kok" data-k="OK">Next ›</button>
+    </div>
+    <button class="bsave jsCopy" id="btnCopyMain" type="button">Salin NKL</button>
+    <div class="bnav">
+      <button type="button" id="btnSave">Simpan</button>
+      <button type="button" class="jsReset">Reset</button>
+      <button type="button" id="btnHist">Riwayat</button>
+    </div>
+  </div>
+  <div id="sheetMini">
+    <button type="button" class="mbtn kbd" id="btnShowPad">⌨ Keyboard</button>
+    <button type="button" class="mbtn ghost jsCopy" id="btnCopyMini">Salin NKL</button>
+    <button type="button" class="mbtn ghost jsReset">Reset</button>
+  </div>
+</div>
+
+<script>
+var HARGA_KONT=170000, HARGA_KRAT=80000;
+function el(id){return document.getElementById(id);}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function fmtM(n){return Math.abs(Math.round(n)).toLocaleString('id-ID');}
+function fmtS(n){var r=Math.round(n);if(r===0)return '0';return (r>0?'+':'-')+Math.abs(r).toLocaleString('id-ID');}
+function fmtP(n){var r=Math.round(n);if(r===0)return '0';return (r<0?'-':'')+Math.abs(r).toLocaleString('id-ID');}
+function grp(s){return Number(s).toLocaleString('id-ID');}
+function num(s){s=String(s===undefined||s===null?'':s);var n=Number(s);return isFinite(n)?n:0;}
+/* getar halus tiap tekan tombol (Android; iOS otomatis diabaikan) */
+function tick(){try{if(navigator.vibrate)navigator.vibrate(8);}catch(e){}}
+/* Item + -> NL dikurangi ; item - -> NK dikurangi (naik ke arah nol) */
+function eff(v){if(v>0)return [0,-v];if(v<0)return [-v,0];return [0,0];}
+
+var currentTab='nkl';
+var STAT=['s_nk','s_nl','k_qty','r_qty'];
+var BA=['ba_nl_q','ba_nl_r','ba_bp_q','ba_bp_r','ba_tb_q','ba_tb_r','ba_pr_q','ba_pr_r'];
+var pcRows=[{nk:'',nl:''},{nk:'',nl:''}];
+var active=null;
+var holdFired=false,holdTimer=null;
+
+function paneOf(inp){
+  var n=inp;
+  while(n&&n!==document.body){
+    if(n.id==='tabNKL')return 'nkl';
+    if(n.id==='tabBANL')return 'banl';
+    n=n.parentNode;
+  }
+  return '';
+}
+function fields(){
+  var all=document.querySelectorAll('input.f'),out=[],i;
+  for(i=0;i<all.length;i++){if(paneOf(all[i])===currentTab)out.push(all[i]);}
+  return out;
+}
+function fieldDisplay(inp){
+  var raw=inp.dataset.raw||'';
+  if(!raw)return '';
+  var g=grp(raw);
+  if(inp.dataset.sign==='neg')return '-'+g;
+  if(inp.dataset.sign==='pos')return '+'+g;
+  return (inp.dataset.minus==='1'?'-':'')+g;
+}
+function renderField(inp){inp.value=fieldDisplay(inp);}
+function qtyNum(id){var f=el(id);var v=num(f.dataset.raw||'0');return (f.dataset.minus==='1')?-v:v;}
+function hasItem(id){var f=el(id);var raw=f.dataset.raw||'';return raw!==''&&num(raw)!==0;}
+function qtyStr(id){var f=el(id);return (f.dataset.minus==='1'?'-':'')+grp(f.dataset.raw);}
+
+/* ===== NKL ===== */
+function pcTotals(){
+  var nk=0,nl=0,i;
+  for(i=0;i<pcRows.length;i++){nk+=num(pcRows[i].nk||'0');nl+=num(pcRows[i].nl||'0');}
+  return {nk:-nk,nl:nl,nkl:nl-nk};
+}
+function pcHasData(){
+  for(var i=0;i<pcRows.length;i++){
+    if((pcRows[i].nk&&num(pcRows[i].nk)!==0)||(pcRows[i].nl&&num(pcRows[i].nl)!==0))return true;
+  }
+  return false;
+}
+function calcAll(){
+  var nk0=-num(el('s_nk').dataset.raw||'0');
+  var nl0= num(el('s_nl').dataset.raw||'0');
+  var kv=qtyNum('k_qty')*HARGA_KONT;
+  var rv=qtyNum('r_qty')*HARGA_KRAT;
+  var K=eff(kv),R=eff(rv);
+  var pc=pcTotals(),hasPC=pcHasData();
+  var P=eff(pc.nkl);
+  var nk1=nk0+K[0]+R[0], nl1=nl0+K[1]+R[1];
+  var nkF=nk1+P[0], nlF=nl1+P[1];
+  return {nk0:nk0,nl0:nl0,kv:kv,rv:rv,pc:pc,hasPC:hasPC,nk1:nk1,nl1:nl1,nkF:nkF,nlF:nlF,bic:nk1+nl1,fin:nkF+nlF};
+}
+
+/* ===== BA NL ===== */
+function baNum(id){var f=el(id);var v=num(f.dataset.raw||'0');return (f.dataset.minus==='1')?-v:v;}
+function baHas(id){var f=el(id);var raw=f.dataset.raw||'';return raw!==''&&num(raw)!==0;}
+function calcBA(){
+  var o={};
+  o.nlq=baNum('ba_nl_q');o.nlr=baNum('ba_nl_r');
+  o.bpq=baNum('ba_bp_q');o.bpr=baNum('ba_bp_r');
+  o.tbq=baNum('ba_tb_q');o.tbr=baNum('ba_tb_r');
+  o.prq=baNum('ba_pr_q');o.prr=baNum('ba_pr_r');
+  o.tq=o.bpq+o.tbq+o.prq;
+  o.tr=o.bpr+o.tbr+o.prr;
+  o.hasR=baHas('ba_bp_q')||baHas('ba_bp_r')||baHas('ba_tb_q')||baHas('ba_tb_r')||baHas('ba_pr_q')||baHas('ba_pr_r');
+  o.hasNL=baHas('ba_nl_q')||baHas('ba_nl_r');
+  return o;
+}
+
+function setV(id,v){var x=el(id);x.textContent=fmtS(v);x.classList.toggle('neg',v<0);}
+function setBlank(id){el(id).textContent='';el(id).classList.remove('neg');}
+
+function hitungNKL(){
+  var m=calcAll();
+  setV('s_nkl',m.nk0+m.nl0);
+  el('k_rp').textContent=hasItem('k_qty')?('Rp '+fmtM(m.kv)):'';
+  el('r_rp').textContent=hasItem('r_qty')?('Rp '+fmtM(m.rv)):'';
+  setV('n1_nk',m.nk1);setV('n1_nl',m.nl1);setV('n1_nkl',m.bic);
+  if(m.hasPC){setV('pc_nk',m.pc.nk);setV('pc_nl',m.pc.nl);setV('pc_nkl',m.pc.nkl);}
+  else{setBlank('pc_nk');setBlank('pc_nl');setBlank('pc_nkl');}
+  setV('f_bic',m.bic);
+  if(m.hasPC)setV('f_pc',m.pc.nkl);else setBlank('f_pc');
+  setV('f_nkl',m.fin);
+  setV('b_nk',m.nkF);setV('b_nl',m.nlF);setV('b_nkl',m.fin);
+}
+
+function hitung(){
+  if(currentTab==='nkl')hitungNKL();
+  saveState();updateHero();
+}
+
+function updateHero(){
+  var lab,val,neg=false;
+  if(active){
+    lab=active.dataset.label||'';
+    val=fieldDisplay(active)||'0';
+    neg=val.charAt(0)==='-';
+  }else if(currentTab==='banl'){
+    var b=calcBA();
+    if(b.hasR){lab='Total Rincian';val=fmtP(b.tr);neg=b.tr<0;}
+    else if(b.hasNL){lab='NL';val=fmtP(b.nlr);neg=b.nlr<0;}
+    else{lab='BA NL';val='0';}
+  }else{
+    var m=calcAll();
+    lab='NKL Akhir';val=fmtS(m.fin);neg=m.fin<0;
+  }
+  el('heroLabel').textContent=lab;
+  el('heroValue').textContent=val;
+  el('heroValue').classList.toggle('neg',neg);
+}
+
+/* ===== toast ===== */
+function toast(msg){
+  var t=document.createElement('div');
+  t.className='toast';t.textContent=msg;
+  var b=el('bottom');
+  if(b)t.style.bottom=(b.offsetHeight+12)+'px';else t.style.top='16px';
+  document.body.appendChild(t);
+  setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},1900);
+}
+
+/* ===== keypad ===== */
+function showPad(){el('bottom').classList.remove('min');}
+function hidePad(){el('bottom').classList.add('min');}
+function updatePm(){
+  var pm=el('kpm');
+  if(active&&active.dataset.free){pm.classList.remove('dis');pm.classList.toggle('on',active.dataset.minus==='1');}
+  else{pm.classList.add('dis');pm.classList.remove('on');}
+}
+function scrollToField(inp){
+  var app=el('app');
+  try{
+    var ar=app.getBoundingClientRect(),fr=inp.getBoundingClientRect();
+    var pos=fr.top-ar.top+app.scrollTop;
+    var target=pos-ar.height*0.22;
+    if(target<0)target=0;
+    var max=app.scrollHeight-ar.height;
+    if(target>max)target=max;
+    app.scrollTo({top:target,behavior:'smooth'});
+  }catch(e){try{inp.scrollIntoView({block:'center'});}catch(e2){}}
+}
+function selectField(inp){
+  showPad();
+  if(active===inp){updatePm();return;}
+  active=inp;
+  var fs=fields(),i;
+  for(i=0;i<fs.length;i++)fs[i].classList.remove('act');
+  inp.classList.add('act');
+  updatePm();
+  el('padLabel').textContent=inp.dataset.label||'';
+  el('padDone').style.display='';
+  var idx=fs.indexOf(inp);
+  el('kok').textContent=(idx<fs.length-1)?'Next ›':'Selesai ✓';
+  updateHero();
+  setTimeout(function(){scrollToField(inp);},40);
+}
+function done(){
+  active=null;
+  var fs=fields();
+  for(var i=0;i<fs.length;i++)fs[i].classList.remove('act');
+  el('kok').textContent='Next ›';
+  el('padLabel').textContent='';
+  el('padDone').style.display='none';
+  updatePm();updateHero();
+}
+function padKey(t){
+  tick();
+  if(!active){
+    if(t==='OK'||t==='PM'||t==='C'||t==='B')return;
+    selectField(currentTab==='banl'?el('ba_nl_q'):el('s_nk'));
+  }
+  if(t==='OK'){var fs=fields(),i=fs.indexOf(active);if(i<fs.length-1)selectField(fs[i+1]);else done();return;}
+  if(t==='PM'){
+    if(active.dataset.free){
+      active.dataset.minus=(active.dataset.minus==='1')?'0':'1';
+      renderField(active);updatePm();after();
+    }
+    return;
+  }
+  var raw=active.dataset.raw||'';
+  if(t==='C'){active.dataset.raw='';if(active.dataset.free){active.dataset.minus='0';updatePm();}}
+  else if(t==='B'){active.dataset.raw=raw.slice(0,-1);}
+  else{
+    var add=(t==='T')?'000':t;
+    if(t==='T'&&!raw)return;
+    if(raw.length+add.length>13)return;
+    active.dataset.raw=raw+add;
+  }
+  renderField(active);after();
+}
+function after(){
+  if(active&&active.dataset.pc!==undefined)pcRows[Number(active.dataset.pc)][active.dataset.col]=active.dataset.raw||'';
+  hitung();
+}
+
+/* hold ⌫ = bersihkan kolom aktif */
+(function(){
+  var ks=document.querySelectorAll('#kgrid .k'),bBtn=null,i;
+  for(i=0;i<ks.length;i++){if(ks[i].getAttribute('data-k')==='B'){bBtn=ks[i];break;}}
+  if(!bBtn)return;
+  bBtn.addEventListener('pointerdown',function(){
+    holdFired=false;
+    clearTimeout(holdTimer);
+    holdTimer=setTimeout(function(){
+      if(!active)return;
+      holdFired=true;
+      active.dataset.raw='';
+      if(active.dataset.free){active.dataset.minus='0';updatePm();}
+      renderField(active);after();tick();
+    },550);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+    bBtn.addEventListener(ev,function(){clearTimeout(holdTimer);});
+  });
+})();
+
+/* blokir pinch-zoom (iOS) */
+['gesturestart','gesturechange'].forEach(function(ev){
+  document.addEventListener(ev,function(e){e.preventDefault();});
+});
+
+/* ===== tab ===== */
+function updateCopyLabels(){
+  var t=(currentTab==='banl')?'Salin BA NL':'Salin NKL';
+  el('btnCopyMain').textContent=t;
+  el('btnCopyMini').textContent=t;
+}
+function switchTab(t){
+  if(t===currentTab)return;
+  done();
+  currentTab=t;
+  el('tabNKL').classList.toggle('hidden',t!=='nkl');
+  el('tabBANL').classList.toggle('hidden',t!=='banl');
+  el('tabBtnNkl').classList.toggle('on',t==='nkl');
+  el('tabBtnBanl').classList.toggle('on',t==='banl');
+  el('app').scrollTop=0;
+  updateCopyLabels();
+  hitung();
+}
+
+/* ===== rak point coffee ===== */
+function renderPcRows(){
+  var box=el('pcRows');box.innerHTML='';
+  pcRows.forEach(function(r,i){
+    var div=document.createElement('div');div.className='rak';
+    var no=document.createElement('div');no.className='no';no.textContent=i+1;
+    function mkInput(sign,col,label){
+      var x=document.createElement('input');x.className='f';x.type='text';x.readOnly=true;x.tabIndex=-1;
+      try{x.inputMode='none';}catch(e){}
+      x.placeholder='0';x.setAttribute('data-sign',sign);
+      x.setAttribute('data-pc',i);x.setAttribute('data-col',col);
+      x.setAttribute('data-label',label);
+      x.dataset.raw=r[col]||'';renderField(x);
+      x.addEventListener('click',function(){selectField(x);});
+      return x;
+    }
+    var a=mkInput('neg','nk','Point Coffee · Rak '+(i+1)+' NK');
+    var b=mkInput('pos','nl','Point Coffee · Rak '+(i+1)+' NL');
+    var del=document.createElement('button');del.className='rakdel';del.type='button';del.textContent='✕';
+    del.addEventListener('click',function(){
+      done();
+      pcRows.splice(i,1);
+      if(!pcRows.length)pcRows=[{nk:'',nl:''}];
+      renderPcRows();hitung();
+    });
+    div.appendChild(no);div.appendChild(a);div.appendChild(b);div.appendChild(del);
+    box.appendChild(div);
+  });
+}
+function tambahRak(){
+  pcRows.push({nk:'',nl:''});
+  renderPcRows();hitung();
+  var fs=fields();
+  selectField(fs[fs.length-2]);
+}
+
+/* ===== salin ===== */
+function buildNKLText(){
+  var m=calcAll();
+  var hasK=hasItem('k_qty'),hasR=hasItem('r_qty');
+  var L=[];
+  L.push('NKL SOBIC');
+  L.push('NK: '+fmtS(m.nk0));
+  L.push('NL: '+fmtS(m.nl0));
+  L.push('NKL: '+fmtS(m.nk0+m.nl0));
+  if(hasK||hasR){
+    L.push('');
+    if(hasK)L.push('Kontainer (Qty/Rp): '+qtyStr('k_qty')+' / Rp '+fmtM(m.kv));
+    if(hasR)L.push('Krat Roti (Qty/Rp): '+qtyStr('r_qty')+' / Rp '+fmtM(m.rv));
+    L.push('');
+    L.push('NKL Nett di Luar Item Kontainer + Krat Roti');
+    L.push('NK: '+fmtS(m.nk1));
+    L.push('NL: '+fmtS(m.nl1));
+    L.push('NKL: '+fmtS(m.bic));
+  }
+  L.push('');
+  L.push('NKL Point Coffee');
+  L.push(m.hasPC?('NK: '+fmtS(m.pc.nk)):'NK:');
+  L.push(m.hasPC?('NL: '+fmtS(m.pc.nl)):'NL:');
+  L.push(m.hasPC?('NKL: '+fmtS(m.pc.nkl)):'NKL:');
+  L.push('');
+  L.push('NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee');
+  L.push('NKL BIC: '+fmtS(m.bic));
+  L.push(m.hasPC?('NKL PC: '+fmtS(m.pc.nkl)):'NKL PC:');
+  L.push('NKL: '+fmtS(m.fin));
+  L.push('');
+  L.push('NKL SOBIC');
+  L.push('NK: '+fmtS(m.nkF));
+  L.push('NL: '+fmtS(m.nlF));
+  L.push('NKL: '+fmtS(m.fin));
+  return L.join('\n');
+}
+function buildBAText(){
+  var b=calcBA();
+  return 'BA NL\n'+
+   '- NL Qty/Rp: '+fmtP(b.nlq)+' / '+fmtP(b.nlr)+'\n'+
+   '- NL Berpasangan Qty/Rp: '+fmtP(b.bpq)+' / '+fmtP(b.bpr)+'\n'+
+   '- NL Tidak Berpasangan Qty/Rp: '+fmtP(b.tbq)+' / '+fmtP(b.tbr)+'\n'+
+   '- NL Promosi yang Tidak Berpasangan Qty/Rp: '+fmtP(b.prq)+' / '+fmtP(b.prr);
+}
+function manualCopy(teks){
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(20,22,40,.5);z-index:150;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
+  var box=document.createElement('div');
+  box.style.cssText='background:rgba(255,255,255,.92);border-radius:24px 24px 0 0;width:100%;max-width:520px;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));';
+  var h=document.createElement('div');h.textContent='Salin manual';
+  h.style.cssText='font-size:15px;font-weight:700;margin-bottom:4px;color:#1B2032;font-family:inherit;';
+  var p=document.createElement('div');p.textContent='Tekan lama teks di bawah, lalu pilih Salin.';
+  p.style.cssText='font-size:12px;color:#5D6480;margin-bottom:10px;font-family:inherit;';
+  var ta=document.createElement('textarea');ta.value=teks;
+  ta.style.cssText='width:100%;height:190px;border:1.5px solid #E4E7F0;border-radius:14px;padding:10px;font-family:inherit;font-size:13px;color:#1B2032;resize:none;background:#fff;user-select:text;-webkit-user-select:text;';
+  var bc=document.createElement('button');bc.type='button';bc.textContent='Tutup';
+  bc.style.cssText='width:100%;margin-top:10px;height:46px;border:none;border-radius:14px;background:#EDEEF6;color:#3A4059;font-family:inherit;font-size:14px;font-weight:700;';
+  bc.addEventListener('click',function(){if(ov.parentNode)ov.parentNode.removeChild(ov);});
+  ov.addEventListener('click',function(e){if(e.target===ov&&ov.parentNode)ov.parentNode.removeChild(ov);});
+  box.appendChild(h);box.appendChild(p);box.appendChild(ta);box.appendChild(bc);
+  ov.appendChild(box);document.body.appendChild(ov);
+  try{ta.focus();ta.select();}catch(e){}
+}
+function salin(){
+  var teks=(currentTab==='banl')?buildBAText():buildNKLText();
+  function ok(){toast('Hasil disalin');}
+  function giveup(){manualCopy(teks);}
+  function tryExec(){
+    try{
+      var t=document.createElement('textarea');
+      t.value=teks;t.setAttribute('readonly','');
+      t.style.cssText='position:fixed;left:-9999px;top:0;';
+      document.body.appendChild(t);t.select();
+      var okk=false;try{okk=document.execCommand('copy');}catch(e){}
+      document.body.removeChild(t);
+      if(okk)ok();else giveup();
+    }catch(e){giveup();}
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(teks).then(ok,function(){tryExec();});}
+  else tryExec();
+}
+
+/* ===== simpan / riwayat ===== */
+function captureState(){
+  var d={f:{},pc:pcRows};
+  for(var i=0;i<STAT.length;i++){
+    var id=STAT[i],f=el(id);
+    d.f[id]=f.dataset.raw||'';
+    if(f.dataset.free)d.f[id+'_m']=(f.dataset.minus==='1')?'1':'0';
+  }
+  return d;
+}
+function captureBA(){
+  var d={f:{}},i;
+  for(i=0;i<BA.length;i++){
+    var f=el(BA[i]);
+    d.f[BA[i]]=f.dataset.raw||'';
+    d.f[BA[i]+'_m']=(f.dataset.minus==='1')?'1':'0';
+  }
+  return d;
+}
+function saveState(){
+  if(currentTab==='banl')lsSet('baV1',JSON.stringify(captureBA()));
+  else lsSet('nklV8',JSON.stringify(captureState()));
+}
+function applyState(d){
+  if(d){
+    var f=d.f||{},i,j;
+    for(i=0;i<STAT.length;i++){
+      var id=STAT[i],e2=el(id),raw='',minus=false;
+      if(f[id]!==undefined){raw=f[id];minus=(f[id+'_m']==='1');}
+      else if(d[id]!==undefined){var s=String(d[id]);minus=(s.charAt(0)==='-');raw=s.replace(/[^0-9]/g,'');}
+      e2.dataset.raw=raw||'';
+      if(e2.dataset.free)e2.dataset.minus=minus?'1':'0';
+      renderField(e2);
+    }
+    var src=d.pc||[];
+    if(src.length){
+      pcRows=[];
+      for(j=0;j<src.length;j++){
+        var a=String(src[j].nk===undefined?'':src[j].nk),b=String(src[j].nl===undefined?'':src[j].nl);
+        pcRows.push({nk:a.replace(/[^0-9]/g,''),nl:b.replace(/[^0-9]/g,'')});
+      }
+    }
+  }
+  renderPcRows();hitungNKL();
+}
+function applyBA(d){
+  var f=(d&&d.f)?d.f:{},i;
+  for(i=0;i<BA.length;i++){
+    var e2=el(BA[i]);
+    e2.dataset.raw=(f[BA[i]]!==undefined)?f[BA[i]]:'';
+    e2.dataset.minus=(f[BA[i]+'_m']==='1')?'1':'0';
+    renderField(e2);
+  }
+}
+function nowLabel(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return p(d.getDate())+'/'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes());}
+function simpanRiwayat(){
+  if(currentTab==='banl'){
+    var b=calcBA();
+    var hb;try{hb=JSON.parse(lsGet('baHist1')||'[]');}catch(e){hb=[];}
+    hb.unshift({id:Date.now(),label:nowLabel(),sub:'Total: '+(b.hasR?fmtP(b.tr):(b.hasNL?fmtP(b.nlr):'0')),data:captureBA()});
+    if(hb.length>20)hb=hb.slice(0,20);
+    lsSet('baHist1',JSON.stringify(hb));
+    renderHistBA();
+  }else{
+    var h;try{h=JSON.parse(lsGet('nklHist8')||'[]');}catch(e){h=[];}
+    h.unshift({id:Date.now(),label:nowLabel(),sub:'NKL akhir: '+el('f_nkl').textContent,data:captureState()});
+    if(h.length>20)h=h.slice(0,20);
+    lsSet('nklHist8',JSON.stringify(h));
+    renderHistNKL();
+  }
+  toast('Tersimpan');
+}
+function mkHist(boxId,storeKey,renderFn,applyFn){
+  var box=el(boxId);box.innerHTML='';
+  var h;try{h=JSON.parse(lsGet(storeKey)||'[]');}catch(e){h=[];}
+  if(!h.length){box.innerHTML='<p class="empty">Belum ada riwayat.</p>';return;}
+  h.forEach(function(x){
+    var row=document.createElement('div');row.className='hitem';
+    var l=document.createElement('div');l.className='hl';
+    l.innerHTML=x.label+'<br><span>'+(x.sub||'')+'</span>';
+    var b1=document.createElement('button');b1.className='hload';b1.type='button';b1.textContent='Muat';
+    b1.addEventListener('click',function(){done();applyFn(x.data);updateHero();});
+    var b2=document.createElement('button');b2.className='hdel';b2.type='button';b2.textContent='✕';
+    b2.addEventListener('click',function(){
+      var arr;try{arr=JSON.parse(lsGet(storeKey)||'[]');}catch(e){arr=[];}
+      var out=[];for(var i=0;i<arr.length;i++)if(arr[i].id!==x.id)out.push(arr[i]);
+      lsSet(storeKey,JSON.stringify(out));renderFn();
+    });
+    row.appendChild(l);row.appendChild(b1);row.appendChild(b2);
+    box.appendChild(row);
+  });
+}
+function renderHistNKL(){mkHist('histList','nklHist8',renderHistNKL,applyState);}
+function renderHistBA(){mkHist('histListBA','baHist1',renderHistBA,applyBA);}
+
+/* ===== reset 2x ===== */
+var resetArmed=false,resetT=null;
+function resetButtons(on){
+  var bs=document.querySelectorAll('.jsReset'),i;
+  for(i=0;i<bs.length;i++){bs[i].textContent=on?'Yakin? Hapus':'Reset';bs[i].style.color=on?'#E5484D':'';}
+}
+function tapReset(){
+  if(!resetArmed){
+    resetArmed=true;resetButtons(true);
+    clearTimeout(resetT);
+    resetT=setTimeout(function(){resetArmed=false;resetButtons(false);},2600);
+    return;
+  }
+  clearTimeout(resetT);resetArmed=false;resetButtons(false);
+  var i,f;
+  if(currentTab==='banl'){
+    for(i=0;i<BA.length;i++){f=el(BA[i]);f.dataset.raw='';f.dataset.minus='0';renderField(f);}
+    done();hitung();
+  }else{
+    for(i=0;i<STAT.length;i++){f=el(STAT[i]);f.dataset.raw='';if(f.dataset.free)f.dataset.minus='0';renderField(f);}
+    pcRows=[{nk:'',nl:''},{nk:'',nl:''}];
+    done();renderPcRows();hitung();
+  }
+  toast('Dibersihkan');
+}
+
+/* ===== tinggi layar ===== */
+function fit(){
+  var h=window.innerHeight||document.documentElement.clientHeight||0;
+  if(h>200){
+    document.documentElement.style.height=h+'px';
+    document.body.style.height=h+'px';
+  }
+}
+window.addEventListener('resize',fit);
+window.addEventListener('orientationchange',function(){setTimeout(fit,250);});
+window.addEventListener('pageshow',fit);
+if(window.visualViewport&&window.visualViewport.addEventListener){window.visualViewport.addEventListener('resize',fit);}
+
+/* ===== init ===== */
+(function(){
+  var i;
+  for(i=0;i<STAT.length;i++){
+    (function(id){var inp=el(id);inp.addEventListener('click',function(){selectField(inp);});})(STAT[i]);
+  }
+  for(i=0;i<BA.length;i++){
+    (function(id){var inp=el(id);inp.addEventListener('click',function(){selectField(inp);});})(BA[i]);
+  }
+  el('tabBtnNkl').addEventListener('click',function(){switchTab('nkl');});
+  el('tabBtnBanl').addEventListener('click',function(){switchTab('banl');});
+  el('btnAdd').addEventListener('click',tambahRak);
+  var cs=document.querySelectorAll('.jsCopy');
+  for(i=0;i<cs.length;i++)cs[i].addEventListener('click',function(){salin();});
+  var rs=document.querySelectorAll('.jsReset');
+  for(i=0;i<rs.length;i++)rs[i].addEventListener('click',tapReset);
+  el('btnSave').addEventListener('click',simpanRiwayat);
+  el('btnHist').addEventListener('click',function(){
+    var d=el(currentTab==='banl'?'histBoxBA':'histBox');
+    if(d){d.open=true;try{d.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){try{d.scrollIntoView();}catch(e2){}}}
+  });
+  el('padDone').addEventListener('click',done);
+  el('padHide').addEventListener('click',hidePad);
+  el('btnShowPad').addEventListener('click',showPad);
+  el('kgrid').addEventListener('contextmenu',function(e){e.preventDefault();});
+  el('kgrid').addEventListener('click',function(e){
+    var b=e.target;
+    if(b&&b.getAttribute&&b.getAttribute('data-k')){
+      if(b.getAttribute('data-k')==='B'&&holdFired){holdFired=false;return;}
+      padKey(b.getAttribute('data-k'));
+    }
+  });
+
+  var d=null,src=lsGet('nklV8')||lsGet('nklV7')||lsGet('nklV6')||lsGet('nklV5');
+  if(src){try{d=JSON.parse(src);}catch(e){d=null;}}
+  applyState(d);
+  var bsrc=lsGet('baV1');
+  if(bsrc){try{applyBA(JSON.parse(bsrc));}catch(e){}}
+  renderHistNKL();renderHistBA();
+  updateCopyLabels();
+  updateHero();
+  fit();
+})();
+window.addEventListener('load',fit);
+</script>
+</body>
+</html>
