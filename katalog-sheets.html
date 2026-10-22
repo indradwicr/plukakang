@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>plukakang — katalog sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit;touch-action:manipulation}
+input{font-family:inherit;outline:none;touch-action:manipulation}
+:root{
+  --top:54px;
+  --grid:#e2e4e9;--grid2:#c9cdd4;
+  --ink:#202124;--ink2:#5f6368;
+  --sel:#1a73e8;--selbg:#e8f0fe;
+  --acc:#ea580c;
+  --acc-deep:#c2410c;
+  --acc-bandbg:#f5b48a;
+  --acc-bandtx:#7c3a12;
+  --acc-raw:#f6c39b;
+  --acc-konv:#fbe3d0;
+}
+/* body TANPA height:100% — height membatasi jarak tempuh position:sticky topbar */
+body{font-family:'Roboto',-apple-system,'Segoe UI',Arial,sans-serif;background:#f8f9fa;color:var(--ink);font-variant-numeric:tabular-nums;min-height:100dvh}
+
+/* ---------- topbar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--grid);display:flex;gap:10px;align-items:center;padding:9px 14px}
+.searchbox{flex:1;display:flex;align-items:center;gap:8px;background:#f1f3f4;border:1.5px solid transparent;border-radius:11px;padding:8px 12px;transition:border-color .15s,background .15s}
+.searchbox:focus-within{background:#fff;border-color:var(--acc)}
+.searchbox svg{flex:none;width:15px;height:15px;stroke:var(--ink2);fill:none;stroke-width:2;stroke-linecap:round}
+.searchbox input{flex:1;border:0;background:none;font-size:13.5px;color:var(--ink);min-width:0}
+.searchbox input::placeholder{color:#9aa0a6}
+.qclear{flex:none;width:18px;height:18px;border-radius:50%;background:#dadce0;color:#5f6368;font-size:12px;line-height:1;display:none;place-items:center;font-weight:700}
+.qclear.show{display:grid}
+.chip{flex:none;font-size:11px;font-weight:700;color:var(--ink2);background:#f1f3f4;border-radius:999px;padding:7px 11px;white-space:nowrap}
+
+/* ---------- canvas ---------- */
+.canvas{max-width:560px;margin:0 auto;padding:18px 14px 120px}
+@media(min-width:780px){.canvas{max-width:1000px}}
+.sheet-head{text-align:center;margin:2px 0 18px}
+.sheet-head h1{font-size:19px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+.sheet-head h1 em{font-style:normal;color:var(--acc)}
+.sheet-head p{font-size:11px;color:var(--ink2);margin-top:4px;letter-spacing:.03em}
+.demonote{margin:0 0 16px;background:#fef7e0;border:1px solid #f5dfa1;color:#8a6116;font-size:11.5px;line-height:1.5;padding:9px 13px;border-radius:10px;text-align:center}
+.demonote b{font-weight:700}
+
+/* ---------- groups & table ---------- */
+.groups{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.group{flex:1 1 330px;min-width:272px;max-width:100%}
+/* border-collapse:collapse merusak sticky (garis ikut scroll) — pakai separate + border per sel */
+.group table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
+.col-plu{width:21%}.col-konv{width:21%}
+table td,table th{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid)}
+table td:first-child,table th:first-child{border-left:1px solid var(--grid)}
+thead th{position:sticky;z-index:10;border-right:1px solid var(--grid2);border-bottom:1px solid var(--grid2);background:var(--acc);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:0 6px;text-align:center}
+thead tr.h1 th{top:var(--top);height:30px}
+thead tr.h2 th{top:calc(var(--top) + 30px);background:var(--acc-deep);font-size:9.5px;letter-spacing:.12em;padding:5px 4px}
+thead th:first-child{border-left:1px solid var(--grid2)}
+thead th.h-desc{font-size:11px;letter-spacing:.14em}
+tbody td{padding:7px 8px;font-size:12.5px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tbody tr.band td{background:var(--acc-bandbg);color:var(--acc-bandtx);font-size:10.5px;font-weight:900;font-style:italic;letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:6px 8px}
+tbody tr.item{cursor:pointer}
+td.c-raw{background:var(--acc-raw);font-weight:600;text-align:center;font-size:11.5px;letter-spacing:.01em;padding:7px 4px}
+td.c-konv{background:var(--acc-konv);font-weight:600;text-align:center;font-size:11.5px;letter-spacing:.01em;padding:7px 4px}
+td.c-desc{background:#fff;font-style:italic;color:#3c4043}
+tr.item:active td{background:var(--selbg)}
+td.sel{box-shadow:inset 0 0 0 2px var(--sel);background:var(--selbg)!important;font-style:normal!important}
+
+/* ---------- ghost / empty ---------- */
+.ghost{text-align:center;color:var(--ink2);padding:52px 20px;font-size:13px;line-height:1.6}
+.ghost b{display:block;font-size:14px;color:var(--ink);margin-bottom:3px;font-weight:700}
+
+/* ---------- tabbar (sheet tabs) ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1px solid var(--grid2);box-shadow:0 -6px 18px rgba(32,33,36,.06);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabrow{display:flex;align-items:stretch;height:52px;padding:0 4px}
+.sq{flex:none;width:46px;display:grid;place-items:center;color:var(--ink2)}
+.sq svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;stroke-linecap:round;fill:none}
+.sq:active{background:#f1f3f4;border-radius:10px}
+.tabs{flex:1;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;position:relative;padding:0 13px;font-size:11.5px;font-weight:700;letter-spacing:.05em;color:#9aa0a6;text-transform:uppercase;white-space:nowrap}
+.tab.on{color:var(--ink)}
+.tab.on:after{content:'';position:absolute;left:9px;right:9px;bottom:5px;height:3px;border-radius:2px;background:var(--acc)}
+
+/* ---------- sheet menu ---------- */
+.sheetmenu{position:fixed;left:8px;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:70;background:#fff;border:1px solid var(--grid);border-radius:14px;box-shadow:0 12px 34px rgba(32,33,36,.16);width:250px;overflow:hidden;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .16s,transform .16s}
+.sheetmenu.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.smttl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);padding:11px 14px 7px}
+.smrow{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;font-size:12.5px;font-weight:600;text-align:left}
+.smrow:active{background:#f1f3f4}
+.smrow .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.smrow .n{margin-left:auto;font-size:10.5px;color:var(--ink2);font-weight:700}
+.smrow.on{background:var(--selbg)}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(8px);bottom:calc(66px + env(safe-area-inset-bottom,0px));background:#202124;color:#fff;font-size:12px;font-weight:600;padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:86vw;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="searchbox">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="q" type="text" placeholder="Cari nama atau PLU…" autocomplete="off" enterkeyhint="search">
+    <button class="qclear" id="qclear" aria-label="Bersihkan pencarian">×</button>
+  </div>
+  <div class="chip" id="chip">…</div>
+</header>
+
+<main class="canvas">
+  <div class="sheet-head">
+    <h1 id="sheetTitle">…</h1>
+    <p id="sheetSub">katalog PLU · versi sheet</p>
+  </div>
+  <div class="demonote" id="demoNote" hidden><b>Mode demo</b> — ini data contoh dari referensi sheet kamu. Taruh file ini di Vercel sejajar dengan <b>data.json</b>, maka data live otomatis terpakai.</div>
+  <div class="groups" id="groups"></div>
+</main>
+
+<div class="sheetmenu" id="sheetmenu">
+  <div class="smttl">Daftar sheet</div>
+  <div id="smrows"></div>
+</div>
+
+<nav class="tabbar">
+  <div class="tabrow">
+    <button class="sq" id="btnMenu" aria-label="Daftar sheet">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="tabs" id="tabs"></div>
+    <button class="sq" id="btnAdmin" aria-label="Buka admin">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* ================================================================
+   plukakang — katalog versi sheet
+   Grid: PLU (RAW | KONVERSI) + DESKRIPSI, band kategori oranye,
+   tab sheet di bawah (ganti brand). Data: fetch data.json live;
+   kalau tidak ada → data demo (contoh dari referensi).
+   ================================================================ */
+
+var CONFIG = {
+  brands: ['saybread','sayburger','yummychoice','yummycoffee','pointcoffee','hambalanfc','perishable'],
+  names: { saybread:'Say Bread', sayburger:'Say Burger', yummychoice:'Yummy Choice', yummycoffee:'Yummy Coffee Gold', pointcoffee:'Point Coffee', hambalanfc:'Hambalan FC', perishable:'Perishable' },
+  tabs: { saybread:'Say Bread', sayburger:'Say Burger', yummychoice:'YummyChoice', yummycoffee:'Yummy Coffee', pointcoffee:'Point Coffee', hambalanfc:'Hambalan FC', perishable:'Perishable' },
+  colors: { saybread:'#f59e0b', sayburger:'#dc2626', yummychoice:'#ea580c', yummycoffee:'#d97706', pointcoffee:'#16a34a', hambalanfc:'#4f46e5', perishable:'#059669' },
+  subs: {
+    saybread: ['dcf','sarana'],
+    sayburger: ['bkl','sarana'],
+    yummychoice: ['bkl','sarana'],
+    yummycoffee: ['bkl','dcf','sarana'],
+    pointcoffee: ['bkl','sarana'],
+    hambalanfc: ['minyak','beras','gula','mineral','beverage'],
+    perishable: ['buah_sayur']
+  },
+  subLabels: { dcf:'Frozen Dough', sarana:'Sarana', bkl:'Bahan Baku', minyak:'Minyak', beras:'Beras', gula:'Gula', mineral:'Mineral', beverage:'Beverage', buah_sayur:'Buah & Sayur' },
+  kategoriMaps: {
+    'yummychoice|bkl': { snack_rte:'Snack RTE', dimsum:'Dimsum', pao:'Pao', fried_chicken:'Fried Chicken', frozen_fc:'Frozen FC', sosis:'Sosis', pizza:'Pizza' },
+    'yummycoffee|bkl': { jelly:'Jelly', syrup:'Syrup', powder:'Powder', other:'Other' },
+    'pointcoffee|bkl': { coffee_bean:'Coffee Bean', sauce:'Sauce', topping_jelly:'Topping Jelly', syrup:'Syrup', powder:'Powder', milk_dairy:'Milk & Dairy', rtd_beverage:'RTD Beverage', tea:'Tea', sweetener:'Sweetener', topping_crunches:'Topping Crunches', rtd_coffee:'RTD Coffee' },
+    'perishable|buah_sayur': { buah:'Buah', sayur:'Sayur', jus:'Jus', bo:'B/O', bp:'B/P' }
+  }
+};
+
+/* ---- data demo (transkrip contoh sheet "YUMMY CHOICE STARTER PACK") ---- */
+var DEMO_RAW = [
+  ['yummychoice','bkl','snack_rte','Bakso Sapiyna','201135493',''],
+  ['yummychoice','bkl','snack_rte','Boneless Chicken (5 pcs)','201158402','201178257'],
+  ['yummychoice','bkl','snack_rte','French Fries (10 pcs)','201299427','201154353'],
+  ['yummychoice','bkl','snack_rte','Gyoza 1S (pcs)','201366119','201306135'],
+  ['yummychoice','bkl','snack_rte','Martabak Telur','201402113',''],
+  ['yummychoice','bkl','snack_rte','Otak-Otak Keju','201145152','201401179'],
+  ['yummychoice','bkl','snack_rte','Otak-Otak Original','201146019','201517916'],
+  ['yummychoice','bkl','snack_rte','Pentol 8 S (3 pack)','201378415','201521946'],
+  ['yummychoice','bkl','snack_rte','Siomay Ayam (6 pcs)','201020589','200543359'],
+  ['yummychoice','bkl','snack_rte','Siomay Udang (8 pcs)','201223444','201017955'],
+  ['yummychoice','bkl','snack_rte','Spicy Chicken Tender 2s (10 pcs)','201446116','201460556'],
+  ['yummychoice','bkl','snack_rte','Spicy Wings (5 pcs)','201379477','201446657'],
+  ['yummychoice','bkl','snack_rte','Telur Matang','200913475',''],
+  ['yummychoice','bkl','snack_rte','Thai Chicken Popcorn','201197588','201591815'],
+  ['yummychoice','bkl','dimsum','Dimsum Ayam (48 pcs)','20110796','20157455'],
+  ['yummychoice','bkl','dimsum','Dimsum Bayam (48 pcs)','20110797','20157576'],
+  ['yummychoice','bkl','dimsum','Dimsum Jamur (48 pcs)','20122749','20141863'],
+  ['yummychoice','bkl','dimsum','Dimsum Pedas (48 pcs)','20122746','20129477'],
+  ['yummychoice','bkl','dimsum','Dimsum Udang (48 pcs)','20110796','20153423'],
+  ['yummychoice','bkl','pao','Pao Ayam Kecap (2 pcs)','20136817','20139616'],
+  ['yummychoice','bkl','pao','Pao Ayam Panggang (12 pcs)','20136818','20139014'],
+  ['yummychoice','bkl','pao','Pao Coklat Kacang (12 pcs)','20132113','20132064'],
+  ['yummychoice','bkl','pao','Pao Kacang Merah (12 pcs)','20133557','20139555'],
+  ['yummychoice','bkl','pao','Pao Salted Egg (12 pcs)','20133558','20133589'],
+  ['yummychoice','bkl','pao','Pao Ayam Hitam (2 pcs)','20122695',''],
+  ['yummychoice','bkl','fried_chicken','Dada (4 pcs)','20107545','20151022'],
+  ['yummychoice','bkl','fried_chicken','Sayap (2 pcs)','20107546','20151038'],
+  ['yummychoice','bkl','fried_chicken','Paha Atas (2 pcs)','20107504','20153120'],
+  ['yummychoice','bkl','fried_chicken','Paha Bawah (2 pcs)','20107507','20151527'],
+  ['yummychoice','bkl','frozen_fc','Dada (4 pcs)','20155674','20159476'],
+  ['yummychoice','bkl','frozen_fc','Sayap (4 pcs)','20135477','20143672'],
+  ['yummychoice','bkl','frozen_fc','Paha Atas (4 pcs)','20139474','20139475'],
+  ['yummychoice','bkl','frozen_fc','Paha Bawah (4 pcs)','20139473','20159473'],
+  ['yummychoice','bkl','sosis','Sosis Keju (12 pcs/60 pcs)','20109606','20155637'],
+  ['yummychoice','bkl','sosis','Sosis Sapi (12 pcs/60 pcs)','20107905','20158853'],
+  ['yummychoice','bkl','sosis','Sosis Keju Spicy (12 pcs/60 pcs)','20139548','20139540'],
+  ['yummychoice','bkl','sosis','Sosis Happy (12 pcs)','20142758','20143158'],
+  ['yummychoice','bkl','sosis','Sosis Beefwort (6 pcs)','20109307',''],
+  ['yummychoice','bkl','pizza','Pizza Beef Olive & Pepperoni (10 pcs)','20152816',''],
+  ['yummychoice','bkl','pizza','Pizza 4 Cheese (10 pcs)','20152812',''],
+  ['yummychoice','bkl','','Minyak (Cimbone 4000)','20182364',''],
+  ['yummychoice','bkl','','Minyak Sosis','20127608',''],
+  ['yummychoice','bkl','','Fresher Rice (24s/36s)','20153342',''],
+  ['yummychoice','bkl','','Beras (6ck)','20118296','20128224'],
+  ['yummychoice','bkl','','Nasi Putih','20163230','20163242'],
+  ['yummychoice','bkl','','Sambal (4s)','20189426','20188919'],
+  ['yummychoice','bkl','','Tepung Basah (Kecil)','20163655','20163524'],
+  ['yummychoice','bkl','','Tepung Kering (Besar)','20115324','20161527'],
+  ['yummychoice','bkl','','Mayonaise','20129308',''],
+  ['yummychoice','bkl','','Sauce BBQ (2S)','20383445',''],
+  ['yummychoice','bkl','','Sauce Chilli (2S)','20180466',''],
+  ['yummychoice','bkl','','Sauce Curry','20129469',''],
+  ['yummychoice','bkl','','Sauce Steak (2S)','20157439',''],
+  ['yummychoice','bkl','','Sambal Bawang (10S)','20136960',''],
+  ['yummychoice','bkl','','Sambal Ijo (10S)','20137170',''],
+  ['yummychoice','sarana','','Box Snacking/Sosis (100s/250s)','2015342','20125456'],
+  ['yummychoice','sarana','','Box Y/C Pizza (250s)','2015346','20129434'],
+  ['yummychoice','sarana','','Kertas Minyak/Nasi (500s)','2016933',''],
+  ['yummychoice','sarana','','Mika Buka Pelangi (250s/500s)','20196458',''],
+  ['yummychoice','sarana','','Paper Crunchbee Bag (100s)','2015437','20122404'],
+  ['yummychoice','sarana','','Paper Lunch Box FC (100s)','2015431','20196345'],
+  ['yummychoice','sarana','','Paper Lunch Box FC isi 5 (50s)','2015536','20128445'],
+  ['yummychoice','sarana','','PC Container Box 200ml (25/50S)','2010258',''],
+  ['yummychoice','sarana','','PC Container Box 750ml (25S/50S)','20194407',''],
+  ['yummychoice','sarana','','PC Puding Spoon (50/100s)','20192879',''],
+  ['yummychoice','sarana','','Sendok Garpu (100s/50s)','20199716','20100596'],
+  ['yummychoice','sarana','','Tray Bauh Petangan (250s/1000s)','20109407',''],
+  ['yummychoice','sarana','','Y/C Paper Bowl 16oz (50s/300s)','2015350','20128437'],
+  ['saybread','dcf','','Frozen Croissant Butter','20150101',''],
+  ['saybread','dcf','','Danish Mini (10 pcs)','20150102','20150202'],
+  ['saybread','sarana','','Paper Bag Kopi (100s)','20151231',''],
+  ['saybread','sarana','','Sticker Label Say Bread','20151232',''],
+  ['sayburger','bkl','','Bun Burger Reguler','20161001','20161011'],
+  ['sayburger','bkl','','Daging Beef 80 gr','20161002',''],
+  ['sayburger','bkl','','Cheese Slice','20161003',''],
+  ['sayburger','bkl','','Saus Burger (2S)','20161004','20161014'],
+  ['sayburger','sarana','','Paper Wrap Burger (500s)','20162001',''],
+  ['sayburger','sarana','','Paper Bag S (100s)','20162002',''],
+  ['sayburger','sarana','','Cup Sos 60 ml (100s)','20162003',''],
+  ['yummycoffee','bkl','jelly','Jelly Original (1 kg)','20171001',''],
+  ['yummycoffee','bkl','syrup','Sirup Vanilla (1 L)','20171002',''],
+  ['yummycoffee','bkl','powder','Bubuk Coklat Premium (1 kg)','20171003','20171013'],
+  ['yummycoffee','dcf','','Frozen Dough Croissant','20172001',''],
+  ['yummycoffee','sarana','','Paper Cup 12 oz (50s)','20173001',''],
+  ['pointcoffee','bkl','coffee_bean','Arabica Gayo 1 kg','20181001','20181011'],
+  ['pointcoffee','bkl','coffee_bean','Robusta Temanggung 1 kg','20181002',''],
+  ['pointcoffee','bkl','milk_dairy','Susu UHT Full Cream 1 L','20181003',''],
+  ['pointcoffee','bkl','sauce','Sauce Caramel (1 L)','20181004',''],
+  ['pointcoffee','bkl','syrup','Monin Caramel 750 ml','20181005',''],
+  ['pointcoffee','bkl','topping_crunches','Ovomaltine Crunchy 1 kg','20181006',''],
+  ['pointcoffee','sarana','','Paper Cup Hot 12 oz (50s)','20182001',''],
+  ['pointcoffee','sarana','','Lid Cup 12 oz (100s)','20182002',''],
+  ['hambalanfc','minyak','','Minyak Goreng 2 L','20191001',''],
+  ['hambalanfc','beras','','Beras Pandan Wangi 5 kg','20191002',''],
+  ['hambalanfc','gula','','Gula Cair 5 kg','20191003',''],
+  ['hambalanfc','mineral','','Air Mineral 600 ml (24s)','20191004',''],
+  ['hambalanfc','beverage','','Syrup Monin 750 ml','20191005',''],
+  ['perishable','buah_sayur','buah','Apel Fuji (kg)','20201001',''],
+  ['perishable','buah_sayur','buah','Jeruk Baby Pacitan (kg)','20201002',''],
+  ['perishable','buah_sayur','sayur','Selada Keriting (pack)','20201003',''],
+  ['perishable','buah_sayur','jus','Jus Jeruk Peras 500 ml','20201004','20201014'],
+  ['perishable','buah_sayur','bo','Belimbing Eks (kg)','20201005',''],
+  ['perishable','buah_sayur','bp','Anggur Red Globe (kg)','20201006','']
+];
+var DEMO_DATA = DEMO_RAW.map(function(r){
+  return { brand:r[0], sub:r[1], kategori:r[2], nama:r[3], raw:r[4], konv:r[5] };
+});
+
+/* ================= state ================= */
+var DATA = [], byBrand = {}, CUR = null, Q = '', IS_DEMO = false;
+var LS_KEY = 'plukakang_sheet_v1';
+var CAP = 30; /* maks baris per blok kolom, biar pecah seperti sheet asli */
+
+/* ================= helpers ================= */
+function $(id){ return document.getElementById(id); }
+function norm(s){ return String(s == null ? '' : s).trim().toLowerCase(); }
+function brandKey(s){ return norm(s).replace(/\s+/g,''); }
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hexRgb(h){ h = String(h||'').replace('#',''); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; }
+function tint(h,p){ var c = hexRgb(h); return 'rgb(' + c.map(function(v){ return Math.round(v + (255-v)*p); }).join(',') + ')'; }
+function shade(h,p){ var c = hexRgb(h); return 'rgb(' + c.map(function(v){ return Math.round(v*(1-p)); }).join(',') + ')'; }
+function byNama(a,b){ return norm(a.nama).localeCompare(norm(b.nama),'id'); }
+
+function copyText(t){
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+  return new Promise(function(res){
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta); res();
+  });
+}
+var toastTimer = null;
+function toast(msg){
+  var el = $('toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1600);
+}
+
+/* ================= data ================= */
+function loadData(){
+  return fetch('data.json?v=' + Date.now())
+    .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+    .then(function(j){
+      var arr = Array.isArray(j) ? j : (j && Array.isArray(j.data) ? j.data : null);
+      if (!arr || !arr.length) throw 0;
+      return arr;
+    })
+    .catch(function(){ IS_DEMO = true; return DEMO_DATA; });
+}
+function indexData(){
+  byBrand = {};
+  DATA.forEach(function(it){
+    var b = brandKey(it.brand);
+    if (CONFIG.brands.indexOf(b) === -1) b = 'perishable';
+    (byBrand[b] = byBrand[b] || []).push(it);
+  });
+}
+
+/* ================= aksen warna per brand ================= */
+function applyAccent(b){
+  var acc = CONFIG.colors[b] || '#ea580c';
+  var st = document.documentElement.style;
+  st.setProperty('--acc', acc);
+  st.setProperty('--acc-deep', shade(acc, .16));
+  st.setProperty('--acc-bandbg', tint(acc, .38));
+  st.setProperty('--acc-bandtx', shade(acc, .48));
+  st.setProperty('--acc-raw', tint(acc, .45));
+  st.setProperty('--acc-konv', tint(acc, .78));
+}
+
+/* ================= struktur band & group ================= */
+function buildBands(b, items){
+  var subs = CONFIG.subs[b] || [];
+  var map = CONFIG.kategoriMaps[b + '|bkl'];
+  var bkl = items.filter(function(i){ return norm(i.sub) === 'bkl'; });
+  var out = [], used = {}, i;
+
+  function push(label, arr){
+    arr = arr.slice().sort(byNama);
+    if (arr.length) out.push({ label: label, items: arr });
+  }
+  if (map){
+    Object.keys(map).forEach(function(k){
+      var arr = bkl.filter(function(i){ return norm(i.kategori) === k; });
+      arr.forEach(function(i){ used[norm(i.nama)] = 1; });
+      push(map[k], arr);
+    });
+    var misc = bkl.filter(function(i){ return !used[norm(i.nama)]; });
+    push('Bahan Baku', misc);
+  } else {
+    push('Bahan Baku', bkl);
+  }
+  subs.forEach(function(s){
+    if (s === 'bkl') return;
+    push(CONFIG.subLabels[s] || s, items.filter(function(i){ return norm(i.sub) === s; }));
+  });
+  /* sisa item yang sub-nya tidak terdaftar → band Lain-lain */
+  var known = {};
+  CONFIG.subs[b] && CONFIG.subs[b].forEach(function(s){ known[s] = 1; });
+  push('Lain-lain', items.filter(function(i){ return !known[norm(i.sub)]; }));
+  return out;
+}
+function packGroups(bands){
+  var groups = [], cur = [], rows = 0;
+  bands.forEach(function(b){
+    var n = b.items.length + 1;
+    if (cur.length && rows + n > CAP){ groups.push(cur); cur = []; rows = 0; }
+    cur.push(b); rows += n;
+  });
+  if (cur.length) groups.push(cur);
+  return groups;
+}
+
+/* ================= render ================= */
+function renderTabs(){
+  $('tabs').innerHTML = CONFIG.brands.map(function(b){
+    return '<button class="tab' + (b === CUR ? ' on' : '') + '" data-b="' + b + '">' + esc(CONFIG.tabs[b]) + '</button>';
+  }).join('');
+  $('smrows').innerHTML = CONFIG.brands.map(function(b){
+    var n = (byBrand[b] || []).length;
+    return '<button class="smrow' + (b === CUR ? ' on' : '') + '" data-b="' + b + '">' +
+      '<span class="dot" style="background:' + CONFIG.colors[b] + '"></span>' +
+      esc(CONFIG.names[b]) + '<span class="n">' + n + ' item</span></button>';
+  }).join('');
+}
+function tableOpen(){
+  return '<table><colgroup><col class="col-plu"><col class="col-konv"><col></colgroup>' +
+    '<thead><tr class="h1"><th colspan="2">PLU</th><th rowspan="2" class="h-desc">Deskripsi</th></tr>' +
+    '<tr class="h2"><th>RAW</th><th>KONVERSI</th></tr></thead><tbody>';
+}
+function renderSheet(){
+  var items = byBrand[CUR] || [];
+  var q = norm(Q);
+  var shown = q ? items.filter(function(i){
+    return norm(i.nama).indexOf(q) > -1 || norm(i.raw).indexOf(q) > -1 || norm(i.konv).indexOf(q) > -1;
+  }) : items;
+
+  $('chip').textContent = q ? (shown.length + '/' + items.length + ' item') : (items.length + ' item');
+  $('sheetTitle').innerHTML = esc(CONFIG.names[CUR] || CUR).replace(' ', ' <em>·</em> ');
+  document.title = 'plukakang · ' + (CONFIG.names[CUR] || CUR);
+
+  var g = $('groups');
+  if (!items.length){
+    g.innerHTML = '<div class="ghost"><b>Sheet kosong</b>Belum ada item untuk ' + esc(CONFIG.names[CUR] || CUR) + ' di data.json</div>';
+    return;
+  }
+  if (!shown.length){
+    g.innerHTML = '<div class="ghost"><b>Tidak ada hasil</b>Tidak ada nama atau PLU yang cocok dengan “' + esc(Q) + '”</div>';
+    return;
+  }
+  var groups = packGroups(buildBands(CUR, shown));
+  g.innerHTML = groups.map(function(bands){
+    return '<section class="group">' + tableOpen() + bands.map(function(b){
+      return '<tr class="band"><td colspan="3">' + esc(b.label) + '</td></tr>' + b.items.map(function(it){
+        return '<tr class="item" data-raw="' + esc(it.raw) + '" data-konv="' + esc(it.konv) + '">' +
+          '<td class="c-raw">' + esc(it.raw) + '</td>' +
+          '<td class="c-konv">' + esc(it.konv) + '</td>' +
+          '<td class="c-desc" title="' + esc(it.nama) + '">' + esc(it.nama) + '</td></tr>';
+      }).join('');
+    }).join('') + '</tbody></table></section>';
+  }).join('');
+}
+function switchBrand(b){
+  CUR = b;
+  try { localStorage.setItem(LS_KEY, b); } catch(e){}
+  applyAccent(b);
+  renderTabs();
+  renderSheet();
+  window.scrollTo(0, 0);
+}
+
+/* ================= event ================= */
+$('tabs').addEventListener('click', function(e){
+  var t = e.target.closest('.tab'); if (t) switchBrand(t.getAttribute('data-b'));
+});
+$('smrows').addEventListener('click', function(e){
+  var t = e.target.closest('.smrow'); if (!t) return;
+  closeMenu(); switchBrand(t.getAttribute('data-b'));
+});
+$('groups').addEventListener('click', function(e){
+  var td = e.target.closest('td'); if (!td) return;
+  var tr = td.closest('tr.item'); if (!tr) return;
+  var raw = tr.getAttribute('data-raw'), konv = tr.getAttribute('data-konv');
+  var val, type;
+  if (td.classList.contains('c-raw')){ val = raw; type = 'RAW'; }
+  else if (td.classList.contains('c-konv')){ val = konv; type = 'KONVERSI'; }
+  else { val = raw || konv; type = raw ? 'RAW' : 'KONVERSI'; }
+  if (!val){ toast('PLU ' + type + ' kosong'); return; }
+  var old = document.querySelector('td.sel'); if (old) old.classList.remove('sel');
+  td.classList.add('sel');
+  setTimeout(function(){ td.classList.remove('sel'); }, 750);
+  copyText(val).then(function(){ toast('✓ ' + val + ' disalin (' + type + ')'); });
+});
+var qTimer = null;
+$('q').addEventListener('input', function(){
+  var v = this.value;
+  $('qclear').classList.toggle('show', !!v);
+  clearTimeout(qTimer);
+  qTimer = setTimeout(function(){ Q = v; renderSheet(); }, 140);
+});
+$('qclear').addEventListener('click', function(){
+  $('q').value = ''; Q = ''; $('qclear').classList.remove('show'); renderSheet();
+});
+function closeMenu(){ $('sheetmenu').classList.remove('show'); }
+$('btnMenu').addEventListener('click', function(e){
+  e.stopPropagation();
+  $('sheetmenu').classList.toggle('show');
+});
+$('sheetmenu').addEventListener('click', function(e){ e.stopPropagation(); });
+document.addEventListener('click', closeMenu);
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+$('btnAdmin').addEventListener('click', function(){
+  toast('Membuka admin…');
+  setTimeout(function(){ window.open('admin.html', '_blank'); }, 350);
+});
+
+/* ================= boot ================= */
+loadData().then(function(arr){
+  DATA = arr;
+  indexData();
+  var saved = null;
+  try { saved = localStorage.getItem(LS_KEY); } catch(e){}
+  switchBrand(CONFIG.brands.indexOf(saved) > -1 ? saved : CONFIG.brands[0]);
+  if (IS_DEMO) $('demoNote').hidden = false;
+});
+</script>
+</body>
+</html>
