@@ -8,6 +8,9 @@
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap">
 
 <style>
 /* ================================================================
@@ -45,7 +48,7 @@
     --indigo: #5e5ce6;
     --blue: #0a84ff;
     --font-main: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
-    --font-code: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    --font-num: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
     --spring: cubic-bezier(0.32, 0.72, 0, 1);
     --ease: cubic-bezier(0.22, 0.9, 0.34, 1);
     --dock-h: 62px;
@@ -144,8 +147,9 @@ body::before {
 }
 .greeting-date-time .date-display { font-weight: 600; }
 .greeting-date-time .time-display {
-    font-family: var(--font-code); color: var(--acc);
-    font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums;
+    font-family: var(--font-num); color: var(--acc);
+    font-size: 13.5px; font-weight: 700; letter-spacing: 0.4px;
+    font-variant-numeric: tabular-nums;
 }
 .greeting-divider { height: 1px; background: var(--separator); margin: 12px 0; }
 .greeting-sapaan {
@@ -305,7 +309,7 @@ body::before {
 }
 .plu-badge-button {
     padding: 4px 11px; border-radius: 8px;
-    font-family: var(--font-code); font-size: 12px; font-weight: 600;
+    font-family: var(--font-num); font-size: 12px; font-weight: 600;
     border: none; cursor: pointer; letter-spacing: 0;
     font-variant-numeric: tabular-nums;
     transition: transform 0.12s ease, background 0.15s ease, color 0.15s ease;
@@ -405,6 +409,7 @@ body::before {
 .calc-context b { color: var(--text-main); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .display-value {
+    font-family: var(--font-num);
     font-size: 52px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.08;
     font-variant-numeric: tabular-nums; color: var(--text-main);
 }
@@ -504,7 +509,7 @@ body::before {
 }
 .field-chip:active { transform: scale(0.98); }
 .field-chip .fc-left { display: flex; align-items: center; gap: 9px; color: var(--text-muted); }
-.field-chip .fc-value { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.field-chip .fc-value { font-family: var(--font-num); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .field-chip.active { background: var(--amber-soft); }
 .field-chip.active .fc-left { color: var(--amber-text); }
 .seal-progress { height: 6px; background: var(--fill); border-radius: 999px; overflow: hidden; margin: 10px 0 8px; }
@@ -524,7 +529,7 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 10px rgba(0, 0, 0, 0.3);
     color: var(--text-main);
-    font-family: inherit; font-size: 21px; font-weight: 600;
+    font-family: var(--font-num); font-size: 21px; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; user-select: none;
     font-variant-numeric: tabular-nums;
@@ -607,7 +612,7 @@ body::before {
 }
 .plu-chip:active { transform: scale(0.94); }
 .plu-chip .pc-name { overflow: hidden; text-overflow: ellipsis; }
-.plu-chip .pc-code { font-family: var(--font-code); color: var(--acc); }
+.plu-chip .pc-code { font-family: var(--font-num); color: var(--acc); }
 
 /* list PLU + alphabet index (dalam sheet) — hairline list */
 .kc-plu-body { flex: 1; min-height: 0; display: flex; position: relative; }
@@ -633,7 +638,7 @@ body::before {
     display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0;
 }
 .plu-item .plu-code {
-    font-family: var(--font-code); font-size: 11.5px; font-weight: 600;
+    font-family: var(--font-num); font-size: 11.5px; font-weight: 600;
     padding: 4px 10px; border-radius: 7px; cursor: pointer;
     white-space: nowrap; border: none; transition: transform 0.1s ease;
     font-variant-numeric: tabular-nums;
@@ -672,6 +677,125 @@ body::before {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 }
 .kc-alpha-bubble.show { opacity: 1; }
+
+/* ===== SHEET PLU KALKULATOR — tab brand + tabel ala sheets katalog ===== */
+.psb-tabs {
+    display: flex; gap: 2px;
+    background: var(--fill); border-radius: 13px; padding: 2px;
+    margin: 0 20px 12px; flex-shrink: 0;
+}
+.psb-tab {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: transparent; border: none; border-radius: 11px;
+    padding: 9px 4px; font-family: inherit;
+    font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; white-space: nowrap; user-select: none;
+    transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+}
+.psb-tab:active { transform: scale(0.96); }
+.psb-tab.active {
+    background: rgba(255, 255, 255, 0.2); color: #ffffff; font-weight: 700;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+.psb-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+/* tabel PLU dalam sheet memakai class katalog (kat-tbl) — sticky top relatif
+   ke list sheet sendiri + aksen per-brand via --psacc (diset JS di #sidebarPluList) */
+.kc-plu-list { padding-top: 2px; }
+.kc-plu-list .kat-group { margin-bottom: 14px; border-radius: 16px; contain: none; }
+.kc-plu-list .kat-group:last-child { margin-bottom: 0; }
+.kc-plu-list table.kat-tbl { border-radius: 15px; }
+.kc-plu-list table.kat-tbl thead tr.kat-h1 th {
+    top: 0; background: var(--psacc, #8e8e93);
+}
+.kc-plu-list table.kat-tbl thead tr.kat-h2 th {
+    top: 32px; background: var(--psacc-deep, #48484d);
+}
+.kc-plu-list table.kat-tbl td.kat-band {
+    background: var(--psacc-bandbg, rgba(142, 142, 147, 0.16));
+    color: var(--psacc-bandtx, #d1d1d6);
+}
+.kc-plu-list table.kat-tbl td.c-raw { background: var(--psacc-raw, rgba(142, 142, 147, 0.16)); }
+.kc-plu-list table.kat-tbl td.c-konv { background: rgba(120, 120, 128, 0.16); }
+/* PLU lebih lega di sheet (font Inter lebih lebar dari mono lama) */
+.kc-plu-list table.kat-tbl col:nth-child(1),
+.kc-plu-list table.kat-tbl col:nth-child(2) { width: 22% !important; }
+
+/* ===== ADMIN GATE — modal password glass ===== */
+.ag-backdrop {
+    position: fixed; inset: 0; z-index: 260;
+    display: flex; align-items: center; justify-content:center; padding: 24px;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    opacity: 0; pointer-events: none; transition: opacity 0.22s ease;
+}
+.ag-backdrop.open { opacity: 1; pointer-events: auto; }
+.ag-card {
+    width: 100%; max-width: 330px;
+    background: rgba(28, 28, 34, 0.88);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8); backdrop-filter: blur(40px) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 26px; padding: 22px 20px 18px;
+    text-align: center; color: var(--text-main);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 24px 70px rgba(0, 0, 0, 0.6);
+    transform: translateY(14px) scale(0.94);
+    transition: transform 0.3s var(--spring);
+}
+.ag-backdrop.open .ag-card { transform: none; }
+.ag-card.shake { animation: agShake 0.4s ease; }
+@keyframes agShake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+}
+.ag-lock {
+    width: 52px; height: 52px; border-radius: 18px; margin: 0 auto 12px;
+    background: linear-gradient(135deg, #0a84ff, #0055d4);
+    color: #fff; font-size: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(10, 132, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.ag-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+.ag-sub { font-size: 12.5px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
+.ag-field { position: relative; margin-top: 14px; }
+.ag-input {
+    width: 100%; padding: 12px 44px 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    color: var(--text-main); font-family: var(--font-num); font-size: 16px;
+    font-weight: 600; letter-spacing: 2px;
+    outline: none; -webkit-appearance: none; appearance: none;
+    transition: background 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.ag-input::placeholder { color: var(--text-light); letter-spacing: 0; font-weight: 500; }
+.ag-input:focus { background: rgba(255, 255, 255, 0.12); border-color: rgba(10, 132, 255, 0.7); box-shadow: 0 0 0 3.5px rgba(10, 132, 255, 0.3); }
+.ag-input.bad { border-color: rgba(255, 69, 58, 0.65); box-shadow: 0 0 0 3.5px rgba(255, 69, 58, 0.22); }
+.ag-eye {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 11px;
+    background: transparent; border: none; color: var(--text-muted);
+    font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.ag-eye:active { transform: translateY(-50%) scale(0.9); }
+.ag-error { display: none; margin-top: 10px; font-size: 12px; font-weight: 600; color: #ff6961; }
+.ag-error.show { display: block; }
+.ag-btns { display: flex; gap: 10px; margin-top: 16px; }
+.ag-btn {
+    flex: 1; padding: 12px; border-radius: 14px;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    cursor: pointer; border: 1px solid transparent;
+    transition: transform 0.12s ease, background 0.15s ease;
+}
+.ag-btn:active { transform: scale(0.96); }
+.ag-cancel { background: var(--fill); color: var(--text-main); }
+.ag-ok {
+    background: var(--acc); color: #ffffff;
+    box-shadow: 0 6px 20px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
 
 /* ===== BOTTOM DOCK — kapsul glass mengambang + lens meluncur ===== */
 .bottom-dock {
@@ -883,7 +1007,7 @@ table.kat-tbl td.kat-band {
     text-transform: uppercase; text-align: center; padding: 7px 9px;
 }
 table.kat-tbl td.c-raw, table.kat-tbl td.c-konv {
-    font-family: var(--font-code); font-weight: 600; font-size: 11px;
+    font-family: var(--font-num); font-weight: 600; font-size: 10.5px;
     color: var(--text-main); text-align: center; padding: 8px 4px;
     cursor: pointer; white-space: nowrap; text-overflow: ellipsis; letter-spacing: 0;
     font-variant-numeric: tabular-nums;
@@ -893,7 +1017,7 @@ table.kat-tbl td.c-konv { background: var(--kacc-konv); }
 table.kat-tbl tbody tr:active td { filter: brightness(1.5); }
 table.kat-tbl td.c-desc { font-size: 12.5px; font-weight: 500; color: var(--text-main); cursor: pointer; background: transparent; text-align: left; padding-left: 11px; }
 table.kat-tbl td.c-desc.noclick { cursor: default; color: var(--text-light); }
-table.kat-tbl td.kat-nocell { text-align: center; color: rgba(235, 235, 245, 0.22); font-family: var(--font-code); background: transparent; }
+table.kat-tbl td.kat-nocell { text-align: center; color: rgba(235, 235, 245, 0.22); font-family: var(--font-num); background: transparent; }
 table.kat-tbl td.kat-flash { background: var(--green-soft) !important; color: var(--green-text) !important; }
 #katGroups .empty-search-state { padding: 46px 20px; }
 .kat-note { font-size: 11px; color: var(--text-light); font-weight: 500; padding: 14px 2px 0; text-align: center; }
@@ -971,6 +1095,59 @@ button:focus-visible, input:focus-visible { outline: 2px solid rgba(10, 132, 255
     .view-enter, .view-enter.view-soft { animation: none; }
     .kat-anim > * { animation: none; }
     .kat-swap, .bump { animation: none; }
+    .ag-card.shake { animation: none; }
+}
+
+/* ===== RESPONSIVE · OPTIMAL DI SEMUA DEVICE ===== */
+.display-value { font-size: clamp(40px, 13vw, 52px); }
+.kat-bigtitle { font-size: clamp(26px, 7.4vw, 30px); }
+@media (max-width: 359px) {
+    .app-layout { padding-left: 12px; padding-right: 12px; }
+    .sticky-search-bar { margin-left: -12px; margin-right: -12px; padding-left: 12px; padding-right: 12px; }
+    .kat-chips { margin-left: -12px; margin-right: -12px; padding-left: 12px; padding-right: 12px; }
+    .brand-grid { gap: 10px; }
+    .brand-card { height: 118px; padding: 13px; border-radius: 19px; }
+    .display-value { font-size: 36px; }
+    .key { height: 46px; font-size: 19px; }
+    table.kat-tbl td.c-raw, table.kat-tbl td.c-konv { font-size: 10px; padding-left: 2px; padding-right: 2px; }
+    table.kat-tbl col:nth-child(1), table.kat-tbl col:nth-child(2) { width: 23% !important; }
+    .kat-bigtitle { font-size: 25px; }
+    .mode-pills { flex-wrap: wrap; }
+    .mode-pill { padding: 8px 2px; }
+    /* sheet PLU: longgar PLU di layar sangat kecil */
+    .sheet-header { padding-left: 14px; padding-right: 14px; }
+    .psb-tabs { margin-left: 14px; margin-right: 14px; }
+    .sheet-search-wrap { padding-left: 14px; padding-right: 14px; }
+    .kc-plu-list { padding-left: 12px; padding-right: 30px; }
+    .kc-plu-list table.kat-tbl col:nth-child(1),
+    .kc-plu-list table.kat-tbl col:nth-child(2) { width: 25% !important; }
+    .kc-plu-list table.kat-tbl td.c-raw,
+    .kc-plu-list table.kat-tbl td.c-konv { font-size: 9.5px; padding-left: 2px; padding-right: 2px; }
+}
+@media (min-width: 600px) {
+    .app-layout { max-width: 560px; }
+    .sheet, .katsheet { max-width: 560px; }
+    .bottom-dock { max-width: 508px; }
+}
+@media (min-width: 1024px) {
+    .app-layout { max-width: 620px; padding-left: 20px; padding-right: 20px; }
+    .sheet, .katsheet { max-width: 620px; }
+    .bottom-dock { max-width: 552px; }
+    .brand-card { height: 142px; }
+    .kat-hero-btns .icon-action-btn { width: 40px; height: 40px; }
+}
+
+/* fallback browser tanpa backdrop-filter (Firefox lama / Android murah) */
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+    .sticky-search-bar, .kat-chips { background: rgba(8, 8, 11, 0.96); }
+    .bottom-dock { background: rgba(12, 12, 16, 0.97); }
+    .sheet, .katsheet { background: rgba(18, 18, 23, 0.99); }
+    .toast-notification { background: rgba(40, 40, 46, 0.98); }
+    .kc-alpha-nav { background: rgba(40, 40, 46, 0.98); }
+    .kc-alpha-bubble, .alpha-bubble { background: rgba(52, 52, 60, 0.99); }
+    .alphabet-nav { background: rgba(24, 24, 30, 0.98); }
+    .ag-backdrop { background: rgba(5, 5, 8, 0.82); }
+    .ag-card { background: rgba(24, 24, 30, 0.99); }
 }
 
   </style>
@@ -1139,7 +1316,7 @@ id="selectorName">—</b></div>
 <div class="plu-open-row" id="pluOpenRow">
   <button class="plu-open-btn" id="pluOpenBtn">
     <i class="fas fa-mug-saucer"></i>
-    <span class="po-label">PLU Point Coffee</span>
+    <span class="po-label">PLU Kopi &middot; PC &amp; YCG</span>
     <span class="po-count" id="pluCountBtn">0</span>
     <i class="fas fa-chevron-right po-chev"></i>
   </button>
@@ -1189,13 +1366,17 @@ id="selectorName">—</b></div>
       </div>
 
 
-      <!-- ===== SHEET PLU POINT COFFEE ===== -->
+      <!-- ===== SHEET PLU (Point Coffee & Yummy Coffee Gold) ===== -->
       <div class="sheet-backdrop" id="pluSheetBackdrop">
         <div class="sheet" id="pluSheet">
            <div class="sheet-grab" id="pluSheetGrab"><div class="sheet-grab-bar"></div></div>
            <div class="sheet-header">
-               <div class="sheet-title">PLU Point Coffee <span id="pluCount"></span></div>
+               <div class="sheet-title">Daftar PLU <span id="pluCount"></span></div>
                <button class="sheet-close" id="pluSheetClose"><i class="fas fa-xmark"></i></button>
+           </div>
+           <div class="psb-tabs" id="pluBrandTabs">
+               <button class="psb-tab active" data-pbrand="pointcoffee"><span class="psb-dot" style="background:#15803d"></span>Point Coffee</button>
+               <button class="psb-tab" data-pbrand="yummycoffee"><span class="psb-dot" style="background:#d97706"></span>Yummy Coffee Gold</button>
            </div>
            <div class="sheet-search-wrap">
                <input type="text" id="sidebarSearchPlu" class="sheet-search" placeholder="Cari nama / PLU RAW / PLU KONV..." autocomplete="off" spellcheck="false">
@@ -1221,6 +1402,25 @@ id="selectorName">—</b></div>
   <div id="alphaBubble" class="alpha-bubble">A</div>
 
 
+</div>
+
+
+<!-- ===== ADMIN PASSWORD GATE ===== -->
+<div class="ag-backdrop" id="adminGate">
+  <div class="ag-card" id="adminGateCard" role="dialog" aria-modal="true" aria-label="Mode Admin">
+    <div class="ag-lock"><i class="fas fa-lock"></i></div>
+    <div class="ag-title">Mode Admin</div>
+    <div class="ag-sub">Masukkan password untuk membuka admin.</div>
+    <div class="ag-field">
+      <input type="password" id="adminPass" class="ag-input" placeholder="Password" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="ag-eye" id="adminGateEye" aria-label="Tampilkan password"><i class="fas fa-eye"></i></button>
+    </div>
+    <div class="ag-error" id="adminErr">Password salah. Coba lagi.</div>
+    <div class="ag-btns">
+      <button class="ag-btn ag-cancel" id="adminGateCancel">Batal</button>
+      <button class="ag-btn ag-ok" id="adminGateOk">Buka Admin</button>
+    </div>
+  </div>
 </div>
 
 
@@ -1295,7 +1495,7 @@ var BRAND_NAMES = {
     STATE
     ================================================================ */
   var DATABASE = [];
-  var pointCoffeeData = [];
+  var calcPluData = { pointcoffee: [], yummycoffee: [] };
   var currentView = 'home';
   var currentBrand = '';
   var currentSub = 'all';
@@ -1489,6 +1689,7 @@ var calcState = {
      biangBotol: '608',
      biangField: 'timbangan',
      seal: '0',
+     pluBrand: 'pointcoffee',
      pluRecent: []
 };
 
@@ -1506,6 +1707,7 @@ var calcState = {
         }
      } catch(e) {}
      if (['gramasi', 'biang', 'seal'].indexOf(calcState.mode) === -1) calcState.mode = 'gramasi';
+     if (['pointcoffee', 'yummycoffee'].indexOf(calcState.pluBrand) === -1) calcState.pluBrand = 'pointcoffee';
      calcState.pluRecent = (calcState.pluRecent || []).filter(function(p) {
         return p && typeof p.code === 'string' && p.code !== '';
      }).slice(0, 6);
@@ -1700,7 +1902,9 @@ function syncBiangChips() {
 function openPluSheet() {
     vibrate();
     $('sidebarSearchPlu').value = '';
+    syncPluBrandTabs();
     renderSidebarPlu('');
+    renderSidebarAlphaNav();
     renderPluRecentChips();
     $('pluSheetBackdrop').classList.add('open');
 }
@@ -1763,6 +1967,41 @@ escapeHtml(p.nama || '') + '">' +
 
 /* Buka sheet PLU */
 $('pluOpenBtn').addEventListener('click', openPluSheet);
+
+
+/* Ganti tab brand dalam sheet PLU (Point Coffee / Yummy Coffee Gold) */
+$('pluBrandTabs').addEventListener('click', function(e) {
+  var t = e.target.closest('.psb-tab');
+  if (!t || t.dataset.pbrand === calcState.pluBrand) return;
+  vibrate();
+  calcState.pluBrand = t.dataset.pbrand;
+  calcPersist();
+  syncPluBrandTabs();
+  renderSidebarPlu($('sidebarSearchPlu').value);
+  renderSidebarAlphaNav();
+});
+
+
+/* Copy dari tabel PLU di sheet — sama seperti katalog */
+$('sidebarPluList').addEventListener('click', function(e) {
+  var td = e.target.closest('td');
+  if (!td) return;
+  var val = '';
+  if (td.classList.contains('c-raw') || td.classList.contains('c-konv')) val = td.dataset.plu || '';
+  else if (td.classList.contains('c-desc') && !td.classList.contains('noclick')) {
+      val = td.dataset.raw || td.dataset.konv || '';
+  }
+  if (!val) return;
+  var tr = td.closest('tr');
+  var desc = tr ? tr.querySelector('td.c-desc') : null;
+  var nm = desc ? desc.innerText : '';
+  recordPluCopy(val, nm);
+  copyToClipboard(val).then(function() {
+      td.classList.add('kat-flash');
+      showToast('PLU ' + val + ' Disalin! \u2713');
+      setTimeout(function() { td.classList.remove('kat-flash'); }, 900);
+  });
+});
 
 
 /* Tutup sheet PLU */
@@ -1833,11 +2072,12 @@ function calcInit() {
 
 
 /* ================================================================
-    PLU POINT COFFEE (isi sheet)
+    SHEET PLU — tabel ala katalog (PC & YCG)
     ================================================================ */
 function renderSidebarPlu(filter) {
     var list = $('sidebarPluList');
-    var items = pointCoffeeData;
+    var brand = calcState.pluBrand || 'pointcoffee';
+    var items = calcPluData[brand] || [];
       if (filter) {
           var f = filter.toLowerCase().trim();
           items = items.filter(function(item) {
@@ -1847,32 +2087,69 @@ function renderSidebarPlu(filter) {
           });
       }
       $('pluCount').innerText = '(' + items.length + ')';
-      $('pluCountBtn').innerText = pointCoffeeData.length;
 
+      /* aksen per brand — variabel --psacc dipasang di elemen list */
+      var base = KAT_BRAND_COLORS[brand] || '#8e8e93';
+      var rgb = katHexRgb(base);
+      function al(a) { return 'rgba(' + rgb.join(',') + ',' + a + ')'; }
+      function sl(p) { return 'rgb(' + rgb.map(function(v) { return Math.round(v + (255 - v) * p); }).join(',') + ')'; }
+      function sd(p) { return 'rgb(' + rgb.map(function(v) { return Math.round(v * (1 - p)); }).join(',') + ')'; }
+      list.style.setProperty('--psacc', base);
+      list.style.setProperty('--psacc-deep', sd(0.4));
+      list.style.setProperty('--psacc-bandbg', al(0.16));
+      list.style.setProperty('--psacc-bandtx', sl(0.55));
+      list.style.setProperty('--psacc-raw', al(0.18));
 
       if (items.length === 0) {
           list.innerHTML = '<div class="plu-empty">' +
-            (filter ? 'Tidak ada PLU ditemukan' : 'Data Point Coffee belum dimuat') +
+            (filter ? 'Tidak ada PLU ditemukan' : 'Data PLU belum dimuat') +
           '</div>';
           return;
       }
 
-
-      var html = '';
-      items.forEach(function(item) {
-          var badges = '';
-          if (item.raw) badges += '<span class="plu-code raw" data-plu="' + escapeHtml(item.raw) + '">' +
-item.raw + '</span>';
-          if (item.konv) badges += '<span class="plu-code konv" data-plu="' + escapeHtml(item.konv) +
-'">' + item.konv + '</span>';
+      /* tampilan tabel sheets — sama seperti katalog (band kategori + sticky header) */
+      list.innerHTML = katPackGroups(katBuildBands(brand, items)).map(katRenderPluBlock).join('');
+  }
 
 
-          html += '<div class="plu-item">' +
-            '<span class="plu-name">' + escapeHtml(item.nama) + '</span>' +
-            (badges ? '<span class="plu-badges">' + badges + '</span>' : '') +
-          '</div>';
+  function katRenderPluBlock(bands) {
+      var rows = '';
+      bands.forEach(function(b) {
+          rows += '<tr><td class="kat-band" colspan="3">' +
+            escapeHtml(b.label) + ' &middot; ' + b.items.length + '</td></tr>';
+          b.items.forEach(function(it) {
+              var hasPlu = !!(it.raw || it.konv);
+              rows += '<tr>' +
+                katCell(it.raw, 'c-raw', '') +
+                katCell(it.konv, 'c-konv', '') +
+                '<td class="c-desc' + (hasPlu ? '' : ' noclick') + '" data-raw="' + escapeHtml(it.raw || '') +
+                  '" data-konv="' + escapeHtml(it.konv || '') + '">' + escapeHtml(it.nama) + '</td>' +
+              '</tr>';
+          });
       });
-      list.innerHTML = html;
+      return '<div class="kat-group"><table class="kat-tbl">' +
+        '<colgroup><col style="width:21%"><col style="width:21%"><col></colgroup>' +
+        '<thead>' +
+          '<tr class="kat-h1"><th colspan="2">PLU</th><th class="kat-desc-h" rowspan="2">Deskripsi</th></tr>' +
+          '<tr class="kat-h2"><th>Raw</th><th>Konversi</th></tr>' +
+        '</thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table></div>';
+  }
+
+
+  function syncPluBrandTabs() {
+      var tabs = document.querySelectorAll('#pluBrandTabs .psb-tab');
+      for (var i = 0; i < tabs.length; i++) {
+          tabs[i].classList.toggle('active', tabs[i].dataset.pbrand === (calcState.pluBrand || 'pointcoffee'));
+      }
+  }
+
+
+  function updatePluOpenCount() {
+      var el = $('pluCountBtn');
+      if (!el) return;
+      el.innerText = (calcPluData.pointcoffee || []).length + (calcPluData.yummycoffee || []).length;
   }
 
 
@@ -1892,12 +2169,12 @@ item.raw + '</span>';
              DATABASE = data;
 
 
-             pointCoffeeData = data.filter(function(item) {
-               return (item.brand === 'pointcoffee' || item.brand === 'point coffee') && item.sub !==
-'sarana';
+             /* data sheet PLU kalkulator — SEMUA PLU per brand (termasuk sarana) */
+             calcPluData.pointcoffee = data.filter(function(item) {
+               return katNorm(item.brand) === 'pointcoffee';
              });
-             pointCoffeeData.sort(function(a, b) {
-               return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+             calcPluData.yummycoffee = data.filter(function(item) {
+               return katNorm(item.brand) === 'yummycoffee';
              });
 
 
@@ -1906,6 +2183,7 @@ item.raw + '</span>';
              document.title = 'plukakang - hapalkeun euy!';
              renderSidebarPlu('');
              renderSidebarAlphaNav();
+             updatePluOpenCount();
         })
         .catch(function(err) {
              console.error('Gagal load data.json:', err);
@@ -2245,16 +2523,81 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
       if (c) switchSheet(c.dataset.sheet);
   });
   $('katMenuBtn').addEventListener('click', openKatSheet);
-  $('katAdminBtn').addEventListener('click', function() {
-      showToast('Membuka admin...');
-      setTimeout(function() { window.open('admin.html', '_blank'); }, 300);
-  });
+  $('katAdminBtn').addEventListener('click', openAdminGate);
   $('katsheetBackdrop').addEventListener('click', closeKatSheet);
   $('katsheetRows').addEventListener('click', function(e) {
       var r = e.target.closest('.kshrow');
       if (!r) return;
       closeKatSheet();
       switchSheet(r.dataset.sheet);
+  });
+
+
+  /* ================================================================
+      MODE ADMIN — password gate
+      Password disimpan sebagai hash djb2 (bukan teks polos).
+      Sudah pernah benar dalam 1 sesi tab = tidak ditanya ulang.
+      ================================================================ */
+  var ADMIN_PASS_HASH = 2718705455; /* djb2("tuan1197") */
+  function djb2Hash(s) {
+      var h = 5381;
+      for (var i = 0; i < s.length; i++) h = (((h << 5) + h) + s.charCodeAt(i)) >>> 0;
+      return h;
+  }
+  function adminUnlocked() {
+      try { return sessionStorage.getItem('plukakang_admin_ok') === '1'; } catch (e) { return false; }
+  }
+  function launchAdmin() {
+      showToast('Membuka admin...');
+      setTimeout(function() { window.open('admin.html', '_blank'); }, 300);
+  }
+  function openAdminGate() {
+      if (adminUnlocked()) { launchAdmin(); return; }
+      var inp = $('adminPass');
+      inp.value = '';
+      inp.type = 'password';
+      inp.classList.remove('bad');
+      $('adminErr').classList.remove('show');
+      $('adminGateEye').innerHTML = '<i class="fas fa-eye"></i>';
+      $('adminGate').classList.add('open');
+      setTimeout(function() { try { inp.focus(); } catch (e) {} }, 340);
+  }
+  function closeAdminGate() {
+      $('adminGate').classList.remove('open');
+      try { $('adminPass').blur(); } catch (e) {}
+  }
+  function tryAdminPassword() {
+      var inp = $('adminPass');
+      if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
+          try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
+          vibrate();
+          closeAdminGate();
+          launchAdmin();
+      } else {
+          $('adminErr').classList.add('show');
+          inp.classList.add('bad');
+          var card = $('adminGateCard');
+          card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+          vibrate();
+          try { inp.select(); } catch (e) {}
+      }
+  }
+  $('adminGateCancel').addEventListener('click', closeAdminGate);
+  $('adminGateOk').addEventListener('click', tryAdminPassword);
+  $('adminGate').addEventListener('click', function(e) { if (e.target === this) closeAdminGate(); });
+  $('adminGateEye').addEventListener('click', function() {
+      var inp = $('adminPass');
+      var show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      this.innerHTML = show ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+  });
+  $('adminPass').addEventListener('input', function() {
+      $('adminErr').classList.remove('show');
+      this.classList.remove('bad');
+  });
+  $('adminPass').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); tryAdminPassword(); }
+      if (e.key === 'Escape' || e.key === 'Esc') closeAdminGate();
   });
 
 
@@ -2891,7 +3234,7 @@ function renderSidebarAlphaNav() {
     var nav = $('kcAlphaNav');
     if (!nav) return;
     var set = {};
-    pointCoffeeData.forEach(function(item) {
+    (calcPluData[calcState.pluBrand || 'pointcoffee'] || []).forEach(function(item) {
         if (item.nama) {
             var c = item.nama.trim().toUpperCase().charAt(0);
             if (/[A-Z]/.test(c)) set[c] = true;
@@ -2923,7 +3266,7 @@ function kcScrollTo(letter) {
     window._kcBubbleTimer = setTimeout(function() {
         bubble.classList.remove('show');
     }, 700);
-    var names = $('sidebarPluList').querySelectorAll('.plu-name');
+    var names = $('sidebarPluList').querySelectorAll('.plu-name, td.c-desc');
     for (var i = 0; i < names.length; i++) {
         if (names[i].innerText.trim().toUpperCase().startsWith(letter)) {
             names[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2965,7 +3308,7 @@ function initKcAlpha() {
         if (kcManualTouch) return;
         var list = $('sidebarPluList');
         var lr = list.getBoundingClientRect();
-        var names = list.querySelectorAll('.plu-name');
+        var names = list.querySelectorAll('.plu-name, td.c-desc');
         var cur = '';
         for (var i = 0; i < names.length; i++) {
              var r = names[i].getBoundingClientRect();
