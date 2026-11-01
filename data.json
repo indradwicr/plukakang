@@ -9837,7 +9837,7 @@
     },
     {
       "brand": "bkl",
-      "sub": "all",
+      "sub": "telur",
       "kategori": "",
       "nama": "Telur Ayam Negeri 10s BKL",
       "raw": "20071627",
@@ -10105,6 +10105,70 @@
       "kategori": "",
       "nama": "Telur Bebek Mentah 4s",
       "raw": "10011251",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "Raja Manis Tape Singkong",
+      "raw": "20126512",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "all",
+      "kategori": "",
+      "nama": "Walls Cooling Box",
+      "raw": "20093075",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "RTE Batagor Paket",
+      "raw": "20076128",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "BakpiaDewi Basah 10s",
+      "raw": "20122319",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "BakpiaDewi Basah 20s",
+      "raw": "20122320",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "BakpiaDewi Kering 10s",
+      "raw": "20122321",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "BakpiaDewi Kering 20s",
+      "raw": "20122323",
+      "konv": ""
+    },
+    {
+      "brand": "bkl",
+      "sub": "dry",
+      "kategori": "",
+      "nama": "Kue Balok",
+      "raw": "20096319",
       "konv": ""
     }
   ]
