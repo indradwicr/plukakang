@@ -600,7 +600,7 @@ body::before {
 .icocell {
     aspect-ratio: 1; border-radius: 12px;
     background: var(--w07); border: 1px solid var(--w12);
-    color: var(--text-muted); font-size: 15px; cursor: pointer;
+    color: var(--text-muted); font-size: 17px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.12s ease, background 0.15s ease, color 0.15s ease;
     -webkit-appearance: none; appearance: none; font-family: inherit;
@@ -894,7 +894,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <div class="gcard-title"><i class="fas fa-clock-rotate-left"></i> Draft dipulihkan <span class="gtag blue" id="draftAt"></span></div>
         <div class="gcard-sub" id="draftInfo" style="margin-top:0"></div>
         <div class="btn-row" style="margin-top:10px">
-          <button class="btn" id="btnLiveFromDraft"><i class="fas fa-rotate"></i> Muat Ulang Live</button>
+          <button class="btn" id="btnLiveFromDraft"><i class="fas fa-rotate"></i> Muat Live</button>
           <button class="btn danger" id="btnDropDraft"><i class="fas fa-eraser"></i> Buang Draft</button>
         </div>
       </div>
@@ -908,7 +908,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           <label class="btn" for="fileXlsx" style="cursor:pointer" id="btnXlsxLabel"><i class="fas fa-file-excel"></i> Excel</label>
           <input type="file" id="fileXlsx" accept=".xlsx,.xls,.csv" hidden>
         </div>
-        <div class="gcard-sub" id="srcInfo">Belum ada data dimuat. "Muat Live" mengambil data.json terbaru dari server (butuh internet &amp; file di tempat sama dengan admin.html).</div>
+        <div class="gcard-sub" id="srcInfo">Belum ada data.</div>
       </div>
 
       <div class="gcard" id="statCard" style="display:none">
@@ -928,7 +928,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           <button class="btn prim" id="btnExport"><i class="fas fa-download"></i> Unduh data.json</button>
           <button class="btn" id="btnCopy"><i class="fas fa-copy"></i> Salin JSON</button>
         </div>
-        <div class="gcard-sub">Unduh data.json hasil edit lalu upload ke Vercel (sejajar index.html &amp; admin.html). Sebelum diterbitkan, semua perubahan tersimpan otomatis sebagai draft di browser ini.</div>
         <div class="btn-row" style="margin-top:8px">
           <a class="btn" href="./index.html" target="_blank" rel="noopener" style="text-decoration:none"><i class="fas fa-up-right-from-square"></i> Buka App</a>
           <button class="btn danger" id="btnReset"><i class="fas fa-eraser"></i> Reset Draft</button>
@@ -955,7 +954,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     <section id="tabBrand" class="hidden">
       <div class="section-bar"><div class="section-title" style="font-size:19px">Brand</div><span class="item-count-chip" id="brandCount"></span></div>
       <div class="brand-grid" id="brandGrid"></div>
-      <div class="gcard-sub" style="margin:2px 2px 0">Identitas brand (nama, ikon, warna, sub, kategori) dibaca app dari blok "brands" di data.json. Edit di sini, lalu Unduh &amp; upload data.json — tanpa sentuh kode.</div>
     </section>
   </div>
 
@@ -989,7 +987,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <input id="iNama" class="f-in" placeholder="cth: Salt Bread Sesame (28)" autocomplete="off">
         <label class="f-lab">PLU RAW</label>
         <input id="iRaw" class="f-in f-num" inputmode="numeric" placeholder="cth: 20141111" autocomplete="off">
-        <label class="f-lab">PLU KONV <span class="f-opt">· kosongkan jika tidak ada</span></label>
+        <label class="f-lab">PLU KONV <span class="f-opt">· opsional</span></label>
         <input id="iKonv" class="f-in f-num" inputmode="numeric" placeholder="cth: 20141112" autocomplete="off">
         <div class="f-err" id="itemErr"></div>
         <button class="f-save" id="itemSave"><i class="fas fa-check"></i> Simpan</button>
@@ -1014,19 +1012,19 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         </div>
         <label class="f-lab">Nama Brand</label>
         <input id="bNama" class="f-in" placeholder="cth: Say Pasta" autocomplete="off">
-        <label class="f-lab" id="bIdLab">ID Brand <span class="f-opt">· unik, huruf kecil / angka / _</span></label>
+        <label class="f-lab" id="bIdLab">ID Brand</label>
         <input id="bId" class="f-in f-num" placeholder="cth: saypasta" autocomplete="off" spellcheck="false">
         <label class="f-lab">Subjudul Kartu</label>
         <input id="bSubjudul" class="f-in" placeholder="cth: Pasta &amp; Saus" autocomplete="off">
-        <label class="f-lab">Ikon <span class="f-opt">· Font Awesome</span></label>
+        <label class="f-lab">Ikon</label>
         <div class="icogrid" id="icoGrid"></div>
-        <input id="bIkon" class="f-in f-num" style="margin-top:8px" placeholder="atau tulis sendiri: fa-nama-ikon" autocomplete="off" spellcheck="false">
+        <input id="bIkon" class="f-in f-num" style="margin-top:8px" placeholder="kustom: fa-nama-ikon" autocomplete="off" spellcheck="false">
         <label class="f-lab">Warna Aksen</label>
         <div class="col-row">
           <input type="color" id="bWarnaPick" value="#8e8e93" aria-label="Pilih warna aksen">
           <input id="bWarna" class="f-in" placeholder="#8e8e93" autocomplete="off" spellcheck="false">
         </div>
-        <label class="f-lab">Warna Gradien Ikon <span class="f-opt">· 2 warna (terang → gelap)</span></label>
+        <label class="f-lab">Gradien Ikon</label>
         <div class="f-2col">
           <div class="col-row"><input type="color" id="bIw1Pick" aria-label="Warna gradien 1"><input id="bIw1" class="f-in" placeholder="#terang"></div>
           <div class="col-row"><input type="color" id="bIw2Pick" aria-label="Warna gradien 2"><input id="bIw2" class="f-in" placeholder="#gelap"></div>
@@ -1037,7 +1035,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           <div id="bSubRows"></div>
           <button class="kv-add" id="bSubAdd">+ Tambah Sub</button>
         </div>
-        <label class="f-lab">Kategori per Sub <span class="f-opt">· kosongkan jika tidak perlu</span></label>
+        <label class="f-lab">Kategori per Sub <span class="f-opt">· opsional</span></label>
         <select id="bKatSub" class="f-sel"></select>
         <div class="kv-block" style="margin-top:8px">
           <div id="bKatRows"></div>
@@ -1063,7 +1061,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <div class="f-err" id="impWarn"></div>
         <button class="btn danger wide" id="impReplace" style="margin-top:12px"><i class="fas fa-arrows-rotate"></i> Ganti Semua Data</button>
         <button class="btn wide" id="impAppend" style="margin-top:8px"><i class="fas fa-plus"></i> Gabungkan ke Akhir</button>
-        <p class="f-hint" style="text-align:center">Header Excel harus: <b>brand, sub, kategori, nama, raw, konv</b> (huruf kecil, satu baris header).</p>
+        <p class="f-hint" style="text-align:center">Header: <b>brand · sub · kategori · nama · raw · konv</b></p>
       </div>
     </div>
   </div>
@@ -1326,7 +1324,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       var dc = $('draftCard');
       dc.style.display = '';
       $('draftAt').innerText = 'disimpan ' + jamMenit(restoreDraftAt() || loadedAt);
-      $('draftInfo').innerText = 'Perubahan terakhir di browser ini dipulihkan otomatis (' + items.length + ' item, ' + brands.length + ' brand) dan BELUM diterbitkan. Klik "Muat Ulang Live" untuk membuang perubahan & mengambil data server.';
+      $('draftInfo').innerText = items.length + ' item · ' + brands.length + ' brand · belum diterbitkan';
     }
   }
 
@@ -1366,7 +1364,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var nama = { live: 'Live (server)', file: 'File JSON', draft: 'Draft browser', import: 'Import Excel' }[srcLabel] || srcLabel;
     var base = nama + ' · ' + items.length + ' item · ' + brands.length + ' brand · ' + jamMenit(loadedAt);
     if (isDirty || dirty) {
-      base += ' — ada perubahan BELUM diterbitkan (jangan lupa Unduh & upload)';
       chip.innerHTML = '<span class="gtag" style="background:var(--amber-soft);color:var(--amber-text)">belum terbit</span>';
     } else {
       chip.innerHTML = '<span class="gtag green">sinkron</span>';
@@ -1395,7 +1392,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       .catch(function() {
         showToast('Gagal muat live — pakai File JSON / Excel');
         if (!loaded) {
-          $('srcInfo').innerText = 'Gagal mengambil data.json dari server. Buka admin lewat http(s) (bukan file://), atau pakai tombol "File JSON" / "Excel".';
+          $('srcInfo').innerText = 'Gagal memuat dari server — pakai File JSON atau Excel.';
         }
       });
   }
@@ -1482,7 +1479,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         '<span class="st-num" style="color:var(--amber-text)">' + orphan + '</span></div>';
     }
     $('stList').innerHTML = html;
-    $('statFmt').innerText = loadedIsV2 ? 'format v2' : 'format lama → export naik v2';
+    $('statFmt').innerText = loadedIsV2 ? 'format v2' : 'format lama';
     $('statFmt').className = 'gtag' + (loadedIsV2 ? ' green' : '');
   }
 
@@ -1515,7 +1512,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var wrap = $('itemListWrap');
     if (!loaded) {
       wrap.innerHTML = '<div class="empty-search-state"><div class="empty-ico"><i class="fas fa-database"></i></div>' +
-        'Belum ada data.<br>Muat dulu lewat tab <b>Data</b> di bawah.</div>';
+        'Muat data dulu di tab Data.</div>';
       $('itemCount').innerText = '';
       return;
     }
@@ -1535,7 +1532,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 
     if (!rows.length) {
       wrap.innerHTML = '<div class="empty-search-state"><div class="empty-ico"><i class="fas fa-magnifying-glass"></i></div>' +
-        (q ? 'Tidak ada yang cocok dengan "<b>' + esc(itemQuery) + '</b>".' : 'Belum ada item di brand ini.<br>Tambah lewat tombol biru di bawah.') + '</div>';
+        (q ? 'Tidak ada yang cocok dengan "<b>' + esc(itemQuery) + '</b>".' : 'Belum ada item di brand ini.') + '</div>';
       return;
     }
     var cap = Math.min(rows.length, LIST_CAP);
@@ -1559,7 +1556,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     }
     html += '</div>';
     if (rows.length > cap) {
-      html += '<div class="list-more">Ditampilkan ' + cap + ' dari ' + rows.length + ' item — persempit pencarian atau pilih brand untuk melihat lainnya</div>';
+      html += '<div class="list-more">' + (rows.length - cap) + ' item lagi — persempit pencarian</div>';
     }
     wrap.innerHTML = html;
   }
@@ -1741,7 +1738,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       items.forEach(function(it) { if (it.brand === b.id) n++; });
       html += '<div class="brand-card" data-bi="' + i + '">' +
         '<div class="brand-card-top">' +
-          '<div class="brand-card-icon" style="background:linear-gradient(135deg,' + esc(b.ikon_warna[0]) + ',' + esc(b.ikon_warna[1]) + ')"><i class="' + esc(b.ikon) + '"></i></div>' +
+          '<div class="brand-card-icon" style="background:linear-gradient(135deg,' + esc(b.ikon_warna[0]) + ',' + esc(b.ikon_warna[1]) + ')"><i class="fas ' + esc(b.ikon) + '"></i></div>' +
           '<button class="brand-card-edit" data-bi="' + i + '" aria-label="Edit ' + esc(b.nama) + '"><i class="fas fa-pen"></i></button>' +
         '</div>' +
         '<div class="brand-card-bottom"><h3>' + esc(b.nama) + '</h3><p>' + (b.subjudul ? esc(b.subjudul) : '&nbsp;') + '</p></div>' +
@@ -1762,7 +1759,21 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
      SHEET FORM BRAND — meta lengkap: nama, id, ikon, warna,
      gradien, sub, kategori per sub + pratinjau kartu live
      ================================================================ */
-  var ICON_LIST = ['fa-bread-slice', 'fa-burger', 'fa-utensils', 'fa-mug-hot', 'fa-mug-saucer', 'fa-bottle-water', 'fa-wine-bottle', 'fa-jar', 'fa-box', 'fa-boxes-stacked', 'fa-seedling', 'fa-apple-whole', 'fa-carrot', 'fa-lemon', 'fa-pepper-hot', 'fa-drumstick-bite', 'fa-fish', 'fa-egg', 'fa-cheese', 'fa-pizza-slice', 'fa-ice-cream', 'fa-cookie-bite', 'fa-candy-cane', 'fa-hotdog', 'fa-bacon', 'fa-bowl-food', 'fa-bowl-rice', 'fa-blender', 'fa-snowflake', 'fa-store', 'fa-truck', 'fa-tag'];
+  var ICON_LIST = [
+    /* roti & jajanan */
+    'fa-bread-slice', 'fa-cake-candles', 'fa-cookie', 'fa-cookie-bite', 'fa-candy-cane', 'fa-ice-cream',
+    /* makanan berat */
+    'fa-burger', 'fa-hotdog', 'fa-pizza-slice', 'fa-drumstick-bite', 'fa-shrimp', 'fa-fish', 'fa-egg', 'fa-bacon',
+    'fa-bowl-food', 'fa-bowl-rice', 'fa-utensils', 'fa-cheese',
+    /* minuman */
+    'fa-mug-hot', 'fa-mug-saucer', 'fa-martini-glass-citrus', 'fa-bottle-water', 'fa-bottle-droplet', 'fa-wine-bottle', 'fa-jar', 'fa-blender',
+    /* bahan segar */
+    'fa-seedling', 'fa-leaf', 'fa-apple-whole', 'fa-carrot', 'fa-lemon', 'fa-pepper-hot', 'fa-wheat-awn', 'fa-snowflake',
+    /* operasional */
+    'fa-box', 'fa-boxes-stacked', 'fa-cubes-stacked', 'fa-jar', 'fa-store', 'fa-warehouse', 'fa-truck', 'fa-basket-shopping', 'fa-bag-shopping', 'fa-tag'
+  ];
+  /* buang duplikat, jaga urutan */
+  ICON_LIST = ICON_LIST.filter(function(v, i, a) { return a.indexOf(v) === i; });
   var bWork = null; /* { isNew, gradAuto, subs:[{id,label}], katArr:{subId:[{id,label}]}, katCur } */
 
   function normalizeColor(v, fb) {
@@ -1786,7 +1797,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function renderIconGrid(cur) {
     var html = '';
     ICON_LIST.forEach(function(ic) {
-      html += '<button class="icocell' + (ic === cur ? ' on' : '') + '" data-ico="' + ic + '" type="button"><i class="' + ic + '"></i></button>';
+      html += '<button class="icocell' + (ic === cur ? ' on' : '') + '" data-ico="' + ic + '" type="button" title="' + ic + '"><i class="fas ' + ic + '"></i></button>';
     });
     $('icoGrid').innerHTML = html;
   }
@@ -1798,7 +1809,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var c1 = normalizeColor($('bIw1').value, shade($('bWarna').value, 0.28)) || shade($('bWarna').value, 0.28);
     var c2 = normalizeColor($('bIw2').value, shade($('bWarna').value, -0.3)) || shade($('bWarna').value, -0.3);
     $('bPrevIco').style.background = 'linear-gradient(135deg,' + c1 + ',' + c2 + ')';
-    $('bPrevIco').innerHTML = '<i class="' + esc(ic) + '"></i>';
+    $('bPrevIco').innerHTML = '<i class="fas ' + esc(ic) + '"></i>';
     $('bPrevNama').innerText = nama;
     $('bPrevSub').innerText = sub;
     renderIconGrid($('bIkon').value.trim());
@@ -1869,7 +1880,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       bWork.katArr = { all: [] };
       $('brandSheetTitle').innerText = 'Tambah Brand';
       $('bNama').value = ''; $('bId').value = ''; $('bId').disabled = false;
-      $('bIdLab').innerHTML = 'ID Brand <span class="f-opt">· unik, huruf kecil / angka / _</span>';
+      $('bIdLab').innerHTML = 'ID Brand';
       $('bSubjudul').value = '';
       $('bIkon').value = 'fa-box';
       $('bWarna').value = '#8e8e93';
@@ -1886,7 +1897,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       $('brandSheetTitle').innerText = 'Edit Brand';
       $('bNama').value = b.nama;
       $('bId').value = b.id; $('bId').disabled = true;
-      $('bIdLab').innerHTML = 'ID Brand <span class="f-opt">· terkunci saat edit (agar item tidak lepas)</span>';
+      $('bIdLab').innerHTML = 'ID Brand <span class="f-opt">· terkunci</span>';
       $('bSubjudul').value = b.subjudul;
       $('bIkon').value = b.ikon;
       $('bWarna').value = b.warna;
@@ -1951,7 +1962,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     bWork.gradAuto = true;
     autoGrad();
     vibrate();
-    showToast('Gradien dihitung ulang dari warna aksen');
+    showToast('Gradien diperbarui');
   });
   $('bSubAdd').addEventListener('click', function() {
     bWork.subs.push({ id: '', label: '' });
@@ -2224,7 +2235,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           'Baris valid: <b>' + parsed.length + '</b> · Dilewati: ' + skipped + '<br>' +
           'Data saat ini: <b>' + items.length + '</b> item';
         if (unk.length) {
-          $('impWarn').innerHTML = 'Brand belum terdaftar: <b>' + esc(unk.join(', ')) + '</b>. Tetap bisa diimport, tapi tambahkan brand-nya dulu di tab Brand supaya tampil di app.';
+          $('impWarn').innerHTML = 'Brand belum terdaftar: <b>' + esc(unk.join(', ')) + '</b> — tambahkan dulu di tab Brand.';
           $('impWarn').classList.add('show');
         } else {
           $('impWarn').classList.remove('show');
