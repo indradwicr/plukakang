@@ -1043,7 +1043,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 
     <!-- ================= TAB: PRODUK BERSAMA ================= -->
     <section id="tabMerge" class="hidden">
-      <div class="section-bar"><div class="section-title" style="font-size:19px">Produk Bersama</div><span class="item-count-chip" id="mergeCount">0 relasi</span></div>
+      <div class="section-bar"><div class="section-title" style="font-size:19px">Produk Bersama</div><span class="item-count-chip" id="mergeCount">0 produk bersama</span></div>
       <div class="gcard">
         <div class="gcard-title"><i class="fas fa-diagram-project"></i> Identitas produk lintas brand <span class="gtag green">2.1</span></div>
         <p class="merge-intro">Hubungkan record yang benar-benar merupakan produk sama. Nama utama akan disinkronkan, sedangkan RAW, KONV, kategori, dan subkategori tetap disimpan per brand. Sistem hanya memberi kandidat — tidak pernah menggabungkan otomatis.</p>
@@ -1575,14 +1575,37 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
     if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
     var ids = {};
-    data.brands.forEach(function(b) { if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.'); if (ids[b.id]) throw new Error('ID brand duplikat: ' + b.id); ids[b.id] = true; });
+    data.brands.forEach(function(b) {
+      if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.');
+      var bid = b.id.trim().toLowerCase();
+      if (ids[bid]) throw new Error('ID brand duplikat setelah normalisasi: ' + b.id);
+      ids[bid] = true;
+    });
     var invalid = 0;
     if (data.v === 3 && Array.isArray(data.products)) {
       if (!data.products.length) throw new Error('Daftar produk V3 kosong.');
-      data.products.forEach(function(p) { if (!p || !p.id || !p.nama || !Array.isArray(p.brands) || !p.brands.length) { invalid++; return; } p.brands.forEach(function(a) { if (!a || !ids[a.brand]) invalid++; }); });
-      if (invalid) throw new Error(invalid + ' produk/relasi tidak valid.');
+      var productIds = {}, relationKeys = {};
+      data.products.forEach(function(p) {
+        if (!p || typeof p.id !== 'string' || !p.id.trim() || typeof p.nama !== 'string' || !p.nama.trim() || !Array.isArray(p.brands) || !p.brands.length) { invalid++; return; }
+        var pid = p.id.trim();
+        if (productIds[pid]) { invalid++; return; }
+        productIds[pid] = true;
+        var localBrands = {};
+        p.brands.forEach(function(a) {
+          if (!a || typeof a.brand !== 'string' || !ids[a.brand.trim().toLowerCase()] || (!String(a.raw || '').trim() && !String(a.konv || '').trim())) { invalid++; return; }
+          var bid = a.brand.trim().toLowerCase();
+          if (localBrands[bid]) { invalid++; return; }
+          localBrands[bid] = true;
+          var rk = bid + '|' + String(a.raw || '').trim() + '|' + String(a.konv || '').trim();
+          relationKeys[rk] = (relationKeys[rk] || 0) + 1;
+        });
+      });
+      if (invalid) throw new Error(invalid + ' produk/relasi tidak valid atau duplikat.');
     } else if (Array.isArray(data.items) && data.items.length) {
-      data.items.forEach(function(it) { if (!it || !it.brand || !it.nama || (!it.raw && !it.konv) || !ids[it.brand]) invalid++; });
+      data.items.forEach(function(it) {
+        if (!it || !it.brand || !it.nama || (!String(it.raw || '').trim() && !String(it.konv || '').trim()) || !ids[String(it.brand).trim().toLowerCase()]) invalid++;
+      });
+      if (invalid) throw new Error(invalid + ' relasi PLU V2 tidak valid. Restore dibatalkan.');
     } else throw new Error('File bukan V3 dan tidak memiliki item V2 yang valid.');
     var parsed = collect(data);
     if (!parsed.items.length || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
@@ -1747,7 +1770,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     }
     $('stList').innerHTML = html;
     $('statFmt').innerText = loadedIsV3 ? 'format v3' : (loadedIsV2 ? 'format v2' : 'format lama');
-    $('statFmt').className = 'gtag' + (loadedIsV2 ? ' green' : '');
+    $('statFmt').className = 'gtag' + ((loadedIsV2 || loadedIsV3) ? ' green' : '');
   }
 
   function renderChips() {
@@ -2655,7 +2678,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     $('mergeMembers').innerText = linkedCount;
     $('mergeCandidates').innerText = candidates.length;
     $('mergePendingCount').innerText = pending.length;
-    $('mergeCount').innerText = products.length + ' relasi';
+    $('mergeCount').innerText = products.length + ' produk bersama';
     if (!candidates.length) candidateBox.innerHTML = '<div class="merge-empty"><i class="fas fa-circle-check"></i><br>Tidak ada kandidat lintas brand yang belum terhubung.</div>';
     else {
       var html = '';
