@@ -3005,8 +3005,13 @@ function renderSidebarPlu(filter) {
   /* ================================================================
       LOAD DATA JSON
       ================================================================ */
+  var plukakangDataVersion = '';
+  var plukakangVersionChecking = false;
+  var plukakangUpdateTimer = null;
+  var plukakangVisibilityHandlerReady = false;
+
   function loadData() {
-      fetch('data.json')
+      return fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
         .then(function(res) {
              if (!res.ok) throw new Error('HTTP ' + res.status);
              return res.json();
@@ -3017,14 +3022,15 @@ function renderSidebarPlu(filter) {
                if (Array.isArray(data.items)) { items = data.items; }
                if (Array.isArray(data.brands) && data.brands.length) { meta = data.brands; }
              }
+             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: items harus berupa array.');
+
              if (meta) { syncMeta(meta); renderBrandGrid(); }
              items.sort(function(a, b) {
-               return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+               return String(a.nama || '').toLowerCase().localeCompare(String(b.nama || '').toLowerCase());
              });
              DATABASE = items;
 
-
-             /* data sheet PLU kalkulator — SEMUA PLU per brand (termasuk sarana) */
+             /* Data PLU kalkulator — semua PLU per brand (termasuk sarana). */
              calcPluData.pointcoffee = items.filter(function(item) {
                return katNorm(item.brand) === 'pointcoffee';
              });
@@ -3032,19 +3038,77 @@ function renderSidebarPlu(filter) {
                return katNorm(item.brand) === 'yummycoffee';
              });
 
-
              renderDataGrid();
              renderKatalog();
              document.title = 'plukakang - hapalkeun euy!';
              renderSidebarPlu('');
              renderSidebarAlphaNav();
              updatePluOpenCount();
+             return true;
         })
         .catch(function(err) {
              console.error('Gagal load data.json:', err);
-             $('sidebarPluList').innerHTML =
-               '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+             var sidebar = $('sidebarPluList');
+             if (sidebar) {
+               sidebar.innerHTML = '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+             }
+             return false;
         });
+  }
+
+  function checkPlukakangDataVersion() {
+      if (plukakangVersionChecking) return Promise.resolve(false);
+      plukakangVersionChecking = true;
+
+      return fetch('version.json?v=' + Date.now(), { cache: 'no-store' })
+        .then(function(res) {
+             if (!res.ok) throw new Error('HTTP ' + res.status);
+             return res.json();
+        })
+        .then(function(info) {
+             var newVersion = info && info.version ? String(info.version) : '';
+             if (!newVersion) throw new Error('version.json tidak memiliki properti version.');
+
+             /* Pemeriksaan pertama hanya menyimpan versi acuan. */
+             if (!plukakangDataVersion) {
+               plukakangDataVersion = newVersion;
+               return false;
+             }
+             if (newVersion === plukakangDataVersion) return false;
+
+             return loadData().then(function(success) {
+               if (success) {
+                 plukakangDataVersion = newVersion;
+                 if (typeof showToast === 'function') showToast('✓ Katalog berhasil diperbarui otomatis');
+                 return true;
+               }
+               return false;
+             });
+        })
+        .catch(function(err) {
+             console.warn('Pemeriksaan pembaruan katalog dilewati:', err);
+             return false;
+        })
+        .then(function(result) {
+             plukakangVersionChecking = false;
+             return result;
+        });
+  }
+
+  function startPlukakangAutoUpdate() {
+      if (plukakangUpdateTimer) clearInterval(plukakangUpdateTimer);
+
+      checkPlukakangDataVersion();
+      plukakangUpdateTimer = setInterval(function() {
+        if (!document.hidden) checkPlukakangDataVersion();
+      }, 60000);
+
+      if (!plukakangVisibilityHandlerReady) {
+        document.addEventListener('visibilitychange', function() {
+          if (!document.hidden) checkPlukakangDataVersion();
+        });
+        plukakangVisibilityHandlerReady = true;
+      }
   }
 
 
@@ -5230,7 +5294,9 @@ function initKcAlpha() {
   SO.init();
   LBR.init();
   applyThemeMeta();
-  loadData();
+  loadData().then(function(success) {
+    /* Jalankan pemeriksaan berkala meskipun data awal gagal dimuat. */
+    startPlukakangAutoUpdate();
+  });
   initAlphabetNavEvents();
   </script>
-</body>
