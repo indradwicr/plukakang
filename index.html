@@ -3009,6 +3009,17 @@ function renderSidebarPlu(filter) {
   var plukakangVersionChecking = false;
   var plukakangUpdateTimer = null;
   var plukakangVisibilityHandlerReady = false;
+  var PLUKAKANG_VERSION_STORAGE_KEY = 'plukakang_last_seen_data_version_v1';
+
+  function getPlukakangSavedVersion() {
+      try { return localStorage.getItem(PLUKAKANG_VERSION_STORAGE_KEY) || ''; }
+      catch (err) { return ''; }
+  }
+
+  function savePlukakangVersion(version) {
+      try { localStorage.setItem(PLUKAKANG_VERSION_STORAGE_KEY, version); }
+      catch (err) { console.warn('Versi katalog tidak dapat disimpan di perangkat:', err); }
+  }
 
   function loadData() {
       return fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
@@ -3069,17 +3080,30 @@ function renderSidebarPlu(filter) {
              var newVersion = info && info.version ? String(info.version) : '';
              if (!newVersion) throw new Error('version.json tidak memiliki properti version.');
 
-             /* Pemeriksaan pertama hanya menyimpan versi acuan. */
-             if (!plukakangDataVersion) {
+             var savedVersion = getPlukakangSavedVersion();
+             var currentVersion = plukakangDataVersion || savedVersion;
+
+             /* Kunjungan pertama: simpan versi acuan tanpa notifikasi. */
+             if (!currentVersion) {
+               plukakangDataVersion = newVersion;
+               savePlukakangVersion(newVersion);
+               return false;
+             }
+
+             /* Tidak ada perubahan sejak kunjungan/pemeriksaan terakhir. */
+             if (newVersion === currentVersion) {
                plukakangDataVersion = newVersion;
                return false;
              }
-             if (newVersion === plukakangDataVersion) return false;
 
+             /* Ada versi baru: muat data dahulu, baru tandai versi sudah dilihat. */
              return loadData().then(function(success) {
                if (success) {
                  plukakangDataVersion = newVersion;
-                 if (typeof showToast === 'function') showToast('✓ Katalog berhasil diperbarui otomatis');
+                 savePlukakangVersion(newVersion);
+                 if (typeof showToast === 'function') {
+                   showToast('🎉 Katalog Plukakang diperbarui ke versi terbaru');
+                 }
                  return true;
                }
                return false;
@@ -3098,11 +3122,15 @@ function renderSidebarPlu(filter) {
   function startPlukakangAutoUpdate() {
       if (plukakangUpdateTimer) clearInterval(plukakangUpdateTimer);
 
+      /* Cek langsung setiap kali aplikasi dibuka, tanpa menunggu 60 detik. */
       checkPlukakangDataVersion();
+
+      /* Tetap cek berkala selama aplikasi aktif. */
       plukakangUpdateTimer = setInterval(function() {
         if (!document.hidden) checkPlukakangDataVersion();
       }, 60000);
 
+      /* Cek lagi saat pengguna kembali ke tab/aplikasi. */
       if (!plukakangVisibilityHandlerReady) {
         document.addEventListener('visibilitychange', function() {
           if (!document.hidden) checkPlukakangDataVersion();
