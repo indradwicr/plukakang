@@ -3030,10 +3030,33 @@ function renderSidebarPlu(filter) {
         .then(function(data) {
              var items = data, meta = null;
              if (data && !Array.isArray(data) && typeof data === 'object') {
-               if (Array.isArray(data.items)) { items = data.items; }
+               if (Array.isArray(data.items)) {
+                 items = data.items;
+               } else if (data.v === 3 && Array.isArray(data.products)) {
+                 /* V3: satu Master Product dapat memiliki banyak relasi brand.
+                    Normalisasi ke bentuk item lama hanya untuk kebutuhan tampilan
+                    katalog/kalkulator; data.json asli tidak diubah. */
+                 items = [];
+                 data.products.forEach(function(product) {
+                   if (!product || !Array.isArray(product.brands)) return;
+                   product.brands.forEach(function(rel) {
+                     if (!rel) return;
+                     items.push({
+                       product_id: product.id || '',
+                       nama: product.nama || '',
+                       deskripsi: product.deskripsi || '',
+                       brand: rel.brand || '',
+                       sub: rel.sub || '',
+                       kategori: rel.kategori || '',
+                       raw: rel.raw || '',
+                       konv: rel.konv || ''
+                     });
+                   });
+                 });
+               }
                if (Array.isArray(data.brands) && data.brands.length) { meta = data.brands; }
              }
-             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: items harus berupa array.');
+             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: harus memiliki items atau products[].brands[].');
 
              if (meta) { syncMeta(meta); renderBrandGrid(); }
              items.sort(function(a, b) {
