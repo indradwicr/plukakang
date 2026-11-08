@@ -18,7 +18,7 @@
    PLUKAKANG ADMIN · LIQUID GLASS DARK EDITION (iOS 26)
    Tema diambil dari index.html: kaca gelap translucent di atas
    ambient aurora hitam, dock kapsul mengambang, sheet glass.
-   Admin = editor data.json (format v2 kompatibel + relasi produk 2.1).
+   Admin = editor data.json (format v3 + relasi produk master).
    ================================================================ */
 :root {
     color-scheme: dark;
@@ -1273,7 +1273,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
 
   /* ================================================================
-     STATE + DATA — format v2 { app, v, brands, items }
+     STATE + DATA — internal normalized rows; source/export format v3
      ================================================================ */
   var DEF_BRANDS = [
     { id: 'saybread', nama: 'Say Bread', subjudul: 'Bakery & Pastry', ikon: 'fa-bread-slice', warna: '#8c5332', ikon_warna: ['#b06a42', '#7a4222'], subs: [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }], kategori: {} },
@@ -1375,14 +1375,28 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     };
   }
   function collect(json) {
-    var arr = null, br = null, ex = {};
+    var arr = null, br = null, ex = {}, isV3 = false;
     if (Array.isArray(json)) { arr = json; }
     else if (json && typeof json === 'object') {
       if (Array.isArray(json.items)) arr = json.items;
       if (Array.isArray(json.brands) && json.brands.length) br = json.brands;
-      for (var k in json) { if (k !== 'items' && k !== 'brands') ex[k] = json[k]; }
+      isV3 = json.v === 3 && Array.isArray(json.products);
+      for (var k in json) { if (k !== 'items' && k !== 'brands' && k !== 'products') ex[k] = json[k]; }
+      if (isV3) {
+        arr = [];
+        ex.products = [];
+        json.products.forEach(function(p, pi) {
+          if (!p || typeof p !== 'object') return;
+          var pid = String(p.id || ('prod_import_' + pi));
+          ex.products.push({ id: pid, nama: String(p.nama || ''), deskripsi: String(p.deskripsi || ''), created_at: p.created_at || '' });
+          (Array.isArray(p.brands) ? p.brands : []).forEach(function(a) {
+            if (!a || !a.brand) return;
+            arr.push({ product_id: pid, nama: p.nama || '', brand: a.brand, sub: a.sub || '', kategori: a.kategori || '', raw: a.raw || '', konv: a.konv || '' });
+          });
+        });
+      }
     }
-    var isV2 = !!(br && br.length);
+    var hasBrands = !!(br && br.length);
     if (!br || !br.length) br = clone(DEF_BRANDS);
     var ni = [], nb = [], ids = {};
     (arr || []).forEach(function(it) {
@@ -1393,13 +1407,13 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       var x = normBrand(b);
       if (x && !ids[x.id]) { ids[x.id] = 1; nb.push(x); }
     });
-    return { brands: nb, items: ni, extra: ex, isV2: isV2 };
+    return { brands: nb, items: ni, extra: ex, isV2: hasBrands, isV3: isV3 };
   }
   function applyData(json, source) {
     var c = collect(json);
     brands = c.brands; items = c.items; extraKeys = c.extra;
     loaded = true; loadedAt = Date.now();
-    loadedIsV2 = c.isV2;
+    loadedIsV2 = c.isV2; loadedIsV3 = c.isV3;
     dirty = (source === 'draft');
     srcLabel = source;
     saveDraft();
@@ -1451,14 +1465,26 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
      ================================================================ */
   var BACKUP_KEY = 'plukakang_admin_backups_v1';
   var BACKUP_LIMIT = 5;
+  function buildV3Object() {
+    var meta = {}, outProducts = [], seen = {};
+    getSharedProducts().forEach(function(p) { if (p && p.id) meta[p.id] = p; });
+    items.forEach(function(it, idx) {
+      var pid = it.product_id || ('prod_unlinked_' + idx);
+      if (!seen[pid]) {
+        var m = meta[pid] || {};
+        seen[pid] = { id: pid, nama: String(m.nama || it.nama || ''), deskripsi: String(m.deskripsi || ''), brands: [] };
+        outProducts.push(seen[pid]);
+      }
+      seen[pid].brands.push({ brand: it.brand, sub: it.sub || '', kategori: it.kategori || '', raw: it.raw || '', konv: it.konv || '' });
+    });
+    var out = {};
+    for (var k in extraKeys) { if (k !== 'app' && k !== 'v' && k !== 'items' && k !== 'products' && k !== 'brands') out[k] = clone(extraKeys[k]); }
+    out.app = 'plukakang'; out.v = 3; out.brands = clone(brands); out.products = outProducts;
+    if (!out.curation || typeof out.curation !== 'object') out.curation = { decisions: [], history: [] };
+    return out;
+  }
   function backupPayload() {
-    return {
-      app: 'plukakang-backup',
-      backup_version: 1,
-      created_at: new Date().toISOString(),
-      source: srcLabel || 'admin',
-      data: Object.assign({}, clone(extraKeys), { app: 'plukakang', v: 2, brands: clone(brands), items: clone(items) })
-    };
+    return { app: 'plukakang-backup', backup_version: 1, created_at: new Date().toISOString(), source: srcLabel || 'admin', data: buildV3Object() };
   }
   function readBackups() {
     try {
@@ -1499,21 +1525,19 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function validateRestore(json) {
     var data = json && json.app === 'plukakang-backup' ? json.data : json;
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
-    if (!Array.isArray(data.items) || !data.items.length) throw new Error('Daftar item kosong atau tidak valid.');
     if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
     var ids = {};
-    data.brands.forEach(function(b) {
-      if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.');
-      if (ids[b.id]) throw new Error('ID brand duplikat: ' + b.id);
-      ids[b.id] = true;
-    });
+    data.brands.forEach(function(b) { if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.'); if (ids[b.id]) throw new Error('ID brand duplikat: ' + b.id); ids[b.id] = true; });
     var invalid = 0;
-    data.items.forEach(function(it) {
-      if (!it || !it.brand || !it.nama || (!it.raw && !it.konv) || !ids[it.brand]) invalid++;
-    });
-    if (invalid) throw new Error(invalid + ' item tidak valid atau memakai brand yang tidak tersedia.');
+    if (data.v === 3 && Array.isArray(data.products)) {
+      if (!data.products.length) throw new Error('Daftar produk V3 kosong.');
+      data.products.forEach(function(p) { if (!p || !p.id || !p.nama || !Array.isArray(p.brands) || !p.brands.length) { invalid++; return; } p.brands.forEach(function(a) { if (!a || !ids[a.brand]) invalid++; }); });
+      if (invalid) throw new Error(invalid + ' produk/relasi tidak valid.');
+    } else if (Array.isArray(data.items) && data.items.length) {
+      data.items.forEach(function(it) { if (!it || !it.brand || !it.nama || (!it.raw && !it.konv) || !ids[it.brand]) invalid++; });
+    } else throw new Error('File bukan V3 dan tidak memiliki item V2 yang valid.');
     var parsed = collect(data);
-    if (parsed.items.length !== data.items.length || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
+    if (!parsed.items.length || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
     return data;
   }
   $('btnBackup').addEventListener('click', function() {
@@ -1530,8 +1554,8 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       try {
         var parsed = JSON.parse(ev.target.result);
         var data = validateRestore(parsed);
-        var count = data.items.length;
-        if (!confirm('Pulihkan backup berisi ' + count + ' item dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
+        var count = collect(data).items.length;
+        if (!confirm('Pulihkan backup berisi ' + count + ' relasi PLU dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
         saveAutoBackup('Sebelum restore');
         applyData(data, 'file');
         $('draftCard').style.display = 'none';
@@ -1674,7 +1698,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         '<span class="st-num" style="color:var(--amber-text)">' + orphan + '</span></div>';
     }
     $('stList').innerHTML = html;
-    $('statFmt').innerText = loadedIsV2 ? 'format v2' : 'format lama';
+    $('statFmt').innerText = loadedIsV3 ? 'format v3' : (loadedIsV2 ? 'format v2' : 'format lama');
     $('statFmt').className = 'gtag' + (loadedIsV2 ? ' green' : '');
   }
 
@@ -1928,7 +1952,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   /* ================================================================
      TAB BRAND — grid kartu (persis seperti home app)
      ================================================================ */
-  var loadedIsV2 = true;
+  var loadedIsV2 = true, loadedIsV3 = false;
   function renderBrandGrid() {
     var grid = $('brandGrid');
     if (!loaded) { grid.innerHTML = ''; $('brandCount').innerText = ''; return; }
@@ -2606,22 +2630,12 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
 
   /* ================================================================
-     EXPORT — format v2 { app, v, brands, items }
+     EXPORT — format v3 { app, v, brands, products, curation }
      ================================================================ */
-  function buildV2() {
-    var out = {};
-    for (var k in extraKeys) { if (k !== 'app' && k !== 'v') out[k] = extraKeys[k]; }
-    out.app = 'plukakang';
-    out.v = 2;
-    out.brands = clone(brands);
-    out.items = items.map(function(it) {
-      return { brand: it.brand, sub: it.sub, kategori: it.kategori, nama: it.nama, raw: it.raw, konv: it.konv, product_id: it.product_id || '' };
-    });
-    return JSON.stringify(out, null, 2);
-  }
+  function buildV3() { return JSON.stringify(buildV3Object(), null, 2); }
   function doExport() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
-    var blob = new Blob([buildV2()], { type: 'application/json' });
+    var blob = new Blob([buildV3()], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'data.json';
@@ -2645,7 +2659,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var duplicates = scanDup();
     var serious = duplicates.filter(function(d) { return d.t === 'red'; });
     if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
-    if (!confirm('Terbitkan ' + items.length + ' item dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
+    if (!confirm('Terbitkan format V3 berisi ' + items.length + ' relasi PLU dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
 
     var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
     if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
@@ -2657,7 +2671,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     fetch('./api/publish', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Admin-Publish-Key': key },
-      body: JSON.stringify({ data: JSON.parse(buildV2()) })
+      body: JSON.stringify({ data: JSON.parse(buildV3()) })
     }).then(function(res) {
       return res.json().catch(function() { return {}; }).then(function(body) {
         if (!res.ok) {
@@ -2684,7 +2698,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
-    copyText(buildV2(), 'JSON tersalin (' + items.length + ' item)');
+    copyText(buildV3(), 'JSON V3 tersalin (' + items.length + ' relasi PLU)');
   });
   $('btnReset').addEventListener('click', function() {
     if (!confirm('Buang draft tersimpan di browser ini? Data yang sedang tampil tidak ikut terhapus.')) return;
@@ -2774,7 +2788,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
      ================================================================ */
   function boot() {
     var d = readDraft();
-    if (d) {
+    if (d && Array.isArray(d.items) && d.items.length) {
       restoreDraftAt = function() { return d.at; };
       applyData(Object.assign({}, d.extra || {}, { brands: d.brands, items: d.items }), 'draft');
       /* senyap: kalau ternyata draft masih sama persis dgn server,
