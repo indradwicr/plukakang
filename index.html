@@ -3005,8 +3005,24 @@ function renderSidebarPlu(filter) {
   /* ================================================================
       LOAD DATA JSON
       ================================================================ */
+  var plukakangDataVersion = '';
+  var plukakangVersionChecking = false;
+  var plukakangUpdateTimer = null;
+  var plukakangVisibilityHandlerReady = false;
+  var PLUKAKANG_VERSION_STORAGE_KEY = 'plukakang_last_seen_data_version_v1';
+
+  function getPlukakangSavedVersion() {
+      try { return localStorage.getItem(PLUKAKANG_VERSION_STORAGE_KEY) || ''; }
+      catch (err) { return ''; }
+  }
+
+  function savePlukakangVersion(version) {
+      try { localStorage.setItem(PLUKAKANG_VERSION_STORAGE_KEY, version); }
+      catch (err) { console.warn('Versi katalog tidak dapat disimpan di perangkat:', err); }
+  }
+
   function loadData() {
-      fetch('data.json')
+      return fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
         .then(function(res) {
              if (!res.ok) throw new Error('HTTP ' + res.status);
              return res.json();
@@ -3015,16 +3031,38 @@ function renderSidebarPlu(filter) {
              var items = data, meta = null;
              if (data && !Array.isArray(data) && typeof data === 'object') {
                if (Array.isArray(data.items)) { items = data.items; }
+               else if (data.v === 3 && Array.isArray(data.products)) {
+                 // V3 stores one Master Product with one or more brand associations.
+                 // Flatten associations for the existing catalogue and PLU calculator UI.
+                 items = [];
+                 data.products.forEach(function(product) {
+                   if (!product || !Array.isArray(product.brands)) return;
+                   product.brands.forEach(function(link) {
+                     if (!link) return;
+                     items.push({
+                       product_id: String(product.id || ''),
+                       nama: String(product.nama || ''),
+                       deskripsi: String(product.deskripsi || ''),
+                       brand: String(link.brand || ''),
+                       sub: String(link.sub || ''),
+                       kategori: String(link.kategori || ''),
+                       raw: String(link.raw || ''),
+                       konv: String(link.konv || '')
+                     });
+                   });
+                 });
+               }
                if (Array.isArray(data.brands) && data.brands.length) { meta = data.brands; }
              }
+             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: items/products harus berupa array.');
+
              if (meta) { syncMeta(meta); renderBrandGrid(); }
              items.sort(function(a, b) {
-               return a.nama.toLowerCase().localeCompare(b.nama.toLowerCase());
+               return String(a.nama || '').toLowerCase().localeCompare(String(b.nama || '').toLowerCase());
              });
              DATABASE = items;
 
-
-             /* data sheet PLU kalkulator — SEMUA PLU per brand (termasuk sarana) */
+             /* Data PLU kalkulator — semua PLU per brand (termasuk sarana). */
              calcPluData.pointcoffee = items.filter(function(item) {
                return katNorm(item.brand) === 'pointcoffee';
              });
@@ -3032,19 +3070,94 @@ function renderSidebarPlu(filter) {
                return katNorm(item.brand) === 'yummycoffee';
              });
 
-
              renderDataGrid();
              renderKatalog();
              document.title = 'plukakang - hapalkeun euy!';
              renderSidebarPlu('');
              renderSidebarAlphaNav();
              updatePluOpenCount();
+             return true;
         })
         .catch(function(err) {
              console.error('Gagal load data.json:', err);
-             $('sidebarPluList').innerHTML =
-               '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+             var sidebar = $('sidebarPluList');
+             if (sidebar) {
+               sidebar.innerHTML = '<div class="plu-empty">Gagal load data. Pastikan file data.json ada.</div>';
+             }
+             return false;
         });
+  }
+
+  function checkPlukakangDataVersion() {
+      if (plukakangVersionChecking) return Promise.resolve(false);
+      plukakangVersionChecking = true;
+
+      return fetch('version.json?v=' + Date.now(), { cache: 'no-store' })
+        .then(function(res) {
+             if (!res.ok) throw new Error('HTTP ' + res.status);
+             return res.json();
+        })
+        .then(function(info) {
+             var newVersion = info && info.version ? String(info.version) : '';
+             if (!newVersion) throw new Error('version.json tidak memiliki properti version.');
+
+             var savedVersion = getPlukakangSavedVersion();
+             var currentVersion = plukakangDataVersion || savedVersion;
+
+             /* Kunjungan pertama: simpan versi acuan tanpa notifikasi. */
+             if (!currentVersion) {
+               plukakangDataVersion = newVersion;
+               savePlukakangVersion(newVersion);
+               return false;
+             }
+
+             /* Tidak ada perubahan sejak kunjungan/pemeriksaan terakhir. */
+             if (newVersion === currentVersion) {
+               plukakangDataVersion = newVersion;
+               return false;
+             }
+
+             /* Ada versi baru: muat data dahulu, baru tandai versi sudah dilihat. */
+             return loadData().then(function(success) {
+               if (success) {
+                 plukakangDataVersion = newVersion;
+                 savePlukakangVersion(newVersion);
+                 if (typeof showToast === 'function') {
+                   showToast('🎉 Katalog Plukakang diperbarui ke versi terbaru');
+                 }
+                 return true;
+               }
+               return false;
+             });
+        })
+        .catch(function(err) {
+             console.warn('Pemeriksaan pembaruan katalog dilewati:', err);
+             return false;
+        })
+        .then(function(result) {
+             plukakangVersionChecking = false;
+             return result;
+        });
+  }
+
+  function startPlukakangAutoUpdate() {
+      if (plukakangUpdateTimer) clearInterval(plukakangUpdateTimer);
+
+      /* Cek langsung setiap kali aplikasi dibuka, tanpa menunggu 60 detik. */
+      checkPlukakangDataVersion();
+
+      /* Tetap cek berkala selama aplikasi aktif. */
+      plukakangUpdateTimer = setInterval(function() {
+        if (!document.hidden) checkPlukakangDataVersion();
+      }, 60000);
+
+      /* Cek lagi saat pengguna kembali ke tab/aplikasi. */
+      if (!plukakangVisibilityHandlerReady) {
+        document.addEventListener('visibilitychange', function() {
+          if (!document.hidden) checkPlukakangDataVersion();
+        });
+        plukakangVisibilityHandlerReady = true;
+      }
   }
 
 
@@ -3388,71 +3501,61 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
 
   /* ================================================================
-      MODE ADMIN — password gate
-      Password disimpan sebagai hash djb2 (bukan teks polos).
-      Sudah pernah benar dalam 1 sesi tab = tidak ditanya ulang.
+      MODE ADMIN — autentikasi server-side
       ================================================================ */
-  var ADMIN_PASS_HASH = 2718705455; /* djb2("tuan1197") */
-  function djb2Hash(s) {
-      var h = 5381;
-      for (var i = 0; i < s.length; i++) h = (((h << 5) + h) + s.charCodeAt(i)) >>> 0;
-      return h;
-  }
-  function adminUnlocked() {
-      try { return sessionStorage.getItem('plukakang_admin_ok') === '1'; } catch (e) { return false; }
-  }
   function launchAdmin() {
       showToast('Membuka admin...');
-      setTimeout(function() { window.open('admin.html', '_blank'); }, 300);
+      window.location.href = 'admin.html';
   }
   function openAdminGate() {
-      if (adminUnlocked()) { launchAdmin(); return; }
-      var inp = $('adminPass');
-      inp.value = '';
-      inp.type = 'password';
-      inp.classList.remove('bad');
-      $('adminErr').classList.remove('show');
-      $('adminGateEye').innerHTML = '<i class="fas fa-eye"></i>';
-      $('adminGate').classList.add('open');
-      setTimeout(function() { try { inp.focus(); } catch (e) {} }, 340);
+      fetch('/api/auth/session', { cache: 'no-store', credentials: 'same-origin' })
+        .then(function(r) { return r.ok ? r.json() : { authenticated: false }; })
+        .then(function(info) {
+          if (info.authenticated) { launchAdmin(); return; }
+          var inp = $('adminPass'); inp.value = ''; inp.type = 'password';
+          inp.classList.remove('bad'); $('adminErr').classList.remove('show');
+          $('adminGateEye').innerHTML = '<i class="fas fa-eye"></i>';
+          $('adminGate').classList.add('open');
+          setTimeout(function() { try { inp.focus(); } catch (e) {} }, 250);
+        }).catch(function() { showToast('Tidak dapat memeriksa sesi Admin.'); });
   }
   function closeAdminGate() {
       $('adminGate').classList.remove('open');
       try { $('adminPass').blur(); } catch (e) {}
   }
   function tryAdminPassword() {
-      var inp = $('adminPass');
-      if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
-          try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
-          vibrate();
-          closeAdminGate();
-          launchAdmin();
-      } else {
-          $('adminErr').classList.add('show');
-          inp.classList.add('bad');
-          var card = $('adminGateCard');
-          card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-          vibrate();
-          try { inp.select(); } catch (e) {}
-      }
+      var inp = $('adminPass'), button = $('adminGateOk');
+      var password = inp.value || '';
+      if (!password) { $('adminErr').innerText = 'Masukkan password Admin.'; $('adminErr').classList.add('show'); return; }
+      button.disabled = true; button.innerText = 'Memeriksa...';
+      fetch('/api/auth/login', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password })
+      }).then(function(r) {
+        return r.json().catch(function() { return {}; }).then(function(body) {
+          if (!r.ok) throw new Error(body.error || 'Login gagal.'); return body;
+        });
+      }).then(function() {
+        inp.value = ''; $('adminErr').classList.remove('show'); inp.classList.remove('bad');
+        vibrate(); closeAdminGate(); launchAdmin();
+      }).catch(function(err) {
+        $('adminErr').innerText = err.message || 'Login gagal.';
+        $('adminErr').classList.add('show'); inp.classList.add('bad'); inp.value = '';
+        var card = $('adminGateCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); vibrate();
+      }).finally(function() { button.disabled = false; button.innerText = 'Buka Admin'; });
   }
   $('adminGateCancel').addEventListener('click', closeAdminGate);
   $('adminGateOk').addEventListener('click', tryAdminPassword);
   $('adminGate').addEventListener('click', function(e) { if (e.target === this) closeAdminGate(); });
   $('adminGateEye').addEventListener('click', function() {
-      var inp = $('adminPass');
-      var show = inp.type === 'password';
+      var inp = $('adminPass'), show = inp.type === 'password';
       inp.type = show ? 'text' : 'password';
       this.innerHTML = show ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
   });
-  $('adminPass').addEventListener('input', function() {
-      $('adminErr').classList.remove('show');
-      this.classList.remove('bad');
-  });
-  $('adminPass').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); tryAdminPassword(); }
-      if (e.key === 'Escape' || e.key === 'Esc') closeAdminGate();
-  });
+  $('adminPass').addEventListener('input', function() { $('adminErr').classList.remove('show'); this.classList.remove('bad'); });
+  $('adminPass').addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); tryAdminPassword(); } });
+  if (new URLSearchParams(window.location.search).get('admin') === '1') openAdminGate();
 
 
   /* ================================================================
@@ -5230,7 +5333,9 @@ function initKcAlpha() {
   SO.init();
   LBR.init();
   applyThemeMeta();
-  loadData();
+  loadData().then(function(success) {
+    /* Jalankan pemeriksaan berkala meskipun data awal gagal dimuat. */
+    startPlukakangAutoUpdate();
+  });
   initAlphabetNavEvents();
   </script>
-</body>
