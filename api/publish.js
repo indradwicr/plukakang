@@ -26,8 +26,8 @@ function validate(data) {
     errors.push('Identitas data tidak valid.');
   }
 
-  if (![2, 3].includes(data.v)) {
-    errors.push('Versi data harus 2 atau 3.');
+  if (data.v !== 4) {
+    errors.push('Versi data harus V4.');
   }
 
   if (!Array.isArray(data.brands) || data.brands.length === 0) {
@@ -58,85 +58,26 @@ function validate(data) {
     }
   }
 
-  if (data.v === 3) {
-    if (!Array.isArray(data.products) || data.products.length === 0) {
-      errors.push('Daftar products V3 wajib tersedia.');
+  if (data.v === 4) {
+    if (!Array.isArray(data.items) || data.items.length === 0) {
+      errors.push('Daftar items V4 wajib tersedia dan tidak boleh kosong.');
     }
-
-    if (Array.isArray(data.products)) {
-      const productIds = new Set();
+    if (Array.isArray(data.items)) {
+      const itemIds = new Set();
       let invalid = 0;
-      let relations = 0;
-
-      for (const product of data.products) {
-        if (
-          !product ||
-          typeof product.id !== 'string' ||
-          !product.id.trim() ||
-          typeof product.nama !== 'string' ||
-          !product.nama.trim() ||
-          !Array.isArray(product.brands) ||
-          product.brands.length === 0
-        ) {
+      for (const item of data.items) {
+        if (!item || typeof item !== 'object' ||
+            typeof item.id !== 'string' || !item.id.trim() ||
+            typeof item.brand !== 'string' || !brandIds.has(item.brand) ||
+            typeof item.nama !== 'string' || !item.nama.trim() ||
+            (!String(item.raw || '').trim() && !String(item.konv || '').trim())) {
           invalid++;
           continue;
         }
-
-        if (productIds.has(product.id)) {
-          invalid++;
-        }
-
-        productIds.add(product.id);
-
-        for (const rel of product.brands) {
-          relations++;
-
-          if (
-            !rel ||
-            typeof rel.brand !== 'string' ||
-            !brandIds.has(rel.brand)
-          ) {
-            invalid++;
-          }
-        }
+        if (itemIds.has(item.id)) invalid++;
+        itemIds.add(item.id);
       }
-
-      if (invalid) {
-        errors.push(
-          `${invalid} produk/relasi tidak valid atau memakai brand yang tidak dikenal.`
-        );
-      }
-
-      if (!relations) {
-        errors.push('Tidak ada relasi PLU yang dapat diterbitkan.');
-      }
-    }
-  } else {
-    if (!Array.isArray(data.items) || data.items.length === 0) {
-      errors.push('Daftar item wajib tersedia.');
-    }
-
-    if (Array.isArray(data.items)) {
-      let invalid = 0;
-
-      for (const item of data.items) {
-        if (
-          !item ||
-          typeof item !== 'object' ||
-          !item.brand ||
-          !item.nama ||
-          (!item.raw && !item.konv) ||
-          !brandIds.has(item.brand)
-        ) {
-          invalid++;
-        }
-      }
-
-      if (invalid) {
-        errors.push(
-          `${invalid} item memiliki field wajib kosong atau brand tidak dikenal.`
-        );
-      }
+      if (invalid) errors.push(`${invalid} item tidak valid, ID kosong/duplikat, atau brand tidak dikenal.`);
     }
   }
 
@@ -197,7 +138,14 @@ module.exports = async function handler(req, res) {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER;
   const repo = process.env.GITHUB_REPO;
-  const branch = process.env.GITHUB_BRANCH || 'main';
+  const branch = String(process.env.GITHUB_BRANCH || '').trim();
+
+  if (!branch) {
+    return send(res, 503, { error: 'GITHUB_BRANCH wajib diatur secara eksplisit. Publish default ke main dinonaktifkan.' });
+  }
+  if (branch === 'main') {
+    return send(res, 403, { error: 'Publish ke branch main dikunci pada paket V4 ini. Gunakan branch development sampai produksi disetujui.' });
+  }
 
   if (!publishKey || !token || !owner || !repo) {
     return send(res, 503, {
@@ -221,14 +169,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const relationCount = data.v === 3
-    ? data.products.reduce(
-        (n, p) => n + (
-          p && Array.isArray(p.brands) ? p.brands.length : 0
-        ),
-        0
-      )
-    : data.items.length;
+  const relationCount = data.items.length;
 
   const dataText = JSON.stringify(data, null, 2) + '\n';
 
@@ -309,7 +250,7 @@ module.exports = async function handler(req, res) {
     const commit = await github(`${base}/git/commits`, token, {
       method: 'POST',
       body: JSON.stringify({
-        message: `Publish Plukakang data (${relationCount} PLU relations, v${data.v})`,
+        message: `Publish Plukakang data (${relationCount} items, v${data.v})`,
         tree: tree.sha,
         parents: [parentSha]
       })
