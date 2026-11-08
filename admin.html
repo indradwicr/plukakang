@@ -845,6 +845,10 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     .btn-row .btn.third { min-width: calc(50% - 4px); }
     .f-2col { grid-template-columns: 1fr; }
 }
+
+/* Pengaturan urutan katalog */
+.order-card{margin-top:14px}.order-help{font-size:12px;color:var(--text-muted);line-height:1.5;margin:4px 0 12px}.order-selects{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.order-selects .f-sel{min-width:0}.order-list{display:flex;flex-direction:column;gap:7px}.order-row{display:flex;align-items:center;gap:9px;padding:10px 9px;border:1px solid var(--hairline);border-radius:13px;background:var(--surface-2);touch-action:pan-y;user-select:none;-webkit-user-select:none}.order-row.dragging{opacity:.42;border-style:dashed}.order-row.drop-target{border-color:var(--acc);background:var(--acc-soft)}.order-grip{color:var(--text-muted);padding:7px 4px;cursor:grab;touch-action:none}.order-name{flex:1;min-width:0;font-size:13px;font-weight:650;overflow-wrap:anywhere}.order-meta{font-size:10px;color:var(--text-muted);font-weight:500}.order-actions{display:flex;gap:4px}.order-actions button{width:32px;height:32px;border:1px solid var(--hairline);border-radius:9px;background:var(--card-white);color:var(--text);display:grid;place-items:center}.order-actions button:disabled{opacity:.28}.order-empty{padding:14px;text-align:center;color:var(--text-muted);font-size:12px;border:1px dashed var(--hairline);border-radius:12px}
+
 </style>
   <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -882,6 +886,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       </div>
       <div class="head-btns">
         <button class="icon-action-btn" id="headExportBtn" aria-label="Unduh data.json"><i class="fas fa-download"></i></button>
+        <button class="icon-action-btn" id="headLogoutBtn" aria-label="Keluar Admin" title="Keluar Admin"><i class="fas fa-right-from-bracket"></i></button>
         <button class="icon-action-btn" id="headThemeBtn" aria-label="Ganti tema terang/gelap"><i class="fas fa-sun" id="themeIco"></i></button>
       </div>
     </header>
@@ -911,10 +916,29 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <div class="gcard-sub" id="srcInfo">Belum ada data.</div>
       </div>
 
+      <div class="gcard" id="backupCard">
+        <div class="gcard-title"><i class="fas fa-shield-halved"></i> Backup &amp; Restore <span class="gtag blue" id="backupCount">0 cadangan</span></div>
+        <div class="gcard-sub">Buat file cadangan yang bisa disimpan di luar perangkat. Admin juga menyimpan hingga 5 snapshot otomatis di browser ini sebelum data diganti.</div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn prim" id="btnBackup"><i class="fas fa-download"></i> Backup Sekarang</button>
+          <label class="btn" for="fileRestore" style="cursor:pointer"><i class="fas fa-clock-rotate-left"></i> Restore Backup</label>
+          <input type="file" id="fileRestore" accept=".json,application/json" hidden>
+        </div>
+        <div class="gcard-sub" id="backupInfo" style="margin-top:9px">Belum ada backup otomatis di browser ini.</div>
+      </div>
+
       <div class="gcard" id="statCard" style="display:none">
         <div class="gcard-title"><i class="fas fa-chart-simple"></i> Statistik <span class="gtag green" id="statFmt">format v2</span></div>
         <div class="stat-total"><b id="stTotal">0</b><span>total item PLU</span></div>
         <div class="stat-list" id="stList"></div>
+      </div>
+
+      <div class="gcard" id="masterCard" style="display:none">
+        <div class="gcard-title"><i class="fas fa-cubes"></i> Master Product <span class="gtag blue" id="masterCount">0</span></div>
+        <div class="gcard-sub">Satu Master Product dapat memiliki beberapa relasi brand. Nama produk dibagikan ke seluruh relasi; PLU, subkategori, dan kategori tetap tersimpan per brand.</div>
+        <div class="btn-row" style="margin-top:10px"><button class="btn" id="btnMasterRefresh"><i class="fas fa-rotate"></i> Perbarui daftar</button><button class="btn prim" id="btnMasterMerge"><i class="fas fa-object-group"></i> Gabungkan Master</button></div>
+        <input class="f-input" id="masterSearch" placeholder="Cari Master Product / ID..." style="margin-top:10px;width:100%">
+        <div id="masterList" style="margin-top:10px"></div>
       </div>
 
       <div class="gcard" id="dupCard" style="display:none">
@@ -924,16 +948,16 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 
       <div class="gcard">
         <div class="gcard-title"><i class="fas fa-cloud-arrow-up"></i> Terbitkan</div>
-        <div class="btn-row">
-          <button class="btn prim" id="btnExport"><i class="fas fa-download"></i> Unduh data.json</button>
+        <button class="btn prim wide" id="btnPublish"><i class="fas fa-cloud-arrow-up"></i> Terbitkan ke GitHub</button>
+        <div class="gcard-sub">Kirim perubahan langsung ke GitHub dan picu deploy Vercel. Kunci publikasi diminta saat proses dan tidak disimpan di browser.</div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn" id="btnExport"><i class="fas fa-download"></i> Unduh data.json</button>
           <button class="btn" id="btnCopy"><i class="fas fa-copy"></i> Salin JSON</button>
         </div>
         <div class="btn-row" style="margin-top:8px">
-          <button class="btn prim" id="btnPublish"><i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung</button>
           <a class="btn" href="./index.html" target="_blank" rel="noopener" style="text-decoration:none"><i class="fas fa-up-right-from-square"></i> Buka App</a>
           <button class="btn danger" id="btnReset"><i class="fas fa-eraser"></i> Reset Draft</button>
         </div>
-        <div class="gcard-sub" style="margin-top:9px">Hybrid: unduh JSON untuk jalur manual, atau terbitkan langsung melalui server yang terhubung ke GitHub. Kunci publikasi diminta saat pertama kali digunakan dan hanya disimpan sementara di sesi browser.</div>
       </div>
     </section>
 
@@ -956,6 +980,22 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     <section id="tabBrand" class="hidden">
       <div class="section-bar"><div class="section-title" style="font-size:19px">Brand</div><span class="item-count-chip" id="brandCount"></span></div>
       <div class="brand-grid" id="brandGrid"></div>
+      <div class="gcard order-card" id="orderManager">
+        <div class="gcard-title"><i class="fas fa-arrow-down-wide-short"></i> Pengaturan Urutan</div>
+        <div class="order-help">Atur posisi yang tampil di aplikasi. Gunakan panah untuk menggeser, atau tekan dan tahan ikon grip lalu seret ke posisi baru.</div>
+        <div class="gcard-title" style="font-size:13px;margin-top:8px">Urutan Brand</div>
+        <div class="order-list" id="orderBrandList"></div>
+        <div class="divider" style="height:1px;background:var(--line);margin:16px 0"></div>
+        <div class="gcard-title" style="font-size:13px">Urutan Subkategori & Kategori</div>
+        <div class="order-selects">
+          <select class="f-sel" id="orderBrandSelect" aria-label="Pilih brand"></select>
+          <select class="f-sel" id="orderSubSelect" aria-label="Pilih subkategori"></select>
+        </div>
+        <div class="order-help">Pilih brand dan subkategori untuk mengatur urutannya. Perubahan langsung tersimpan sebagai draft.</div>
+        <div class="order-list" id="orderSubList"></div>
+        <div class="gcard-title" style="font-size:13px;margin-top:16px">Kategori</div>
+        <div class="order-list" id="orderCategoryList"></div>
+      </div>
     </section>
   </div>
 
@@ -1149,43 +1189,50 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   applyThemeMeta();
 
   /* ================================================================
-     GERBANG PASSWORD — hash djb2 sama dengan index.html
+     GERBANG PASSWORD — kompatibel dengan login Admin Plukakang lama
      ================================================================ */
-  var ADMIN_PASS_HASH = 2718705455; /* djb2 — sama dengan index.html */
+  var ADMIN_PASS_HASH = 2718705455; /* hash yang sama dengan index.html versi lama */
   function djb2Hash(str) {
     var h = 5381, i;
-    for (i = 0; i < str.length; i++) { h = (((h << 5) + h) + str.charCodeAt(i)) >>> 0; }
+    for (i = 0; i < str.length; i++) h = (((h << 5) + h) + str.charCodeAt(i)) >>> 0;
     return h;
   }
   var unlocked = false;
-  function adminUnlocked() {
-    try { return sessionStorage.getItem('plukakang_admin_ok') === '1'; } catch (e) { return false; }
-  }
-  function tryAdminPassword() {
-    var inp = $('adminPass');
-    if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
-      try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
-      unlockAdmin();
-    } else {
-      $('adminErr').classList.add('show');
-      inp.classList.add('bad');
-      inp.value = '';
-      var card = $('adminGateCard');
-      card.classList.remove('shake');
-      void card.offsetWidth;
-      card.classList.add('shake');
-    }
-  }
   function unlockAdmin() {
     unlocked = true;
     $('adminGate').classList.remove('open');
     boot();
   }
+  function tryAdminPassword() {
+    var inp = $('adminPass');
+    if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
+      try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
+      $('adminErr').classList.remove('show');
+      inp.classList.remove('bad');
+      inp.value = '';
+      unlockAdmin();
+    } else {
+      $('adminErr').innerText = 'Password salah. Coba lagi.';
+      $('adminErr').classList.add('show');
+      inp.classList.add('bad');
+      inp.value = '';
+      var card = $('adminGateCard');
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    }
+  }
+  function logoutAdmin() {
+    if (!confirm('Keluar dari sesi Admin sekarang?')) return;
+    try { sessionStorage.removeItem('plukakang_admin_ok'); } catch (e) {}
+    unlocked = false;
+    $('adminGate').classList.add('open');
+    $('adminPass').value = '';
+  }
   $('adminGateOk').addEventListener('click', tryAdminPassword);
   $('adminPass').addEventListener('keydown', function(e) { if (e.key === 'Enter') tryAdminPassword(); });
+  $('adminPass').addEventListener('input', function() { $('adminErr').classList.remove('show'); this.classList.remove('bad'); });
+  $('headLogoutBtn').addEventListener('click', logoutAdmin);
   $('adminGateEye').addEventListener('click', function() {
-    var inp = $('adminPass');
-    var show = inp.type === 'password';
+    var inp = $('adminPass'); var show = inp.type === 'password';
     inp.type = show ? 'text' : 'password';
     this.innerHTML = show ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
   });
@@ -1204,6 +1251,9 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   ];
 
   var brands = [], items = [], extraKeys = {};
+  var masterCuration = { decisions: [], history: [] };
+  function ensurePid(it) { if (!it.product_id) it.product_id = 'prod_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); return it.product_id; }
+  function masterGroups() { var map = {}; items.forEach(function(it){ var id=ensurePid(it); if(!map[id]) map[id]={id:id,nama:it.nama,items:[]}; map[id].items.push(it); }); return Object.keys(map).map(function(k){return map[k];}); }
   var loaded = false, srcLabel = '', loadedAt = 0, dirty = false;
   var curChip = 'all';
   var editItemIdx = null;
@@ -1249,7 +1299,8 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       kategori: String(it.kategori == null ? '' : it.kategori).toLowerCase().trim(),
       nama: nama,
       raw: raw,
-      konv: konv
+      konv: konv,
+      product_id: String(it.product_id || it.master_id || '').trim()
     };
   }
   function normBrand(b) {
@@ -1292,29 +1343,38 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     };
   }
   function collect(json) {
-    var arr = null, br = null, ex = {};
+    var arr = null, br = null, ex = {}, migratedProducts = [], curation = { decisions: [], history: [] }, version = 2;
     if (Array.isArray(json)) { arr = json; }
     else if (json && typeof json === 'object') {
-      if (Array.isArray(json.items)) arr = json.items;
       if (Array.isArray(json.brands) && json.brands.length) br = json.brands;
-      for (var k in json) { if (k !== 'items' && k !== 'brands') ex[k] = json[k]; }
+      version = Number(json.v || 2);
+      if (version >= 3 && Array.isArray(json.products)) {
+        curation = json.curation || curation;
+        json.products.forEach(function(p, pi) {
+          if (!p || !Array.isArray(p.brands)) return;
+          var pid = String(p.id || ('prod_import_' + pi));
+          migratedProducts.push({ id: pid, nama: String(p.nama || ''), deskripsi: String(p.deskripsi || '') });
+          p.brands.forEach(function(a) {
+            arr = arr || [];
+            arr.push({ brand:a.brand, sub:a.sub, kategori:a.kategori, nama:p.nama, raw:a.raw, konv:a.konv, product_id:pid });
+          });
+        });
+      } else if (Array.isArray(json.items)) arr = json.items;
+      for (var k in json) { if (['items','brands','products','curation'].indexOf(k) === -1) ex[k] = json[k]; }
     }
     var isV2 = !!(br && br.length);
     if (!br || !br.length) br = clone(DEF_BRANDS);
     var ni = [], nb = [], ids = {};
-    (arr || []).forEach(function(it) {
+    (arr || []).forEach(function(it, i) {
       var n = normItem(it);
-      if (n) ni.push(n);
+      if (n) { if (!n.product_id) n.product_id = 'prod_legacy_' + i + '_' + Math.random().toString(36).slice(2,7); ni.push(n); }
     });
-    br.forEach(function(b) {
-      var x = normBrand(b);
-      if (x && !ids[x.id]) { ids[x.id] = 1; nb.push(x); }
-    });
-    return { brands: nb, items: ni, extra: ex, isV2: isV2 };
+    br.forEach(function(b) { var x = normBrand(b); if (x && !ids[x.id]) { ids[x.id] = 1; nb.push(x); } });
+    return { brands: nb, items: ni, extra: ex, isV2: isV2, curation: curation, products: migratedProducts, version: version };
   }
   function applyData(json, source) {
     var c = collect(json);
-    brands = c.brands; items = c.items; extraKeys = c.extra;
+    brands = c.brands; items = c.items; extraKeys = c.extra; masterCuration = c.curation || {decisions:[],history:[]};
     loaded = true; loadedAt = Date.now();
     loadedIsV2 = c.isV2;
     dirty = (source === 'draft');
@@ -1343,7 +1403,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         localStorage.setItem(DRAFT_KEY, JSON.stringify({
           at: Date.now(),
           brands: brands,
-          items: items
+          items: items, curation: masterCuration
         }));
       } catch (e) {}
     }, 400);
@@ -1354,12 +1414,113 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       if (!raw) return null;
       var d = JSON.parse(raw);
       if (!d || !Array.isArray(d.brands) || !Array.isArray(d.items)) return null;
+      if (d.curation) masterCuration = d.curation;
       return d;
     } catch (e) { return null; }
   }
   function clearDraft() {
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
   }
+
+  /* ================================================================
+     BACKUP & RESTORE — snapshot lokal + file backup portabel
+     ================================================================ */
+  var BACKUP_KEY = 'plukakang_admin_backups_v1';
+  var BACKUP_LIMIT = 5;
+  function backupPayload() {
+    return {
+      app: 'plukakang-backup',
+      backup_version: 1,
+      created_at: new Date().toISOString(),
+      source: srcLabel || 'admin',
+      data: JSON.parse(buildV3())
+    };
+  }
+  function readBackups() {
+    try {
+      var list = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+  function refreshBackupInfo() {
+    var list = readBackups();
+    $('backupCount').innerText = list.length + ' cadangan';
+    if (!list.length) {
+      $('backupInfo').innerText = 'Belum ada backup otomatis di browser ini.';
+      return;
+    }
+    var latest = list[0];
+    $('backupInfo').innerText = 'Terakhir: ' + jamMenit(new Date(latest.at).getTime()) + ' · ' + (latest.item_count || 0) + ' item. Tersimpan di browser/perangkat ini.';
+  }
+  function saveAutoBackup(reason) {
+    if (!loaded || !items.length || !brands.length) return false;
+    try {
+      var list = readBackups();
+      list.unshift({ at: Date.now(), reason: reason || 'Perubahan data', item_count: items.length, payload: backupPayload() });
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(list.slice(0, BACKUP_LIMIT)));
+      refreshBackupInfo();
+      return true;
+    } catch (e) {
+      showToast('Backup otomatis gagal — ruang penyimpanan browser mungkin penuh');
+      return false;
+    }
+  }
+  function downloadBackup(payload, filename) {
+    var blob = new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
+  }
+  function validateRestore(json) {
+    var data = json && json.app === 'plukakang-backup' ? json.data : json;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
+    var isV3 = Number(data.v) >= 3 && Array.isArray(data.products);
+    if ((!isV3 && (!Array.isArray(data.items) || !data.items.length)) || (isV3 && !data.products.length)) throw new Error('Daftar produk kosong atau tidak valid.');
+    if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
+    var ids = {};
+    data.brands.forEach(function(b) {
+      if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.');
+      if (ids[b.id]) throw new Error('ID brand duplikat: ' + b.id);
+      ids[b.id] = true;
+    });
+    var invalid = 0;
+    if (isV3) { data.products.forEach(function(p){ if(!p || !p.id || !p.nama || !Array.isArray(p.brands) || !p.brands.length){invalid++;return;} p.brands.forEach(function(a){if(!a || !a.brand || (!a.raw && !a.konv) || !ids[a.brand]) invalid++;}); }); }
+    else data.items.forEach(function(it) { if (!it || !it.brand || !it.nama || (!it.raw && !it.konv) || !ids[it.brand]) invalid++; });
+    if (invalid) throw new Error(invalid + ' produk/relasi tidak valid atau memakai brand yang tidak tersedia.');
+    var parsed = collect(data);
+    if ((!isV3 && parsed.items.length !== data.items.length) || (isV3 && parsed.items.length !== data.products.reduce(function(n,p){return n+(p.brands||[]).length;},0)) || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
+    return data;
+  }
+  $('btnBackup').addEventListener('click', function() {
+    if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
+    var payload = backupPayload();
+    downloadBackup(payload, 'plukakang-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json');
+    saveAutoBackup('Backup manual');
+    showToast('File backup berhasil dibuat');
+  });
+  $('fileRestore').addEventListener('change', function(e) {
+    var f = e.target.files && e.target.files[0]; if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var parsed = JSON.parse(ev.target.result);
+        var data = validateRestore(parsed);
+        var count = data.items.length;
+        if (!confirm('Pulihkan backup berisi ' + count + ' item dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
+        saveAutoBackup('Sebelum restore');
+        applyData(data, 'file');
+        $('draftCard').style.display = 'none';
+        showToast('Backup dipulihkan: ' + count + ' item');
+      } catch (err) {
+        showToast('Restore dibatalkan: ' + (err && err.message ? err.message : 'file tidak valid'), null, null, 4200);
+      } finally { e.target.value = ''; }
+    };
+    reader.onerror = function() { showToast('File backup gagal dibaca'); e.target.value = ''; };
+    reader.readAsText(f);
+  });
+  refreshBackupInfo();
+
   function updateSrcInfo(isDirty) {
     var el = $('srcInfo'), chip = $('srcChip');
     if (!loaded) { return; }
@@ -1410,8 +1571,10 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var r = new FileReader();
     r.onload = function(ev) {
       try {
+        var incoming = JSON.parse(ev.target.result);
+        if (loaded) saveAutoBackup('Sebelum impor JSON');
         $('draftCard').style.display = 'none';
-        applyData(JSON.parse(ev.target.result), 'file');
+        applyData(incoming, 'file');
         showToast('File dimuat: ' + items.length + ' item');
       } catch (err) { showToast('JSON tidak valid'); }
     };
@@ -1436,7 +1599,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
     if (name === 'item') renderItemList();
-    if (name === 'brand') renderBrandGrid();
+    if (name === 'brand') { renderBrandGrid(); renderOrderManager(); }
     window.scrollTo(0, 0);
   }
   $('dockData').addEventListener('click', function() { showTab('data'); vibrate(); });
@@ -1450,11 +1613,69 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   /* ================================================================
      RENDER: SEMUA
      ================================================================ */
+  function renderMasterProducts() {
+    if (!loaded || !$('masterCard')) return;
+    var groups=masterGroups(), q=String($('masterSearch').value||'').toLowerCase();
+    $('masterCard').style.display=''; $('masterCount').innerText=groups.length+' master';
+    var html=''; groups.filter(function(g){return !q || (g.nama+' '+g.id).toLowerCase().indexOf(q)>=0;}).slice(0,120).forEach(function(g){
+      html += '<div class="dup-item" style="display:block;padding:10px;border-bottom:1px solid var(--hairline)"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="master-pick" value="'+esc(g.id)+'"><b>'+esc(g.nama)+'</b></label><div class="item-subinfo">ID: '+esc(g.id)+' · '+g.items.length+' relasi · '+esc(g.items.map(function(x){return brandName(x.brand)}).join(', '))+'</div><div class="btn-row" style="margin-top:7px"><button class="btn-mini" data-master-add="'+esc(g.id)+'">+ Relasi brand</button><button class="btn-mini" data-master-split="'+esc(g.id)+'">Pisah relasi</button><button class="btn-mini danger" data-master-remove="'+esc(g.id)+'">Hapus relasi</button><button class="btn-mini danger" data-master-delete="'+esc(g.id)+'">Hapus Master</button></div></div>';
+    });
+    $('masterList').innerHTML=html || '<div class="item-subinfo">Tidak ada Master Product.</div>';
+  }
+  $('masterList').addEventListener('click',function(e){
+    var add=e.target.closest('[data-master-add]'), split=e.target.closest('[data-master-split]'), rem=e.target.closest('[data-master-remove]'), del=e.target.closest('[data-master-delete]');
+    if(add){
+      var id=add.dataset.masterAdd, g=masterGroups().filter(function(x){return x.id===id;})[0]; if(!g)return;
+      var brand=window.prompt('Masukkan ID brand:\n'+brands.map(function(b){return b.id+' = '+b.nama;}).join('\n')); if(!brand)return; brand=brand.toLowerCase().trim();
+      if(!brandById(brand)){showToast('ID brand tidak ditemukan');return;}
+      if(g.items.some(function(x){return x.brand===brand;})){showToast('Master ini sudah terhubung ke brand tersebut');return;}
+      var raw=window.prompt('PLU RAW (boleh kosong):','')||'', konv=window.prompt('PLU KONV (boleh kosong):','')||''; if(!raw.trim()&&!konv.trim()){showToast('Isi minimal satu PLU');return;}
+      var b=brandById(brand), sub=b.subs[0]?b.subs[0].id:'all';
+      items.push({brand:brand,sub:sub,kategori:'',nama:g.nama,raw:raw.trim(),konv:konv.trim(),product_id:id});
+      masterCuration.history.push({at:new Date().toISOString(),action:'add_brand_link',master_id:id,brand:brand}); markDirty();renderMasterProducts();showToast('Relasi brand ditambahkan');
+    }
+    if(split){
+      var sid=split.dataset.masterSplit, sg=masterGroups().filter(function(x){return x.id===sid;})[0];if(!sg||sg.items.length<2){showToast('Master ini hanya punya satu relasi');return;}
+      var labels=sg.items.map(function(x,i){return i+' = '+brandName(x.brand)+' (RAW '+x.raw+', KONV '+x.konv+')';}).join('\n');
+      var ix=window.prompt('Pilih nomor relasi yang akan dipisah:\n'+labels,'0');if(ix===null)return;ix=Number(ix);if(!Number.isInteger(ix)||!sg.items[ix]){showToast('Nomor relasi tidak valid');return;}
+      var fresh='prod_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);sg.items[ix].product_id=fresh;masterCuration.history.push({at:new Date().toISOString(),action:'split_link',from:sid,to:fresh,brand:sg.items[ix].brand});markDirty();renderMasterProducts();showToast('Relasi berhasil dipisahkan');
+    }
+    if(del){
+      var did=del.dataset.masterDelete, dg=masterGroups().filter(function(x){return x.id===did;})[0];if(!dg)return;
+      if(!confirm('HAPUS MASTER PRODUCT "'+dg.nama+'" beserta seluruh '+dg.items.length+' relasi brand dan PLU-nya? Tindakan ini tidak bisa dibatalkan kecuali dari backup.'))return;
+      items=items.filter(function(x){return x.product_id!==did;});masterCuration.history.push({at:new Date().toISOString(),action:'delete_master_product',master_id:did,name:dg.nama,relations:dg.items.length});markDirty();renderMasterProducts();showToast('Master Product dan seluruh relasinya dihapus');
+    }
+    if(rem){
+      var rid=rem.dataset.masterRemove, rg=masterGroups().filter(function(x){return x.id===rid;})[0];if(!rg)return;
+      var rlabels=rg.items.map(function(x,i){return i+' = '+brandName(x.brand)+' (RAW '+x.raw+', KONV '+x.konv+')';}).join('\n');
+      var ri=window.prompt('Pilih nomor relasi brand yang dihapus:\n'+rlabels,'0');if(ri===null)return;ri=Number(ri);if(!Number.isInteger(ri)||!rg.items[ri]){showToast('Nomor relasi tidak valid');return;}
+      if(!confirm('Hapus relasi '+brandName(rg.items[ri].brand)+'? Master Product tetap ada jika masih punya relasi lain.'))return;
+      var target=rg.items[ri], pos=items.indexOf(target);items.splice(pos,1);masterCuration.history.push({at:new Date().toISOString(),action:'remove_brand_link',master_id:rid,brand:target.brand});markDirty();renderMasterProducts();showToast('Relasi dihapus');
+    }
+  });
+  $('btnMasterRefresh').addEventListener('click',renderMasterProducts);
+  $('masterSearch').addEventListener('input',renderMasterProducts);
+  $('btnMasterMerge').addEventListener('click',function(){
+    var picks=Array.prototype.slice.call(document.querySelectorAll('.master-pick:checked')).map(function(x){return x.value;});
+    if(picks.length<2){showToast('Pilih minimal dua Master Product');return;}
+    var groups=masterGroups().filter(function(g){return picks.indexOf(g.id)>=0;});
+    var name=window.prompt('Nama Master Product hasil gabungan:',groups[0].nama); if(!name)return;
+    if(!confirm('Gabungkan '+groups.length+' Master Product menjadi satu? Semua relasi brand akan dipertahankan.'))return;
+    var keep=groups[0].id, removed=picks.slice(1);
+    items.forEach(function(it){if(removed.indexOf(it.product_id)>=0){it.product_id=keep;it.nama=name;}});
+    items.forEach(function(it){if(it.product_id===keep)it.nama=name;});
+    masterCuration.history=masterCuration.history||[]; masterCuration.history.push({at:new Date().toISOString(),action:'merge',from:picks,to:keep,name:name});
+    masterCuration.decisions=masterCuration.decisions||[]; masterCuration.decisions.push({at:new Date().toISOString(),action:'merge',ids:picks,master_id:keep});
+    markDirty(); renderMasterProducts(); showToast('Master Product berhasil digabung');
+  });
+
   function renderAll() {
     renderStats();
+    renderMasterProducts();
     renderChips();
     renderItemList();
     renderBrandGrid();
+    renderOrderManager();
     renderDup();
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
@@ -1693,9 +1914,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (dups.length) {
       if (!confirm('Peringatan duplikat:\n\n- ' + dups.join('\n- ').replace(/<b>/g, '').replace(/<\/b>/g, '') + '\n\nSimpan tetap?')) return;
     }
-    var obj = { brand: brand, sub: sub, kategori: kat, nama: nama, raw: raw, konv: konv };
+    var prior = editItemIdx !== null ? items[editItemIdx] : null;
+    var obj = { brand: brand, sub: sub, kategori: kat, nama: nama, raw: raw, konv: konv, product_id: prior ? ensurePid(prior) : ('prod_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8)) };
     if (editItemIdx !== null) {
       items[editItemIdx] = obj;
+      items.forEach(function(x){ if(x.product_id === obj.product_id) x.nama = nama; });
       showToast('Item diperbarui');
     } else {
       items.push(obj);
@@ -1756,6 +1979,90 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (c) openBrandSheet(parseInt(c.dataset.bi, 10));
   });
   $('fabAddBrand').addEventListener('click', function() { openBrandSheet(null); vibrate(); });
+
+  /* ================================================================
+     PENGATURAN URUTAN — brand, sub, kategori
+     ================================================================ */
+  var orderDrag = null, orderHoldTimer = null;
+  function moveArrayEntry(arr, from, to) {
+    if (!Array.isArray(arr) || from < 0 || to < 0 || from >= arr.length || to >= arr.length || from === to) return false;
+    var entry = arr.splice(from, 1)[0]; arr.splice(to, 0, entry); return true;
+  }
+  function moveObjectKey(obj, from, to) {
+    var keys = Object.keys(obj || {}); if (from < 0 || to < 0 || from >= keys.length || to >= keys.length || from === to) return obj;
+    var vals = {}; keys.forEach(function(k){ vals[k] = obj[k]; });
+    var key = keys.splice(from,1)[0]; keys.splice(to,0,key);
+    var out = {}; keys.forEach(function(k){ out[k] = vals[k]; }); return out;
+  }
+  function orderRowHtml(kind, index, label, meta, total) {
+    return '<div class="order-row" data-order-kind="'+kind+'" data-order-index="'+index+'">' +
+      '<span class="order-grip" aria-label="Tekan dan tahan untuk memindahkan"><i class="fas fa-grip-vertical"></i></span>' +
+      '<span class="order-name">'+esc(label)+' <span class="order-meta">'+esc(meta || '')+'</span></span>' +
+      '<span class="order-actions"><button type="button" data-order-move="up" aria-label="Naik" '+(index===0?'disabled':'')+'><i class="fas fa-chevron-up"></i></button>' +
+      '<button type="button" data-order-move="down" aria-label="Turun" '+(index===total-1?'disabled':'')+'><i class="fas fa-chevron-down"></i></button></span></div>';
+  }
+  function selectedOrderBrand() { return brandById($('orderBrandSelect').value); }
+  function renderOrderManager() {
+    if (!$('orderBrandList')) return;
+    $('orderBrandList').innerHTML = brands.map(function(b,i){ return orderRowHtml('brand',i,b.nama,b.subjudul,brands.length); }).join('') || '<div class="order-empty">Belum ada brand.</div>';
+    var bs = $('orderBrandSelect'), prevB = bs.value;
+    bs.innerHTML = brands.map(function(b){ return '<option value="'+esc(b.id)+'">'+esc(b.nama)+'</option>'; }).join('');
+    if (brands.some(function(b){return b.id===prevB;})) bs.value=prevB;
+    var brand = selectedOrderBrand(), ss=$('orderSubSelect'), prevS=ss.value;
+    ss.innerHTML = brand ? brand.subs.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.label)+'</option>';}).join('') : '';
+    if (brand && brand.subs.some(function(x){return x.id===prevS;})) ss.value=prevS;
+    $('orderSubList').innerHTML = brand ? brand.subs.map(function(x,i){return orderRowHtml('sub',i,x.label,x.id,brand.subs.length);}).join('') : '<div class="order-empty">Pilih brand.</div>';
+    var sub = brand && ss.value, cats = brand && brand.kategori[sub] ? brand.kategori[sub] : {};
+    var keys = Object.keys(cats);
+    $('orderCategoryList').innerHTML = keys.length ? keys.map(function(k,i){return orderRowHtml('category',i,cats[k],k,keys.length);}).join('') : '<div class="order-empty">Tidak ada kategori pada subkategori ini.</div>';
+  }
+  function reorderByKind(kind, from, to) {
+    var brand = selectedOrderBrand(), changed=false;
+    if (kind==='brand') changed=moveArrayEntry(brands,from,to);
+    else if (kind==='sub' && brand) changed=moveArrayEntry(brand.subs,from,to);
+    else if (kind==='category' && brand) {
+      var sub=$('orderSubSelect').value, obj=brand.kategori[sub] || {};
+      var reordered=moveObjectKey(obj,from,to);
+      if (reordered!==obj) { brand.kategori[sub]=reordered; changed=true; }
+    }
+    if (changed) { markDirty(); renderOrderManager(); renderBrandGrid(); renderStats(); }
+  }
+  $('orderBrandSelect').addEventListener('change',renderOrderManager);
+  $('orderSubSelect').addEventListener('change',renderOrderManager);
+  $('orderManager').addEventListener('click',function(e){
+    var btn=e.target.closest('[data-order-move]'); if(!btn) return;
+    var row=btn.closest('.order-row'), idx=Number(row.dataset.orderIndex), dir=btn.dataset.orderMove==='up'?-1:1;
+    reorderByKind(row.dataset.orderKind,idx,idx+dir);
+  });
+  $('orderManager').addEventListener('pointerdown',function(e){
+    var grip=e.target.closest('.order-grip'); if(!grip) return;
+    var row=grip.closest('.order-row'); if(!row) return;
+    orderHoldTimer=setTimeout(function(){
+      orderDrag={kind:row.dataset.orderKind,from:Number(row.dataset.orderIndex),row:row};
+      row.classList.add('dragging');
+      if (navigator.vibrate) navigator.vibrate(18);
+    },320);
+  });
+  $('orderManager').addEventListener('pointermove',function(e){
+    if(!orderDrag) return;
+    e.preventDefault();
+    var target=document.elementFromPoint(e.clientX,e.clientY);
+    var row=target && target.closest ? target.closest('.order-row[data-order-kind="'+orderDrag.kind+'"]') : null;
+    document.querySelectorAll('.order-row.drop-target').forEach(function(x){x.classList.remove('drop-target');});
+    if(row && row!==orderDrag.row) row.classList.add('drop-target');
+  },{passive:false});
+  function finishOrderDrag(e){
+    clearTimeout(orderHoldTimer);
+    if(!orderDrag) return;
+    var target=document.elementFromPoint(e.clientX,e.clientY);
+    var row=target && target.closest ? target.closest('.order-row[data-order-kind="'+orderDrag.kind+'"]') : null;
+    var kind=orderDrag.kind, from=orderDrag.from, to=row?Number(row.dataset.orderIndex):from;
+    document.querySelectorAll('.order-row.dragging,.order-row.drop-target').forEach(function(x){x.classList.remove('dragging','drop-target');});
+    orderDrag=null;
+    if(from!==to) reorderByKind(kind,from,to);
+  }
+  document.addEventListener('pointerup',finishOrderDrag);
+  $('orderManager').addEventListener('pointercancel',function(){clearTimeout(orderHoldTimer); if(orderDrag){orderDrag.row.classList.remove('dragging');orderDrag=null;}});
 
   /* ================================================================
      SHEET FORM BRAND — meta lengkap: nama, id, ikon, warna,
@@ -2158,17 +2465,14 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   /* ================================================================
      EXPORT — format v2 { app, v, brands, items }
      ================================================================ */
-  function buildV2() {
-    var out = {};
-    for (var k in extraKeys) { if (k !== 'app' && k !== 'v') out[k] = extraKeys[k]; }
-    out.app = 'plukakang';
-    out.v = 2;
-    out.brands = clone(brands);
-    out.items = items.map(function(it) {
-      return { brand: it.brand, sub: it.sub, kategori: it.kategori, nama: it.nama, raw: it.raw, konv: it.konv };
-    });
+  function buildV3() {
+    var groups = masterGroups();
+    var out = { app:'plukakang', v:3, brands:clone(brands), products:groups.map(function(g){
+      return { id:g.id, nama:g.nama, deskripsi:'', brands:g.items.map(function(it){ return { brand:it.brand, sub:it.sub, kategori:it.kategori, raw:it.raw, konv:it.konv }; }) };
+    }), curation:clone(masterCuration) };
     return JSON.stringify(out, null, 2);
   }
+  function buildV2() { return buildV3(); }
   function doExport() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
     var blob = new Blob([buildV2()], { type: 'application/json' });
@@ -2186,59 +2490,35 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   $('headExportBtn').addEventListener('click', doExport);
 
   /* ================================================================
-     HYBRID PUBLISH — GitHub token tetap di environment server
+     PUBLISH — kirim data ke endpoint server, tanpa menyimpan secret
      ================================================================ */
-  var PUBLISH_KEY_SESSION = 'plukakang_publish_key_v1';
-  function validatePublishData(payload) {
-    var errors = [];
-    if (!payload || payload.app !== 'plukakang') errors.push('Identitas data bukan plukakang.');
-    if (payload.v !== 2) errors.push('Versi format harus v2.');
-    if (!Array.isArray(payload.brands) || !payload.brands.length) errors.push('Daftar brand kosong atau tidak valid.');
-    if (!Array.isArray(payload.items) || !payload.items.length) errors.push('Daftar item kosong atau tidak valid.');
-    if (Array.isArray(payload.brands)) {
-      var brandIds = {};
-      payload.brands.forEach(function(b, i) {
-        if (!b || !b.id || !b.nama) errors.push('Brand ke-' + (i + 1) + ' tidak memiliki id/nama.');
-        else if (brandIds[b.id]) errors.push('ID brand duplikat: ' + b.id);
-        else brandIds[b.id] = true;
-      });
-    }
-    if (Array.isArray(payload.items)) {
-      var bad = 0;
-      payload.items.forEach(function(it) {
-        if (!it || !it.brand || !it.nama || (!it.raw && !it.konv)) bad++;
-      });
-      if (bad) errors.push(bad + ' item tidak memiliki brand/nama atau tidak memiliki kode raw maupun konversi.');
-    }
-    return errors;
-  }
-  function publishDirect() {
+  var publishInProgress = false;
+  $('btnPublish').addEventListener('click', function() {
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
-    var payload;
-    try { payload = JSON.parse(buildV2()); } catch (e) { showToast('Gagal membentuk JSON'); return; }
-    var errors = validatePublishData(payload);
-    if (errors.length) {
-      alert('Validasi gagal:\n\n• ' + errors.join('\n• '));
-      return;
-    }
-    if (!confirm('Terbitkan ' + payload.items.length + ' item dari ' + payload.brands.length + ' brand ke repository sekarang? Perubahan akan memicu deployment baru.')) return;
-    var key = '';
-    try { key = sessionStorage.getItem(PUBLISH_KEY_SESSION) || ''; } catch (e) {}
-    if (!key) {
-      key = prompt('Masukkan kunci publikasi Plukakang. Kunci ini harus cocok dengan PLUKAKANG_PUBLISH_KEY di Vercel:');
-      if (!key) return;
-      try { sessionStorage.setItem(PUBLISH_KEY_SESSION, key); } catch (e) {}
-    }
+    if (publishInProgress) return;
+    var duplicates = scanDup();
+    var serious = duplicates.filter(function(d) { return d.t === 'red'; });
+    if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
+    if (!confirm('Terbitkan ' + masterGroups().length + ' Master Product (' + items.length + ' relasi brand) dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
+
+    var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
+    if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
+
+    publishInProgress = true;
     var btn = $('btnPublish');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim…';
-    fetch('/api/publish', {
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menerbitkan…';
+    fetch('./api/publish', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-publish-key': key },
-      body: JSON.stringify({ data: payload })
-    }).then(function(r) {
-      return r.json().catch(function() { return {}; }).then(function(body) {
-        if (!r.ok) { var err = new Error(body.error || ('HTTP ' + r.status)); err.status = r.status; throw err; }
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Publish-Key': key },
+      body: JSON.stringify({ data: JSON.parse(buildV2()) })
+    }).then(function(res) {
+      return res.json().catch(function() { return {}; }).then(function(body) {
+        if (!res.ok) {
+          var msg = body && body.error ? body.error : ('HTTP ' + res.status);
+          if (body && Array.isArray(body.details) && body.details.length) msg += ' ' + body.details.join(' ');
+          throw new Error(msg);
+        }
         return body;
       });
     }).then(function(result) {
@@ -2247,19 +2527,15 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       srcLabel = 'live';
       loadedAt = Date.now();
       updateSrcInfo(false);
-      $('draftCard').style.display = 'none';
-      showToast('Commit GitHub berhasil · ' + String(result.commit || '').slice(0, 7) + '. Vercel akan deploy jika branch ini terhubung.');
+      showToast('Publish berhasil! Commit: ' + String(result.commit || '').slice(0, 7) + '. Tunggu deploy Vercel.', null, null, 5000);
     }).catch(function(err) {
-      if (err.status === 401 || err.status === 403) {
-        try { sessionStorage.removeItem(PUBLISH_KEY_SESSION); } catch (e) {}
-      }
-      showToast('Publikasi gagal: ' + esc(err.message || 'kesalahan jaringan') + ' — jalur unduh manual tetap tersedia', null, null, 5000);
+      showToast('Publish gagal: ' + (err && err.message ? err.message : 'Kesalahan jaringan'), null, null, 5200);
     }).finally(function() {
+      publishInProgress = false;
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung';
+      btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Terbitkan ke GitHub';
     });
-  }
-  $('btnPublish').addEventListener('click', publishDirect);
+  });
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
     copyText(buildV2(), 'JSON tersalin (' + items.length + ' item)');
@@ -2330,6 +2606,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (!pendingImport) return;
     if (mode === 'replace') {
       if (!confirm('GANTI seluruh ' + items.length + ' item dengan ' + pendingImport.length + ' item dari Excel?')) return;
+      saveAutoBackup('Sebelum mengganti data dengan Excel');
       items = pendingImport.slice();
     } else {
       items = items.concat(pendingImport);
@@ -2372,6 +2649,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       loadLive(true);
     }
   }
-  if (adminUnlocked()) unlockAdmin();
+  try { if (sessionStorage.getItem('plukakang_admin_ok') === '1') unlockAdmin(); } catch (e) {}
   </script>
 </body>
