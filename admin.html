@@ -1181,74 +1181,43 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   applyThemeMeta();
 
   /* ================================================================
-     AUTENTIKASI ADMIN — sesi HttpOnly dari server
+     GERBANG PASSWORD — kompatibel dengan login Admin Plukakang lama
      ================================================================ */
-  var unlocked = false;
-  var adminSessionTimer = null;
-  function setAdminError(message) {
-    $('adminErr').innerText = message || 'Password salah. Coba lagi.';
-    $('adminErr').classList.add('show');
-    $('adminPass').classList.add('bad');
+  var ADMIN_PASS_HASH = 2718705455; /* hash yang sama dengan index.html versi lama */
+  function djb2Hash(str) {
+    var h = 5381, i;
+    for (i = 0; i < str.length; i++) h = (((h << 5) + h) + str.charCodeAt(i)) >>> 0;
+    return h;
   }
+  var unlocked = false;
   function unlockAdmin() {
     unlocked = true;
     $('adminGate').classList.remove('open');
     boot();
-    startAdminSessionMonitor();
   }
   function tryAdminPassword() {
     var inp = $('adminPass');
-    var button = $('adminGateOk');
-    var password = inp.value || '';
-    if (!password) { setAdminError('Masukkan password Admin.'); return; }
-    button.disabled = true;
-    button.innerText = 'Memeriksa...';
-    fetch('/api/auth/login', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: password })
-    }).then(function(res) {
-      return res.json().catch(function() { return {}; }).then(function(body) {
-        if (!res.ok) throw new Error(body.error || 'Login gagal.');
-        return body;
-      });
-    }).then(function() {
-      inp.value = '';
+    if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
+      try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
       $('adminErr').classList.remove('show');
       inp.classList.remove('bad');
-      unlockAdmin();
-    }).catch(function(err) {
-      setAdminError(err.message || 'Login gagal. Periksa koneksi dan konfigurasi server.');
       inp.value = '';
-      var card = $('adminGateCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-    }).finally(function() {
-      button.disabled = false;
-      button.innerText = 'Buka Admin';
-    });
-  }
-  function lockAdmin(message) {
-    unlocked = false;
-    if (adminSessionTimer) clearInterval(adminSessionTimer);
-    $('adminGate').classList.add('open');
-    if (message) setAdminError(message);
-  }
-  function checkAdminSession() {
-    return fetch('/api/auth/session', { cache: 'no-store', credentials: 'same-origin' })
-      .then(function(res) { return res.ok ? res.json() : { authenticated: false }; })
-      .then(function(info) {
-        if (info.authenticated) { if (!unlocked) unlockAdmin(); return true; }
-        if (unlocked) lockAdmin('Sesi berakhir. Silakan login kembali.');
-        return false;
-      }).catch(function() { return false; });
-  }
-  function startAdminSessionMonitor() {
-    if (adminSessionTimer) clearInterval(adminSessionTimer);
-    adminSessionTimer = setInterval(function() { checkAdminSession(); }, 5 * 60 * 1000);
+      unlockAdmin();
+    } else {
+      $('adminErr').innerText = 'Password salah. Coba lagi.';
+      $('adminErr').classList.add('show');
+      inp.classList.add('bad');
+      inp.value = '';
+      var card = $('adminGateCard');
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    }
   }
   function logoutAdmin() {
     if (!confirm('Keluar dari sesi Admin sekarang?')) return;
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
-      .finally(function() { lockAdmin('Anda sudah keluar. Masukkan password untuk masuk kembali.'); });
+    try { sessionStorage.removeItem('plukakang_admin_ok'); } catch (e) {}
+    unlocked = false;
+    $('adminGate').classList.add('open');
+    $('adminPass').value = '';
   }
   $('adminGateOk').addEventListener('click', tryAdminPassword);
   $('adminPass').addEventListener('keydown', function(e) { if (e.key === 'Enter') tryAdminPassword(); });
@@ -2602,5 +2571,5 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       loadLive(true);
     }
   }
-  checkAdminSession();
+  try { if (sessionStorage.getItem('plukakang_admin_ok') === '1') unlockAdmin(); } catch (e) {}
   </script>
