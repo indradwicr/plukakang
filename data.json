@@ -10867,10 +10867,18 @@
     },
     {
       "brand": "hambalanfc",
-      "sub": "minyak",
+      "sub": "beras",
       "kategori": "",
       "nama": "Gentong Rejeki 5kg",
       "raw": "20103313",
+      "konv": ""
+    },
+    {
+      "brand": "hambalanfc",
+      "sub": "beverage",
+      "kategori": "",
+      "nama": "Cimory NS Chocolate Almond",
+      "raw": "20144282",
       "konv": ""
     }
   ]
