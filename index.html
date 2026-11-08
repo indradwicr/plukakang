@@ -3031,30 +3031,9 @@ function renderSidebarPlu(filter) {
              var items = data, meta = null;
              if (data && !Array.isArray(data) && typeof data === 'object') {
                if (Array.isArray(data.items)) { items = data.items; }
-               else if (data.v === 3 && Array.isArray(data.products)) {
-                 // V3 stores one Master Product with one or more brand associations.
-                 // Flatten associations for the existing catalogue and PLU calculator UI.
-                 items = [];
-                 data.products.forEach(function(product) {
-                   if (!product || !Array.isArray(product.brands)) return;
-                   product.brands.forEach(function(link) {
-                     if (!link) return;
-                     items.push({
-                       product_id: String(product.id || ''),
-                       nama: String(product.nama || ''),
-                       deskripsi: String(product.deskripsi || ''),
-                       brand: String(link.brand || ''),
-                       sub: String(link.sub || ''),
-                       kategori: String(link.kategori || ''),
-                       raw: String(link.raw || ''),
-                       konv: String(link.konv || '')
-                     });
-                   });
-                 });
-               }
                if (Array.isArray(data.brands) && data.brands.length) { meta = data.brands; }
              }
-             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: items/products harus berupa array.');
+             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: items harus berupa array.');
 
              if (meta) { syncMeta(meta); renderBrandGrid(); }
              items.sort(function(a, b) {
@@ -3501,49 +3480,47 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
 
   /* ================================================================
-      MODE ADMIN — autentikasi server-side
+      MODE ADMIN — autentikasi lokal kompatibel dengan admin.html
       ================================================================ */
+  var ADMIN_PASS_HASH = 2718705455; /* djb2("tuan1197") */
+  function djb2Hash(s) {
+      var h = 5381;
+      for (var i = 0; i < s.length; i++) h = (((h << 5) + h) + s.charCodeAt(i)) >>> 0;
+      return h;
+  }
+  function adminUnlocked() {
+      try { return sessionStorage.getItem('plukakang_admin_ok') === '1'; }
+      catch (e) { return false; }
+  }
   function launchAdmin() {
       showToast('Membuka admin...');
       window.location.href = 'admin.html';
   }
   function openAdminGate() {
-      fetch('/api/auth/session', { cache: 'no-store', credentials: 'same-origin' })
-        .then(function(r) { return r.ok ? r.json() : { authenticated: false }; })
-        .then(function(info) {
-          if (info.authenticated) { launchAdmin(); return; }
-          var inp = $('adminPass'); inp.value = ''; inp.type = 'password';
-          inp.classList.remove('bad'); $('adminErr').classList.remove('show');
-          $('adminGateEye').innerHTML = '<i class="fas fa-eye"></i>';
-          $('adminGate').classList.add('open');
-          setTimeout(function() { try { inp.focus(); } catch (e) {} }, 250);
-        }).catch(function() { showToast('Tidak dapat memeriksa sesi Admin.'); });
+      if (adminUnlocked()) { launchAdmin(); return; }
+      var inp = $('adminPass');
+      inp.value = ''; inp.type = 'password';
+      inp.classList.remove('bad'); $('adminErr').classList.remove('show');
+      $('adminGateEye').innerHTML = '<i class="fas fa-eye"></i>';
+      $('adminGate').classList.add('open');
+      setTimeout(function() { try { inp.focus(); } catch (e) {} }, 250);
   }
   function closeAdminGate() {
       $('adminGate').classList.remove('open');
       try { $('adminPass').blur(); } catch (e) {}
   }
   function tryAdminPassword() {
-      var inp = $('adminPass'), button = $('adminGateOk');
-      var password = inp.value || '';
-      if (!password) { $('adminErr').innerText = 'Masukkan password Admin.'; $('adminErr').classList.add('show'); return; }
-      button.disabled = true; button.innerText = 'Memeriksa...';
-      fetch('/api/auth/login', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: password })
-      }).then(function(r) {
-        return r.json().catch(function() { return {}; }).then(function(body) {
-          if (!r.ok) throw new Error(body.error || 'Login gagal.'); return body;
-        });
-      }).then(function() {
-        inp.value = ''; $('adminErr').classList.remove('show'); inp.classList.remove('bad');
-        vibrate(); closeAdminGate(); launchAdmin();
-      }).catch(function(err) {
-        $('adminErr').innerText = err.message || 'Login gagal.';
-        $('adminErr').classList.add('show'); inp.classList.add('bad'); inp.value = '';
-        var card = $('adminGateCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); vibrate();
-      }).finally(function() { button.disabled = false; button.innerText = 'Buka Admin'; });
+      var inp = $('adminPass');
+      if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
+          try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
+          inp.value = ''; $('adminErr').classList.remove('show'); inp.classList.remove('bad');
+          vibrate(); closeAdminGate(); launchAdmin();
+      } else {
+          $('adminErr').innerText = 'Password salah. Coba lagi.';
+          $('adminErr').classList.add('show'); inp.classList.add('bad'); inp.value = '';
+          var card = $('adminGateCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+          vibrate();
+      }
   }
   $('adminGateCancel').addEventListener('click', closeAdminGate);
   $('adminGateOk').addEventListener('click', tryAdminPassword);
@@ -5339,3 +5316,4 @@ function initKcAlpha() {
   });
   initAlphabetNavEvents();
   </script>
+</body>
