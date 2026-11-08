@@ -17,71 +17,50 @@ function secureEqual(a, b) {
 
 function validate(data) {
   const errors = [];
-
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
     return ['Payload data harus berupa object JSON.'];
   }
-
   if (data.app !== 'plukakang') errors.push('Identitas data tidak valid.');
-  if (data.v !== 2) errors.push('Versi data harus 2.');
-  if (!Array.isArray(data.brands) || data.brands.length === 0) {
-    errors.push('Daftar brand wajib tersedia.');
-  }
-  if (!Array.isArray(data.items) || data.items.length === 0) {
-    errors.push('Daftar item wajib tersedia.');
-  }
+  if (![2, 3].includes(data.v)) errors.push('Versi data harus 2 atau 3.');
+  if (!Array.isArray(data.brands) || data.brands.length === 0) errors.push('Daftar brand wajib tersedia.');
 
+  const brandIds = new Set();
   if (Array.isArray(data.brands)) {
-    const ids = new Set();
-
     for (const brand of data.brands) {
-      if (
-        !brand ||
-        typeof brand.id !== 'string' ||
-        !brand.id.trim() ||
-        typeof brand.nama !== 'string' ||
-        !brand.nama.trim()
-      ) {
-        errors.push('Setiap brand wajib memiliki id dan nama.');
-        break;
+      if (!brand || typeof brand.id !== 'string' || !brand.id.trim() || typeof brand.nama !== 'string' || !brand.nama.trim()) {
+        errors.push('Setiap brand wajib memiliki id dan nama.'); break;
       }
-
-      if (ids.has(brand.id)) {
-        errors.push(`ID brand duplikat: ${brand.id}`);
-        break;
-      }
-
-      ids.add(brand.id);
+      if (brandIds.has(brand.id)) { errors.push(`ID brand duplikat: ${brand.id}`); break; }
+      brandIds.add(brand.id);
     }
   }
 
-  if (Array.isArray(data.items)) {
-    const brandIds = new Set(
-      (data.brands || []).map((b) => b && b.id).filter(Boolean)
-    );
-
-    let invalid = 0;
-
-    for (const item of data.items) {
-      if (
-        !item ||
-        typeof item !== 'object' ||
-        !item.brand ||
-        !item.nama ||
-        (!item.raw && !item.konv) ||
-        !brandIds.has(item.brand)
-      ) {
-        invalid++;
+  if (data.v === 2) {
+    if (!Array.isArray(data.items) || data.items.length === 0) errors.push('Daftar item wajib tersedia.');
+    if (Array.isArray(data.items)) {
+      let invalid = 0;
+      for (const item of data.items) {
+        if (!item || typeof item !== 'object' || !item.brand || !item.nama || (!item.raw && !item.konv) || !brandIds.has(item.brand)) invalid++;
       }
-    }
-
-    if (invalid) {
-      errors.push(
-        `${invalid} item memiliki field wajib kosong atau brand tidak dikenal.`
-      );
+      if (invalid) errors.push(`${invalid} item memiliki field wajib kosong atau brand tidak dikenal.`);
     }
   }
 
+  if (data.v === 3) {
+    if (!Array.isArray(data.products) || data.products.length === 0) errors.push('Daftar Master Product wajib tersedia.');
+    if (Array.isArray(data.products)) {
+      const productIds = new Set(); let invalid = 0;
+      for (const product of data.products) {
+        if (!product || typeof product !== 'object' || typeof product.id !== 'string' || !product.id.trim() || !product.nama || !Array.isArray(product.brands) || product.brands.length === 0) { invalid++; continue; }
+        if (productIds.has(product.id)) invalid++;
+        productIds.add(product.id);
+        for (const link of product.brands) {
+          if (!link || !link.brand || (!link.raw && !link.konv) || !brandIds.has(link.brand)) invalid++;
+        }
+      }
+      if (invalid) errors.push(`${invalid} Master Product/relasi brand tidak valid, ID duplikat, atau PLU/brand tidak lengkap.`);
+    }
+  }
   return errors;
 }
 
@@ -216,7 +195,8 @@ module.exports = async function handler(req, res) {
       app: 'plukakang',
       version: dataHash.slice(0, 12),
       data_sha256: dataHash,
-      item_count: data.items.length,
+      item_count: data.v === 3 ? data.products.reduce((n, p) => n + p.brands.length, 0) : data.items.length,
+      product_count: data.v === 3 ? data.products.length : data.items.length,
       brand_count: data.brands.length,
       published_at: new Date().toISOString(),
     };
@@ -266,7 +246,7 @@ module.exports = async function handler(req, res) {
     const commit = await github(`${base}/git/commits`, token, {
       method: 'POST',
       body: JSON.stringify({
-        message: `Publish Plukakang data (${data.items.length} items)`,
+        message: `Publish Plukakang data (v${data.v})`,
         tree: tree.sha,
         parents: [parentSha],
       }),
@@ -290,6 +270,7 @@ module.exports = async function handler(req, res) {
       commit: commit.sha,
       version: version.version,
       item_count: version.item_count,
+      product_count: version.product_count,
       brand_count: version.brand_count,
       message: 'Commit berhasil dibuat. Deployment hosting akan berjalan mengikuti integrasi repository.',
     });
@@ -306,4 +287,3 @@ module.exports = async function handler(req, res) {
         : 'Gagal menerbitkan ke GitHub. Periksa konfigurasi repository dan token server.',
     });
   }
-};
