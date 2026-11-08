@@ -1,25 +1,36 @@
-# Plukakang 2.0 — Hybrid Publishing Starter
+# Plukakang V4 — paket pengembangan
 
-Paket ini mempertahankan `index.html`, `admin.html`, dan `data.json` di root agar path lama tetap bekerja.
+Paket ini mempertahankan tampilan Liquid Glass yang ada dan menyederhanakan model data menjadi satu item = satu brand.
 
-## Isi yang sudah diterapkan
+## Struktur file
+- `index.html` — katalog pengguna, sudah membaca `data.json` V4 melalui `items`.
+- `admin.html` — Admin, navigasi Multi-Brand/Relasi dihapus; pengelolaan item dan brand tetap tersedia.
+- `data.json` — data V4 hasil migrasi, 1.331 item dan 9 brand.
+- `version.json` — metadata draft untuk data V4.
+- `api/publish.js` — endpoint Publish V4.
+- `vercel.json` — aturan cache dari konfigurasi sebelumnya.
 
-- Tombol **Terbitkan langsung** pada Admin.
-- Validasi dasar sebelum publish.
-- Vercel Function `/api/publish` yang menerbitkan `data.json` dan `version.json` dalam satu commit GitHub.
-- Token GitHub dan kunci publikasi berada di environment variables server, bukan di frontend.
-- Jalur unduh manual tetap dipertahankan.
+## Model data V4
+`{ app: "plukakang", v: 4, brands: [...], items: [...] }`
 
-## Setup
+Setiap item memiliki `id` permanen, `brand`, `nama`, `deskripsi`, `sub`, `kategori`, `raw`, dan `konv`. Tidak ada `products`, `product_id`, atau relasi lintas brand.
 
-1. Salin isi paket ini ke repository Plukakang.
-2. Hubungkan repository dan branch produksi ke Vercel.
-3. Atur environment variables seperti di `.env.example` dan ikuti `docs/publishing-hybrid.md`.
-4. Redeploy project Vercel.
-5. Buka Admin. Uji jalur manual terlebih dahulu, lalu uji **Terbitkan langsung** dengan perubahan kecil.
+## Setup branch development
+1. Salin isi paket ke root repository pada branch `plukakang-2.0`.
+2. Pastikan endpoint berada di `api/publish.js`.
+3. Di environment Preview Vercel, atur `GITHUB_BRANCH=plukakang-2.0`. Jangan isi `main` untuk paket ini; endpoint menolak publish ke `main`.
+4. Pertahankan secret server yang sudah ada: `PLUKAKANG_PUBLISH_KEY`, `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`. Jangan menaruh secret di file frontend.
+5. Deploy Preview dan uji katalog/Admin terlebih dahulu. Jangan publish ke produksi sebelum disetujui.
 
-## Catatan
+## Catatan migrasi
+V3 memiliki ID pada produk induk, tetapi tidak pada setiap relasi brand. Karena V4 menjadikan setiap relasi sebagai item mandiri, ID item baru dibuat satu kali saat migrasi. Simpan `data.json` V4 ini sebagai sumber kanonis; jangan menjalankan ulang migrasi V3 jika ingin mempertahankan ID yang sama.
 
-- Jangan commit file `.env` atau token asli.
-- Admin gate lama bukan sistem autentikasi server-side. Aktifkan Vercel Deployment Protection atau pembatasan akses lain untuk melindungi halaman Admin.
-- PWA/offline/update notification belum diaktifkan pada paket ini; itu tahap berikutnya setelah pipeline data stabil.
+## Validasi yang sudah dijalankan
+- 9 brand, 1.331 item.
+- Semua ID item unik dan tidak kosong.
+- Semua brand item terdaftar.
+- Semua nama terisi dan setiap item memiliki RAW atau KONV.
+- Multiset seluruh field sumber (brand, nama, deskripsi, sub, kategori, RAW, KONV) sama persis dengan backup V3.
+- Sintaks JavaScript inline pada `index.html` dan `admin.html` serta `api/publish.js` lolos `node --check`.
+
+Catatan: pengujian ini adalah validasi statis/sintaks dan integritas data, bukan pengujian browser end-to-end atau deployment live.

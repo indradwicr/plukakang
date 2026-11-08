@@ -3030,7 +3030,9 @@ function renderSidebarPlu(filter) {
         .then(function(data) {
              var items = data, meta = null;
              if (data && !Array.isArray(data) && typeof data === 'object') {
-               if (Array.isArray(data.items)) {
+               if (data.v === 4 && Array.isArray(data.items)) {
+                 items = data.items;
+               } else if (Array.isArray(data.items)) {
                  items = data.items;
                } else if (data.v === 3 && Array.isArray(data.products)) {
                  /* V3: satu Master Product dapat memiliki banyak relasi brand.
@@ -3056,7 +3058,7 @@ function renderSidebarPlu(filter) {
                }
                if (Array.isArray(data.brands) && data.brands.length) { meta = data.brands; }
              }
-             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: harus memiliki items atau products[].brands[].');
+             if (!Array.isArray(items)) throw new Error('Format data.json tidak valid: harus memiliki items V4.');
 
              if (meta) { syncMeta(meta); renderBrandGrid(); }
              items.sort(function(a, b) {
