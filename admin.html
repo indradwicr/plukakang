@@ -845,6 +845,10 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     .btn-row .btn.third { min-width: calc(50% - 4px); }
     .f-2col { grid-template-columns: 1fr; }
 }
+
+/* Pengaturan urutan katalog */
+.order-card{margin-top:14px}.order-help{font-size:12px;color:var(--text-muted);line-height:1.5;margin:4px 0 12px}.order-selects{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.order-selects .f-sel{min-width:0}.order-list{display:flex;flex-direction:column;gap:7px}.order-row{display:flex;align-items:center;gap:9px;padding:10px 9px;border:1px solid var(--hairline);border-radius:13px;background:var(--surface-2);touch-action:pan-y;user-select:none;-webkit-user-select:none}.order-row.dragging{opacity:.42;border-style:dashed}.order-row.drop-target{border-color:var(--acc);background:var(--acc-soft)}.order-grip{color:var(--text-muted);padding:7px 4px;cursor:grab;touch-action:none}.order-name{flex:1;min-width:0;font-size:13px;font-weight:650;overflow-wrap:anywhere}.order-meta{font-size:10px;color:var(--text-muted);font-weight:500}.order-actions{display:flex;gap:4px}.order-actions button{width:32px;height:32px;border:1px solid var(--hairline);border-radius:9px;background:var(--card-white);color:var(--text);display:grid;place-items:center}.order-actions button:disabled{opacity:.28}.order-empty{padding:14px;text-align:center;color:var(--text-muted);font-size:12px;border:1px dashed var(--hairline);border-radius:12px}
+
 </style>
   <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -882,6 +886,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       </div>
       <div class="head-btns">
         <button class="icon-action-btn" id="headExportBtn" aria-label="Unduh data.json"><i class="fas fa-download"></i></button>
+        <button class="icon-action-btn" id="headLogoutBtn" aria-label="Keluar Admin" title="Keluar Admin"><i class="fas fa-right-from-bracket"></i></button>
         <button class="icon-action-btn" id="headThemeBtn" aria-label="Ganti tema terang/gelap"><i class="fas fa-sun" id="themeIco"></i></button>
       </div>
     </header>
@@ -935,8 +940,10 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 
       <div class="gcard">
         <div class="gcard-title"><i class="fas fa-cloud-arrow-up"></i> Terbitkan</div>
-        <div class="btn-row">
-          <button class="btn prim" id="btnExport"><i class="fas fa-download"></i> Unduh data.json</button>
+        <button class="btn prim wide" id="btnPublish"><i class="fas fa-cloud-arrow-up"></i> Terbitkan ke GitHub</button>
+        <div class="gcard-sub">Kirim perubahan langsung ke GitHub dan picu deploy Vercel. Kunci publikasi diminta saat proses dan tidak disimpan di browser.</div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn" id="btnExport"><i class="fas fa-download"></i> Unduh data.json</button>
           <button class="btn" id="btnCopy"><i class="fas fa-copy"></i> Salin JSON</button>
         </div>
         <div class="btn-row" style="margin-top:8px">
@@ -965,6 +972,22 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     <section id="tabBrand" class="hidden">
       <div class="section-bar"><div class="section-title" style="font-size:19px">Brand</div><span class="item-count-chip" id="brandCount"></span></div>
       <div class="brand-grid" id="brandGrid"></div>
+      <div class="gcard order-card" id="orderManager">
+        <div class="gcard-title"><i class="fas fa-arrow-down-wide-short"></i> Pengaturan Urutan</div>
+        <div class="order-help">Atur posisi yang tampil di aplikasi. Gunakan panah untuk menggeser, atau tekan dan tahan ikon grip lalu seret ke posisi baru.</div>
+        <div class="gcard-title" style="font-size:13px;margin-top:8px">Urutan Brand</div>
+        <div class="order-list" id="orderBrandList"></div>
+        <div class="divider" style="height:1px;background:var(--line);margin:16px 0"></div>
+        <div class="gcard-title" style="font-size:13px">Urutan Subkategori & Kategori</div>
+        <div class="order-selects">
+          <select class="f-sel" id="orderBrandSelect" aria-label="Pilih brand"></select>
+          <select class="f-sel" id="orderSubSelect" aria-label="Pilih subkategori"></select>
+        </div>
+        <div class="order-help">Pilih brand dan subkategori untuk mengatur urutannya. Perubahan langsung tersimpan sebagai draft.</div>
+        <div class="order-list" id="orderSubList"></div>
+        <div class="gcard-title" style="font-size:13px;margin-top:16px">Kategori</div>
+        <div class="order-list" id="orderCategoryList"></div>
+      </div>
     </section>
   </div>
 
@@ -1158,43 +1181,81 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   applyThemeMeta();
 
   /* ================================================================
-     GERBANG PASSWORD — hash djb2 sama dengan index.html
+     AUTENTIKASI ADMIN — sesi HttpOnly dari server
      ================================================================ */
-  var ADMIN_PASS_HASH = 2718705455; /* djb2 — sama dengan index.html */
-  function djb2Hash(str) {
-    var h = 5381, i;
-    for (i = 0; i < str.length; i++) { h = (((h << 5) + h) + str.charCodeAt(i)) >>> 0; }
-    return h;
-  }
   var unlocked = false;
-  function adminUnlocked() {
-    try { return sessionStorage.getItem('plukakang_admin_ok') === '1'; } catch (e) { return false; }
-  }
-  function tryAdminPassword() {
-    var inp = $('adminPass');
-    if (djb2Hash(inp.value || '') === ADMIN_PASS_HASH) {
-      try { sessionStorage.setItem('plukakang_admin_ok', '1'); } catch (e) {}
-      unlockAdmin();
-    } else {
-      $('adminErr').classList.add('show');
-      inp.classList.add('bad');
-      inp.value = '';
-      var card = $('adminGateCard');
-      card.classList.remove('shake');
-      void card.offsetWidth;
-      card.classList.add('shake');
-    }
+  var adminSessionTimer = null;
+  function setAdminError(message) {
+    $('adminErr').innerText = message || 'Password salah. Coba lagi.';
+    $('adminErr').classList.add('show');
+    $('adminPass').classList.add('bad');
   }
   function unlockAdmin() {
     unlocked = true;
     $('adminGate').classList.remove('open');
     boot();
+    startAdminSessionMonitor();
+  }
+  function tryAdminPassword() {
+    var inp = $('adminPass');
+    var button = $('adminGateOk');
+    var password = inp.value || '';
+    if (!password) { setAdminError('Masukkan password Admin.'); return; }
+    button.disabled = true;
+    button.innerText = 'Memeriksa...';
+    fetch('/api/auth/login', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: password })
+    }).then(function(res) {
+      return res.json().catch(function() { return {}; }).then(function(body) {
+        if (!res.ok) throw new Error(body.error || 'Login gagal.');
+        return body;
+      });
+    }).then(function() {
+      inp.value = '';
+      $('adminErr').classList.remove('show');
+      inp.classList.remove('bad');
+      unlockAdmin();
+    }).catch(function(err) {
+      setAdminError(err.message || 'Login gagal. Periksa koneksi dan konfigurasi server.');
+      inp.value = '';
+      var card = $('adminGateCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    }).finally(function() {
+      button.disabled = false;
+      button.innerText = 'Buka Admin';
+    });
+  }
+  function lockAdmin(message) {
+    unlocked = false;
+    if (adminSessionTimer) clearInterval(adminSessionTimer);
+    $('adminGate').classList.add('open');
+    if (message) setAdminError(message);
+  }
+  function checkAdminSession() {
+    return fetch('/api/auth/session', { cache: 'no-store', credentials: 'same-origin' })
+      .then(function(res) { return res.ok ? res.json() : { authenticated: false }; })
+      .then(function(info) {
+        if (info.authenticated) { if (!unlocked) unlockAdmin(); return true; }
+        if (unlocked) lockAdmin('Sesi berakhir. Silakan login kembali.');
+        return false;
+      }).catch(function() { return false; });
+  }
+  function startAdminSessionMonitor() {
+    if (adminSessionTimer) clearInterval(adminSessionTimer);
+    adminSessionTimer = setInterval(function() { checkAdminSession(); }, 5 * 60 * 1000);
+  }
+  function logoutAdmin() {
+    if (!confirm('Keluar dari sesi Admin sekarang?')) return;
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+      .finally(function() { lockAdmin('Anda sudah keluar. Masukkan password untuk masuk kembali.'); });
   }
   $('adminGateOk').addEventListener('click', tryAdminPassword);
   $('adminPass').addEventListener('keydown', function(e) { if (e.key === 'Enter') tryAdminPassword(); });
+  $('adminPass').addEventListener('input', function() { $('adminErr').classList.remove('show'); this.classList.remove('bad'); });
+  $('headLogoutBtn').addEventListener('click', logoutAdmin);
   $('adminGateEye').addEventListener('click', function() {
-    var inp = $('adminPass');
-    var show = inp.type === 'password';
+    var inp = $('adminPass'); var show = inp.type === 'password';
     inp.type = show ? 'text' : 'password';
     this.innerHTML = show ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
   });
@@ -1547,7 +1608,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
     if (name === 'item') renderItemList();
-    if (name === 'brand') renderBrandGrid();
+    if (name === 'brand') { renderBrandGrid(); renderOrderManager(); }
     window.scrollTo(0, 0);
   }
   $('dockData').addEventListener('click', function() { showTab('data'); vibrate(); });
@@ -1566,6 +1627,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     renderChips();
     renderItemList();
     renderBrandGrid();
+    renderOrderManager();
     renderDup();
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
@@ -1867,6 +1929,90 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (c) openBrandSheet(parseInt(c.dataset.bi, 10));
   });
   $('fabAddBrand').addEventListener('click', function() { openBrandSheet(null); vibrate(); });
+
+  /* ================================================================
+     PENGATURAN URUTAN — brand, sub, kategori
+     ================================================================ */
+  var orderDrag = null, orderHoldTimer = null;
+  function moveArrayEntry(arr, from, to) {
+    if (!Array.isArray(arr) || from < 0 || to < 0 || from >= arr.length || to >= arr.length || from === to) return false;
+    var entry = arr.splice(from, 1)[0]; arr.splice(to, 0, entry); return true;
+  }
+  function moveObjectKey(obj, from, to) {
+    var keys = Object.keys(obj || {}); if (from < 0 || to < 0 || from >= keys.length || to >= keys.length || from === to) return obj;
+    var vals = {}; keys.forEach(function(k){ vals[k] = obj[k]; });
+    var key = keys.splice(from,1)[0]; keys.splice(to,0,key);
+    var out = {}; keys.forEach(function(k){ out[k] = vals[k]; }); return out;
+  }
+  function orderRowHtml(kind, index, label, meta, total) {
+    return '<div class="order-row" data-order-kind="'+kind+'" data-order-index="'+index+'">' +
+      '<span class="order-grip" aria-label="Tekan dan tahan untuk memindahkan"><i class="fas fa-grip-vertical"></i></span>' +
+      '<span class="order-name">'+esc(label)+' <span class="order-meta">'+esc(meta || '')+'</span></span>' +
+      '<span class="order-actions"><button type="button" data-order-move="up" aria-label="Naik" '+(index===0?'disabled':'')+'><i class="fas fa-chevron-up"></i></button>' +
+      '<button type="button" data-order-move="down" aria-label="Turun" '+(index===total-1?'disabled':'')+'><i class="fas fa-chevron-down"></i></button></span></div>';
+  }
+  function selectedOrderBrand() { return brandById($('orderBrandSelect').value); }
+  function renderOrderManager() {
+    if (!$('orderBrandList')) return;
+    $('orderBrandList').innerHTML = brands.map(function(b,i){ return orderRowHtml('brand',i,b.nama,b.subjudul,brands.length); }).join('') || '<div class="order-empty">Belum ada brand.</div>';
+    var bs = $('orderBrandSelect'), prevB = bs.value;
+    bs.innerHTML = brands.map(function(b){ return '<option value="'+esc(b.id)+'">'+esc(b.nama)+'</option>'; }).join('');
+    if (brands.some(function(b){return b.id===prevB;})) bs.value=prevB;
+    var brand = selectedOrderBrand(), ss=$('orderSubSelect'), prevS=ss.value;
+    ss.innerHTML = brand ? brand.subs.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.label)+'</option>';}).join('') : '';
+    if (brand && brand.subs.some(function(x){return x.id===prevS;})) ss.value=prevS;
+    $('orderSubList').innerHTML = brand ? brand.subs.map(function(x,i){return orderRowHtml('sub',i,x.label,x.id,brand.subs.length);}).join('') : '<div class="order-empty">Pilih brand.</div>';
+    var sub = brand && ss.value, cats = brand && brand.kategori[sub] ? brand.kategori[sub] : {};
+    var keys = Object.keys(cats);
+    $('orderCategoryList').innerHTML = keys.length ? keys.map(function(k,i){return orderRowHtml('category',i,cats[k],k,keys.length);}).join('') : '<div class="order-empty">Tidak ada kategori pada subkategori ini.</div>';
+  }
+  function reorderByKind(kind, from, to) {
+    var brand = selectedOrderBrand(), changed=false;
+    if (kind==='brand') changed=moveArrayEntry(brands,from,to);
+    else if (kind==='sub' && brand) changed=moveArrayEntry(brand.subs,from,to);
+    else if (kind==='category' && brand) {
+      var sub=$('orderSubSelect').value, obj=brand.kategori[sub] || {};
+      var reordered=moveObjectKey(obj,from,to);
+      if (reordered!==obj) { brand.kategori[sub]=reordered; changed=true; }
+    }
+    if (changed) { markDirty(); renderOrderManager(); renderBrandGrid(); renderStats(); }
+  }
+  $('orderBrandSelect').addEventListener('change',renderOrderManager);
+  $('orderSubSelect').addEventListener('change',renderOrderManager);
+  $('orderManager').addEventListener('click',function(e){
+    var btn=e.target.closest('[data-order-move]'); if(!btn) return;
+    var row=btn.closest('.order-row'), idx=Number(row.dataset.orderIndex), dir=btn.dataset.orderMove==='up'?-1:1;
+    reorderByKind(row.dataset.orderKind,idx,idx+dir);
+  });
+  $('orderManager').addEventListener('pointerdown',function(e){
+    var grip=e.target.closest('.order-grip'); if(!grip) return;
+    var row=grip.closest('.order-row'); if(!row) return;
+    orderHoldTimer=setTimeout(function(){
+      orderDrag={kind:row.dataset.orderKind,from:Number(row.dataset.orderIndex),row:row};
+      row.classList.add('dragging');
+      if (navigator.vibrate) navigator.vibrate(18);
+    },320);
+  });
+  $('orderManager').addEventListener('pointermove',function(e){
+    if(!orderDrag) return;
+    e.preventDefault();
+    var target=document.elementFromPoint(e.clientX,e.clientY);
+    var row=target && target.closest ? target.closest('.order-row[data-order-kind="'+orderDrag.kind+'"]') : null;
+    document.querySelectorAll('.order-row.drop-target').forEach(function(x){x.classList.remove('drop-target');});
+    if(row && row!==orderDrag.row) row.classList.add('drop-target');
+  },{passive:false});
+  function finishOrderDrag(e){
+    clearTimeout(orderHoldTimer);
+    if(!orderDrag) return;
+    var target=document.elementFromPoint(e.clientX,e.clientY);
+    var row=target && target.closest ? target.closest('.order-row[data-order-kind="'+orderDrag.kind+'"]') : null;
+    var kind=orderDrag.kind, from=orderDrag.from, to=row?Number(row.dataset.orderIndex):from;
+    document.querySelectorAll('.order-row.dragging,.order-row.drop-target').forEach(function(x){x.classList.remove('dragging','drop-target');});
+    orderDrag=null;
+    if(from!==to) reorderByKind(kind,from,to);
+  }
+  document.addEventListener('pointerup',finishOrderDrag);
+  $('orderManager').addEventListener('pointercancel',function(){clearTimeout(orderHoldTimer); if(orderDrag){orderDrag.row.classList.remove('dragging');orderDrag=null;}});
 
   /* ================================================================
      SHEET FORM BRAND — meta lengkap: nama, id, ikon, warna,
@@ -2295,6 +2441,54 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   $('btnExport').addEventListener('click', doExport);
   $('headExportBtn').addEventListener('click', doExport);
+
+  /* ================================================================
+     PUBLISH — kirim data ke endpoint server, tanpa menyimpan secret
+     ================================================================ */
+  var publishInProgress = false;
+  $('btnPublish').addEventListener('click', function() {
+    if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
+    if (publishInProgress) return;
+    var duplicates = scanDup();
+    var serious = duplicates.filter(function(d) { return d.t === 'red'; });
+    if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
+    if (!confirm('Terbitkan ' + items.length + ' item dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
+
+    var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
+    if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
+
+    publishInProgress = true;
+    var btn = $('btnPublish');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menerbitkan…';
+    fetch('./api/publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Publish-Key': key },
+      body: JSON.stringify({ data: JSON.parse(buildV2()) })
+    }).then(function(res) {
+      return res.json().catch(function() { return {}; }).then(function(body) {
+        if (!res.ok) {
+          var msg = body && body.error ? body.error : ('HTTP ' + res.status);
+          if (body && Array.isArray(body.details) && body.details.length) msg += ' ' + body.details.join(' ');
+          throw new Error(msg);
+        }
+        return body;
+      });
+    }).then(function(result) {
+      dirty = false;
+      clearDraft();
+      srcLabel = 'live';
+      loadedAt = Date.now();
+      updateSrcInfo(false);
+      showToast('Publish berhasil! Commit: ' + String(result.commit || '').slice(0, 7) + '. Tunggu deploy Vercel.', null, null, 5000);
+    }).catch(function(err) {
+      showToast('Publish gagal: ' + (err && err.message ? err.message : 'Kesalahan jaringan'), null, null, 5200);
+    }).finally(function() {
+      publishInProgress = false;
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Terbitkan ke GitHub';
+    });
+  });
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
     copyText(buildV2(), 'JSON tersalin (' + items.length + ' item)');
@@ -2408,5 +2602,5 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       loadLive(true);
     }
   }
-  if (adminUnlocked()) unlockAdmin();
+  checkAdminSession();
   </script>
