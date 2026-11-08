@@ -911,6 +911,17 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <div class="gcard-sub" id="srcInfo">Belum ada data.</div>
       </div>
 
+      <div class="gcard" id="backupCard">
+        <div class="gcard-title"><i class="fas fa-shield-halved"></i> Backup &amp; Restore <span class="gtag blue" id="backupCount">0 cadangan</span></div>
+        <div class="gcard-sub">Buat file cadangan yang bisa disimpan di luar perangkat. Admin juga menyimpan hingga 5 snapshot otomatis di browser ini sebelum data diganti.</div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn prim" id="btnBackup"><i class="fas fa-download"></i> Backup Sekarang</button>
+          <label class="btn" for="fileRestore" style="cursor:pointer"><i class="fas fa-clock-rotate-left"></i> Restore Backup</label>
+          <input type="file" id="fileRestore" accept=".json,application/json" hidden>
+        </div>
+        <div class="gcard-sub" id="backupInfo" style="margin-top:9px">Belum ada backup otomatis di browser ini.</div>
+      </div>
+
       <div class="gcard" id="statCard" style="display:none">
         <div class="gcard-title"><i class="fas fa-chart-simple"></i> Statistik <span class="gtag green" id="statFmt">format v2</span></div>
         <div class="stat-total"><b id="stTotal">0</b><span>total item PLU</span></div>
@@ -929,11 +940,9 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           <button class="btn" id="btnCopy"><i class="fas fa-copy"></i> Salin JSON</button>
         </div>
         <div class="btn-row" style="margin-top:8px">
-          <button class="btn prim" id="btnPublish"><i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung</button>
           <a class="btn" href="./index.html" target="_blank" rel="noopener" style="text-decoration:none"><i class="fas fa-up-right-from-square"></i> Buka App</a>
           <button class="btn danger" id="btnReset"><i class="fas fa-eraser"></i> Reset Draft</button>
         </div>
-        <div class="gcard-sub" style="margin-top:9px">Hybrid: unduh JSON untuk jalur manual, atau terbitkan langsung melalui server yang terhubung ke GitHub. Kunci publikasi diminta saat pertama kali digunakan dan hanya disimpan sementara di sesi browser.</div>
       </div>
     </section>
 
@@ -1360,6 +1369,106 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function clearDraft() {
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
   }
+
+  /* ================================================================
+     BACKUP & RESTORE — snapshot lokal + file backup portabel
+     ================================================================ */
+  var BACKUP_KEY = 'plukakang_admin_backups_v1';
+  var BACKUP_LIMIT = 5;
+  function backupPayload() {
+    return {
+      app: 'plukakang-backup',
+      backup_version: 1,
+      created_at: new Date().toISOString(),
+      source: srcLabel || 'admin',
+      data: { app: 'plukakang', v: 2, brands: clone(brands), items: clone(items) }
+    };
+  }
+  function readBackups() {
+    try {
+      var list = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+  function refreshBackupInfo() {
+    var list = readBackups();
+    $('backupCount').innerText = list.length + ' cadangan';
+    if (!list.length) {
+      $('backupInfo').innerText = 'Belum ada backup otomatis di browser ini.';
+      return;
+    }
+    var latest = list[0];
+    $('backupInfo').innerText = 'Terakhir: ' + jamMenit(new Date(latest.at).getTime()) + ' · ' + (latest.item_count || 0) + ' item. Tersimpan di browser/perangkat ini.';
+  }
+  function saveAutoBackup(reason) {
+    if (!loaded || !items.length || !brands.length) return false;
+    try {
+      var list = readBackups();
+      list.unshift({ at: Date.now(), reason: reason || 'Perubahan data', item_count: items.length, payload: backupPayload() });
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(list.slice(0, BACKUP_LIMIT)));
+      refreshBackupInfo();
+      return true;
+    } catch (e) {
+      showToast('Backup otomatis gagal — ruang penyimpanan browser mungkin penuh');
+      return false;
+    }
+  }
+  function downloadBackup(payload, filename) {
+    var blob = new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
+  }
+  function validateRestore(json) {
+    var data = json && json.app === 'plukakang-backup' ? json.data : json;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
+    if (!Array.isArray(data.items) || !data.items.length) throw new Error('Daftar item kosong atau tidak valid.');
+    if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
+    var ids = {};
+    data.brands.forEach(function(b) {
+      if (!b || typeof b.id !== 'string' || !b.id.trim() || !b.nama) throw new Error('Ada brand yang tidak memiliki ID/nama.');
+      if (ids[b.id]) throw new Error('ID brand duplikat: ' + b.id);
+      ids[b.id] = true;
+    });
+    var invalid = 0;
+    data.items.forEach(function(it) {
+      if (!it || !it.brand || !it.nama || (!it.raw && !it.konv) || !ids[it.brand]) invalid++;
+    });
+    if (invalid) throw new Error(invalid + ' item tidak valid atau memakai brand yang tidak tersedia.');
+    var parsed = collect(data);
+    if (parsed.items.length !== data.items.length || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
+    return data;
+  }
+  $('btnBackup').addEventListener('click', function() {
+    if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
+    var payload = backupPayload();
+    downloadBackup(payload, 'plukakang-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json');
+    saveAutoBackup('Backup manual');
+    showToast('File backup berhasil dibuat');
+  });
+  $('fileRestore').addEventListener('change', function(e) {
+    var f = e.target.files && e.target.files[0]; if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var parsed = JSON.parse(ev.target.result);
+        var data = validateRestore(parsed);
+        var count = data.items.length;
+        if (!confirm('Pulihkan backup berisi ' + count + ' item dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
+        saveAutoBackup('Sebelum restore');
+        applyData(data, 'file');
+        $('draftCard').style.display = 'none';
+        showToast('Backup dipulihkan: ' + count + ' item');
+      } catch (err) {
+        showToast('Restore dibatalkan: ' + (err && err.message ? err.message : 'file tidak valid'), null, null, 4200);
+      } finally { e.target.value = ''; }
+    };
+    reader.onerror = function() { showToast('File backup gagal dibaca'); e.target.value = ''; };
+    reader.readAsText(f);
+  });
+  refreshBackupInfo();
+
   function updateSrcInfo(isDirty) {
     var el = $('srcInfo'), chip = $('srcChip');
     if (!loaded) { return; }
@@ -1410,8 +1519,10 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var r = new FileReader();
     r.onload = function(ev) {
       try {
+        var incoming = JSON.parse(ev.target.result);
+        if (loaded) saveAutoBackup('Sebelum impor JSON');
         $('draftCard').style.display = 'none';
-        applyData(JSON.parse(ev.target.result), 'file');
+        applyData(incoming, 'file');
         showToast('File dimuat: ' + items.length + ' item');
       } catch (err) { showToast('JSON tidak valid'); }
     };
@@ -2184,82 +2295,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   $('btnExport').addEventListener('click', doExport);
   $('headExportBtn').addEventListener('click', doExport);
-
-  /* ================================================================
-     HYBRID PUBLISH — GitHub token tetap di environment server
-     ================================================================ */
-  var PUBLISH_KEY_SESSION = 'plukakang_publish_key_v1';
-  function validatePublishData(payload) {
-    var errors = [];
-    if (!payload || payload.app !== 'plukakang') errors.push('Identitas data bukan plukakang.');
-    if (payload.v !== 2) errors.push('Versi format harus v2.');
-    if (!Array.isArray(payload.brands) || !payload.brands.length) errors.push('Daftar brand kosong atau tidak valid.');
-    if (!Array.isArray(payload.items) || !payload.items.length) errors.push('Daftar item kosong atau tidak valid.');
-    if (Array.isArray(payload.brands)) {
-      var brandIds = {};
-      payload.brands.forEach(function(b, i) {
-        if (!b || !b.id || !b.nama) errors.push('Brand ke-' + (i + 1) + ' tidak memiliki id/nama.');
-        else if (brandIds[b.id]) errors.push('ID brand duplikat: ' + b.id);
-        else brandIds[b.id] = true;
-      });
-    }
-    if (Array.isArray(payload.items)) {
-      var bad = 0;
-      payload.items.forEach(function(it) {
-        if (!it || !it.brand || !it.nama || (!it.raw && !it.konv)) bad++;
-      });
-      if (bad) errors.push(bad + ' item tidak memiliki brand/nama atau tidak memiliki kode raw maupun konversi.');
-    }
-    return errors;
-  }
-  function publishDirect() {
-    if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
-    var payload;
-    try { payload = JSON.parse(buildV2()); } catch (e) { showToast('Gagal membentuk JSON'); return; }
-    var errors = validatePublishData(payload);
-    if (errors.length) {
-      alert('Validasi gagal:\n\n• ' + errors.join('\n• '));
-      return;
-    }
-    if (!confirm('Terbitkan ' + payload.items.length + ' item dari ' + payload.brands.length + ' brand ke repository sekarang? Perubahan akan memicu deployment baru.')) return;
-    var key = '';
-    try { key = sessionStorage.getItem(PUBLISH_KEY_SESSION) || ''; } catch (e) {}
-    if (!key) {
-      key = prompt('Masukkan kunci publikasi Plukakang. Kunci ini harus cocok dengan PLUKAKANG_PUBLISH_KEY di Vercel:');
-      if (!key) return;
-      try { sessionStorage.setItem(PUBLISH_KEY_SESSION, key); } catch (e) {}
-    }
-    var btn = $('btnPublish');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim…';
-    fetch('/api/publish', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-publish-key': key },
-      body: JSON.stringify({ data: payload })
-    }).then(function(r) {
-      return r.json().catch(function() { return {}; }).then(function(body) {
-        if (!r.ok) { var err = new Error(body.error || ('HTTP ' + r.status)); err.status = r.status; throw err; }
-        return body;
-      });
-    }).then(function(result) {
-      dirty = false;
-      clearDraft();
-      srcLabel = 'live';
-      loadedAt = Date.now();
-      updateSrcInfo(false);
-      $('draftCard').style.display = 'none';
-      showToast('Commit GitHub berhasil · ' + String(result.commit || '').slice(0, 7) + '. Vercel akan deploy jika branch ini terhubung.');
-    }).catch(function(err) {
-      if (err.status === 401 || err.status === 403) {
-        try { sessionStorage.removeItem(PUBLISH_KEY_SESSION); } catch (e) {}
-      }
-      showToast('Publikasi gagal: ' + esc(err.message || 'kesalahan jaringan') + ' — jalur unduh manual tetap tersedia', null, null, 5000);
-    }).finally(function() {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung';
-    });
-  }
-  $('btnPublish').addEventListener('click', publishDirect);
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
     copyText(buildV2(), 'JSON tersalin (' + items.length + ' item)');
@@ -2330,6 +2365,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     if (!pendingImport) return;
     if (mode === 'replace') {
       if (!confirm('GANTI seluruh ' + items.length + ' item dengan ' + pendingImport.length + ' item dari Excel?')) return;
+      saveAutoBackup('Sebelum mengganti data dengan Excel');
       items = pendingImport.slice();
     } else {
       items = items.concat(pendingImport);
@@ -2374,4 +2410,3 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   if (adminUnlocked()) unlockAdmin();
   </script>
-</body>
