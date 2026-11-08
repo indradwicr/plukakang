@@ -929,9 +929,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           <button class="btn" id="btnCopy"><i class="fas fa-copy"></i> Salin JSON</button>
         </div>
         <div class="btn-row" style="margin-top:8px">
+          <button class="btn prim" id="btnPublish"><i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung</button>
           <a class="btn" href="./index.html" target="_blank" rel="noopener" style="text-decoration:none"><i class="fas fa-up-right-from-square"></i> Buka App</a>
           <button class="btn danger" id="btnReset"><i class="fas fa-eraser"></i> Reset Draft</button>
         </div>
+        <div class="gcard-sub" style="margin-top:9px">Hybrid: unduh JSON untuk jalur manual, atau terbitkan langsung melalui server yang terhubung ke GitHub. Kunci publikasi diminta saat pertama kali digunakan dan hanya disimpan sementara di sesi browser.</div>
       </div>
     </section>
 
@@ -2182,6 +2184,82 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   $('btnExport').addEventListener('click', doExport);
   $('headExportBtn').addEventListener('click', doExport);
+
+  /* ================================================================
+     HYBRID PUBLISH — GitHub token tetap di environment server
+     ================================================================ */
+  var PUBLISH_KEY_SESSION = 'plukakang_publish_key_v1';
+  function validatePublishData(payload) {
+    var errors = [];
+    if (!payload || payload.app !== 'plukakang') errors.push('Identitas data bukan plukakang.');
+    if (payload.v !== 2) errors.push('Versi format harus v2.');
+    if (!Array.isArray(payload.brands) || !payload.brands.length) errors.push('Daftar brand kosong atau tidak valid.');
+    if (!Array.isArray(payload.items) || !payload.items.length) errors.push('Daftar item kosong atau tidak valid.');
+    if (Array.isArray(payload.brands)) {
+      var brandIds = {};
+      payload.brands.forEach(function(b, i) {
+        if (!b || !b.id || !b.nama) errors.push('Brand ke-' + (i + 1) + ' tidak memiliki id/nama.');
+        else if (brandIds[b.id]) errors.push('ID brand duplikat: ' + b.id);
+        else brandIds[b.id] = true;
+      });
+    }
+    if (Array.isArray(payload.items)) {
+      var bad = 0;
+      payload.items.forEach(function(it) {
+        if (!it || !it.brand || !it.nama || (!it.raw && !it.konv)) bad++;
+      });
+      if (bad) errors.push(bad + ' item tidak memiliki brand/nama atau tidak memiliki kode raw maupun konversi.');
+    }
+    return errors;
+  }
+  function publishDirect() {
+    if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
+    var payload;
+    try { payload = JSON.parse(buildV2()); } catch (e) { showToast('Gagal membentuk JSON'); return; }
+    var errors = validatePublishData(payload);
+    if (errors.length) {
+      alert('Validasi gagal:\n\n• ' + errors.join('\n• '));
+      return;
+    }
+    if (!confirm('Terbitkan ' + payload.items.length + ' item dari ' + payload.brands.length + ' brand ke repository sekarang? Perubahan akan memicu deployment baru.')) return;
+    var key = '';
+    try { key = sessionStorage.getItem(PUBLISH_KEY_SESSION) || ''; } catch (e) {}
+    if (!key) {
+      key = prompt('Masukkan kunci publikasi Plukakang. Kunci ini harus cocok dengan PLUKAKANG_PUBLISH_KEY di Vercel:');
+      if (!key) return;
+      try { sessionStorage.setItem(PUBLISH_KEY_SESSION, key); } catch (e) {}
+    }
+    var btn = $('btnPublish');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim…';
+    fetch('/api/publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-publish-key': key },
+      body: JSON.stringify({ data: payload })
+    }).then(function(r) {
+      return r.json().catch(function() { return {}; }).then(function(body) {
+        if (!r.ok) { var err = new Error(body.error || ('HTTP ' + r.status)); err.status = r.status; throw err; }
+        return body;
+      });
+    }).then(function(result) {
+      dirty = false;
+      clearDraft();
+      srcLabel = 'live';
+      loadedAt = Date.now();
+      updateSrcInfo(false);
+      $('draftCard').style.display = 'none';
+      showToast('Commit GitHub berhasil · ' + String(result.commit || '').slice(0, 7) + '. Vercel akan deploy jika branch ini terhubung.');
+    }).catch(function(err) {
+      if (err.status === 401 || err.status === 403) {
+        try { sessionStorage.removeItem(PUBLISH_KEY_SESSION); } catch (e) {}
+      }
+      showToast('Publikasi gagal: ' + esc(err.message || 'kesalahan jaringan') + ' — jalur unduh manual tetap tersedia', null, null, 5000);
+    }).finally(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Terbitkan langsung';
+    });
+  }
+  $('btnPublish').addEventListener('click', publishDirect);
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
     copyText(buildV2(), 'JSON tersalin (' + items.length + ' item)');
