@@ -3,6 +3,44 @@
   "v": 2,
   "brands": [
     {
+      "id": "seasonal",
+      "nama": "Seasonal",
+      "subjudul": "Selalu Muncul Revisi",
+      "ikon": "fa-cookie-bite",
+      "warna": "#cc00b5",
+      "ikon_warna": [
+        "#da47ca",
+        "#8f007f"
+      ],
+      "subs": [
+        {
+          "id": "all",
+          "label": "Semua"
+        },
+        {
+          "id": "kuker",
+          "label": "Kue Kering"
+        },
+        {
+          "id": "sirup",
+          "label": "Sirup"
+        },
+        {
+          "id": "permen",
+          "label": "Permen"
+        },
+        {
+          "id": "kurma",
+          "label": "Kurma"
+        },
+        {
+          "id": "coco",
+          "label": "Nata de Coco"
+        }
+      ],
+      "kategori": {}
+    },
+    {
       "id": "saybread",
       "nama": "Say Bread",
       "subjudul": "Bakery & Pastry",
@@ -116,6 +154,10 @@
         {
           "id": "sarana",
           "label": "Sarana"
+        },
+        {
+          "id": "rtd",
+          "label": "Ready to Drink"
         }
       ],
       "kategori": {
@@ -253,44 +295,6 @@
         {
           "id": "dry",
           "label": "Dry Food"
-        }
-      ],
-      "kategori": {}
-    },
-    {
-      "id": "seasonal",
-      "nama": "Seasonal",
-      "subjudul": "Selalu Muncul Revisi",
-      "ikon": "fa-cookie-bite",
-      "warna": "#cc00b5",
-      "ikon_warna": [
-        "#da47ca",
-        "#8f007f"
-      ],
-      "subs": [
-        {
-          "id": "all",
-          "label": "Semua"
-        },
-        {
-          "id": "kuker",
-          "label": "Kue Kering"
-        },
-        {
-          "id": "sirup",
-          "label": "Sirup"
-        },
-        {
-          "id": "permen",
-          "label": "Permen"
-        },
-        {
-          "id": "kurma",
-          "label": "Kurma"
-        },
-        {
-          "id": "coco",
-          "label": "Nata de Coco"
         }
       ],
       "kategori": {}
@@ -10903,6 +10907,46 @@
       "kategori": "",
       "nama": "Nissin Waffer Chocolate SE",
       "raw": "20040511",
+      "konv": ""
+    },
+    {
+      "brand": "yummycoffee",
+      "sub": "rtd",
+      "kategori": "",
+      "nama": "YC GO Palm Sugar",
+      "raw": "20113539",
+      "konv": ""
+    },
+    {
+      "brand": "yummycoffee",
+      "sub": "rtd",
+      "kategori": "",
+      "nama": "YC GO Classic",
+      "raw": "20119610",
+      "konv": ""
+    },
+    {
+      "brand": "yummycoffee",
+      "sub": "rtd",
+      "kategori": "",
+      "nama": "YC GO Mocha",
+      "raw": "20119612",
+      "konv": ""
+    },
+    {
+      "brand": "yummycoffee",
+      "sub": "rtd",
+      "kategori": "",
+      "nama": "YC GO Hazelnut Choco",
+      "raw": "20119611",
+      "konv": ""
+    },
+    {
+      "brand": "yummycoffee",
+      "sub": "rtd",
+      "kategori": "",
+      "nama": "YC GO Hazelnut Dolce",
+      "raw": "20113538",
       "konv": ""
     }
   ]
