@@ -868,6 +868,38 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 .merge-stat b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
 .merge-stat span{font-size:10px;color:var(--text-muted)}
 
+
+/* ===== MOBILE CURATION EXPERIENCE ===== */
+.merge-intro{font-size:13px;line-height:1.65}
+.merge-card{padding:15px;border-radius:18px}
+.merge-card h3{font-size:15px;line-height:1.4;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.merge-meta{font-size:12px;line-height:1.5;padding:8px 10px;border-radius:10px;background:var(--w06)}
+.merge-record{padding:12px 0;font-size:13px}
+.merge-record strong{font-size:13px}
+.merge-codes{font-size:12px;line-height:1.6}
+.merge-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.merge-actions .btn{min-width:0;min-height:44px;font-size:12px;border-radius:12px}
+.merge-actions .btn.green{grid-column:1/-1;min-height:48px;font-size:14px}
+.merge-empty{font-size:13px;line-height:1.6}
+.admin-dialog-backdrop{position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,.68);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.admin-dialog-backdrop.open{display:flex}
+.admin-dialog{width:100%;max-width:520px;max-height:min(82dvh,760px);overflow:auto;background:var(--card-white);color:var(--text-main);border:1px solid var(--glass-brd);border-radius:24px 24px 20px 20px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.45);padding-bottom:max(18px,env(safe-area-inset-bottom))}
+.admin-dialog-grab{width:38px;height:4px;border-radius:9px;background:var(--w24);margin:0 auto 17px}
+.admin-dialog-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:7px}
+.admin-dialog h2{font-size:20px;line-height:1.25;margin:0 0 8px;font-weight:850}
+.admin-dialog-desc{font-size:13px;line-height:1.6;color:var(--text-muted);margin-bottom:14px}
+.admin-dialog-preview{border:1px solid var(--w12);background:var(--w04);border-radius:15px;padding:12px;margin:12px 0}
+.admin-dialog-preview .merge-record{padding:9px 0}
+.admin-dialog-field{display:block;font-size:12px;font-weight:750;margin:13px 0 7px}
+.admin-dialog-input{width:100%;min-height:48px;border:1px solid var(--w18);border-radius:13px;padding:12px 14px;background:var(--w06);color:var(--text-main);font:inherit;font-size:16px;outline:none}
+.admin-dialog-input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(10,132,255,.15)}
+.admin-dialog-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.admin-dialog-actions button{min-height:48px;border-radius:14px;font-size:14px;font-weight:800}
+.admin-dialog-actions .primary{background:var(--acc);color:white;border:0}
+.admin-dialog-actions .secondary{background:var(--w08);color:var(--text-main);border:1px solid var(--w14)}
+.admin-dialog-actions .danger{background:#b42332;color:white;border:0}
+@media(min-width:600px){.admin-dialog-backdrop{align-items:center}.admin-dialog{border-radius:24px}}
+
 </style>
   <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -1141,6 +1173,22 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <p class="f-hint" style="text-align:center">Header: <b>brand · sub · kategori · nama · raw · konv</b></p>
       </div>
     </div>
+  </div>
+
+
+  <div class="admin-dialog-backdrop" id="adminDialogBackdrop" aria-hidden="true">
+    <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
+      <div class="admin-dialog-grab"></div>
+      <div class="admin-dialog-kicker" id="adminDialogKicker">KURASI PRODUK</div>
+      <h2 id="adminDialogTitle">Konfirmasi</h2>
+      <div class="admin-dialog-desc" id="adminDialogDesc"></div>
+      <div id="adminDialogPreview"></div>
+      <div id="adminDialogFields"></div>
+      <div class="admin-dialog-actions">
+        <button type="button" class="secondary" id="adminDialogCancel">Batal</button>
+        <button type="button" class="primary" id="adminDialogConfirm">Lanjutkan</button>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -2484,6 +2532,53 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function getProductMembers(id) {
     return items.filter(function(it) { return it.product_id === id; });
   }
+  var adminDialogResolve = null;
+  function adminDialog(opts) {
+    opts = opts || {};
+    return new Promise(function(resolve) {
+      adminDialogResolve = resolve;
+      $('adminDialogKicker').innerText = opts.kicker || 'KURASI PRODUK';
+      $('adminDialogTitle').innerText = opts.title || 'Konfirmasi';
+      $('adminDialogDesc').innerText = opts.description || '';
+      $('adminDialogPreview').innerHTML = opts.preview || '';
+      $('adminDialogFields').innerHTML = '';
+      (opts.fields || []).forEach(function(field, index) {
+        var wrap = document.createElement('div');
+        var id = 'adminDialogField' + index;
+        var label = document.createElement('label');
+        label.className = 'admin-dialog-field'; label.htmlFor = id;
+        label.innerText = field.label || 'Nama';
+        var input = document.createElement('input');
+        input.className = 'admin-dialog-input'; input.id = id;
+        input.type = field.type || 'text'; input.value = field.value || '';
+        input.placeholder = field.placeholder || '';
+        input.autocomplete = 'off';
+        wrap.appendChild(label); wrap.appendChild(input);
+        $('adminDialogFields').appendChild(wrap);
+      });
+      var confirmBtn = $('adminDialogConfirm');
+      confirmBtn.innerText = opts.confirmText || 'Lanjutkan';
+      confirmBtn.className = opts.danger ? 'danger' : 'primary';
+      $('adminDialogBackdrop').classList.add('open');
+      $('adminDialogBackdrop').setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function(){ var first=$('adminDialogFields').querySelector('input'); if(first) first.focus(); },80);
+    });
+  }
+  function closeAdminDialog(value) {
+    $('adminDialogBackdrop').classList.remove('open');
+    $('adminDialogBackdrop').setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    var done = adminDialogResolve; adminDialogResolve = null;
+    if (done) done(value);
+  }
+  $('adminDialogCancel').addEventListener('click',function(){closeAdminDialog(null);});
+  $('adminDialogConfirm').addEventListener('click',function(){
+    var fields=[].slice.call($('adminDialogFields').querySelectorAll('input'));
+    closeAdminDialog(fields.length ? fields.map(function(x){return x.value;}) : true);
+  });
+  $('adminDialogBackdrop').addEventListener('click',function(e){if(e.target===this)closeAdminDialog(null);});
+
   function mergeSignature(a, b) { return [a.brand,a.nama,a.raw,a.konv,b.brand,b.nama,b.raw,b.konv].join('|'); }
   function pairReason(a, b) {
     var reasons = [];
@@ -2513,17 +2608,26 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     }
     return Object.keys(groups).map(function(k) { return groups[k]; }).sort(function(a,b) { return b.score-a.score || a.a.nama.localeCompare(b.a.nama); });
   }
-  function mergePair(aIndex, bIndex) {
+  async function mergePair(aIndex, bIndex) {
     var a = items[aIndex], b = items[bIndex];
     if (!a || !b || a.brand === b.brand) { showToast('Relasi harus menghubungkan brand berbeda.'); return; }
-    var name = window.prompt('Nama produk utama untuk kedua brand:', a.nama || b.nama);
-    if (name === null) return;
-    name = name.trim();
-    if (!name) { showToast('Nama produk utama wajib diisi.'); return; }
     var idA = a.product_id || '', idB = b.product_id || '';
-    if (idA && idB && idA !== idB) {
-      if (!confirm('Kedua record sudah terhubung ke produk bersama yang berbeda. Gabungkan kedua kelompok relasi ini?')) return;
-    }
+    var preview = '<div class="admin-dialog-preview">' +
+      '<div class="merge-record"><strong>' + esc(brandName(a.brand)) + ' · ' + esc(a.nama) + '</strong><div class="merge-codes">RAW: ' + esc(a.raw || '—') + ' · KONV: ' + esc(a.konv || '—') + '</div></div>' +
+      '<div class="merge-record"><strong>' + esc(brandName(b.brand)) + ' · ' + esc(b.nama) + '</strong><div class="merge-codes">RAW: ' + esc(b.raw || '—') + ' · KONV: ' + esc(b.konv || '—') + '</div></div></div>';
+    var description = 'Kedua record akan memakai satu nama produk utama. PLU RAW, KONV, kategori, dan subkategori masing-masing brand tetap dipertahankan.';
+    if (idA && idB && idA !== idB) description += ' Keduanya saat ini sudah berada di dua kelompok produk bersama yang berbeda. Kelompok tersebut juga akan disatukan.';
+    var result = await adminDialog({
+      kicker:'TINJAU SEBELUM MENGGABUNGKAN',
+      title:'Hubungkan sebagai produk yang sama?',
+      description:description,
+      preview:preview,
+      fields:[{label:'Nama produk utama',value:a.nama || b.nama,placeholder:'Masukkan nama produk'}],
+      confirmText:'Gabungkan relasi'
+    });
+    if (!result) return;
+    var name = String(result[0] || '').trim();
+    if (!name) { showToast('Nama produk utama wajib diisi.'); return; }
     saveAutoBackup('Sebelum menghubungkan produk lintas brand');
     var pid = idA || idB || makeProductId();
     if (idA && idB && idA !== idB) {
@@ -2610,22 +2714,17 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var rename=e.target.closest('[data-rename-product]');
     if (rename) {
       var p=getSharedProducts().find(function(x){return x.id===rename.dataset.renameProduct;}); if(!p)return;
-      var n=window.prompt('Nama produk bersama:',p.nama); if(n===null)return; n=n.trim(); if(!n)return;
-      p.nama=n; getProductMembers(p.id).forEach(function(it){it.nama=n;}); markDirty(); return;
+      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Ubah nama produk',description:'Nama ini akan digunakan oleh seluruh relasi brand yang terhubung.',fields:[{label:'Nama produk',value:p.nama}],confirmText:'Simpan'}).then(function(v){if(!v)return;var n=String(v[0]||'').trim();if(!n)return;p.nama=n;getProductMembers(p.id).forEach(function(it){it.nama=n;});markDirty();}); return;
     }
     var desc=e.target.closest('[data-desc-product]');
     if (desc) {
       var dp=getSharedProducts().find(function(x){return x.id===desc.dataset.descProduct;}); if(!dp)return;
-      var nd=window.prompt('Deskripsi bersama untuk produk ini:',dp.deskripsi||''); if(nd===null)return;
-      dp.deskripsi=nd.trim(); markDirty(); return;
+      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Deskripsi produk',description:'Deskripsi ini berlaku untuk semua brand yang terhubung.',fields:[{label:'Deskripsi',value:dp.deskripsi||'',placeholder:'Tambahkan keterangan produk'}],confirmText:'Simpan'}).then(function(v){if(!v)return;dp.deskripsi=String(v[0]||'').trim();markDirty();}); return;
     }
     var unlink=e.target.closest('[data-unlink-product]');
     if (unlink) {
       var id=unlink.dataset.unlinkProduct, members=getProductMembers(id);
-      if(!confirm('Lepas relasi produk ini? Record setiap brand tetap ada, PLU dan kategori tidak berubah.'))return;
-      members.forEach(function(it){it.product_id='';});
-      extraKeys.products=getSharedProducts().filter(function(p){return p.id!==id;});
-      markDirty(); showToast('Relasi dilepas; record tetap aman.');
+      adminDialog({kicker:'TINDAKAN PRODUK',title:'Lepas relasi bersama?',description:'Record setiap brand tetap ada. PLU, kategori, dan subkategori tidak dihapus; hanya hubungan produk bersamanya yang dilepas.',preview:'<div class="admin-dialog-preview"><strong>'+members.length+' relasi brand akan dipisahkan</strong></div>',confirmText:'Lepas relasi',danger:true}).then(function(ok){if(!ok)return;members.forEach(function(it){it.product_id='';});extraKeys.products=getSharedProducts().filter(function(p){return p.id!==id;});markDirty();showToast('Relasi dilepas; record tetap aman.');});
     }
   });
 
