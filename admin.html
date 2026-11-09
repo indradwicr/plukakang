@@ -1359,6 +1359,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       brand: String(it.brand == null ? '' : it.brand).toLowerCase().trim(),
       sub: String(it.sub == null ? '' : it.sub).toLowerCase().trim(),
       kategori: String(it.kategori == null ? '' : it.kategori).toLowerCase().trim(),
+      product_id: String(it.product_id == null ? '' : it.product_id).trim(),
       nama: nama,
       deskripsi: String(it.deskripsi == null ? '' : it.deskripsi),
       raw: raw,
@@ -1547,6 +1548,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function validateRestore(json) {
     var data = json && json.app === 'plukakang-backup' ? json.data : json;
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
+    if (!Array.isArray(data.items) || !data.items.length) throw new Error('Daftar item kosong atau tidak valid.');
     if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
     var ids = {};
     data.brands.forEach(function(b) {
@@ -1694,9 +1696,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     $('tabData').classList.toggle('hidden', name !== 'data');
     $('tabItem').classList.toggle('hidden', name !== 'item');
     $('tabBrand').classList.toggle('hidden', name !== 'brand');
+    $('tabMerge').classList.toggle('hidden', name !== 'merge');
     $('dockData').classList.toggle('active', name === 'data');
     $('dockItem').classList.toggle('active', name === 'item');
     $('dockBrand').classList.toggle('active', name === 'brand');
+    $('dockMerge').classList.toggle('active', name === 'merge');
     $('fabItem').classList.toggle('show', name === 'item');
     $('fabBrand').classList.toggle('show', name === 'brand');
     $('fabAddItem').disabled = !loaded;
@@ -1724,6 +1728,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     renderBrandGrid();
     renderOrderManager();
     renderDup();
+    renderMergeManager();
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
     $('statCard').style.display = loaded ? '' : 'none';
@@ -1965,6 +1970,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var obj = { id: oldItem ? oldItem.id : makeItemId(), brand: brand, sub: sub, kategori: kat, nama: nama, deskripsi: oldItem ? (oldItem.deskripsi || '') : '', raw: raw, konv: konv };
     if (editItemIdx !== null) {
       items[editItemIdx] = obj;
+      if (obj.product_id) {
+        items.forEach(function(linked) { if (linked.product_id === obj.product_id) linked.nama = nama; });
+        var pm = getSharedProducts().find(function(p) { return p.id === obj.product_id; });
+        if (pm) pm.nama = nama;
+      }
       showToast('Item diperbarui');
     } else {
       items.push(obj);
@@ -2699,4 +2709,3 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   try { if (sessionStorage.getItem('plukakang_admin_ok') === '1') unlockAdmin(); } catch (e) {}
   </script>
-</body>

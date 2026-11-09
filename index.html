@@ -3164,6 +3164,26 @@ function renderSidebarPlu(filter) {
       }
   }
 
+  function startPlukakangAutoUpdate() {
+      if (plukakangUpdateTimer) clearInterval(plukakangUpdateTimer);
+
+      /* Cek langsung setiap kali aplikasi dibuka, tanpa menunggu 60 detik. */
+      checkPlukakangDataVersion();
+
+      /* Tetap cek berkala selama aplikasi aktif. */
+      plukakangUpdateTimer = setInterval(function() {
+        if (!document.hidden) checkPlukakangDataVersion();
+      }, 60000);
+
+      /* Cek lagi saat pengguna kembali ke tab/aplikasi. */
+      if (!plukakangVisibilityHandlerReady) {
+        document.addEventListener('visibilitychange', function() {
+          if (!document.hidden) checkPlukakangDataVersion();
+        });
+        plukakangVisibilityHandlerReady = true;
+      }
+  }
+
 
   /* ================================================================
       DETAIL VIEW
@@ -5341,4 +5361,3 @@ function initKcAlpha() {
   });
   initAlphabetNavEvents();
   </script>
-</body>
