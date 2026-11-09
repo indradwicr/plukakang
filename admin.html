@@ -18,7 +18,7 @@
    PLUKAKANG ADMIN · LIQUID GLASS DARK EDITION (iOS 26)
    Tema diambil dari index.html: kaca gelap translucent di atas
    ambient aurora hitam, dock kapsul mengambang, sheet glass.
-   Admin = editor data.json V4 (item independen dengan ID permanen).
+   Admin = editor data.json (format v3 + relasi produk master).
    ================================================================ */
 :root {
     color-scheme: dark;
@@ -1040,7 +1040,30 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         <div class="order-list" id="orderCategoryList"></div>
       </div>
     </section>
-</div>
+
+    <!-- ================= TAB: PRODUK BERSAMA ================= -->
+    <section id="tabMerge" class="hidden">
+      <div class="section-bar"><div class="section-title" style="font-size:19px">Produk Bersama</div><span class="item-count-chip" id="mergeCount">0 produk bersama</span></div>
+      <div class="gcard">
+        <div class="gcard-title"><i class="fas fa-diagram-project"></i> Identitas produk lintas brand <span class="gtag green">2.1</span></div>
+        <p class="merge-intro">Hubungkan record yang benar-benar merupakan produk sama. Nama utama akan disinkronkan, sedangkan RAW, KONV, kategori, dan subkategori tetap disimpan per brand. Sistem hanya memberi kandidat — tidak pernah menggabungkan otomatis.</p>
+        <div class="merge-stat"><div><b id="mergeLinked">0</b><span>Produk bersama</span></div><div><b id="mergeMembers">0</b><span>Relasi brand</span></div><div><b id="mergeCandidates">0</b><span>Kandidat review</span></div></div>
+      </div>
+      <div class="gcard">
+        <div class="gcard-title"><i class="fas fa-magnifying-glass"></i> Kandidat penggabungan</div>
+        <p class="merge-intro">Kandidat muncul jika nama, RAW, atau KONV memiliki kesamaan lintas brand. Periksa detailnya sebelum menekan Gabungkan.</p>
+        <div id="mergeCandidateList"><div class="merge-empty">Muat data terlebih dahulu.</div></div>
+      </div>
+      <div class="gcard">
+        <div class="gcard-title"><i class="fas fa-clock"></i> Periksa nanti <span class="gtag" id="mergePendingCount">0</span></div>
+        <div id="mergePendingList"><div class="merge-empty">Belum ada kandidat yang ditunda.</div></div>
+      </div>
+      <div class="gcard">
+        <div class="gcard-title"><i class="fas fa-link"></i> Produk yang sudah terhubung</div>
+        <div id="mergeLinkedList"><div class="merge-empty">Belum ada produk bersama.</div></div>
+      </div>
+    </section>
+  </div>
 
   <!-- FAB per tab -->
   <div class="fab-bar" id="fabItem"><button class="fab-prim" id="fabAddItem" disabled><i class="fas fa-plus"></i> Tambah Item</button></div>
@@ -1051,7 +1074,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     <button class="dock-tab active" id="dockData"><i class="fas fa-database"></i>Data</button>
     <button class="dock-tab" id="dockItem"><i class="fas fa-boxes-stacked"></i>Item PLU</button>
     <button class="dock-tab" id="dockBrand"><i class="fas fa-tags"></i>Brand</button>
-    
+    <button class="dock-tab" id="dockMerge"><i class="fas fa-diagram-project"></i>Relasi</button>
   </nav>
 
   <!-- ===== SHEET: FORM ITEM ===== -->
@@ -1298,7 +1321,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
 
   /* ================================================================
-     STATE + DATA — normalized independent items; source/export format v4
+     STATE + DATA — internal normalized rows; source/export format v3
      ================================================================ */
   var DEF_BRANDS = [
     { id: 'saybread', nama: 'Say Bread', subjudul: 'Bakery & Pastry', ikon: 'fa-bread-slice', warna: '#8c5332', ikon_warna: ['#b06a42', '#7a4222'], subs: [{ id: 'all', label: 'Semua' }, { id: 'dcf', label: 'Frozen Dough' }, { id: 'sarana', label: 'Sarana' }], kategori: {} },
@@ -1344,9 +1367,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     return (m && m[katId]) ? m[katId] : katId;
   }
 
-  function makeItemId() {
-    if (window.crypto && typeof window.crypto.randomUUID === 'function') return 'item_' + window.crypto.randomUUID().replace(/-/g, '');
-    return 'item_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 12);
+  function newItemId() {
+    var token = '';
+    try { token = (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '') : Math.random().toString(36).slice(2) + Date.now().toString(36)); }
+    catch (e) { token = Math.random().toString(36).slice(2) + Date.now().toString(36); }
+    return 'item_' + token.slice(0, 16);
   }
   function normItem(it) {
     if (!it || typeof it !== 'object') return null;
@@ -1355,13 +1380,12 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     var konv = String(it.konv == null ? '' : it.konv).trim();
     if (!nama && !raw && !konv) return null;
     return {
-      id: String(it.id == null ? '' : it.id).trim() || makeItemId(),
+      id: String(it.id == null ? '' : it.id).trim(),
       brand: String(it.brand == null ? '' : it.brand).toLowerCase().trim(),
-      sub: String(it.sub == null ? '' : it.sub).toLowerCase().trim(),
-      kategori: String(it.kategori == null ? '' : it.kategori).toLowerCase().trim(),
-      product_id: String(it.product_id == null ? '' : it.product_id).trim(),
       nama: nama,
       deskripsi: String(it.deskripsi == null ? '' : it.deskripsi),
+      sub: String(it.sub == null ? '' : it.sub).toLowerCase().trim(),
+      kategori: String(it.kategori == null ? '' : it.kategori).toLowerCase().trim(),
       raw: raw,
       konv: konv
     };
@@ -1411,34 +1435,38 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     else if (json && typeof json === 'object') {
       if (Array.isArray(json.items)) arr = json.items;
       if (Array.isArray(json.brands) && json.brands.length) br = json.brands;
-      isV3 = json.v === 3 && Array.isArray(json.products);
       isV4 = json.v === 4 && Array.isArray(json.items);
-      for (var k in json) { if (k !== 'items' && k !== 'brands' && k !== 'products' && k !== 'curation') ex[k] = json[k]; }
+      isV3 = json.v === 3 && Array.isArray(json.products);
+      for (var k in json) { if (k !== 'items' && k !== 'brands' && k !== 'products') ex[k] = json[k]; }
       if (isV3) {
         arr = [];
-        json.products.forEach(function(p) {
+        ex.products = [];
+        json.products.forEach(function(p, pi) {
           if (!p || typeof p !== 'object') return;
+          var pid = String(p.id || ('prod_import_' + pi));
+          ex.products.push({ id: pid, nama: String(p.nama || ''), deskripsi: String(p.deskripsi || ''), created_at: p.created_at || '' });
           (Array.isArray(p.brands) ? p.brands : []).forEach(function(a) {
             if (!a || !a.brand) return;
-            arr.push({ id: makeItemId(), nama: p.nama || '', deskripsi: p.deskripsi || '', brand: a.brand, sub: a.sub || '', kategori: a.kategori || '', raw: a.raw || '', konv: a.konv || '' });
+            arr.push({ product_id: pid, nama: p.nama || '', brand: a.brand, sub: a.sub || '', kategori: a.kategori || '', raw: a.raw || '', konv: a.konv || '' });
           });
         });
       }
     }
+    var hasBrands = !!(br && br.length);
     if (!br || !br.length) br = clone(DEF_BRANDS);
-    var ni = [], nb = [], ids = {}, itemIds = {};
+    var ni = [], nb = [], ids = {};
     (arr || []).forEach(function(it) {
       var n = normItem(it);
-      if (!n) return;
-      if (itemIds[n.id]) n.id = makeItemId();
-      itemIds[n.id] = true;
-      ni.push(n);
+      if (n) {
+        if (isV4 && !n.id) n.id = newItemId();
+        ni.push(n);
+      }
     });
     br.forEach(function(b) {
       var x = normBrand(b);
       if (x && !ids[x.id]) { ids[x.id] = 1; nb.push(x); }
     });
-    return { brands: nb, items: ni, extra: ex, isV2: !!(br && br.length), isV3: isV3, isV4: isV4 };
+    return { brands: nb, items: ni, extra: ex, isV2: hasBrands && !isV4, isV3: isV3, isV4: isV4 };
   }
   function applyData(json, source) {
     var c = collect(json);
@@ -1497,13 +1525,25 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   var BACKUP_KEY = 'plukakang_admin_backups_v1';
   var BACKUP_LIMIT = 5;
   function buildV4Object() {
-    var outItems = items.map(function(it) {
-      if (!it.id) it.id = makeItemId();
-      return { id: it.id, brand: it.brand, nama: it.nama, deskripsi: it.deskripsi || '', sub: it.sub || '', kategori: it.kategori || '', raw: it.raw || '', konv: it.konv || '' };
-    });
     var out = {};
-    for (var k in extraKeys) { if (k !== 'app' && k !== 'v' && k !== 'items' && k !== 'products' && k !== 'curation' && k !== 'brands' && k !== 'mergePending' && k !== 'mergeIgnored') out[k] = clone(extraKeys[k]); }
-    out.app = 'plukakang'; out.v = 4; out.brands = clone(brands); out.items = outItems;
+    for (var k in extraKeys) {
+      if (k !== 'app' && k !== 'v' && k !== 'items' && k !== 'products' && k !== 'brands' && k !== 'curation') out[k] = clone(extraKeys[k]);
+    }
+    out.app = 'plukakang';
+    out.v = 4;
+    out.brands = clone(brands);
+    out.items = items.map(function(it) {
+      return {
+        id: it.id || (it.id = newItemId()),
+        brand: it.brand,
+        nama: it.nama,
+        deskripsi: it.deskripsi || '',
+        sub: it.sub || '',
+        kategori: it.kategori || '',
+        raw: it.raw || '',
+        konv: it.konv || ''
+      };
+    });
     return out;
   }
   function backupPayload() {
@@ -1548,7 +1588,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   function validateRestore(json) {
     var data = json && json.app === 'plukakang-backup' ? json.data : json;
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Format file tidak dikenali.');
-    if (!Array.isArray(data.items) || !data.items.length) throw new Error('Daftar item kosong atau tidak valid.');
     if (!Array.isArray(data.brands) || !data.brands.length) throw new Error('Daftar brand kosong atau tidak valid.');
     var ids = {};
     data.brands.forEach(function(b) {
@@ -1563,13 +1602,14 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       var itemIds = {};
       data.items.forEach(function(it) {
         if (!it || typeof it.id !== 'string' || !it.id.trim() || !it.brand || !it.nama || (!String(it.raw || '').trim() && !String(it.konv || '').trim()) || !ids[String(it.brand).trim().toLowerCase()]) { invalid++; return; }
-        if (itemIds[it.id]) invalid++;
-        itemIds[it.id] = true;
+        var iid = it.id.trim();
+        if (itemIds[iid]) invalid++;
+        itemIds[iid] = true;
       });
-      if (invalid) throw new Error(invalid + ' item V4 tidak valid atau ID duplikat.');
+      if (invalid) throw new Error(invalid + ' item V4 tidak valid atau memiliki ID duplikat.');
     } else if (data.v === 3 && Array.isArray(data.products)) {
       if (!data.products.length) throw new Error('Daftar produk V3 kosong.');
-      var productIds = {}, relationKeys = {};
+      var productIds = {};
       data.products.forEach(function(p) {
         if (!p || typeof p.id !== 'string' || !p.id.trim() || typeof p.nama !== 'string' || !p.nama.trim() || !Array.isArray(p.brands) || !p.brands.length) { invalid++; return; }
         var pid = p.id.trim();
@@ -1581,17 +1621,15 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
           var bid = a.brand.trim().toLowerCase();
           if (localBrands[bid]) { invalid++; return; }
           localBrands[bid] = true;
-          var rk = bid + '|' + String(a.raw || '').trim() + '|' + String(a.konv || '').trim();
-          relationKeys[rk] = (relationKeys[rk] || 0) + 1;
         });
       });
-      if (invalid) throw new Error(invalid + ' produk/item tidak valid atau duplikat.');
+      if (invalid) throw new Error(invalid + ' produk/relasi tidak valid atau duplikat.');
     } else if (Array.isArray(data.items) && data.items.length) {
       data.items.forEach(function(it) {
         if (!it || !it.brand || !it.nama || (!String(it.raw || '').trim() && !String(it.konv || '').trim()) || !ids[String(it.brand).trim().toLowerCase()]) invalid++;
       });
-      if (invalid) throw new Error(invalid + ' item PLU V2 tidak valid. Restore dibatalkan.');
-    } else throw new Error('File bukan V2, V3, atau V4 yang valid.');
+      if (invalid) throw new Error(invalid + ' item lama tidak valid. Restore dibatalkan.');
+    } else throw new Error('File bukan V4/V3 dan tidak memiliki item yang valid.');
     var parsed = collect(data);
     if (!parsed.items.length || parsed.brands.length !== data.brands.length) throw new Error('Sebagian data tidak dapat dibaca. Restore dibatalkan.');
     return data;
@@ -1611,7 +1649,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
         var parsed = JSON.parse(ev.target.result);
         var data = validateRestore(parsed);
         var count = collect(data).items.length;
-        if (!confirm('Pulihkan backup berisi ' + count + ' item dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
+        if (!confirm('Pulihkan backup berisi ' + count + ' relasi PLU dan ' + data.brands.length + ' brand? Data yang sedang tampil akan diganti.')) return;
         saveAutoBackup('Sebelum restore');
         applyData(data, 'file');
         $('draftCard').style.display = 'none';
@@ -1691,7 +1729,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
      ================================================================ */
   var curTab = 'data';
   function showTab(name) {
-    if (name === 'merge') name = 'item';
     curTab = name;
     $('tabData').classList.toggle('hidden', name !== 'data');
     $('tabItem').classList.toggle('hidden', name !== 'item');
@@ -1707,12 +1744,13 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     $('fabAddBrand').disabled = !loaded;
     if (name === 'item') renderItemList();
     if (name === 'brand') { renderBrandGrid(); renderOrderManager(); }
+    if (name === 'merge') renderMergeManager();
     window.scrollTo(0, 0);
   }
   $('dockData').addEventListener('click', function() { showTab('data'); vibrate(); });
   $('dockItem').addEventListener('click', function() { showTab('item'); vibrate(); });
   $('dockBrand').addEventListener('click', function() { showTab('brand'); vibrate(); });
-  /* Multi-Brand navigation removed in V4. */
+  $('dockMerge').addEventListener('click', function() { showTab('merge'); vibrate(); });
   $('headThemeBtn').addEventListener('click', toggleTheme);
   window.addEventListener('scroll', function() {
     $('itemSearchBar').classList.toggle('scrolled', window.scrollY > 10);
@@ -1755,7 +1793,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     }
     $('stList').innerHTML = html;
     $('statFmt').innerText = loadedIsV4 ? 'format v4' : (loadedIsV3 ? 'format v3' : (loadedIsV2 ? 'format v2' : 'format lama'));
-    $('statFmt').className = 'gtag' + ((loadedIsV2 || loadedIsV3) ? ' green' : '');
+    $('statFmt').className = 'gtag' + ((loadedIsV2 || loadedIsV3 || loadedIsV4) ? ' green' : '');
   }
 
   function renderChips() {
@@ -1967,7 +2005,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       if (!confirm('Peringatan duplikat:\n\n- ' + dups.join('\n- ').replace(/<b>/g, '').replace(/<\/b>/g, '') + '\n\nSimpan tetap?')) return;
     }
     var oldItem = editItemIdx !== null ? items[editItemIdx] : null;
-    var obj = { id: oldItem ? oldItem.id : makeItemId(), brand: brand, sub: sub, kategori: kat, nama: nama, deskripsi: oldItem ? (oldItem.deskripsi || '') : '', raw: raw, konv: konv };
+    var obj = { id: oldItem ? oldItem.id : newItemId(), brand: brand, sub: sub, kategori: kat, nama: nama, deskripsi: oldItem ? (oldItem.deskripsi || '') : '', raw: raw, konv: konv };
     if (editItemIdx !== null) {
       items[editItemIdx] = obj;
       if (obj.product_id) {
@@ -2475,7 +2513,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       (byName[k] = byName[k] || []).push(it);
       ['raw', 'konv'].forEach(function(f) {
         var c = it[f];
-        if (c) (byCode[c] = byCode[c] || []).push({ label: brandName(it.brand) + ' · ' + it.nama, brand: it.brand });
+        if (c) (byCode[c] = byCode[c] || []).push({ label: brandName(it.brand) + ' · ' + it.nama, product_id: it.product_id || '', brand: it.brand });
       });
       if (it.raw && it.konv && it.raw === it.konv) {
         out.push({ t: 'amber', ic: 'fa-equals', h: '<b>RAW = KONV</b>: ' + esc(brandName(it.brand)) + ' · ' + esc(it.nama) + ' (' + esc(it.raw) + ')' });
@@ -2493,7 +2531,8 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       var rows = byCode[c], conflicts = [];
       for (var x = 0; x < rows.length; x++) {
         for (var y = x + 1; y < rows.length; y++) {
-          if (rows[x].label !== rows[y].label) {
+          var sameSharedProduct = rows[x].product_id && rows[x].product_id === rows[y].product_id;
+          if (!sameSharedProduct && rows[x].label !== rows[y].label) {
             if (conflicts.indexOf(rows[x].label) < 0) conflicts.push(rows[x].label);
             if (conflicts.indexOf(rows[y].label) < 0) conflicts.push(rows[y].label);
           }
@@ -2527,7 +2566,216 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
 
   /* ================================================================
-     EXPORT — format V4 { app, v, brands, items }
+     SHARED PRODUCTS 2.1 — satu identitas, kode per brand
+     ================================================================ */
+  function getSharedProducts() {
+    if (!Array.isArray(extraKeys.products)) extraKeys.products = [];
+    return extraKeys.products;
+  }
+  function makeProductId() {
+    return 'prd_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+  }
+  function getProductMembers(id) {
+    return items.filter(function(it) { return it.product_id === id; });
+  }
+  var adminDialogResolve = null;
+  function adminDialog(opts) {
+    opts = opts || {};
+    return new Promise(function(resolve) {
+      adminDialogResolve = resolve;
+      $('adminDialogKicker').innerText = opts.kicker || 'KURASI PRODUK';
+      $('adminDialogTitle').innerText = opts.title || 'Konfirmasi';
+      $('adminDialogDesc').innerText = opts.description || '';
+      $('adminDialogPreview').innerHTML = opts.preview || '';
+      $('adminDialogFields').innerHTML = '';
+      (opts.fields || []).forEach(function(field, index) {
+        var wrap = document.createElement('div');
+        var id = 'adminDialogField' + index;
+        var label = document.createElement('label');
+        label.className = 'admin-dialog-field'; label.htmlFor = id;
+        label.innerText = field.label || 'Nama';
+        var input = document.createElement('input');
+        input.className = 'admin-dialog-input'; input.id = id;
+        input.type = field.type || 'text'; input.value = field.value || '';
+        input.placeholder = field.placeholder || '';
+        input.autocomplete = 'off';
+        wrap.appendChild(label); wrap.appendChild(input);
+        $('adminDialogFields').appendChild(wrap);
+      });
+      var confirmBtn = $('adminDialogConfirm');
+      confirmBtn.innerText = opts.confirmText || 'Lanjutkan';
+      confirmBtn.className = opts.danger ? 'danger' : 'primary';
+      $('adminDialogBackdrop').classList.add('open');
+      $('adminDialogBackdrop').setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function(){ var first=$('adminDialogFields').querySelector('input'); if(first) first.focus(); },80);
+    });
+  }
+  function closeAdminDialog(value) {
+    $('adminDialogBackdrop').classList.remove('open');
+    $('adminDialogBackdrop').setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    var done = adminDialogResolve; adminDialogResolve = null;
+    if (done) done(value);
+  }
+  $('adminDialogCancel').addEventListener('click',function(){closeAdminDialog(null);});
+  $('adminDialogConfirm').addEventListener('click',function(){
+    var fields=[].slice.call($('adminDialogFields').querySelectorAll('input'));
+    closeAdminDialog(fields.length ? fields.map(function(x){return x.value;}) : true);
+  });
+  $('adminDialogBackdrop').addEventListener('click',function(e){if(e.target===this)closeAdminDialog(null);});
+
+  function mergeSignature(a, b) { return [a.brand,a.nama,a.raw,a.konv,b.brand,b.nama,b.raw,b.konv].join('|'); }
+  function pairReason(a, b) {
+    var reasons = [];
+    if (a.nama && b.nama && a.nama.toLowerCase().trim() === b.nama.toLowerCase().trim()) reasons.push('Nama sama');
+    if (a.raw && b.raw && a.raw === b.raw) reasons.push('RAW sama');
+    if (a.konv && b.konv && a.konv === b.konv) reasons.push('KONV sama');
+    return reasons;
+  }
+  function getMergeCandidates() {
+    var groups = {}, seen = {};
+    for (var i = 0; i < items.length; i++) {
+      for (var j = i + 1; j < items.length; j++) {
+        var a = items[i], b = items[j];
+        if (!a.brand || !b.brand || a.brand === b.brand) continue;
+        if (a.product_id && a.product_id === b.product_id) continue;
+        var why = pairReason(a, b);
+        if (!why.length) continue;
+        var sig=mergeSignature(a,b);
+        if (Array.isArray(extraKeys.mergeIgnored) && extraKeys.mergeIgnored.indexOf(sig)>=0) continue;
+        if (Array.isArray(extraKeys.mergePending) && extraKeys.mergePending.indexOf(sig)>=0) continue;
+        var key = i + ':' + j;
+        if (seen[key]) continue;
+        seen[key] = true;
+        var score = (why.indexOf('Nama sama') >= 0 ? 1 : 0) + (why.indexOf('RAW sama') >= 0 ? 2 : 0) + (why.indexOf('KONV sama') >= 0 ? 2 : 0);
+        groups[key] = { aIndex:i, bIndex:j, a:a, b:b, why:why, score:score };
+      }
+    }
+    return Object.keys(groups).map(function(k) { return groups[k]; }).sort(function(a,b) { return b.score-a.score || a.a.nama.localeCompare(b.a.nama); });
+  }
+  async function mergePair(aIndex, bIndex) {
+    var a = items[aIndex], b = items[bIndex];
+    if (!a || !b || a.brand === b.brand) { showToast('Relasi harus menghubungkan brand berbeda.'); return; }
+    var idA = a.product_id || '', idB = b.product_id || '';
+    var preview = '<div class="admin-dialog-preview">' +
+      '<div class="merge-record"><strong>' + esc(brandName(a.brand)) + ' · ' + esc(a.nama) + '</strong><div class="merge-codes">RAW: ' + esc(a.raw || '—') + ' · KONV: ' + esc(a.konv || '—') + '</div></div>' +
+      '<div class="merge-record"><strong>' + esc(brandName(b.brand)) + ' · ' + esc(b.nama) + '</strong><div class="merge-codes">RAW: ' + esc(b.raw || '—') + ' · KONV: ' + esc(b.konv || '—') + '</div></div></div>';
+    var description = 'Kedua record akan memakai satu nama produk utama. PLU RAW, KONV, kategori, dan subkategori masing-masing brand tetap dipertahankan.';
+    if (idA && idB && idA !== idB) description += ' Keduanya saat ini sudah berada di dua kelompok produk bersama yang berbeda. Kelompok tersebut juga akan disatukan.';
+    var result = await adminDialog({
+      kicker:'TINJAU SEBELUM MENGGABUNGKAN',
+      title:'Hubungkan sebagai produk yang sama?',
+      description:description,
+      preview:preview,
+      fields:[{label:'Nama produk utama',value:a.nama || b.nama,placeholder:'Masukkan nama produk'}],
+      confirmText:'Gabungkan relasi'
+    });
+    if (!result) return;
+    var name = String(result[0] || '').trim();
+    if (!name) { showToast('Nama produk utama wajib diisi.'); return; }
+    saveAutoBackup('Sebelum menghubungkan produk lintas brand');
+    var pid = idA || idB || makeProductId();
+    if (idA && idB && idA !== idB) {
+      items.forEach(function(it) { if (it.product_id === idB) it.product_id = pid; });
+      extraKeys.products = getSharedProducts().filter(function(p) { return p.id !== idB; });
+    }
+    items.forEach(function(it) { if (it.product_id === pid || it === a || it === b) { it.product_id = pid; it.nama = name; } });
+    var products = getSharedProducts();
+    var prod = products.find(function(p) { return p.id === pid; });
+    if (!prod) { prod = { id:pid, nama:name, deskripsi:'', created_at:new Date().toISOString() }; products.push(prod); }
+    prod.nama = name;
+    markDirty();
+    showToast('Produk terhubung: ' + getProductMembers(pid).length + ' brand');
+    renderMergeManager();
+  }
+  function renderMergeManager() {
+    var candidateBox = $('mergeCandidateList'), linkedBox = $('mergeLinkedList'), pendingBox = $('mergePendingList');
+    if (!candidateBox || !linkedBox || !pendingBox) return;
+    if (!loaded) { candidateBox.innerHTML = '<div class="merge-empty">Muat data terlebih dahulu.</div>'; linkedBox.innerHTML = '<div class="merge-empty">Belum ada data.</div>'; pendingBox.innerHTML = '<div class="merge-empty">Belum ada data.</div>'; return; }
+    var candidates = getMergeCandidates();
+    var pending = Array.isArray(extraKeys.mergePending) ? extraKeys.mergePending : [];
+    var products = getSharedProducts().filter(function(p) { return getProductMembers(p.id).length > 1; });
+    var linkedCount = products.reduce(function(n,p) { return n + getProductMembers(p.id).length; }, 0);
+    $('mergeLinked').innerText = products.length;
+    $('mergeMembers').innerText = linkedCount;
+    $('mergeCandidates').innerText = candidates.length;
+    $('mergePendingCount').innerText = pending.length;
+    $('mergeCount').innerText = products.length + ' produk bersama';
+    if (!candidates.length) candidateBox.innerHTML = '<div class="merge-empty"><i class="fas fa-circle-check"></i><br>Tidak ada kandidat lintas brand yang belum terhubung.</div>';
+    else {
+      var html = '';
+      candidates.slice(0,100).forEach(function(c) {
+        var a=c.a, b=c.b;
+        html += '<div class="merge-card"><h3>' + esc(a.nama) + ' <span class="gtag blue">vs</span> ' + esc(b.nama) + '</h3>';
+        html += '<div class="merge-meta">Kecocokan: ' + esc(c.why.join(' · ')) + '</div>';
+        html += '<div class="merge-record"><strong>' + esc(brandName(a.brand)) + ' · ' + esc(a.nama) + '</strong><div class="merge-codes">RAW: ' + esc(a.raw || '—') + ' &nbsp; KONV: ' + esc(a.konv || '—') + '</div></div>';
+        html += '<div class="merge-record"><strong>' + esc(brandName(b.brand)) + ' · ' + esc(b.nama) + '</strong><div class="merge-codes">RAW: ' + esc(b.raw || '—') + ' &nbsp; KONV: ' + esc(b.konv || '—') + '</div></div>';
+        html += '<div class="merge-actions"><button class="btn green" data-merge-a="' + c.aIndex + '" data-merge-b="' + c.bIndex + '"><i class="fas fa-link"></i> Gabungkan</button><button class="btn" data-ignore-a="' + c.aIndex + '" data-ignore-b="' + c.bIndex + '">Jangan gabung</button><button class="btn" data-pending-a="' + c.aIndex + '" data-pending-b="' + c.bIndex + '">Periksa nanti</button></div></div>';
+      });
+      if (candidates.length > 100) html += '<div class="merge-empty">Menampilkan 100 dari ' + candidates.length + ' kandidat. Persempit dengan menyelesaikan kandidat di atas.</div>';
+      candidateBox.innerHTML = html;
+    }
+    if (!pending.length) pendingBox.innerHTML = '<div class="merge-empty">Belum ada kandidat yang ditunda.</div>';
+    else {
+      var ph='';
+      pending.forEach(function(sig,idx){
+        var parts=sig.split('|');
+        ph += '<div class="merge-record"><strong>' + esc(parts[1] || 'Produk') + ' · ' + esc(brandName(parts[0])) + ' ↔ ' + esc(brandName(parts[4])) + '</strong><div class="merge-codes">' + esc(parts[2] || '—') + ' / ' + esc(parts[3] || '—') + ' ↔ ' + esc(parts[6] || '—') + ' / ' + esc(parts[7] || '—') + '</div><button class="btn" data-resume-pending="' + idx + '">Kembalikan ke review</button></div>';
+      });
+      pendingBox.innerHTML=ph;
+    }
+    if (!products.length) linkedBox.innerHTML = '<div class="merge-empty">Belum ada produk bersama. Pilih kandidat yang benar lalu tekan Gabungkan.</div>';
+    else {
+      var lh = '';
+      products.forEach(function(p) {
+        var members = getProductMembers(p.id);
+        lh += '<div class="merge-card"><h3>' + esc(p.nama || members[0].nama) + ' <span class="merge-pill">' + members.length + ' brand</span></h3>';
+        members.forEach(function(it) { lh += '<div class="merge-record"><strong>' + esc(brandName(it.brand)) + '</strong><div class="merge-codes">RAW: ' + esc(it.raw || '—') + ' &nbsp; KONV: ' + esc(it.konv || '—') + ' · ' + esc(subLabel(it.brand,it.sub)) + '</div></div>'; });
+        lh += '<div class="merge-meta">' + esc(p.deskripsi || 'Belum ada deskripsi bersama') + '</div><div class="merge-actions"><button class="btn" data-rename-product="' + esc(p.id) + '"><i class="fas fa-pen"></i> Ubah nama</button><button class="btn" data-desc-product="' + esc(p.id) + '"><i class="fas fa-align-left"></i> Deskripsi</button><button class="btn danger" data-unlink-product="' + esc(p.id) + '"><i class="fas fa-link-slash"></i> Lepas relasi</button></div></div>';
+      });
+      linkedBox.innerHTML = lh;
+    }
+  }
+  $('tabMerge').addEventListener('click', function(e) {
+    var merge = e.target.closest('[data-merge-a]');
+    if (merge) { mergePair(parseInt(merge.dataset.mergeA,10), parseInt(merge.dataset.mergeB,10)); return; }
+    var pending=e.target.closest('[data-pending-a]');
+    if (pending) {
+      var pa=items[parseInt(pending.dataset.pendingA,10)], pb=items[parseInt(pending.dataset.pendingB,10)];
+      if(!Array.isArray(extraKeys.mergePending)) extraKeys.mergePending=[];
+      var ps=mergeSignature(pa,pb); if(extraKeys.mergePending.indexOf(ps)<0) extraKeys.mergePending.push(ps);
+      markDirty(); showToast('Kandidat dipindahkan ke Periksa nanti'); return;
+    }
+    var resume=e.target.closest('[data-resume-pending]');
+    if(resume) { extraKeys.mergePending.splice(parseInt(resume.dataset.resumePending,10),1); markDirty(); showToast('Kandidat dikembalikan ke review'); return; }
+    var ignore = e.target.closest('[data-ignore-a]');
+    if (ignore) {
+      var a=items[parseInt(ignore.dataset.ignoreA,10)], b=items[parseInt(ignore.dataset.ignoreB,10)];
+      if (!Array.isArray(extraKeys.mergeIgnored)) extraKeys.mergeIgnored=[];
+      var sig=mergeSignature(a,b);
+      extraKeys.mergeIgnored.push(sig); markDirty();
+      showToast('Kandidat ditandai jangan gabung'); return;
+    }
+    var rename=e.target.closest('[data-rename-product]');
+    if (rename) {
+      var p=getSharedProducts().find(function(x){return x.id===rename.dataset.renameProduct;}); if(!p)return;
+      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Ubah nama produk',description:'Nama ini akan digunakan oleh seluruh relasi brand yang terhubung.',fields:[{label:'Nama produk',value:p.nama}],confirmText:'Simpan'}).then(function(v){if(!v)return;var n=String(v[0]||'').trim();if(!n)return;p.nama=n;getProductMembers(p.id).forEach(function(it){it.nama=n;});markDirty();}); return;
+    }
+    var desc=e.target.closest('[data-desc-product]');
+    if (desc) {
+      var dp=getSharedProducts().find(function(x){return x.id===desc.dataset.descProduct;}); if(!dp)return;
+      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Deskripsi produk',description:'Deskripsi ini berlaku untuk semua brand yang terhubung.',fields:[{label:'Deskripsi',value:dp.deskripsi||'',placeholder:'Tambahkan keterangan produk'}],confirmText:'Simpan'}).then(function(v){if(!v)return;dp.deskripsi=String(v[0]||'').trim();markDirty();}); return;
+    }
+    var unlink=e.target.closest('[data-unlink-product]');
+    if (unlink) {
+      var id=unlink.dataset.unlinkProduct, members=getProductMembers(id);
+      adminDialog({kicker:'TINDAKAN PRODUK',title:'Lepas relasi bersama?',description:'Record setiap brand tetap ada. PLU, kategori, dan subkategori tidak dihapus; hanya hubungan produk bersamanya yang dilepas.',preview:'<div class="admin-dialog-preview"><strong>'+members.length+' relasi brand akan dipisahkan</strong></div>',confirmText:'Lepas relasi',danger:true}).then(function(ok){if(!ok)return;members.forEach(function(it){it.product_id='';});extraKeys.products=getSharedProducts().filter(function(p){return p.id!==id;});markDirty();showToast('Relasi dilepas; record tetap aman.');});
+    }
+  });
+
+  /* ================================================================
+     EXPORT — format v4 { app, v, brands, items }
      ================================================================ */
   function buildV4() { return JSON.stringify(buildV4Object(), null, 2); }
   function doExport() {
@@ -2552,11 +2800,12 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   var publishInProgress = false;
   $('btnPublish').addEventListener('click', function() {
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
+    if (loadedIsV4) { showToast('Publish V4 belum diaktifkan di API. Unduh data.json V4 dan jangan publish dulu.'); return; }
     if (publishInProgress) return;
     var duplicates = scanDup();
     var serious = duplicates.filter(function(d) { return d.t === 'red'; });
     if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
-    if (!confirm('Terbitkan format V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
+    if (!confirm('Terbitkan format V3 berisi ' + items.length + ' relasi PLU dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
 
     var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
     if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
@@ -2568,7 +2817,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     fetch('./api/publish', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Admin-Publish-Key': key },
-      body: JSON.stringify({ data: JSON.parse(buildV4()) })
+      body: JSON.stringify({ data: JSON.parse(buildV3()) })
     }).then(function(res) {
       return res.json().catch(function() { return {}; }).then(function(body) {
         if (!res.ok) {
@@ -2595,7 +2844,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
-    copyText(buildV4(), 'JSON V4 tersalin (' + items.length + ' item PLU)');
+    copyText(buildV3(), 'JSON V3 tersalin (' + items.length + ' relasi PLU)');
   });
   $('btnReset').addEventListener('click', function() {
     if (!confirm('Buang draft tersimpan di browser ini? Data yang sedang tampil tidak ikut terhapus.')) return;
@@ -2661,7 +2910,6 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
   function finishImport(mode) {
     if (!pendingImport) return;
-    pendingImport.forEach(function(it) { if (!it.id) it.id = makeItemId(); });
     if (mode === 'replace') {
       if (!confirm('GANTI seluruh ' + items.length + ' item dengan ' + pendingImport.length + ' item dari Excel?')) return;
       saveAutoBackup('Sebelum mengganti data dengan Excel');
@@ -2709,3 +2957,4 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   }
   try { if (sessionStorage.getItem('plukakang_admin_ok') === '1') unlockAdmin(); } catch (e) {}
   </script>
+</body>
