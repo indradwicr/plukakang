@@ -2800,12 +2800,11 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   var publishInProgress = false;
   $('btnPublish').addEventListener('click', function() {
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
-    if (loadedIsV4) { showToast('Publish V4 belum diaktifkan di API. Unduh data.json V4 dan jangan publish dulu.'); return; }
     if (publishInProgress) return;
     var duplicates = scanDup();
     var serious = duplicates.filter(function(d) { return d.t === 'red'; });
     if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
-    if (!confirm('Terbitkan format V3 berisi ' + items.length + ' relasi PLU dan ' + brands.length + ' brand ke GitHub? Perubahan akan menjadi data live setelah deploy Vercel selesai.')) return;
+    if (!confirm('Terbitkan database V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke branch development plukakang-2.0? Production tidak akan diubah.')) return;
 
     var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
     if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
@@ -2817,7 +2816,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
     fetch('./api/publish', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Admin-Publish-Key': key },
-      body: JSON.stringify({ data: JSON.parse(buildV3()) })
+      body: JSON.stringify({ data: buildV4Object() })
     }).then(function(res) {
       return res.json().catch(function() { return {}; }).then(function(body) {
         if (!res.ok) {
@@ -2844,7 +2843,7 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
   });
   $('btnCopy').addEventListener('click', function() {
     if (!loaded) { showToast('Belum ada data — muat dulu'); return; }
-    copyText(buildV3(), 'JSON V3 tersalin (' + items.length + ' relasi PLU)');
+    copyText(buildV4(), 'JSON V4 tersalin (' + items.length + ' item)');
   });
   $('btnReset').addEventListener('click', function() {
     if (!confirm('Buang draft tersimpan di browser ini? Data yang sedang tampil tidak ikut terhapus.')) return;
