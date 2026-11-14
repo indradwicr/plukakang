@@ -2886,19 +2886,12 @@ body { justify-content:center; }
      ================================================================ */
   var publishInProgress = false;
   $('btnPublish').addEventListener('click', function() {
-    // Production is intentionally read-only for publishing. The server-side
-    // API also blocks GITHUB_BRANCH=main; this UI guard makes the rule clear.
-    var currentHost = String(window.location.hostname || '').toLowerCase();
-    if (currentHost === 'plu-master.vercel.app') {
-      showToast('Admin Production hanya untuk melihat dan mengelola data. Untuk Publish, buka Admin dari deployment Preview plukakang-2.0.', null, null, 6500);
-      return;
-    }
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
     if (publishInProgress) return;
     var duplicates = scanDup();
     var serious = duplicates.filter(function(d) { return d.t === 'red'; });
     if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
-    if (!confirm('Terbitkan database V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke branch development plukakang-2.0? Production tidak akan diubah.')) return;
+    if (!confirm('Terbitkan database V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke branch yang dikonfigurasi untuk deployment ini? Pastikan kamu membuka Admin dari alamat Production atau Preview yang benar.')) return;
 
     var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
     if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
