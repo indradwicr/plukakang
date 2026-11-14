@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0f" id="metaTheme">
-  <title>plukakang - hapalkeun euy!</title>
+  <title>plukakang — hapalkeun euy!</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgOTYgOTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iIzBhODRmZiI+PHJlY3QgeD0iMjIiIHk9IjIyIiB3aWR0aD0iNSIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjMxIiB5PSIyMiIgd2lkdGg9IjMiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSIzOCIgeT0iMjIiIHdpZHRoPSI3IiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNDkiIHk9IjIyIiB3aWR0aD0iMyIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjU2IiB5PSIyMiIgd2lkdGg9IjUiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSI2NCIgeT0iMjIiIHdpZHRoPSIzIiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNzAiIHk9IjIyIiB3aWR0aD0iNCIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjwvZz48L3N2Zz4=">
 
 
@@ -424,13 +424,13 @@ body::before {
     font-size: 1.25rem; flex-shrink: 0;
     box-shadow: inset 0 1px 0 var(--w30), 0 4px 14px var(--k40);
 }
-.card-saybread .brand-card-icon { background: linear-gradient(135deg, #b06a42, #7a4222); color: #fff; }
-.card-sayburger .brand-card-icon { background: linear-gradient(135deg, #fb5b7d, #d81b45); color: #fff; }
-.card-yummychoice .brand-card-icon { background: linear-gradient(135deg, #fb923c, #ea580c); color: #fff; }
-.card-yummycoffee .brand-card-icon { background: linear-gradient(135deg, #f5a144, #c26a08); color: #fff; }
-.card-pointcoffee .brand-card-icon { background: linear-gradient(135deg, #2fab5e, #116531); color: #fff; }
-.card-hambalanfc .brand-card-icon { background: linear-gradient(135deg, #5f8bef, #1e40af); color: #fff; }
-.card-perishable .brand-card-icon { background: linear-gradient(135deg, #2ebd85, #047857); color: #fff; }
+.card-saybread .brand-card-icon { background: #F2E7DE; color: #875A3C; }
+.card-sayburger .brand-card-icon { background: #F8E4E8; color: #B65B70; }
+.card-yummychoice .brand-card-icon { background: #F8EBDD; color: #A87936; }
+.card-yummycoffee .brand-card-icon { background: #F3EBDD; color: #987044; }
+.card-pointcoffee .brand-card-icon { background: #E2F0E7; color: #43805A; }
+.card-hambalanfc .brand-card-icon { background: #E5ECF8; color: #5576AD; }
+.card-perishable .brand-card-icon { background: #E2F0EC; color: #4D8878; }
 .brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
 .brand-card-bottom h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; color: var(--text-main); }
 .brand-card-bottom p { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 3px; }
@@ -1757,6 +1757,111 @@ html[data-theme="light"] #soView .chip:active { color: var(--text-main); }
     .lb-addrow { grid-template-columns: 82px 1fr auto; }
     .lb-ic { width: 26px; }
 }
+
+/* ================================================================
+   plukakang 4.2 — SEAMLESS REFINEMENT LAYER
+   Focus: quieter surfaces, clearer hierarchy, harmonious brand icons.
+   ================================================================ */
+html[data-theme="light"] {
+  --bg-app: #F7F8FA;
+  --card-white: #FFFFFF;
+  --surface-2: #F2F4F7;
+  --text-main: #20242C;
+  --text-muted: #737B88;
+  --text-light: #929AA6;
+  --separator: #E8EBF0;
+  --hairline: #DDE2E9;
+  --fill: #F0F2F5;
+  --fill-2: #E9EDF2;
+  --frost: rgba(248,249,251,.96);
+  --glass-brd: #E9ECF1;
+  --glass-spec: none;
+  --glass-shadow: 0 2px 8px rgba(25,35,50,.035);
+  --dockbg: rgba(255,255,255,.96);
+  --docktab: #929AA6;
+}
+html[data-theme="light"] body::before {
+  background: linear-gradient(180deg,#F8F9FB 0%,#F5F7FA 100%);
+  animation: none;
+}
+html[data-theme="light"] .brand-card {
+  background: #fff;
+  border: 1px solid #E9ECF1;
+  box-shadow: 0 2px 8px rgba(25,35,50,.035);
+  border-radius: 18px;
+}
+html[data-theme="light"] .brand-card:hover {
+  box-shadow: 0 5px 16px rgba(25,35,50,.07);
+  transform: translateY(-1px);
+}
+html[data-theme="light"] .brand-card-icon {
+  width: 42px; height: 42px; border-radius: 13px;
+  box-shadow: none; font-size: 1.15rem;
+}
+html[data-theme="light"] .icon-action-btn {
+  background: #F1F3F6; border: 1px solid #E9ECF1;
+  box-shadow: none; color: #596272;
+}
+html[data-theme="light"] .sticky-search-bar {
+  background: rgba(247,248,250,.94);
+  border-color: transparent;
+  box-shadow: none;
+}
+html[data-theme="light"] .search-field {
+  background: #fff; border: 1px solid #E8EBF0; box-shadow: none;
+}
+html[data-theme="light"] .bottom-dock {
+  background: rgba(255,255,255,.96);
+  border: 1px solid #E8EBF0;
+  box-shadow: 0 5px 22px rgba(25,35,50,.09);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+html[data-theme="light"] .dock-lens {
+  background: #EAF2FF;
+  box-shadow: none;
+}
+html[data-theme="light"] .dock-tab.active { color: #2878D8; }
+html[data-theme="light"] .dock-tab { color: #8992A0; }
+html[data-theme="light"] .greeting-container {
+  background: #fff; border: 1px solid #E9ECF1;
+  box-shadow: 0 2px 8px rgba(25,35,50,.035);
+}
+html[data-theme="light"] .section-title { color: #303744; }
+html[data-theme="light"] .detail-header .back-btn,
+html[data-theme="light"] .vt-btn {
+  box-shadow: none;
+}
+html[data-theme="light"] .view-toggle {
+  background: #F0F2F5; border: 1px solid #E7EAF0;
+}
+html[data-theme="light"] .vt-btn.active {
+  background: #fff; color: #2878D8;
+  box-shadow: 0 1px 4px rgba(25,35,50,.08);
+}
+/* Dark mode receives the same calmer hierarchy without losing its identity. */
+html:not([data-theme="light"]) .brand-card {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 5px 18px rgba(0,0,0,.16);
+  border-color: rgba(255,255,255,.075);
+}
+html:not([data-theme="light"]) .brand-card-icon {
+  box-shadow: none;
+}
+.bottom-dock { border: 1px solid var(--separator); }
+.brand-card, .icon-action-btn, .search-field, .bottom-dock {
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+
+.tools-grid{display:grid;grid-template-columns:1fr;gap:11px;padding:4px 0 28px}
+.tool-card{width:100%;display:flex;align-items:center;gap:13px;text-align:left;padding:15px;border:1px solid var(--glass-brd);border-radius:18px;background:var(--card-white);color:var(--text-main);box-shadow:var(--glass-shadow);cursor:pointer;min-height:78px}
+.tool-icon{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:14px;font-size:18px}
+.tool-blue{background:#E8F0FC;color:#527DB8}.tool-green{background:#E7F1EB;color:#56856A}.tool-amber{background:#F5EEE2;color:#A17A42}
+.tool-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.tool-copy b{font-size:14px;font-weight:750}.tool-copy small{font-size:11px;color:var(--text-muted);line-height:1.4}.tool-arrow{color:var(--text-light);font-size:12px}
+html[data-theme="light"] .tool-card{background:#fff;border-color:#E9ECF1;box-shadow:0 2px 8px rgba(25,35,50,.035)}
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -1779,8 +1884,6 @@ html[data-theme="light"] #soView .chip:active { color: var(--text-main); }
           </div>
         </div>
        <div class="head-btns">
-         <button class="icon-action-btn" id="headLbBtn" onclick="LBR.open()" aria-label="Form Lembur SO"><i class="fas fa-clock"></i></button>
-         <button class="icon-action-btn" id="headSoBtn" onclick="soHeaderTap()" aria-label="Buka Kalkulator SO"><i class="fas fa-cash-register"></i></button>
          <button class="icon-action-btn" id="headThemeBtn" onclick="toggleTheme()" aria-label="Ganti tema terang/gelap"><i class="fas fa-sun" id="themeIco"></i></button>
        </div>
     </header>
@@ -1889,6 +1992,16 @@ Kembali</button>
 
        <div class="kat-groups" id="katGroups"></div>
        <div class="kat-note" id="katNote">Ketuk sel PLU untuk menyalin &middot; ketuk deskripsi untuk menyalin PLU RAW-nya.</div>
+    </section>
+
+
+    <section id="toolsView" style="display:none;">
+      <div class="section-bar"><span class="section-title">Tools</span><span class="item-count-chip">Alat bantu operasional</span></div>
+      <div class="tools-grid">
+        <button class="tool-card" type="button" onclick="openTool('plu')"><span class="tool-icon tool-blue"><i class="fas fa-calculator"></i></span><span class="tool-copy"><b>Kalkulator PLU</b><small>Gramasi, biang kopi, dan plastik seal</small></span><i class="fas fa-chevron-right tool-arrow"></i></button>
+        <button class="tool-card" type="button" onclick="openTool('so')"><span class="tool-icon tool-green"><i class="fas fa-clipboard-list"></i></span><span class="tool-copy"><b>Kalkulator SO</b><small>NKL, BA NL, dan SO Kas</small></span><i class="fas fa-chevron-right tool-arrow"></i></button>
+        <button class="tool-card" type="button" onclick="openTool('lembur')"><span class="tool-icon tool-amber"><i class="fas fa-clock"></i></span><span class="tool-copy"><b>Form Lembur</b><small>Pengisian dan salin form lembur</small></span><i class="fas fa-chevron-right tool-arrow"></i></button>
+      </div>
     </section>
 
     <!-- ===== BOTTOM SHEET DAFTAR SHEET (KATALOG) ===== -->
@@ -2227,9 +2340,9 @@ Kembali</button>
     <i class="fas fa-layer-group dock-tab-icon"></i>
     <span>Katalog</span>
   </button>
-  <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
-    <i class="fas fa-calculator dock-tab-icon"></i>
-    <span>Kalkulator</span>
+  <button class="dock-tab" id="dock-tools" onclick="switchTab('tools')">
+    <i class="fas fa-wrench dock-tab-icon"></i>
+    <span>Tools</span>
   </button>
 </nav>
 
@@ -2333,7 +2446,7 @@ var BRAND_NAMES = {
   var currentBrand = '';
   var currentSub = 'all';
   var currentKategori = 'all';
-  var detailViewMode = 'list';
+  var detailViewMode = 'table';
   var currentSheet = 'all';
   var katalogData = {};
 
@@ -2474,7 +2587,8 @@ function switchTab(tab) {
     $('detailView').style.display = 'none';
     $('katalogView').style.display = 'none';
     $('kalkulatorView').style.display = 'none';
-    $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+    if ($('toolsView')) $('toolsView').style.display = 'none';
+    $('soView').style.display = 'none';
     $('greetingWrapper').classList.add('hidden');
 
 
@@ -2490,6 +2604,10 @@ function switchTab(tab) {
         currentView = 'katalog';
         renderKatalog();
         syncKatTop();
+    } else if (tab === 'tools') {
+        $('toolsView').style.display = 'block';
+        $('globalSearchBar').style.display = 'none';
+        currentView = 'tools';
     } else if (tab === 'kalkulator') {
         $('kalkulatorView').style.display = 'block';
         $('globalSearchBar').style.display = 'none';
@@ -2508,12 +2626,11 @@ function switchTab(tab) {
 
     var tabs = document.querySelectorAll('.dock-tab');
     for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-    var activeTab = $('dock-' + tab);
+    var activeTab = $('dock-' + ((tab === 'kalkulator' || tab === 'so') ? 'tools' : tab));
     if (activeTab) activeTab.classList.add('active');
     var lensEl = $('dockLens');
     if (lensEl) lensEl.style.opacity = (tab === 'so') ? '0' : '';
-    var headSoBtn = $('headSoBtn');
-    if (headSoBtn) headSoBtn.classList.toggle('active', tab === 'so');
+    
     positionLens();
 
 
@@ -2522,11 +2639,21 @@ function switchTab(tab) {
         $('searchClearBtn').style.display = 'none';
     }
     toggleAlphabetNav();
-    animateView(tab === 'kalkulator' ? $('kalkulatorView') : (tab === 'so' ? $('soView') : (tab === 'katalog' ? $('katalogView') : $('homeView'))));
+    var viewToAnimate = $('homeView');
+    if (tab === 'katalog') viewToAnimate = $('katalogView');
+    else if (tab === 'tools') viewToAnimate = $('toolsView');
+    else if (tab === 'kalkulator') viewToAnimate = $('kalkulatorView');
+    else if (tab === 'so') viewToAnimate = $('soView');
+    animateView(viewToAnimate);
     updateBarTitle();
 }
 function soBack() { switchTab(soReturnView || 'home'); }
 function soHeaderTap() { if (currentView === 'so') { soBack(); } else { switchTab('so'); } }
+function openTool(tool) {
+  if (tool === 'plu') switchTab('kalkulator');
+  else if (tool === 'so') switchTab('so');
+  else if (tool === 'lembur' && window.LBR && typeof LBR.open === 'function') LBR.open();
+}
 /* ================================================================
     KALKULATOR SO (SOFT BLUE ISLAND)
     ================================================================ */
@@ -3213,17 +3340,18 @@ function openBrandCategory(key) {
     $('detailView').style.display = 'block';
     $('katalogView').style.display = 'none';
     $('kalkulatorView').style.display = 'none';
-    $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+    $('soView').style.display = 'none';
     $('greetingWrapper').classList.add('hidden');
     $('globalSearchBar').style.display = '';
     $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
 
 
-    detailViewMode = 'list';
-    $('viewListBtn').classList.add('active');
-    $('viewTableBtn').classList.remove('active');
-    $('productGrid').classList.remove('hidden');
-    $('tableView').classList.add('hidden');
+    // plukakang 4.2: Home -> brand langsung membuka tampilan Tabel.
+    detailViewMode = 'table';
+    $('viewListBtn').classList.remove('active');
+    $('viewTableBtn').classList.add('active');
+    $('productGrid').classList.add('hidden');
+    $('tableView').classList.remove('hidden');
 
 
     renderSubPills();
@@ -3907,7 +4035,7 @@ var handleSearch = debounce(function() {
           $('detailView').style.display = 'block';
           $('katalogView').style.display = 'none';
           $('kalkulatorView').style.display = 'none';
-          $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+          $('soView').style.display = 'none';
           $('greetingWrapper').classList.add('hidden');
           $('globalSearchBar').style.display = '';
           $('detailHeadingTitle').innerText = 'Hasil Pencarian';
@@ -3919,7 +4047,7 @@ var handleSearch = debounce(function() {
           $('detailView').style.display = 'none';
           $('katalogView').style.display = 'none';
           $('kalkulatorView').style.display = 'none';
-          $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+          $('soView').style.display = 'none';
           $('greetingWrapper').classList.remove('hidden');
           currentView = 'home';
       }
@@ -3996,7 +4124,13 @@ now.getFullYear();
 
 
   function getSapaanData() {
-      var jam = new Date().getHours();
+      var now = new Date();
+      // Hari libur nasional 2026 sesuai SKB 3 Menteri; cuti bersama tidak termasuk.
+      var holidays2026 = new Set(['2026-01-01','2026-01-16','2026-02-17','2026-03-19','2026-03-21','2026-03-22','2026-04-03','2026-04-05','2026-05-01','2026-05-14','2026-05-27','2026-05-31','2026-06-01','2026-06-16','2026-08-17','2026-08-25','2026-12-25']);
+      var dateJakarta = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
+      var weekdayJakarta = new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',weekday:'short'}).format(now);
+      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'😂', text:'gadag? 😂' };
+      var jam = Number(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',hour:'2-digit',hourCycle:'h23'}).format(now));
       if (jam >= 0 && jam < 5) return { icon: '  🌙', text: 'rek naon ente?' };
       if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
       if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
@@ -4595,8 +4729,18 @@ function initKcAlpha() {
   function rpLine(lab, sv) { var s = (sv === '' || sv == null) ? '' : fmt(sv); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
   function rpLineN(lab, n) { var s = (n == null) ? '' : fmtN(n); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
   function rpLineSN(lab, n) { var s = (n == null) ? '' : fmtS(n); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
-  function signQty(v) { v = String(v == null ? '' : v); if (v === '') { return ''; } var m = v.charAt(0) === '-', r2 = m ? v.substring(1) : v; return (m ? '-' : '+') + fmt(r2); }
-  function qrLine(lab, qty, rp) { var q = (qty === '') ? '' : fmtN(qty), r = (rp === '') ? '' : fmt(rp); return lab + ': ' + (q !== '' ? q + ' /' : '/') + ' Rp' + (r !== '' ? ' ' + r : ''); }
+  function signQty(v) {
+    v = String(v == null ? '' : v).trim();
+    if (v === '') { return ''; }
+    var negative = v.charAt(0) === '-';
+    // Normalisasi tanda agar input '+15' tidak berubah menjadi '++15'.
+    var digits = v.replace(/^[+-]+/, '');
+    return (negative ? '-' : '+') + fmt(digits);
+  }
+  function qrLine(lab, qty, rp) {
+    var q = (qty === '') ? '' : String(qty), r = (rp === '') ? '' : fmt(rp);
+    return lab + ': ' + (q !== '' ? q + ' /' : '/') + ' Rp' + (r !== '' ? ' ' + r : '');
+  }
   function ketLine(L, rows) {
     var items = [], i;
     for (i = 0; i < rows.length; i++) { var r = rows[i];
@@ -4626,11 +4770,13 @@ function initKcAlpha() {
       blockNKL(L, nkK, nlK);
     }
     if (c.pcAny) { L.push(''); L.push('NKL Point Coffee'); blockNKL(L, c.pn, c.pl); }
-    L.push('');
-    L.push('NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee');
-    L.push('NKL BIC: ' + fmtS(c.nkF + c.nlF + (c.pn + c.pl)));
-    L.push('NKL PC: ' + fmtS(c.pn + c.pl));
-    L.push('NKL: ' + fmtS(c.nkF + c.nlF));
+    if (c.pcAny) {
+      L.push('');
+      L.push('NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee');
+      L.push('NKL BIC: ' + fmtS(c.nkF + c.nlF + (c.pn + c.pl)));
+      L.push('NKL PC: ' + fmtS(c.pn + c.pl));
+      L.push('NKL: ' + fmtS(c.nkF + c.nlF));
+    }
     L.push('');
     L.push('NKL SOBIC');
     L.push('NK: ' + fmtS(c.nkF));
