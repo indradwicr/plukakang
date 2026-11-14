@@ -15,10 +15,10 @@
 
   <style>
 /* ================================================================
-   PLUKAKANG ADMIN · LIQUID GLASS DARK EDITION (iOS 26)
+   PLUKAKANG ADMIN · LIQUID GLASS DARK EDITION · V4.1
    Tema diambil dari index.html: kaca gelap translucent di atas
    ambient aurora hitam, dock kapsul mengambang, sheet glass.
-   Admin = editor data.json (format v3 + relasi produk master).
+   Admin = editor database Plukakang V4 (satu item untuk satu brand).
    ================================================================ */
 :root {
     color-scheme: dark;
@@ -900,6 +900,17 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 .admin-dialog-actions .danger{background:#b42332;color:white;border:0}
 @media(min-width:600px){.admin-dialog-backdrop{align-items:center}.admin-dialog{border-radius:24px}}
 
+
+.history-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.history-entry{padding:11px 12px;border:1px solid var(--separator);border-radius:13px;background:var(--w04)}
+.history-entry-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.history-entry-title{font-size:12px;font-weight:800}
+.history-entry-meta{font-size:10.5px;color:var(--text-muted);margin-top:5px;line-height:1.5}
+.history-empty{font-size:12px;color:var(--text-muted);padding:12px 0}
+.history-status-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--separator);font-size:12px}
+.history-status-row:last-of-type{border-bottom:0}
+.history-status-row span{color:var(--text-muted)}
+.history-status-row b{font-variant-numeric:tabular-nums}
 </style>
   <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 
@@ -937,7 +948,7 @@ body { justify-content:center; }
 .btn.prim,.fab-prim,.f-save {background:linear-gradient(135deg,#398bff,#1764d8)}
 .bottom-dock {max-width:560px}
 .dock-tab {font-size:11px}
-#dockMerge,#tabMerge {display:none!important}
+#dockMerge {display:flex!important}
 #tabData {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1128,26 +1139,22 @@ body { justify-content:center; }
       </div>
     </section>
 
-    <!-- ================= TAB: PRODUK BERSAMA ================= -->
-    <section id="tabMerge" class="hidden">
-      <div class="section-bar"><div class="section-title" style="font-size:19px">Produk Bersama</div><span class="item-count-chip" id="mergeCount">0 produk bersama</span></div>
+    <!-- ================= TAB: RIWAYAT ================= -->
+    <section id="tabHistory" class="hidden">
+      <div class="section-bar"><div class="section-title" style="font-size:19px">Riwayat &amp; Aktivitas</div><span class="item-count-chip" id="historyCount">0 aktivitas</span></div>
       <div class="gcard">
-        <div class="gcard-title"><i class="fas fa-diagram-project"></i> Identitas produk lintas brand <span class="gtag green">2.1</span></div>
-        <p class="merge-intro">Hubungkan record yang benar-benar merupakan produk sama. Nama utama akan disinkronkan, sedangkan RAW, KONV, kategori, dan subkategori tetap disimpan per brand. Sistem hanya memberi kandidat — tidak pernah menggabungkan otomatis.</p>
-        <div class="merge-stat"><div><b id="mergeLinked">0</b><span>Produk bersama</span></div><div><b id="mergeMembers">0</b><span>Relasi brand</span></div><div><b id="mergeCandidates">0</b><span>Kandidat review</span></div></div>
+        <div class="gcard-title"><i class="fas fa-clock-rotate-left"></i> Riwayat Publish</div>
+        <div class="gcard-sub">Catatan publikasi tersimpan di browser/perangkat ini. Riwayat tidak mengubah database V4.</div>
+        <div id="publishHistoryList" class="history-list"><div class="history-empty">Belum ada riwayat publish di perangkat ini.</div></div>
+        <div class="btn-row" style="margin-top:10px"><button class="btn danger" id="clearHistoryBtn"><i class="fas fa-trash"></i> Hapus Riwayat Lokal</button></div>
       </div>
       <div class="gcard">
-        <div class="gcard-title"><i class="fas fa-magnifying-glass"></i> Kandidat penggabungan</div>
-        <p class="merge-intro">Kandidat muncul jika nama, RAW, atau KONV memiliki kesamaan lintas brand. Periksa detailnya sebelum menekan Gabungkan.</p>
-        <div id="mergeCandidateList"><div class="merge-empty">Muat data terlebih dahulu.</div></div>
-      </div>
-      <div class="gcard">
-        <div class="gcard-title"><i class="fas fa-clock"></i> Periksa nanti <span class="gtag" id="mergePendingCount">0</span></div>
-        <div id="mergePendingList"><div class="merge-empty">Belum ada kandidat yang ditunda.</div></div>
-      </div>
-      <div class="gcard">
-        <div class="gcard-title"><i class="fas fa-link"></i> Produk yang sudah terhubung</div>
-        <div id="mergeLinkedList"><div class="merge-empty">Belum ada produk bersama.</div></div>
+        <div class="gcard-title"><i class="fas fa-shield-halved"></i> Status Perlindungan Data</div>
+        <div class="history-status-row"><span>Format database</span><b id="historyFormat">—</b></div>
+        <div class="history-status-row"><span>Jumlah item</span><b id="historyItems">—</b></div>
+        <div class="history-status-row"><span>Jumlah brand</span><b id="historyBrands">—</b></div>
+        <div class="history-status-row"><span>Backup lokal</span><b id="historyBackups">—</b></div>
+        <div class="gcard-sub">Backup otomatis dan riwayat di sini bersifat lokal pada browser. Simpan juga file backup ke perangkat atau penyimpanan eksternal.</div>
       </div>
     </section>
   </div>
@@ -1161,7 +1168,7 @@ body { justify-content:center; }
     <button class="dock-tab active" id="dockData"><i class="fas fa-database"></i>Data</button>
     <button class="dock-tab" id="dockItem"><i class="fas fa-boxes-stacked"></i>Item PLU</button>
     <button class="dock-tab" id="dockBrand"><i class="fas fa-tags"></i>Brand</button>
-    <button class="dock-tab" id="dockMerge"><i class="fas fa-diagram-project"></i>Relasi</button>
+    <button class="dock-tab" id="dockMerge"><i class="fas fa-clock-rotate-left"></i>Riwayat</button>
   </nav>
 
   <!-- ===== SHEET: FORM ITEM ===== -->
@@ -1614,7 +1621,7 @@ body { justify-content:center; }
   function buildV4Object() {
     var out = {};
     for (var k in extraKeys) {
-      if (k !== 'app' && k !== 'v' && k !== 'items' && k !== 'products' && k !== 'brands' && k !== 'curation') out[k] = clone(extraKeys[k]);
+      if (k !== 'app' && k !== 'v' && k !== 'items' && k !== 'products' && k !== 'brands' && k !== 'curation' && k !== 'mergeIgnored' && k !== 'mergePending') out[k] = clone(extraKeys[k]);
     }
     out.app = 'plukakang';
     out.v = 4;
@@ -1820,24 +1827,24 @@ body { justify-content:center; }
     $('tabData').classList.toggle('hidden', name !== 'data');
     $('tabItem').classList.toggle('hidden', name !== 'item');
     $('tabBrand').classList.toggle('hidden', name !== 'brand');
-    $('tabMerge').classList.toggle('hidden', name !== 'merge');
+    $('tabHistory').classList.toggle('hidden', name !== 'history');
     $('dockData').classList.toggle('active', name === 'data');
     $('dockItem').classList.toggle('active', name === 'item');
     $('dockBrand').classList.toggle('active', name === 'brand');
-    $('dockMerge').classList.toggle('active', name === 'merge');
+    $('dockMerge').classList.toggle('active', name === 'history');
     $('fabItem').classList.toggle('show', name === 'item');
     $('fabBrand').classList.toggle('show', name === 'brand');
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
     if (name === 'item') renderItemList();
     if (name === 'brand') { renderBrandGrid(); renderOrderManager(); }
-    if (name === 'merge') renderMergeManager();
+    if (name === 'history') renderHistory();
     window.scrollTo(0, 0);
   }
   $('dockData').addEventListener('click', function() { showTab('data'); vibrate(); });
   $('dockItem').addEventListener('click', function() { showTab('item'); vibrate(); });
   $('dockBrand').addEventListener('click', function() { showTab('brand'); vibrate(); });
-  $('dockMerge').addEventListener('click', function() { showTab('merge'); vibrate(); });
+  $('dockMerge').addEventListener('click', function() { showTab('history'); vibrate(); });
   $('headThemeBtn').addEventListener('click', toggleTheme);
   window.addEventListener('scroll', function() {
     $('itemSearchBar').classList.toggle('scrolled', window.scrollY > 10);
@@ -1848,12 +1855,13 @@ body { justify-content:center; }
      ================================================================ */
   function renderAll() {
     renderStats();
+    renderHistory();
     renderChips();
     renderItemList();
     renderBrandGrid();
     renderOrderManager();
     renderDup();
-    renderMergeManager();
+    renderHistory();
     $('fabAddItem').disabled = !loaded;
     $('fabAddBrand').disabled = !loaded;
     $('statCard').style.display = loaded ? '' : 'none';
@@ -2774,7 +2782,7 @@ body { justify-content:center; }
     prod.nama = name;
     markDirty();
     showToast('Produk terhubung: ' + getProductMembers(pid).length + ' brand');
-    renderMergeManager();
+    renderHistory();
   }
   function renderMergeManager() {
     var candidateBox = $('mergeCandidateList'), linkedBox = $('mergeLinkedList'), pendingBox = $('mergePendingList');
@@ -2824,44 +2832,7 @@ body { justify-content:center; }
       linkedBox.innerHTML = lh;
     }
   }
-  $('tabMerge').addEventListener('click', function(e) {
-    var merge = e.target.closest('[data-merge-a]');
-    if (merge) { mergePair(parseInt(merge.dataset.mergeA,10), parseInt(merge.dataset.mergeB,10)); return; }
-    var pending=e.target.closest('[data-pending-a]');
-    if (pending) {
-      var pa=items[parseInt(pending.dataset.pendingA,10)], pb=items[parseInt(pending.dataset.pendingB,10)];
-      if(!Array.isArray(extraKeys.mergePending)) extraKeys.mergePending=[];
-      var ps=mergeSignature(pa,pb); if(extraKeys.mergePending.indexOf(ps)<0) extraKeys.mergePending.push(ps);
-      markDirty(); showToast('Kandidat dipindahkan ke Periksa nanti'); return;
-    }
-    var resume=e.target.closest('[data-resume-pending]');
-    if(resume) { extraKeys.mergePending.splice(parseInt(resume.dataset.resumePending,10),1); markDirty(); showToast('Kandidat dikembalikan ke review'); return; }
-    var ignore = e.target.closest('[data-ignore-a]');
-    if (ignore) {
-      var a=items[parseInt(ignore.dataset.ignoreA,10)], b=items[parseInt(ignore.dataset.ignoreB,10)];
-      if (!Array.isArray(extraKeys.mergeIgnored)) extraKeys.mergeIgnored=[];
-      var sig=mergeSignature(a,b);
-      extraKeys.mergeIgnored.push(sig); markDirty();
-      showToast('Kandidat ditandai jangan gabung'); return;
-    }
-    var rename=e.target.closest('[data-rename-product]');
-    if (rename) {
-      var p=getSharedProducts().find(function(x){return x.id===rename.dataset.renameProduct;}); if(!p)return;
-      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Ubah nama produk',description:'Nama ini akan digunakan oleh seluruh relasi brand yang terhubung.',fields:[{label:'Nama produk',value:p.nama}],confirmText:'Simpan'}).then(function(v){if(!v)return;var n=String(v[0]||'').trim();if(!n)return;p.nama=n;getProductMembers(p.id).forEach(function(it){it.nama=n;});markDirty();}); return;
-    }
-    var desc=e.target.closest('[data-desc-product]');
-    if (desc) {
-      var dp=getSharedProducts().find(function(x){return x.id===desc.dataset.descProduct;}); if(!dp)return;
-      adminDialog({kicker:'EDIT PRODUK BERSAMA',title:'Deskripsi produk',description:'Deskripsi ini berlaku untuk semua brand yang terhubung.',fields:[{label:'Deskripsi',value:dp.deskripsi||'',placeholder:'Tambahkan keterangan produk'}],confirmText:'Simpan'}).then(function(v){if(!v)return;dp.deskripsi=String(v[0]||'').trim();markDirty();}); return;
-    }
-    var unlink=e.target.closest('[data-unlink-product]');
-    if (unlink) {
-      var id=unlink.dataset.unlinkProduct, members=getProductMembers(id);
-      adminDialog({kicker:'TINDAKAN PRODUK',title:'Lepas relasi bersama?',description:'Record setiap brand tetap ada. PLU, kategori, dan subkategori tidak dihapus; hanya hubungan produk bersamanya yang dilepas.',preview:'<div class="admin-dialog-preview"><strong>'+members.length+' relasi brand akan dipisahkan</strong></div>',confirmText:'Lepas relasi',danger:true}).then(function(ok){if(!ok)return;members.forEach(function(it){it.product_id='';});extraKeys.products=getSharedProducts().filter(function(p){return p.id!==id;});markDirty();showToast('Relasi dilepas; record tetap aman.');});
-    }
-  });
-
-  /* ================================================================
+    /* ================================================================
      EXPORT — format v4 { app, v, brands, items }
      ================================================================ */
   function buildV4() { return JSON.stringify(buildV4Object(), null, 2); }
@@ -2884,25 +2855,50 @@ body { justify-content:center; }
   /* ================================================================
      PUBLISH — kirim data ke endpoint server, tanpa menyimpan secret
      ================================================================ */
+
+  var HISTORY_KEY = 'plukakang_publish_history_v1';
+  function readPublishHistory() {
+    try { var value = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); return Array.isArray(value) ? value : []; }
+    catch (e) { return []; }
+  }
+  function writePublishHistory(entry) {
+    try { var list = readPublishHistory(); list.unshift(entry); localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 30))); }
+    catch (e) { showToast('Publish berhasil, tetapi riwayat lokal gagal disimpan.'); }
+    renderHistory();
+  }
+  function renderHistory() {
+    var list = readPublishHistory();
+    if ($('historyCount')) $('historyCount').innerText = list.length + ' aktivitas';
+    if ($('publishHistoryList')) {
+      $('publishHistoryList').innerHTML = list.length ? list.map(function(entry) {
+        return '<div class="history-entry"><div class="history-entry-top"><span class="history-entry-title"><i class="fas fa-circle-check" style="color:var(--green)"></i> Publish berhasil · ' + esc(entry.branch || 'branch tidak diketahui') + '</span><span class="gtag green">' + esc(entry.items || 0) + ' item</span></div><div class="history-entry-meta">' + esc(entry.time || '') + ' · ' + esc(entry.commit || 'commit tidak tersedia') + '<br>' + esc(entry.version || '') + '</div></div>';
+      }).join('') : '<div class="history-empty">Belum ada riwayat publish di perangkat ini.</div>';
+    }
+    if ($('historyFormat')) $('historyFormat').innerText = loaded ? (loadedIsV4 ? 'V4' : 'Perlu verifikasi') : 'Belum dimuat';
+    if ($('historyItems')) $('historyItems').innerText = loaded ? items.length.toLocaleString('id-ID') : '—';
+    if ($('historyBrands')) $('historyBrands').innerText = loaded ? brands.length : '—';
+    if ($('historyBackups')) $('historyBackups').innerText = readBackups().length + ' snapshot lokal';
+  }
+  $('clearHistoryBtn').addEventListener('click', function() {
+    if (!confirm('Hapus riwayat publish yang tersimpan di browser ini? Ini tidak menghapus commit GitHub atau data V4.')) return;
+    try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+    renderHistory(); showToast('Riwayat lokal dihapus');
+  });
+
+
   var publishInProgress = false;
   $('btnPublish').addEventListener('click', function() {
-    // Production is intentionally read-only for publishing. The server-side
-    // API also blocks GITHUB_BRANCH=main; this UI guard makes the rule clear.
-    var currentHost = String(window.location.hostname || '').toLowerCase();
-    if (currentHost === 'plu-master.vercel.app') {
-      showToast('Admin Production hanya untuk melihat dan mengelola data. Untuk Publish, buka Admin dari deployment Preview plukakang-2.0.', null, null, 6500);
-      return;
-    }
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
     if (publishInProgress) return;
     var duplicates = scanDup();
     var serious = duplicates.filter(function(d) { return d.t === 'red'; });
     if (serious.length && !confirm('Ditemukan ' + serious.length + ' peringatan duplikat. Tetap lanjutkan publish?')) return;
-    if (!confirm('Terbitkan database V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke branch development plukakang-2.0? Production tidak akan diubah.')) return;
+    if (!confirm('Terbitkan database V4 berisi ' + items.length + ' item dan ' + brands.length + ' brand ke branch yang dikonfigurasi untuk deployment ini? Pastikan kamu membuka Admin dari alamat Production atau Preview yang benar.')) return;
 
     var key = window.prompt('Masukkan PLUKAKANG_PUBLISH_KEY yang tersimpan di Vercel Environment Variables. Kunci tidak akan disimpan di browser:');
     if (!key) { showToast('Publish dibatalkan — kunci tidak dimasukkan'); return; }
 
+    saveAutoBackup('Sebelum Publish ke ' + (location.hostname || 'deployment'));
     publishInProgress = true;
     var btn = $('btnPublish');
     btn.disabled = true;
@@ -2921,12 +2917,19 @@ body { justify-content:center; }
         return body;
       });
     }).then(function(result) {
+      writePublishHistory({
+        time: new Date().toLocaleString('id-ID'),
+        branch: result.branch || 'terkonfigurasi',
+        commit: String(result.commit || '').slice(0, 12),
+        version: result.version || 'V4',
+        items: result.item_count || items.length
+      });
       dirty = false;
       clearDraft();
       srcLabel = 'live';
       loadedAt = Date.now();
       updateSrcInfo(false);
-      showToast('Publish berhasil! Commit: ' + String(result.commit || '').slice(0, 7) + '. Tunggu deploy Vercel.', null, null, 5000);
+      showToast('Publish berhasil ke ' + (result.branch || 'branch terkonfigurasi') + '! Commit: ' + String(result.commit || '').slice(0, 7) + '. Tunggu deploy Vercel.', null, null, 5200);
     }).catch(function(err) {
       showToast('Publish gagal: ' + (err && err.message ? err.message : 'Kesalahan jaringan'), null, null, 5200);
     }).finally(function() {
