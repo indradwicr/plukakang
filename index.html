@@ -1862,6 +1862,13 @@ html:not([data-theme="light"]) .brand-card-icon {
 .tool-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.tool-copy b{font-size:14px;font-weight:750}.tool-copy small{font-size:11px;color:var(--text-muted);line-height:1.4}.tool-arrow{color:var(--text-light);font-size:12px}
 html[data-theme="light"] .tool-card{background:#fff;border-color:#E9ECF1;box-shadow:0 2px 8px rgba(25,35,50,.035)}
 
+
+/* Home brand detail: same grouped PLU table presentation as Katalog */
+#detailView .kat-home-groups { display:flex; flex-direction:column; gap:18px; padding-bottom:28px; }
+#detailView .kat-home-groups .kat-group { width:100%; }
+#detailView .kat-home-groups .kat-tbl { width:100%; }
+#detailView .kat-home-groups .kat-tbl .kat-band { text-align:center; }
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -3348,6 +3355,7 @@ function openBrandCategory(key) {
 
     // plukakang 4.2: Home -> brand langsung membuka tampilan Tabel.
     detailViewMode = 'table';
+    if (typeof applyKatAccent === 'function') applyKatAccent(katNorm(key));
     $('viewListBtn').classList.remove('active');
     $('viewTableBtn').classList.add('active');
     $('productGrid').classList.add('hidden');
@@ -3511,7 +3519,13 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
 
       $('productGrid').innerHTML = '<div class="list-group">' + html + '</div>';
-      $('tableBody').innerHTML = tableHtml;
+
+      // Home brand detail reuses the exact grouped table component from Katalog.
+      // This keeps header, RAW/KONV columns, category bands, spacing and brand accent consistent.
+      var homeTableHtml = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
+          .map(function(group) { return katRenderBlock(group, currentBrand || 'all'); })
+          .join('');
+      $('tableView').innerHTML = '<div class="kat-home-groups">' + homeTableHtml + '</div>';
 
 
       _renderCache.key = cacheKey;
@@ -3811,11 +3825,12 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
         (style ? ' style="' + style + '"' : '') + '>' + escapeHtml(val) + '</td>';
   }
 
-  function katRenderBlock(bands) {
+  function katRenderBlock(bands, sheetKey) {
+      sheetKey = sheetKey || currentSheet;
       var rows = '';
       bands.forEach(function(b) {
           var a = katAcc(b.accent);
-          var bandStyle = (currentSheet === 'all')
+          var bandStyle = (sheetKey === 'all')
               ? 'background:' + a.bg(0.22) + ';color:' + a.tx
               : 'background:var(--kacc-bandbg);color:var(--kacc-bandtx)';
           rows += '<tr><td class="kat-band" colspan="3" style="' + bandStyle + '">' +
