@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0f" id="metaTheme">
-  <title>plukakang admin</title>
+  <title>Plukakang Admin V4.1</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgOTYgOTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iIzBhODRmZiI+PHJlY3QgeD0iMjIiIHk9IjIyIiB3aWR0aD0iNSIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjMxIiB5PSIyMiIgd2lkdGg9IjMiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSIzOCIgeT0iMjIiIHdpZHRoPSI3IiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNDkiIHk9IjIyIiB3aWR0aD0iMyIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjU2IiB5PSIyMiIgd2lkdGg9IjUiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSI2NCIgeT0iMjIiIHdpZHRoPSIzIiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNzAiIHk9IjIyIiB3aWR0aD0iNCIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjwvZz48L3N2Zz4=">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -902,6 +902,93 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
 
 </style>
   <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
+
+<style id="plukakang-v41-hybrid">
+/* PLUKAKANG V4.1 — Hybrid: clean workspace + liquid glass */
+:root {
+  --acc:#398bff;
+  --acc-soft:rgba(57,139,255,.15);
+  --card-white:rgba(25,29,40,.68);
+  --glass-shadow:0 12px 34px rgba(0,0,0,.22);
+}
+body { justify-content:center; }
+.app-layout {
+  max-width: 1180px;
+  padding: 22px 28px calc(var(--dock-h) + 108px + env(safe-area-inset-bottom,0px));
+}
+.app-header {
+  position:relative;
+  padding:14px 16px;
+  margin:0 0 24px;
+  border:1px solid var(--glass-brd);
+  border-radius:22px;
+  background:rgba(18,21,30,.52);
+  -webkit-backdrop-filter:blur(26px) saturate(1.6);
+  backdrop-filter:blur(26px) saturate(1.6);
+  box-shadow:var(--glass-spec),var(--glass-shadow);
+}
+.brand-title-group h1 {font-size:20px;letter-spacing:-.65px}
+.brand-title-group span {font-size:11px;letter-spacing:.35px}
+.section-bar {align-items:center;margin:4px 2px 16px}
+.section-title {font-size:25px}
+.gcard {border-radius:22px;padding:19px;margin-bottom:16px}
+.gcard-title {font-size:14px}
+.btn {min-height:42px}
+.btn.prim,.fab-prim,.f-save {background:linear-gradient(135deg,#398bff,#1764d8)}
+.bottom-dock {max-width:560px}
+.dock-tab {font-size:11px}
+#dockMerge,#tabMerge {display:none!important}
+#tabData {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 16px;
+  align-items:start;
+}
+#tabData > .section-bar {grid-column:1/-1}
+#draftCard,#statCard {grid-column:1/-1}
+#tabData > .gcard {min-width:0}
+#tabData > .gcard:nth-of-type(1) {grid-column:1/-1}
+#tabData > .gcard:nth-of-type(2) {grid-column:1}
+#backupCard {grid-column:2}
+#statCard {grid-column:1}
+#dupCard {grid-column:2}
+#tabData > .gcard:last-child {grid-column:1/-1}
+#tabItem,#tabBrand {max-width:100%}
+#tabBrand .brand-grid {grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.brand-card {height:150px;padding:16px}
+.list-group {border-radius:20px}
+.product-card {padding:14px 18px}
+.product-card-title {font-size:14px}
+.sticky-search-bar {border-radius:0 0 16px 16px}
+.order-card {padding:20px}
+.sheet {max-width:620px}
+@media (min-width:900px) {
+  .app-layout {padding-top:28px}
+  .app-header {margin-bottom:28px}
+  .bottom-dock {
+    bottom:22px;
+    left:50%;
+    width:560px;
+    border-radius:20px;
+    height:66px;
+  }
+  .fab-bar {max-width:560px;bottom:calc(66px + 32px + env(safe-area-inset-bottom,0px))}
+  #tabItem .sticky-search-bar {margin:0;padding:8px 0 14px;border-radius:0}
+  #itemListWrap {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #itemListWrap .list-group {margin:0}
+}
+@media (max-width:700px) {
+  .app-layout {max-width:560px;padding:12px 16px calc(var(--dock-h) + 100px + env(safe-area-inset-bottom,0px))}
+  .app-header {padding:10px 11px;margin-bottom:18px;border-radius:19px}
+  #tabData {display:block}
+  #tabData > .gcard {margin-bottom:13px}
+  .section-title {font-size:22px}
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after {animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+</style>
+
 </head>
 <body>
 
@@ -931,8 +1018,8 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
       <div class="brand-block">
         <div class="brand-icon"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor"><rect x="22" y="22" width="5" height="52" rx="1.6"/><rect x="31" y="22" width="3" height="52" rx="1.6"/><rect x="38" y="22" width="7" height="52" rx="1.6"/><rect x="49" y="22" width="3" height="52" rx="1.6"/><rect x="56" y="22" width="5" height="52" rx="1.6"/><rect x="64" y="22" width="3" height="52" rx="1.6"/><rect x="70" y="22" width="4" height="52" rx="1.6"/></g></svg></div>
         <div class="brand-title-group">
-          <h1>plukakang admin</h1>
-          <span>editor data.json</span>
+          <h1>Plukakang Admin</h1>
+          <span>V4.1 · Hybrid Admin</span>
         </div>
       </div>
       <div class="head-btns">
@@ -2799,6 +2886,13 @@ html[data-theme="light"] .f-sel option { background: #fff; color: #17171c; }
      ================================================================ */
   var publishInProgress = false;
   $('btnPublish').addEventListener('click', function() {
+    // Production is intentionally read-only for publishing. The server-side
+    // API also blocks GITHUB_BRANCH=main; this UI guard makes the rule clear.
+    var currentHost = String(window.location.hostname || '').toLowerCase();
+    if (currentHost === 'plu-master.vercel.app') {
+      showToast('Admin Production hanya untuk melihat dan mengelola data. Untuk Publish, buka Admin dari deployment Preview plukakang-2.0.', null, null, 6500);
+      return;
+    }
     if (!loaded) { showToast('Muat data terlebih dahulu'); return; }
     if (publishInProgress) return;
     var duplicates = scanDup();
