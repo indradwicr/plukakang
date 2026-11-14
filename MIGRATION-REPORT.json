@@ -1,0 +1,12 @@
+{
+  "source_created_at": "2026-11-08T08:27:03.422Z",
+  "source": "live",
+  "old_version": 2,
+  "new_version": 3,
+  "master_products": 1331,
+  "brand_associations": 1331,
+  "brands": 9,
+  "automatic_merges": 0,
+  "preserved_duplicate_rows": true,
+  "id_strategy": "deterministic SHA-256 of original row index and row content"
+}
