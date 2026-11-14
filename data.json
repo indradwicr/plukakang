@@ -849,7 +849,7 @@
       "sub": "bkl",
       "kategori": "snack_rte",
       "raw": "20137325",
-      "konv": ""
+      "konv": "20137304"
     },
     {
       "id": "item_7a57b53a2d55",
@@ -1838,7 +1838,7 @@
       "deskripsi": "",
       "sub": "bkl",
       "kategori": "powder",
-      "raw": "",
+      "raw": "20138185",
       "konv": "20138471"
     },
     {
@@ -13514,8 +13514,6 @@
     {
       "id": "item_8c380fdda012",
       "brand": "hambalanfc",
-      "sub": "beras",
-      "kategori": "",
       "nama": "Gentong Rejeki 5kg",
       "deskripsi": "",
       "sub": "beras",
@@ -13611,6 +13609,16 @@
       "sub": "rtd",
       "kategori": "",
       "raw": "20113538",
+      "konv": ""
+    },
+    {
+      "id": "item_migrated_8651208d9f67",
+      "brand": "bkl",
+      "nama": "Morisca Lapis Legit 1100gr",
+      "deskripsi": "",
+      "sub": "dry",
+      "kategori": "",
+      "raw": "20046757",
       "konv": ""
     }
   ]
