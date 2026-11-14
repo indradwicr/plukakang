@@ -13630,6 +13630,26 @@
       "kategori": "",
       "raw": "",
       "konv": "20040897"
+    },
+    {
+      "id": "item_1f8138009bf542b0",
+      "brand": "yummycoffee",
+      "nama": "Minute Maid Pulpy",
+      "deskripsi": "",
+      "sub": "dcf",
+      "kategori": "",
+      "raw": "20021178",
+      "konv": "20141436"
+    },
+    {
+      "id": "item_95cf5a2bcc5b4864",
+      "brand": "yummycoffee",
+      "nama": "Buavita Mangga",
+      "deskripsi": "",
+      "sub": "dcf",
+      "kategori": "",
+      "raw": "10007973",
+      "konv": "20141849"
     }
   ]
 }
