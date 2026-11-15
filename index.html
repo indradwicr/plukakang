@@ -2140,15 +2140,22 @@ html:not([data-theme="light"]) #lemburView .lb-page-box .lb-card {
   top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px)) !important;
   z-index: 60 !important;
 }
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
+/* iOS Safari: each category is a separate table. Making every thead sticky
+   causes later category headers to float over product rows. Only the first
+   table owns the sticky PLU header; later category headers stay in flow. */
+#detailView .kat-home-groups .kat-group:first-child table.kat-tbl thead tr.kat-h1 th {
   position: sticky !important;
   top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px)) !important;
   z-index: 59 !important;
 }
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
+#detailView .kat-home-groups .kat-group:first-child table.kat-tbl thead tr.kat-h2 th {
   position: sticky !important;
   top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px) + 32px) !important;
   z-index: 59 !important;
+}
+#detailView .kat-home-groups .kat-group:not(:first-child) table.kat-tbl thead tr.kat-h1 th,
+#detailView .kat-home-groups .kat-group:not(:first-child) table.kat-tbl thead tr.kat-h2 th {
+  position: static !important; top: auto !important; z-index: auto !important;
 }
 #detailView .kat-home-groups table.kat-tbl thead { position: relative; }
 #detailView .kat-home-groups table.kat-tbl { border-collapse: separate; border-spacing: 0; }
@@ -2174,6 +2181,26 @@ html[data-theme="light"] .ag-card {
 }
 html[data-theme="light"] .ag-input { background:#f2f3f6 !important;color:#20232b !important;border-color:#d9dce3 !important; }
 html[data-theme="light"] .ag-cancel { background:#eef0f4 !important;color:#20232b !important; }
+/* Admin password gate follows the active app theme explicitly. */
+html:not([data-theme="light"]) .ag-card {
+  background:rgba(25,26,34,.97) !important;
+  color:#F5F5F7 !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 70px rgba(0,0,0,.48) !important;
+}
+html:not([data-theme="light"]) .ag-card .ag-title { color:#F5F5F7 !important; }
+html:not([data-theme="light"]) .ag-card .ag-sub { color:rgba(235,235,245,.68) !important; }
+html:not([data-theme="light"]) .ag-card .ag-input {
+  background:rgba(255,255,255,.08) !important;
+  color:#F5F5F7 !important;
+  border-color:rgba(255,255,255,.18) !important;
+}
+html:not([data-theme="light"]) .ag-card .ag-input::placeholder { color:rgba(235,235,245,.42) !important; }
+html:not([data-theme="light"]) .ag-card .ag-cancel {
+  background:rgba(255,255,255,.10) !important;
+  color:#F5F5F7 !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+}
 
 
 /* Tools list: clean icon-only rows, no colored badge tiles */
@@ -4549,7 +4576,7 @@ now.getFullYear();
       var holidays2026 = new Set(['2026-01-01','2026-01-16','2026-02-17','2026-03-19','2026-03-21','2026-03-22','2026-04-03','2026-04-05','2026-05-01','2026-05-14','2026-05-27','2026-05-31','2026-06-01','2026-06-16','2026-08-17','2026-08-25','2026-12-25']);
       var dateJakarta = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
       var weekdayJakarta = new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',weekday:'short'}).format(now);
-      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'😂', text:'gadag? 😂' };
+      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'🫵🏽', text:'🫵🏽 gadag? tanggal bereum? 😂' };
       var jam = Number(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',hour:'2-digit',hourCycle:'h23'}).format(now));
       if (jam >= 0 && jam < 5) return { icon: '  🌙', text: 'rek naon ente?' };
       if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
