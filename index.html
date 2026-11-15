@@ -2255,6 +2255,66 @@ html:not([data-theme="light"]) .tools-badge i { color:rgba(255,255,255,.82) !imp
 }
 #detailView .kat-home-groups table.kat-tbl thead th { background-clip: padding-box; }
 
+
+
+/* 4.3.3 — Safari-safe Home header: a standalone sticky surface, not sticky TH cells.
+   Native table headers are hidden only in Home; Catalog keeps its original behavior. */
+#detailView #tableView .kat-home-sticky-head {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: var(--home-kat-header-top, 0px) !important;
+  z-index: 80 !important;
+  display: grid !important;
+  grid-template-columns: 21% 21% 58%;
+  grid-template-rows: 34px 27px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 17px 17px 0 0;
+  background: #c900b8;
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,.12) inset;
+  margin: 0;
+  isolation: isolate;
+}
+#detailView #tableView .kat-home-sticky-top {
+  display: contents;
+}
+#detailView #tableView .kat-home-sticky-top > span:first-child {
+  grid-column: 1 / 3; grid-row: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 850; letter-spacing: .18em;
+  border-right: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
+#detailView #tableView .kat-home-sticky-desc {
+  grid-column: 3; grid-row: 1 / 3;
+  display: flex; align-items: center; justify-content: flex-start;
+  padding-left: 12px; font-size: 11px; font-weight: 850; letter-spacing: .18em;
+}
+#detailView #tableView .kat-home-sticky-sub {
+  grid-column: 1 / 3; grid-row: 2;
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: #79006f;
+}
+#detailView #tableView .kat-home-sticky-sub span {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 850; letter-spacing: .16em;
+}
+#detailView #tableView .kat-home-sticky-sub span + span {
+  border-left: 1px solid rgba(255,255,255,.2);
+}
+#detailView #tableView .kat-home-groups table.kat-tbl thead {
+  display: none !important;
+}
+#detailView #tableView .kat-home-groups table.kat-tbl {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+#detailView #tableView .kat-home-groups .kat-group {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -3979,7 +4039,7 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
       var homeBands = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
           .reduce(function(allBands, group) { return allBands.concat(group); }, []);
       var homeTableHtml = katRenderBlock(homeBands, currentBrand || 'all');
-      $('tableView').innerHTML = '<div class="kat-home-groups">' + homeTableHtml + '</div>';
+      $('tableView').innerHTML = '<div class="kat-home-sticky-head" aria-hidden="true"><div class="kat-home-sticky-top"><span>PLU</span><span class="kat-home-sticky-desc">DESKRIPSI</span></div><div class="kat-home-sticky-sub"><span>RAW</span><span>KONVERSI</span></div></div><div class="kat-home-groups">' + homeTableHtml + '</div>';
       requestAnimationFrame(syncHomeKatHeaderTop);
 
 
