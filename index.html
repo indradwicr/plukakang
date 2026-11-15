@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0f" id="metaTheme">
-  <title>plukakang - hapalkeun euy!</title>
+  <title>plukakang — hapalkeun euy!</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgOTYgOTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iIzBhODRmZiI+PHJlY3QgeD0iMjIiIHk9IjIyIiB3aWR0aD0iNSIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjMxIiB5PSIyMiIgd2lkdGg9IjMiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSIzOCIgeT0iMjIiIHdpZHRoPSI3IiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNDkiIHk9IjIyIiB3aWR0aD0iMyIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjxyZWN0IHg9IjU2IiB5PSIyMiIgd2lkdGg9IjUiIGhlaWdodD0iNTIiIHJ4PSIxLjYiLz48cmVjdCB4PSI2NCIgeT0iMjIiIHdpZHRoPSIzIiBoZWlnaHQ9IjUyIiByeD0iMS42Ii8+PHJlY3QgeD0iNzAiIHk9IjIyIiB3aWR0aD0iNCIgaGVpZ2h0PSI1MiIgcng9IjEuNiIvPjwvZz48L3N2Zz4=">
 
 
@@ -424,13 +424,13 @@ body::before {
     font-size: 1.25rem; flex-shrink: 0;
     box-shadow: inset 0 1px 0 var(--w30), 0 4px 14px var(--k40);
 }
-.card-saybread .brand-card-icon { background: linear-gradient(135deg, #b06a42, #7a4222); color: #fff; }
-.card-sayburger .brand-card-icon { background: linear-gradient(135deg, #fb5b7d, #d81b45); color: #fff; }
-.card-yummychoice .brand-card-icon { background: linear-gradient(135deg, #fb923c, #ea580c); color: #fff; }
-.card-yummycoffee .brand-card-icon { background: linear-gradient(135deg, #f5a144, #c26a08); color: #fff; }
-.card-pointcoffee .brand-card-icon { background: linear-gradient(135deg, #2fab5e, #116531); color: #fff; }
-.card-hambalanfc .brand-card-icon { background: linear-gradient(135deg, #5f8bef, #1e40af); color: #fff; }
-.card-perishable .brand-card-icon { background: linear-gradient(135deg, #2ebd85, #047857); color: #fff; }
+.card-saybread .brand-card-icon { background: #F2E7DE; color: #875A3C; }
+.card-sayburger .brand-card-icon { background: #F8E4E8; color: #B65B70; }
+.card-yummychoice .brand-card-icon { background: #F8EBDD; color: #A87936; }
+.card-yummycoffee .brand-card-icon { background: #F3EBDD; color: #987044; }
+.card-pointcoffee .brand-card-icon { background: #E2F0E7; color: #43805A; }
+.card-hambalanfc .brand-card-icon { background: #E5ECF8; color: #5576AD; }
+.card-perishable .brand-card-icon { background: #E2F0EC; color: #4D8878; }
 .brand-card-bottom { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
 .brand-card-bottom h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; color: var(--text-main); }
 .brand-card-bottom p { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 3px; }
@@ -1757,7 +1757,412 @@ html[data-theme="light"] #soView .chip:active { color: var(--text-main); }
     .lb-addrow { grid-template-columns: 82px 1fr auto; }
     .lb-ic { width: 26px; }
 }
-</style>
+
+/* ================================================================
+   plukakang 4.2 — SEAMLESS REFINEMENT LAYER
+   Focus: quieter surfaces, clearer hierarchy, harmonious brand icons.
+   ================================================================ */
+html[data-theme="light"] {
+  --bg-app: #F7F8FA;
+  --card-white: #FFFFFF;
+  --surface-2: #F2F4F7;
+  --text-main: #20242C;
+  --text-muted: #737B88;
+  --text-light: #929AA6;
+  --separator: #E8EBF0;
+  --hairline: #DDE2E9;
+  --fill: #F0F2F5;
+  --fill-2: #E9EDF2;
+  --frost: rgba(248,249,251,.96);
+  --glass-brd: #E9ECF1;
+  --glass-spec: none;
+  --glass-shadow: 0 2px 8px rgba(25,35,50,.035);
+  --dockbg: rgba(255,255,255,.96);
+  --docktab: #929AA6;
+}
+html[data-theme="light"] body::before {
+  background: linear-gradient(180deg,#F8F9FB 0%,#F5F7FA 100%);
+  animation: none;
+}
+html[data-theme="light"] .brand-card {
+  background: #fff;
+  border: 1px solid #E9ECF1;
+  box-shadow: 0 2px 8px rgba(25,35,50,.035);
+  border-radius: 18px;
+}
+html[data-theme="light"] .brand-card:hover {
+  box-shadow: 0 5px 16px rgba(25,35,50,.07);
+  transform: translateY(-1px);
+}
+html[data-theme="light"] .brand-card-icon {
+  width: 42px; height: 42px; border-radius: 13px;
+  box-shadow: none; font-size: 1.15rem;
+}
+html[data-theme="light"] .icon-action-btn {
+  background: #F1F3F6; border: 1px solid #E9ECF1;
+  box-shadow: none; color: #596272;
+}
+html[data-theme="light"] .sticky-search-bar {
+  background: rgba(247,248,250,.94);
+  border-color: transparent;
+  box-shadow: none;
+}
+html[data-theme="light"] .search-field {
+  background: #fff; border: 1px solid #E8EBF0; box-shadow: none;
+}
+html[data-theme="light"] .bottom-dock {
+  background: rgba(255,255,255,.96);
+  border: 1px solid #E8EBF0;
+  box-shadow: 0 5px 22px rgba(25,35,50,.09);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+html[data-theme="light"] .dock-lens {
+  background: #EAF2FF;
+  box-shadow: none;
+}
+html[data-theme="light"] .dock-tab.active { color: #2878D8; }
+html[data-theme="light"] .dock-tab { color: #8992A0; }
+html[data-theme="light"] .greeting-container {
+  background: #fff; border: 1px solid #E9ECF1;
+  box-shadow: 0 2px 8px rgba(25,35,50,.035);
+}
+html[data-theme="light"] .section-title { color: #303744; }
+html[data-theme="light"] .detail-header .back-btn,
+html[data-theme="light"] .vt-btn {
+  box-shadow: none;
+}
+html[data-theme="light"] .view-toggle {
+  background: #F0F2F5; border: 1px solid #E7EAF0;
+}
+html[data-theme="light"] .vt-btn.active {
+  background: #fff; color: #2878D8;
+  box-shadow: 0 1px 4px rgba(25,35,50,.08);
+}
+/* Dark mode receives the same calmer hierarchy without losing its identity. */
+html:not([data-theme="light"]) .brand-card {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 5px 18px rgba(0,0,0,.16);
+  border-color: rgba(255,255,255,.075);
+}
+html:not([data-theme="light"]) .brand-card-icon {
+  box-shadow: none;
+}
+.bottom-dock { border: 1px solid var(--separator); }
+.brand-card, .icon-action-btn, .search-field, .bottom-dock {
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+
+.tools-grid{display:grid;grid-template-columns:1fr;gap:11px;padding:4px 0 28px}
+.tool-card{width:100%;display:flex;align-items:center;gap:13px;text-align:left;padding:15px;border:1px solid var(--glass-brd);border-radius:18px;background:var(--card-white);color:var(--text-main);box-shadow:var(--glass-shadow);cursor:pointer;min-height:78px}
+.tool-icon{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:14px;font-size:18px}
+.tool-blue{background:#E8F0FC;color:#527DB8}.tool-green{background:#E7F1EB;color:#56856A}.tool-amber{background:#F5EEE2;color:#A17A42}
+.tool-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.tool-copy b{font-size:14px;font-weight:750}.tool-copy small{font-size:11px;color:var(--text-muted);line-height:1.4}.tool-arrow{color:var(--text-light);font-size:12px}
+html[data-theme="light"] .tool-card{background:#fff;border-color:#E9ECF1;box-shadow:0 2px 8px rgba(25,35,50,.035)}
+
+
+/* Home brand detail: same grouped PLU table presentation as Katalog */
+#detailView .kat-home-groups { display:flex; flex-direction:column; gap:18px; padding-bottom:28px; }
+#detailView .kat-home-groups .kat-group { width:100%; }
+#detailView .kat-home-groups .kat-tbl { width:100%; }
+#detailView .kat-home-groups .kat-tbl .kat-band { text-align:center; }
+
+
+/* plukakang 4.2 — Tools workspace */
+#toolsView { padding-top: 8px; }
+.tools-hero { padding: 12px 4px 22px; }
+.tools-eyebrow { color:var(--text-light); font-size:10px; font-weight:800; letter-spacing:.16em; margin-bottom:8px; }
+.tools-hero h2 { margin:0; color:var(--text-main); font-size:30px; line-height:1.1; font-weight:850; letter-spacing:-.8px; }
+.tools-hero p { margin:8px 0 0; color:var(--text-muted); font-size:13px; line-height:1.5; }
+.tools-section-label { margin:0 4px 10px; color:var(--text-light); font-size:10px; font-weight:800; letter-spacing:.14em; }
+.tools-grid { display:grid; grid-template-columns:1fr; gap:10px; padding:0 0 18px; }
+.tool-card { display:flex; align-items:center; width:100%; min-height:94px; gap:14px; padding:15px;
+  border:1px solid var(--glass-brd); border-radius:20px; background:var(--card-white);
+  color:var(--text-main); text-align:left; box-shadow:var(--glass-shadow); cursor:pointer;
+  transition:transform .16s ease,border-color .16s ease,background .16s ease; }
+.tool-card:active { transform:scale(.985); }
+.tool-card .tool-icon { width:50px; height:50px; flex:0 0 50px; display:grid; place-items:center;
+  border-radius:16px; font-size:20px; }
+.tool-card-blue .tool-icon { background:#EAF1FC; color:#477BBE; }
+.tool-card-green .tool-icon { background:#E8F2EB; color:#4E8662; }
+.tool-card-amber .tool-icon { background:#F5EFE4; color:#A27B43; }
+.tool-copy { display:flex; flex:1; min-width:0; flex-direction:column; gap:4px; }
+.tool-copy b { font-size:15px; font-weight:800; letter-spacing:-.2px; }
+.tool-copy small { color:var(--text-muted); font-size:11px; line-height:1.4; }
+.tool-copy em { margin-top:3px; color:var(--text-light); font-size:10px; font-style:normal; font-weight:750; }
+.tool-copy em i { margin-left:4px; font-size:9px; }
+.tools-footnote { display:flex; align-items:flex-start; gap:9px; margin:4px 2px 24px; padding:13px 14px;
+  border-radius:15px; background:var(--fill); color:var(--text-muted); font-size:11px; line-height:1.45; }
+.tools-footnote i { color:var(--text-light); margin-top:1px; }
+html[data-theme="light"] .tool-card { background:#fff; border-color:#E8ECF1; box-shadow:0 3px 12px rgba(28,39,55,.045); }
+html[data-theme="light"] .tool-card-blue .tool-icon { background:#EDF3FC; color:#527FB9; }
+html[data-theme="light"] .tool-card-green .tool-icon { background:#EDF4EF; color:#5B8768; }
+html[data-theme="light"] .tool-card-amber .tool-icon { background:#F7F1E8; color:#A27D4B; }
+
+
+#detailView .detail-header { display:none; }
+/* Hide alphabet rail in table mode; keep it available in List mode only. */
+
+
+/* Tools — glass workspace, visually aligned with plukakang home */
+#toolsView { padding: 4px 0 28px; }
+.tools-hero {
+  position:relative; overflow:hidden; margin:4px 0 18px; padding:20px 18px 19px;
+  border:1px solid var(--glass-brd); border-radius:24px;
+  background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(235,240,248,.46));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 8px 26px rgba(30,45,70,.055);
+  -webkit-backdrop-filter:blur(24px); backdrop-filter:blur(24px);
+}
+.tools-hero:after {
+  content:""; position:absolute; width:150px; height:150px; right:-48px; top:-68px;
+  border-radius:50%; background:rgba(75,145,225,.10); filter:blur(2px); pointer-events:none;
+}
+.tools-eyebrow { font-size:9px; letter-spacing:.17em; font-weight:850; color:var(--text-light); margin-bottom:9px; }
+.tools-hero h2 { margin:0; font-size:27px; line-height:1.08; font-weight:850; letter-spacing:-.7px; color:var(--text-main); }
+.tools-hero p { margin:7px 0 0; max-width:270px; font-size:12px; line-height:1.5; color:var(--text-muted); }
+.tools-section-label { display:flex; align-items:center; gap:8px; margin:0 5px 10px; color:var(--text-light); font-size:9px; font-weight:850; letter-spacing:.15em; }
+.tools-section-label:after { content:""; height:1px; flex:1; background:var(--separator); }
+.tools-grid { display:grid; grid-template-columns:1fr; gap:9px; padding:0 0 14px; }
+.tool-card {
+  position:relative; overflow:hidden; display:flex; align-items:center; width:100%; min-height:82px;
+  gap:13px; padding:13px 14px; border:1px solid var(--glass-brd); border-radius:19px;
+  background:rgba(255,255,255,.58); color:var(--text-main); text-align:left;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 5px 18px rgba(30,45,70,.045);
+  -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+  cursor:pointer; transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+.tool-card:active { transform:scale(.985); }
+.tool-card .tool-icon {
+  width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;
+  border-radius:15px;font-size:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+}
+.tool-card-blue .tool-icon { background:linear-gradient(145deg,#E8F1FF,#DCE9FA);color:#477BBE; }
+.tool-card-green .tool-icon { background:linear-gradient(145deg,#E8F3EC,#DCECE2);color:#4E8662; }
+.tool-card-amber .tool-icon { background:linear-gradient(145deg,#F7F0E5,#EFE4D2);color:#A27B43; }
+.tool-copy { display:flex;flex:1;min-width:0;flex-direction:column;gap:3px; }
+.tool-copy b { font-size:14px;font-weight:800;letter-spacing:-.25px; }
+.tool-copy small { color:var(--text-muted);font-size:10.5px;line-height:1.35; }
+.tool-copy em { margin-top:3px;color:#4D83C3;font-size:9.5px;font-style:normal;font-weight:800; }
+.tool-copy em i { margin-left:4px;font-size:9px; }
+.tool-arrow { color:var(--text-light);font-size:11px;margin-left:2px; }
+.tools-footnote {
+  display:flex;align-items:flex-start;gap:9px;margin:3px 2px 20px;padding:12px 13px;
+  border:1px solid var(--glass-brd);border-radius:16px;background:rgba(255,255,255,.38);
+  color:var(--text-muted);font-size:10.5px;line-height:1.45;
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+}
+.tools-footnote i { color:#8A9CB2;margin-top:1px; }
+html[data-theme="dark"] .tools-hero,
+html:not([data-theme="light"]) .tools-hero {
+  background:linear-gradient(135deg,rgba(45,48,60,.72),rgba(28,31,42,.58));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 26px rgba(0,0,0,.12);
+}
+html:not([data-theme="light"]) .tool-card {
+  background:rgba(38,41,52,.58);
+  border-color:rgba(255,255,255,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 5px 18px rgba(0,0,0,.10);
+}
+html:not([data-theme="light"]) .tools-footnote { background:rgba(38,41,52,.40);border-color:rgba(255,255,255,.08); }
+
+
+/* Tools — compact, native-feeling list inspired by music-library/settings patterns */
+#toolsView { padding: 8px 2px 28px; }
+.tools-head { padding: 12px 5px 22px; }
+.tools-head-title { color:var(--text-main);font-size:30px;line-height:1.1;font-weight:850;letter-spacing:-.8px; }
+.tools-head-sub { margin-top:5px;color:var(--text-muted);font-size:12px;font-weight:600; }
+.tools-list {
+  overflow:hidden;border:1px solid var(--glass-brd);border-radius:22px;
+  background:rgba(255,255,255,.48);
+  -webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 5px 20px rgba(30,45,70,.045);
+}
+.tools-row {
+  width:100%;min-height:78px;display:flex;align-items:center;gap:14px;
+  padding:13px 15px;border:0;border-bottom:1px solid var(--separator);
+  background:transparent;color:var(--text-main);text-align:left;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.tools-row:last-child { border-bottom:0; }
+.tools-row:active { background:var(--fill); }
+.tools-badge {
+  width:43px;height:43px;flex:0 0 43px;border-radius:14px;
+  display:grid;place-items:center;color:#fff !important;font-size:17px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 2px 6px rgba(0,0,0,.10);
+}
+.tools-badge i { color:#fff !important; }
+.badge-blue { background:linear-gradient(145deg,#438FE8,#246BC5); }
+.badge-green { background:linear-gradient(145deg,#35A66D,#218451); }
+.badge-amber { background:linear-gradient(145deg,#D5A04F,#B77A2D); }
+.tools-row-copy { flex:1;min-width:0;display:flex;flex-direction:column;gap:4px; }
+.tools-row-copy b { font-size:14px;font-weight:780;letter-spacing:-.2px;color:var(--text-main); }
+.tools-row-copy small { font-size:10.5px;line-height:1.35;color:var(--text-muted);font-weight:500; }
+.tools-chevron { color:var(--text-light);font-size:11px; }
+html:not([data-theme="light"]) .tools-list {
+  background:rgba(35,37,47,.48);border-color:rgba(255,255,255,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 5px 20px rgba(0,0,0,.10);
+}
+html:not([data-theme="light"]) .tools-row { border-bottom-color:rgba(255,255,255,.08); }
+html[data-theme="light"] .tools-list { background:rgba(255,255,255,.62); }
+
+
+/* Brand badge: retain brand color on the tile, use white glyph for contrast */
+.brand-card-icon,
+.brand-card-icon i,
+.brand-card-icon svg { color:#fff !important; }
+
+
+/* Tool subpages */
+.tool-page-head { padding:10px 4px 16px; }
+.tool-back { display:inline-flex;align-items:center;gap:8px;padding:7px 0 12px;border:0;background:transparent;color:var(--accent,#2685eb);font-size:14px;font-weight:750; }
+.tool-page-title { color:var(--text-main);font-size:25px;font-weight:850;letter-spacing:-.55px; }
+#kalkulatorView,#soView,#lemburView { padding-top:4px; }
+.lb-page-box { padding:0 0 calc(34px + env(safe-area-inset-bottom,0px)); }
+#lemburView .lb-page-box .shhead { font-size:15px;margin:0 3px 12px; }
+#lemburView .lb-page-box .lb-card {
+  margin:0 0 12px;padding:15px;border:1px solid var(--glass-brd);
+  border-radius:20px;background:var(--glass-bg,rgba(255,255,255,.72));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 4px 16px rgba(30,45,70,.045);
+}
+#lemburView .lb-page-box .lb-lab { margin-bottom:10px;font-size:10px;letter-spacing:.11em; }
+#lemburView .lb-page-box .lb-in,
+#lemburView .lb-page-box .lb-ta { min-height:44px;border-radius:13px;font-size:13px; }
+#lemburView .lb-page-box .lb-timerow { display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px; }
+#lemburView .lb-page-box .lb-toko,
+#lemburView .lb-page-box .lb-krow,
+#lemburView .lb-page-box .lb-addrow { display:flex;gap:8px;align-items:center; }
+#lemburView .lb-page-box .lb-toko > *,
+#lemburView .lb-page-box .lb-krow > * { min-width:0; }
+#lemburView .lb-page-box .lb-prim { position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:4;box-shadow:0 5px 18px rgba(20,35,60,.16); }
+#lemburView .lb-page-box .shclose { display:none; }
+.badge-slate { background:linear-gradient(145deg,#818A99,#626D7E); }
+html:not([data-theme="light"]) #lemburView .lb-page-box .lb-card {
+  background:rgba(35,37,47,.72);border-color:rgba(255,255,255,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 16px rgba(0,0,0,.12);
+}
+
+
+.ag-card {
+  background:var(--surface-raised, var(--card-bg, rgba(255,255,255,.92))) !important;
+  color:var(--text-main) !important;
+  border-color:var(--glass-brd) !important;
+  box-shadow:inset 0 1px 0 var(--glass-highlight,rgba(255,255,255,.75)),0 24px 70px rgba(15,23,42,.22) !important;
+}
+.ag-input { background:var(--input-bg,var(--fill)) !important; color:var(--text-main) !important; border-color:var(--glass-brd) !important; }
+.ag-input::placeholder { color:var(--text-muted) !important; opacity:.8; }
+.ag-cancel { background:var(--fill) !important; color:var(--text-main) !important; border:1px solid var(--glass-brd) !important; }
+.ag-sub { color:var(--text-muted) !important; }
+html[data-theme="light"] .ag-card {
+  background:rgba(255,255,255,.94) !important;
+  border:1px solid rgba(35,45,65,.12) !important;
+  color:#20232b !important;
+  box-shadow:0 24px 70px rgba(15,23,42,.18) !important;
+}
+html[data-theme="light"] .ag-input { background:#f2f3f6 !important;color:#20232b !important;border-color:#d9dce3 !important; }
+html[data-theme="light"] .ag-cancel { background:#eef0f4 !important;color:#20232b !important; }
+/* Admin password gate follows the active app theme explicitly. */
+html:not([data-theme="light"]) .ag-card {
+  background:rgba(25,26,34,.97) !important;
+  color:#F5F5F7 !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 70px rgba(0,0,0,.48) !important;
+}
+html:not([data-theme="light"]) .ag-card .ag-title { color:#F5F5F7 !important; }
+html:not([data-theme="light"]) .ag-card .ag-sub { color:rgba(235,235,245,.68) !important; }
+html:not([data-theme="light"]) .ag-card .ag-input {
+  background:rgba(255,255,255,.08) !important;
+  color:#F5F5F7 !important;
+  border-color:rgba(255,255,255,.18) !important;
+}
+html:not([data-theme="light"]) .ag-card .ag-input::placeholder { color:rgba(235,235,245,.42) !important; }
+html:not([data-theme="light"]) .ag-card .ag-cancel {
+  background:rgba(255,255,255,.10) !important;
+  color:#F5F5F7 !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+}
+
+
+/* Tools list: clean icon-only rows, no colored badge tiles */
+.tools-badge {
+  width:34px !important;height:34px !important;flex:0 0 34px !important;
+  border-radius:0 !important;background:transparent !important;
+  box-shadow:none !important;color:var(--text-muted) !important;
+  font-size:19px !important;
+}
+.tools-badge i { color:var(--text-muted) !important; }
+.tools-row { gap:14px !important; }
+.tools-row:active .tools-badge i { color:var(--accent,#2685eb) !important; }
+html:not([data-theme="light"]) .tools-badge i { color:rgba(255,255,255,.82) !important; }
+
+
+/* Form Lembur: progressive disclosure keeps the page short and calm */
+#lemburView .lb-compact-card { padding:0 !important; overflow:hidden; }
+#lemburView .lb-disclosure > summary {
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:54px;padding:13px 15px;font-size:13px;font-weight:800;color:var(--text-main);cursor:pointer;
+}
+#lemburView .lb-disclosure > summary::-webkit-details-marker { display:none; }
+#lemburView .lb-disclosure > summary:after { content:"＋";font-size:17px;color:var(--text-muted);font-weight:500; }
+#lemburView .lb-disclosure[open] > summary:after { content:"−"; }
+#lemburView .lb-disclosure > summary b { margin-left:auto;font-size:11px;color:var(--accent,#2685eb);font-weight:800;white-space:nowrap; }
+#lemburView .lb-disclosure-body { padding:0 14px 14px; }
+#lemburView .lb-disclosure-body .lb-chips { display:flex;flex-wrap:wrap;gap:7px;max-height:220px;overflow:auto;padding:2px 1px 8px; }
+#lemburView .lb-disclosure-body .lchip { font-size:11px;line-height:1.35;padding:9px 11px;border-radius:13px; }
+#lemburView .lb-disclosure-body #lbPList { max-height:300px;overflow:auto;overscroll-behavior:contain;border-top:1px solid var(--glass-brd);margin-top:8px; }
+#lemburView .lb-disclosure-body .lb-searchrow { position:sticky;top:0;z-index:2;background:var(--glass-bg);padding:6px 0; }
+#lemburView .lb-disclosure-body .lb-person,
+#lemburView .lb-disclosure-body .lb-prow { min-height:54px; }
+#lemburView .lb-page-box .lb-prim {
+  position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:8;
+  width:100%;min-height:52px;border-radius:17px;
+}
+#lemburView .lb-page-box { padding-bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
+
+
+/* ===== Home brand page: sticky stack persis pola Katalog =====
+   Tumpukan: search bar global (sticky top:0) -> pil sub/kategori (sticky,
+   frosted, seperti .kat-chips) -> header tabel 2 baris (sticky di bawah pil).
+   Offset memakai --home-kat-top / --home-kat-subh / --home-kat-chipsh yang
+   diukur dari TINGGI elemen oleh syncHomeKatSticky() — tidak bergantung
+   posisi scroll, jadi stabil di iOS Safari. */
+#detailView { overflow: visible !important; }
+/* #tableView mewarisi .table-wrapper (overflow:hidden) — overflow selain
+   visible pada ancestor membuat sticky header tabel tidak pernah bisa
+   menempel ke viewport. Tabel lama di dalamnya sudah tidak dipakai
+   (innerHTML ditimpa .kat-home-groups saat render). */
+#detailView #tableView { overflow: visible !important; }
+#detailView .kat-home-groups,
+#detailView .kat-home-groups .kat-group { overflow: visible !important; contain: none !important; }
+#detailView .kat-home-groups table.kat-tbl { border-collapse: separate !important; border-spacing: 0 !important; }
+#detailView .kat-home-groups { margin-top: 10px; }
+#detailView #productGrid { margin-top: 10px; }
+#detailView #subPillsContainer,
+#detailView #kategoriPillsContainer {
+  position: -webkit-sticky; position: sticky;
+  top: var(--home-kat-top, 92px);
+  z-index: 45;
+  margin: 0 -16px;
+  padding: 8px 16px;
+  background: var(--frost);
+  -webkit-backdrop-filter: saturate(1.9) blur(30px);
+  backdrop-filter: saturate(1.9) blur(30px);
+}
+#detailView #kategoriPillsContainer {
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-subh, 0px));
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
+  position: -webkit-sticky; position: sticky;
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-chipsh, 0px));
+  z-index: 30;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
+  position: -webkit-sticky; position: sticky;
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-chipsh, 0px) + 32px);
+  z-index: 30;
+}
+#detailView .kat-home-groups table.kat-tbl thead th { background-clip: padding-box; }
+</style></style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
 <body>
@@ -1779,8 +2184,6 @@ html[data-theme="light"] #soView .chip:active { color: var(--text-main); }
           </div>
         </div>
        <div class="head-btns">
-         <button class="icon-action-btn" id="headLbBtn" onclick="LBR.open()" aria-label="Form Lembur SO"><i class="fas fa-clock"></i></button>
-         <button class="icon-action-btn" id="headSoBtn" onclick="soHeaderTap()" aria-label="Buka Kalkulator SO"><i class="fas fa-cash-register"></i></button>
          <button class="icon-action-btn" id="headThemeBtn" onclick="toggleTheme()" aria-label="Ganti tema terang/gelap"><i class="fas fa-sun" id="themeIco"></i></button>
        </div>
     </header>
@@ -1881,7 +2284,6 @@ Kembali</button>
           </div>
           <div class="kat-hero-btns">
              <button class="icon-action-btn" id="katMenuBtn" aria-label="Daftar sheet"><i class="fas fa-list-ul"></i></button>
-             <button class="icon-action-btn" id="katAdminBtn" aria-label="Buka admin"><i class="fas fa-sliders"></i></button>
           </div>
        </div>
 
@@ -1891,6 +2293,37 @@ Kembali</button>
        <div class="kat-note" id="katNote">Ketuk sel PLU untuk menyalin &middot; ketuk deskripsi untuk menyalin PLU RAW-nya.</div>
     </section>
 
+
+
+
+    <section id="toolsView" style="display:none;">
+      <div class="tools-head">
+        <div class="tools-head-title">Tools</div>
+        <div class="tools-head-sub">Alat kerja</div>
+      </div>
+      <div class="tools-list" role="list">
+        <button class="tools-row" type="button" onclick="openTool('plu')">
+          <span class="tools-badge badge-blue"><i class="fas fa-calculator"></i></span>
+          <span class="tools-row-copy"><b>Kalkulator PC</b><small>Gramasi, biang kopi, plastik seal</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
+        </button>
+        <button class="tools-row" type="button" onclick="openTool('so')">
+          <span class="tools-badge badge-green"><i class="fas fa-clipboard-check"></i></span>
+          <span class="tools-row-copy"><b>Kalkulator SO</b><small>NKL, BA NL, dan SO Kas</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
+        </button>
+        <button class="tools-row" type="button" onclick="openTool('lembur')">
+          <span class="tools-badge badge-amber"><i class="fas fa-clock"></i></span>
+          <span class="tools-row-copy"><b>Form Lembur</b><small>Pengajuan dan laporan lembur</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
+        </button>
+        <button class="tools-row" type="button" onclick="openAdminGate()">
+          <span class="tools-badge badge-slate"><i class="fas fa-sliders"></i></span>
+          <span class="tools-row-copy"><b>Admin</b><small>Kelola katalog dan data</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
+        </button>
+      </div>
+    </section>
     <!-- ===== BOTTOM SHEET DAFTAR SHEET (KATALOG) ===== -->
     <div class="katsheet-backdrop" id="katsheetBackdrop"></div>
     <div class="katsheet" id="katsheetMenu" role="dialog" aria-label="Daftar sheet">
@@ -1902,6 +2335,10 @@ Kembali</button>
 
     <!-- ===== KALKULATOR VIEW (SOFT BLUE ISLAND) ===== -->
     <section id="kalkulatorView" style="display: none;">
+      <div class="tool-page-head">
+        <button class="tool-back" type="button" onclick="toolBack()"><i class="fas fa-arrow-left"></i><span>Kembali</span></button>
+        <div class="tool-page-title">Kalkulator PC</div>
+      </div>
       <div class="calc-shell">
 
 
@@ -2181,6 +2618,14 @@ Kembali</button>
       </div>
     </div>
 
+    <section id="lemburView" style="display:none;">
+      <div class="tool-page-head">
+        <button class="tool-back" type="button" onclick="toolBack()"><i class="fas fa-arrow-left"></i><span>Kembali</span></button>
+        <div class="tool-page-title">Form Lembur</div>
+      </div>
+      <div class="lb-page-box" id="lbPageBox"></div>
+    </section>
+
     <!-- ===== BOTTOM SHEET FORM LEMBUR SO ===== -->
     <div class="sheet-backdrop" id="lbSheetBackdrop">
       <div class="sheet lb-sheet" id="lbSheet">
@@ -2227,9 +2672,9 @@ Kembali</button>
     <i class="fas fa-layer-group dock-tab-icon"></i>
     <span>Katalog</span>
   </button>
-  <button class="dock-tab" id="dock-kalkulator" onclick="switchTab('kalkulator')">
-    <i class="fas fa-calculator dock-tab-icon"></i>
-    <span>Kalkulator</span>
+  <button class="dock-tab" id="dock-tools" onclick="switchTab('tools')">
+    <i class="fas fa-wrench dock-tab-icon"></i>
+    <span>Tools</span>
   </button>
 </nav>
 
@@ -2333,7 +2778,7 @@ var BRAND_NAMES = {
   var currentBrand = '';
   var currentSub = 'all';
   var currentKategori = 'all';
-  var detailViewMode = 'list';
+  var detailViewMode = 'table';
   var currentSheet = 'all';
   var katalogData = {};
 
@@ -2474,7 +2919,9 @@ function switchTab(tab) {
     $('detailView').style.display = 'none';
     $('katalogView').style.display = 'none';
     $('kalkulatorView').style.display = 'none';
-    $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+    if ($('lemburView')) $('lemburView').style.display = 'none';
+    if ($('toolsView')) $('toolsView').style.display = 'none';
+    $('soView').style.display = 'none';
     $('greetingWrapper').classList.add('hidden');
 
 
@@ -2490,17 +2937,26 @@ function switchTab(tab) {
         currentView = 'katalog';
         renderKatalog();
         syncKatTop();
+    } else if (tab === 'tools') {
+        $('toolsView').style.display = 'block';
+        $('globalSearchBar').style.display = 'none';
+        currentView = 'tools';
     } else if (tab === 'kalkulator') {
         $('kalkulatorView').style.display = 'block';
         $('globalSearchBar').style.display = 'none';
         currentView = 'kalkulator';
         calcRender();
+    } else if (tab === 'lembur') {
+        $('lemburView').style.display = 'block';
+        $('globalSearchBar').style.display = 'none';
+        currentView = 'lembur';
+        if (window.LBR && typeof LBR.renderPage === 'function') LBR.renderPage();
     } else if (tab === 'so') {
         $('soView').style.display = 'block';
         $('globalSearchBar').style.display = 'none';
         currentView = 'so';
         if (prevView !== 'so') {
-            soReturnView = (prevView === 'katalog' || prevView === 'kalkulator') ? prevView : 'home';
+            soReturnView = (prevView === 'tools' || prevView === 'katalog' || prevView === 'kalkulator') ? (prevView === 'kalkulator' ? 'tools' : prevView) : 'tools';
         }
         if (window.SO) SO.onShow();
     }
@@ -2508,25 +2964,36 @@ function switchTab(tab) {
 
     var tabs = document.querySelectorAll('.dock-tab');
     for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-    var activeTab = $('dock-' + tab);
+    var activeTab = $('dock-' + ((tab === 'kalkulator' || tab === 'so' || tab === 'lembur') ? 'tools' : tab));
     if (activeTab) activeTab.classList.add('active');
     var lensEl = $('dockLens');
-    if (lensEl) lensEl.style.opacity = (tab === 'so') ? '0' : '';
-    var headSoBtn = $('headSoBtn');
-    if (headSoBtn) headSoBtn.classList.toggle('active', tab === 'so');
+    if (lensEl) lensEl.style.opacity = '';
+    
     positionLens();
 
 
-    if (tab !== 'kalkulator' && tab !== 'so') {
+    if (tab !== 'kalkulator' && tab !== 'so' && tab !== 'lembur') {
         $('searchInput').value = '';
         $('searchClearBtn').style.display = 'none';
     }
     toggleAlphabetNav();
-    animateView(tab === 'kalkulator' ? $('kalkulatorView') : (tab === 'so' ? $('soView') : (tab === 'katalog' ? $('katalogView') : $('homeView'))));
+    var viewToAnimate = $('homeView');
+    if (tab === 'katalog') viewToAnimate = $('katalogView');
+    else if (tab === 'tools') viewToAnimate = $('toolsView');
+    else if (tab === 'kalkulator') viewToAnimate = $('kalkulatorView');
+    else if (tab === 'so') viewToAnimate = $('soView');
+    else if (tab === 'lembur') viewToAnimate = $('lemburView');
+    animateView(viewToAnimate);
     updateBarTitle();
 }
-function soBack() { switchTab(soReturnView || 'home'); }
+function soBack() { switchTab(soReturnView || 'tools'); }
+function toolBack() { switchTab('tools'); }
 function soHeaderTap() { if (currentView === 'so') { soBack(); } else { switchTab('so'); } }
+function openTool(tool) {
+  if (tool === 'plu') switchTab('kalkulator');
+  else if (tool === 'so') switchTab('so');
+  else if (tool === 'lembur') switchTab('lembur');
+}
 /* ================================================================
     KALKULATOR SO (SOFT BLUE ISLAND)
     ================================================================ */
@@ -3188,6 +3655,25 @@ function renderSidebarPlu(filter) {
   /* ================================================================
       DETAIL VIEW
       ================================================================ */
+
+function syncHomeKatSticky() {
+  /* Pola Katalog: offset sticky dihitung dari TINGGI elemen (stabil terhadap
+     scroll), bukan dari posisi elemen saat scroll — cara lama (rect.bottom +
+     listener scroll) membuat header tabel Home nyangkut di tengah layar iOS. */
+  var sb = $('globalSearchBar');
+  if (!sb) return;
+  var top = Math.round(sb.getBoundingClientRect().height) + 4;
+  document.documentElement.style.setProperty('--home-kat-top', top + 'px');
+  var sub = $('subPillsContainer'), kat = $('kategoriPillsContainer');
+  var subh = (sub && sub.style.display !== 'none') ? Math.round(sub.offsetHeight) : 0;
+  var katph = (kat && kat.style.display !== 'none') ? Math.round(kat.offsetHeight) : 0;
+  document.documentElement.style.setProperty('--home-kat-subh', subh + 'px');
+  document.documentElement.style.setProperty('--home-kat-chipsh', (subh + katph) + 'px');
+}
+if (!window._homeKatStickyBound) {
+  window.addEventListener('resize', function(){ requestAnimationFrame(syncHomeKatSticky); }, {passive:true});
+  window._homeKatStickyBound = true;
+}
 function setDetailView(mode) {
     detailViewMode = mode;
     $('viewListBtn').classList.toggle('active', mode === 'list');
@@ -3201,6 +3687,7 @@ function setDetailView(mode) {
         $('productGrid').classList.add('hidden');
         $('tableView').classList.remove('hidden');
     }
+    toggleAlphabetNav();
 }
 
 
@@ -3213,17 +3700,19 @@ function openBrandCategory(key) {
     $('detailView').style.display = 'block';
     $('katalogView').style.display = 'none';
     $('kalkulatorView').style.display = 'none';
-    $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+    $('soView').style.display = 'none';
     $('greetingWrapper').classList.add('hidden');
     $('globalSearchBar').style.display = '';
     $('detailHeadingTitle').innerText = BRAND_NAMES[key] || 'Daftar Produk';
 
 
-    detailViewMode = 'list';
-    $('viewListBtn').classList.add('active');
-    $('viewTableBtn').classList.remove('active');
-    $('productGrid').classList.remove('hidden');
-    $('tableView').classList.add('hidden');
+    // plukakang 4.2: Home -> brand langsung membuka tampilan Tabel.
+    detailViewMode = 'table';
+    if (typeof applyKatAccent === 'function') applyKatAccent(katNorm(key));
+    $('viewListBtn').classList.remove('active');
+    $('viewTableBtn').classList.add('active');
+    $('productGrid').classList.add('hidden');
+    $('tableView').classList.remove('hidden');
 
 
     renderSubPills();
@@ -3238,6 +3727,8 @@ function openBrandCategory(key) {
     toggleAlphabetNav();
     animateView($('detailView'));
     updateBarTitle();
+    try { window.scrollTo(0, 0); } catch (e) {}
+    requestAnimationFrame(syncHomeKatSticky);
 }
 
 
@@ -3287,6 +3778,7 @@ function renderSubPills() {
 
      if (!labelMap) {
          katContainer.style.display = 'none';
+         syncHomeKatSticky();
          return;
      }
 
@@ -3307,6 +3799,8 @@ function renderSubPills() {
         el.dataset.katId = key;
         katContainer.appendChild(el);
     });
+
+    syncHomeKatSticky();
 }
 
 
@@ -3383,7 +3877,17 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
 
       $('productGrid').innerHTML = '<div class="list-group">' + html + '</div>';
-      $('tableBody').innerHTML = tableHtml;
+
+      // Home brand detail reuses the exact grouped table component from Katalog.
+      // This keeps header, RAW/KONV columns, category bands, spacing and brand accent consistent.
+      // Home memakai SATU tabel untuk seluruh band kategori. Dengan satu THEAD,
+      // sticky header tidak berhenti di akhir tabel kategori pertama dan tidak
+      // muncul lagi di tengah daftar saat kategori berikutnya dimulai.
+      var homeBands = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
+          .reduce(function(allBands, group) { return allBands.concat(group); }, []);
+      var homeTableHtml = katRenderBlock(homeBands, currentBrand || 'all');
+      $('tableView').innerHTML = '<div class="kat-home-groups">' + homeTableHtml + '</div>';
+      requestAnimationFrame(syncHomeKatSticky);
 
 
       _renderCache.key = cacheKey;
@@ -3514,7 +4018,6 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
       if (c) switchSheet(c.dataset.sheet);
   });
   $('katMenuBtn').addEventListener('click', openKatSheet);
-  $('katAdminBtn').addEventListener('click', openAdminGate);
   $('katsheetBackdrop').addEventListener('click', closeKatSheet);
   $('katsheetRows').addEventListener('click', function(e) {
       var r = e.target.closest('.kshrow');
@@ -3683,11 +4186,12 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
         (style ? ' style="' + style + '"' : '') + '>' + escapeHtml(val) + '</td>';
   }
 
-  function katRenderBlock(bands) {
+  function katRenderBlock(bands, sheetKey) {
+      sheetKey = sheetKey || currentSheet;
       var rows = '';
       bands.forEach(function(b) {
           var a = katAcc(b.accent);
-          var bandStyle = (currentSheet === 'all')
+          var bandStyle = (sheetKey === 'all')
               ? 'background:' + a.bg(0.22) + ';color:' + a.tx
               : 'background:var(--kacc-bandbg);color:var(--kacc-bandtx)';
           rows += '<tr><td class="kat-band" colspan="3" style="' + bandStyle + '">' +
@@ -3907,7 +4411,7 @@ var handleSearch = debounce(function() {
           $('detailView').style.display = 'block';
           $('katalogView').style.display = 'none';
           $('kalkulatorView').style.display = 'none';
-          $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+          $('soView').style.display = 'none';
           $('greetingWrapper').classList.add('hidden');
           $('globalSearchBar').style.display = '';
           $('detailHeadingTitle').innerText = 'Hasil Pencarian';
@@ -3919,7 +4423,7 @@ var handleSearch = debounce(function() {
           $('detailView').style.display = 'none';
           $('katalogView').style.display = 'none';
           $('kalkulatorView').style.display = 'none';
-          $('soView').style.display = 'none'; var _hso = $('headSoBtn'); if (_hso) _hso.classList.remove('active');
+          $('soView').style.display = 'none';
           $('greetingWrapper').classList.remove('hidden');
           currentView = 'home';
       }
@@ -3996,7 +4500,13 @@ now.getFullYear();
 
 
   function getSapaanData() {
-      var jam = new Date().getHours();
+      var now = new Date();
+      // Hari libur nasional 2026 sesuai SKB 3 Menteri; cuti bersama tidak termasuk.
+      var holidays2026 = new Set(['2026-01-01','2026-01-16','2026-02-17','2026-03-19','2026-03-21','2026-03-22','2026-04-03','2026-04-05','2026-05-01','2026-05-14','2026-05-27','2026-05-31','2026-06-01','2026-06-16','2026-08-17','2026-08-25','2026-12-25']);
+      var dateJakarta = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
+      var weekdayJakarta = new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',weekday:'short'}).format(now);
+      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'', text:'🫵🏽 gadag? tanggal bereum? 😂' };
+      var jam = Number(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',hour:'2-digit',hourCycle:'h23'}).format(now));
       if (jam >= 0 && jam < 5) return { icon: '  🌙', text: 'rek naon ente?' };
       if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
       if (jam >= 11 && jam < 15) return { icon: '🌤️', text: 'aduh, kurang lincah wa!' };
@@ -4102,7 +4612,7 @@ function renderAlphabetNav() {
   function toggleAlphabetNav() {
       var nav = $('alphabetNav');
       if (!nav) return;
-      if (currentView === 'detail' && activeAlphabet.length > 0) {
+      if (currentView === 'detail' && detailViewMode === 'list' && activeAlphabet.length > 0) {
           nav.style.display = 'flex';
       } else {
           nav.style.display = 'none';
@@ -4595,8 +5105,18 @@ function initKcAlpha() {
   function rpLine(lab, sv) { var s = (sv === '' || sv == null) ? '' : fmt(sv); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
   function rpLineN(lab, n) { var s = (n == null) ? '' : fmtN(n); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
   function rpLineSN(lab, n) { var s = (n == null) ? '' : fmtS(n); return (lab + ': Rp ' + s).replace(/\s+$/, ''); }
-  function signQty(v) { v = String(v == null ? '' : v); if (v === '') { return ''; } var m = v.charAt(0) === '-', r2 = m ? v.substring(1) : v; return (m ? '-' : '+') + fmt(r2); }
-  function qrLine(lab, qty, rp) { var q = (qty === '') ? '' : fmtN(qty), r = (rp === '') ? '' : fmt(rp); return lab + ': ' + (q !== '' ? q + ' /' : '/') + ' Rp' + (r !== '' ? ' ' + r : ''); }
+  function signQty(v) {
+    v = String(v == null ? '' : v).trim();
+    if (v === '') { return ''; }
+    var negative = v.charAt(0) === '-';
+    // Normalisasi tanda agar input '+15' tidak berubah menjadi '++15'.
+    var digits = v.replace(/^[+-]+/, '');
+    return (negative ? '-' : '+') + fmt(digits);
+  }
+  function qrLine(lab, qty, rp) {
+    var q = (qty === '') ? '' : String(qty), r = (rp === '') ? '' : fmt(rp);
+    return lab + ': ' + (q !== '' ? q + ' /' : '/') + ' Rp' + (r !== '' ? ' ' + r : '');
+  }
   function ketLine(L, rows) {
     var items = [], i;
     for (i = 0; i < rows.length; i++) { var r = rows[i];
@@ -4626,11 +5146,13 @@ function initKcAlpha() {
       blockNKL(L, nkK, nlK);
     }
     if (c.pcAny) { L.push(''); L.push('NKL Point Coffee'); blockNKL(L, c.pn, c.pl); }
-    L.push('');
-    L.push('NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee');
-    L.push('NKL BIC: ' + fmtS(c.nkF + c.nlF + (c.pn + c.pl)));
-    L.push('NKL PC: ' + fmtS(c.pn + c.pl));
-    L.push('NKL: ' + fmtS(c.nkF + c.nlF));
+    if (c.pcAny) {
+      L.push('');
+      L.push('NKL Nett di Luar Item Kontainer + Krat Roti - NKL Point Coffee');
+      L.push('NKL BIC: ' + fmtS(c.nkF + c.nlF + (c.pn + c.pl)));
+      L.push('NKL PC: ' + fmtS(c.pn + c.pl));
+      L.push('NKL: ' + fmtS(c.nkF + c.nlF));
+    }
     L.push('');
     L.push('NKL SOBIC');
     L.push('NK: ' + fmtS(c.nkF));
@@ -4997,10 +5519,12 @@ function initKcAlpha() {
 
     function isOpen() { var b = el('lbSheetBackdrop'); return !!(b && b.classList.contains('open')); }
     function renderPrev() { var e = el('lbPrev'); if (e) { e.textContent = buildText(); } }
-    function renderSheet() { el('lbBox').innerHTML = viewHTML(); renderPrev(); }
+    function renderSheet() { var target = el('lbPageBox') || el('lbBox'); if (target) target.innerHTML = viewHTML(); renderPrev(); }
+    function renderPage() { renderSheet(); }
+
     function renderSheetKeep() { var b = el('lbBox'), y = b ? b.scrollTop : 0; renderSheet(); b = el('lbBox'); if (b) { b.scrollTop = y; } }
-    function openLb() { renderSheet(); el('lbSheetBackdrop').classList.add('open'); }
-    function closeSheet() { el('lbSheetBackdrop').classList.remove('open'); }
+    function openLb() { if (typeof switchTab === 'function') switchTab('lembur'); else { renderSheet(); el('lbSheetBackdrop').classList.add('open'); } }
+    function closeSheet() { if (typeof switchTab === 'function' && currentView === 'lembur') switchTab('tools'); else el('lbSheetBackdrop').classList.remove('open'); }
 
     /* ---- hitungan & teks ---- */
     function tglLong(s) { var p = String(s || '').split('-'); if (p.length !== 3) { return String(s || ''); } var dt = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); if (isNaN(dt.getTime())) { return String(s); } return HARI[dt.getDay()] + ', ' + pad2(dt.getDate()) + ' ' + BLN[dt.getMonth()] + ' ' + dt.getFullYear(); }
@@ -5284,14 +5808,14 @@ function initKcAlpha() {
       } else { h += '<div class="lb-dur off">Durasi otomatis saat jam mulai &amp; selesai terisi</div>'; }
       h += '</div>';
       h += '<div class="lb-card"><div class="lb-lab">Data Unit Kerja</div>' + lbToko('reg', 'Toko Reguler') + lbToko('eks', 'Toko Ekstra') + '</div>';
-      h += '<div class="lb-card"><div class="lb-lab">Kendala Operasional</div><div class="lb-chips">';
+      h += '<div class="lb-card lb-compact-card"><details class="lb-disclosure"><summary><span>Kendala Operasional</span><b>' + d.kendala.length + ' dipilih</b></summary><div class="lb-disclosure-body"><div class="lb-chips">';
       for (i = 0; i < DEFK.length; i++) { var on = d.kendala.indexOf(DEFK[i]) > -1; h += '<button type="button" class="lchip' + (on ? ' on' : '') + '" onclick="LBR.kChip(' + i + ')">' + esc(DEFK[i]) + '</button>'; }
       h += '<button type="button" class="lchip add" onclick="LBR.kCustom()">+ Tulis sendiri</button></div>';
       if (d.kendala.length) {
         for (i = 0; i < d.kendala.length; i++) { h += '<div class="lb-krow"><input class="lb-in" data-lb="kd" data-i="' + i + '" value="' + esc(d.kendala[i]) + '" placeholder="Kendala ' + (i + 1) + '" autocomplete="off"><button class="lb-x" type="button" onclick="LBR.kDel(' + i + ')">✕</button></div>'; }
       } else { h += '<div class="lb-hint">Belum ada kendala - ketuk chip di atas untuk menambah.</div>'; }
-      h += '</div>';
-      h += '<div class="lb-card"><div class="lb-lab">Daftar Personel<span class="lb-cnt" id="lbCnt">' + selected().length + '/' + D.roster.length + ' dipilih</span></div>';
+      h += '</div></div></details></div>';
+      h += '<div class="lb-card lb-compact-card"><details class="lb-disclosure"><summary><span>Daftar Personel</span><b id="lbCnt">' + selected().length + '/' + D.roster.length + ' dipilih</b></summary><div class="lb-disclosure-body">';
       if (D.roster.length) {
         h += '<div class="lb-searchrow"><input class="lb-in" data-lb="q" value="' + esc(q) + '" placeholder="Cari NIK / nama..." autocomplete="off"><button class="lb-mini" type="button" onclick="LBR.pAll()">Semua</button><button class="lb-mini" type="button" onclick="LBR.pNone()">Kosongkan</button></div><div id="lbPList">' + pListHTML() + '</div>';
       }
@@ -5300,7 +5824,7 @@ function initKcAlpha() {
       }
       if (D.roster.length) { h += '<button class="lb-link" type="button" onclick="LBR.impToggle()">' + (impOpen ? 'Tutup impor' : 'Impor / perbarui daftar personel') + '</button>'; }
       h += '<div class="lb-addrow"><input class="lb-in" data-lb="anik" inputmode="numeric" maxlength="14" placeholder="NIK" autocomplete="off" spellcheck="false"><input class="lb-in caps" data-lb="anama" placeholder="NAMA" autocomplete="off" spellcheck="false"><button class="lb-mini acc" type="button" onclick="LBR.pAdd()">+ Tambah</button></div>';
-      h += '</div>';
+      h += '</div></details></div>';
       h += '<div class="lb-card"><div class="lb-lab">Format Salinan</div><div class="lb-tglrow">' + sw('num', 'Nomor urut') + sw('dur', 'Durasi jam') + sw('tot', 'Total lembur') + '</div></div>';
       h += '<div class="lb-card"><div class="lb-lab">Pratinjau Salinan</div><pre class="lb-prev" id="lbPrev"></pre></div>';
       h += '<button class="lb-prim" type="button" onclick="LBR.copy()"><i class="fas fa-clipboard"></i>Salin Form Lembur</button>';
@@ -5330,7 +5854,7 @@ function initKcAlpha() {
     }
 
     window.LBR = {
-      init: init, open: openLb, close: closeSheet,
+      init: init, open: openLb, close: closeSheet, renderPage: renderPage,
       setDate: setDate, setTime: setTime,
       kChip: kChip, kCustom: kCustom, kDel: kDel, tgl: tgl,
       pToggle: pToggle, pAll: pAll, pNone: pNone, pAdd: pAdd, pDel: pDel,
@@ -5344,10 +5868,14 @@ function initKcAlpha() {
     };
   })();
 
+
+
+
   /* ================================================================
       INIT
       ================================================================ */
   renderBrandGrid();
+  syncHomeKatSticky();
   positionLens(true);
   clockLoop();
   toggleSapaanCountdown();
