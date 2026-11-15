@@ -2087,6 +2087,36 @@ html[data-theme="light"] .tools-list { background:rgba(255,255,255,.62); }
 .brand-card-icon i,
 .brand-card-icon svg { color:#fff !important; }
 
+
+/* Tool subpages */
+.tool-page-head { padding:10px 4px 16px; }
+.tool-back { display:inline-flex;align-items:center;gap:8px;padding:7px 0 12px;border:0;background:transparent;color:var(--accent,#2685eb);font-size:14px;font-weight:750; }
+.tool-page-title { color:var(--text-main);font-size:25px;font-weight:850;letter-spacing:-.55px; }
+#kalkulatorView,#soView,#lemburView { padding-top:4px; }
+.lb-page-box { padding:0 0 calc(34px + env(safe-area-inset-bottom,0px)); }
+#lemburView .lb-page-box .shhead { font-size:15px;margin:0 3px 12px; }
+#lemburView .lb-page-box .lb-card {
+  margin:0 0 12px;padding:15px;border:1px solid var(--glass-brd);
+  border-radius:20px;background:var(--glass-bg,rgba(255,255,255,.72));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 4px 16px rgba(30,45,70,.045);
+}
+#lemburView .lb-page-box .lb-lab { margin-bottom:10px;font-size:10px;letter-spacing:.11em; }
+#lemburView .lb-page-box .lb-in,
+#lemburView .lb-page-box .lb-ta { min-height:44px;border-radius:13px;font-size:13px; }
+#lemburView .lb-page-box .lb-timerow { display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px; }
+#lemburView .lb-page-box .lb-toko,
+#lemburView .lb-page-box .lb-krow,
+#lemburView .lb-page-box .lb-addrow { display:flex;gap:8px;align-items:center; }
+#lemburView .lb-page-box .lb-toko > *,
+#lemburView .lb-page-box .lb-krow > * { min-width:0; }
+#lemburView .lb-page-box .lb-prim { position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:4;box-shadow:0 5px 18px rgba(20,35,60,.16); }
+#lemburView .lb-page-box .shclose { display:none; }
+.badge-slate { background:linear-gradient(145deg,#818A99,#626D7E); }
+html:not([data-theme="light"]) #lemburView .lb-page-box .lb-card {
+  background:rgba(35,37,47,.72);border-color:rgba(255,255,255,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 16px rgba(0,0,0,.12);
+}
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -2209,7 +2239,6 @@ Kembali</button>
           </div>
           <div class="kat-hero-btns">
              <button class="icon-action-btn" id="katMenuBtn" aria-label="Daftar sheet"><i class="fas fa-list-ul"></i></button>
-             <button class="icon-action-btn" id="katAdminBtn" aria-label="Buka admin"><i class="fas fa-sliders"></i></button>
           </div>
        </div>
 
@@ -2243,6 +2272,11 @@ Kembali</button>
           <span class="tools-row-copy"><b>Form Lembur</b><small>Pengajuan dan laporan lembur</small></span>
           <i class="fas fa-chevron-right tools-chevron"></i>
         </button>
+        <button class="tools-row" type="button" onclick="openAdminGate()">
+          <span class="tools-badge badge-slate"><i class="fas fa-sliders"></i></span>
+          <span class="tools-row-copy"><b>Admin</b><small>Kelola katalog dan data</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
+        </button>
       </div>
     </section>
     <!-- ===== BOTTOM SHEET DAFTAR SHEET (KATALOG) ===== -->
@@ -2256,6 +2290,10 @@ Kembali</button>
 
     <!-- ===== KALKULATOR VIEW (SOFT BLUE ISLAND) ===== -->
     <section id="kalkulatorView" style="display: none;">
+      <div class="tool-page-head">
+        <button class="tool-back" type="button" onclick="toolBack()"><i class="fas fa-arrow-left"></i><span>Kembali</span></button>
+        <div class="tool-page-title">Kalkulator PC</div>
+      </div>
       <div class="calc-shell">
 
 
@@ -2534,6 +2572,14 @@ Kembali</button>
          <div class="so-sheet-box" id="soSheetBox"></div>
       </div>
     </div>
+
+    <section id="lemburView" style="display:none;">
+      <div class="tool-page-head">
+        <button class="tool-back" type="button" onclick="toolBack()"><i class="fas fa-arrow-left"></i><span>Kembali</span></button>
+        <div class="tool-page-title">Form Lembur</div>
+      </div>
+      <div class="lb-page-box" id="lbPageBox"></div>
+    </section>
 
     <!-- ===== BOTTOM SHEET FORM LEMBUR SO ===== -->
     <div class="sheet-backdrop" id="lbSheetBackdrop">
@@ -2828,6 +2874,7 @@ function switchTab(tab) {
     $('detailView').style.display = 'none';
     $('katalogView').style.display = 'none';
     $('kalkulatorView').style.display = 'none';
+    if ($('lemburView')) $('lemburView').style.display = 'none';
     if ($('toolsView')) $('toolsView').style.display = 'none';
     $('soView').style.display = 'none';
     $('greetingWrapper').classList.add('hidden');
@@ -2854,12 +2901,17 @@ function switchTab(tab) {
         $('globalSearchBar').style.display = 'none';
         currentView = 'kalkulator';
         calcRender();
+    } else if (tab === 'lembur') {
+        $('lemburView').style.display = 'block';
+        $('globalSearchBar').style.display = 'none';
+        currentView = 'lembur';
+        if (window.LBR && typeof LBR.renderPage === 'function') LBR.renderPage();
     } else if (tab === 'so') {
         $('soView').style.display = 'block';
         $('globalSearchBar').style.display = 'none';
         currentView = 'so';
         if (prevView !== 'so') {
-            soReturnView = (prevView === 'katalog' || prevView === 'kalkulator') ? prevView : 'home';
+            soReturnView = (prevView === 'tools' || prevView === 'katalog' || prevView === 'kalkulator') ? (prevView === 'kalkulator' ? 'tools' : prevView) : 'tools';
         }
         if (window.SO) SO.onShow();
     }
@@ -2867,7 +2919,7 @@ function switchTab(tab) {
 
     var tabs = document.querySelectorAll('.dock-tab');
     for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-    var activeTab = $('dock-' + ((tab === 'kalkulator' || tab === 'so') ? 'tools' : tab));
+    var activeTab = $('dock-' + ((tab === 'kalkulator' || tab === 'so' || tab === 'lembur') ? 'tools' : tab));
     if (activeTab) activeTab.classList.add('active');
     var lensEl = $('dockLens');
     if (lensEl) lensEl.style.opacity = '';
@@ -2875,7 +2927,7 @@ function switchTab(tab) {
     positionLens();
 
 
-    if (tab !== 'kalkulator' && tab !== 'so') {
+    if (tab !== 'kalkulator' && tab !== 'so' && tab !== 'lembur') {
         $('searchInput').value = '';
         $('searchClearBtn').style.display = 'none';
     }
@@ -2885,15 +2937,17 @@ function switchTab(tab) {
     else if (tab === 'tools') viewToAnimate = $('toolsView');
     else if (tab === 'kalkulator') viewToAnimate = $('kalkulatorView');
     else if (tab === 'so') viewToAnimate = $('soView');
+    else if (tab === 'lembur') viewToAnimate = $('lemburView');
     animateView(viewToAnimate);
     updateBarTitle();
 }
-function soBack() { switchTab(soReturnView || 'home'); }
+function soBack() { switchTab(soReturnView || 'tools'); }
+function toolBack() { switchTab('tools'); }
 function soHeaderTap() { if (currentView === 'so') { soBack(); } else { switchTab('so'); } }
 function openTool(tool) {
   if (tool === 'plu') switchTab('kalkulator');
   else if (tool === 'so') switchTab('so');
-  else if (tool === 'lembur' && window.LBR && typeof LBR.open === 'function') LBR.open();
+  else if (tool === 'lembur') switchTab('lembur');
 }
 /* ================================================================
     KALKULATOR SO (SOFT BLUE ISLAND)
@@ -3912,7 +3966,6 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
       if (c) switchSheet(c.dataset.sheet);
   });
   $('katMenuBtn').addEventListener('click', openKatSheet);
-  $('katAdminBtn').addEventListener('click', openAdminGate);
   $('katsheetBackdrop').addEventListener('click', closeKatSheet);
   $('katsheetRows').addEventListener('click', function(e) {
       var r = e.target.closest('.kshrow');
@@ -5414,10 +5467,12 @@ function initKcAlpha() {
 
     function isOpen() { var b = el('lbSheetBackdrop'); return !!(b && b.classList.contains('open')); }
     function renderPrev() { var e = el('lbPrev'); if (e) { e.textContent = buildText(); } }
-    function renderSheet() { el('lbBox').innerHTML = viewHTML(); renderPrev(); }
+    function renderSheet() { var target = el('lbPageBox') || el('lbBox'); if (target) target.innerHTML = viewHTML(); renderPrev(); }
+    function renderPage() { renderSheet(); }
+
     function renderSheetKeep() { var b = el('lbBox'), y = b ? b.scrollTop : 0; renderSheet(); b = el('lbBox'); if (b) { b.scrollTop = y; } }
-    function openLb() { renderSheet(); el('lbSheetBackdrop').classList.add('open'); }
-    function closeSheet() { el('lbSheetBackdrop').classList.remove('open'); }
+    function openLb() { if (typeof switchTab === 'function') switchTab('lembur'); else { renderSheet(); el('lbSheetBackdrop').classList.add('open'); } }
+    function closeSheet() { if (typeof switchTab === 'function' && currentView === 'lembur') switchTab('tools'); else el('lbSheetBackdrop').classList.remove('open'); }
 
     /* ---- hitungan & teks ---- */
     function tglLong(s) { var p = String(s || '').split('-'); if (p.length !== 3) { return String(s || ''); } var dt = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); if (isNaN(dt.getTime())) { return String(s); } return HARI[dt.getDay()] + ', ' + pad2(dt.getDate()) + ' ' + BLN[dt.getMonth()] + ' ' + dt.getFullYear(); }
@@ -5747,7 +5802,7 @@ function initKcAlpha() {
     }
 
     window.LBR = {
-      init: init, open: openLb, close: closeSheet,
+      init: init, open: openLb, close: closeSheet, renderPage: renderPage,
       setDate: setDate, setTime: setTime,
       kChip: kChip, kCustom: kCustom, kDel: kDel, tgl: tgl,
       pToggle: pToggle, pAll: pAll, pNone: pNone, pAdd: pAdd, pDel: pDel,
