@@ -2015,6 +2015,78 @@ html:not([data-theme="light"]) .tool-card {
 }
 html:not([data-theme="light"]) .tools-footnote { background:rgba(38,41,52,.40);border-color:rgba(255,255,255,.08); }
 
+
+/* Home brand table: mirror Catalog sticky PLU/Description header without
+   stacking several sticky translucent bars (iOS Safari overlap fix). */
+#detailView .section-bar,
+#detailView .toolbar-row,
+#detailView #subPillsContainer {
+  position: relative !important;
+  top: auto !important;
+  z-index: auto !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
+  position: sticky !important;
+  top: var(--home-kat-header-top, 64px) !important;
+  z-index: 30 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
+  position: sticky !important;
+  top: calc(var(--home-kat-header-top, 64px) + 32px) !important;
+  z-index: 30 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead th {
+  background-clip: padding-box;
+}
+
+
+/* Tools — compact, native-feeling list inspired by music-library/settings patterns */
+#toolsView { padding: 8px 2px 28px; }
+.tools-head { padding: 12px 5px 22px; }
+.tools-head-title { color:var(--text-main);font-size:30px;line-height:1.1;font-weight:850;letter-spacing:-.8px; }
+.tools-head-sub { margin-top:5px;color:var(--text-muted);font-size:12px;font-weight:600; }
+.tools-list {
+  overflow:hidden;border:1px solid var(--glass-brd);border-radius:22px;
+  background:rgba(255,255,255,.48);
+  -webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 5px 20px rgba(30,45,70,.045);
+}
+.tools-row {
+  width:100%;min-height:78px;display:flex;align-items:center;gap:14px;
+  padding:13px 15px;border:0;border-bottom:1px solid var(--separator);
+  background:transparent;color:var(--text-main);text-align:left;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.tools-row:last-child { border-bottom:0; }
+.tools-row:active { background:var(--fill); }
+.tools-badge {
+  width:43px;height:43px;flex:0 0 43px;border-radius:14px;
+  display:grid;place-items:center;color:#fff !important;font-size:17px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 2px 6px rgba(0,0,0,.10);
+}
+.tools-badge i { color:#fff !important; }
+.badge-blue { background:linear-gradient(145deg,#438FE8,#246BC5); }
+.badge-green { background:linear-gradient(145deg,#35A66D,#218451); }
+.badge-amber { background:linear-gradient(145deg,#D5A04F,#B77A2D); }
+.tools-row-copy { flex:1;min-width:0;display:flex;flex-direction:column;gap:4px; }
+.tools-row-copy b { font-size:14px;font-weight:780;letter-spacing:-.2px;color:var(--text-main); }
+.tools-row-copy small { font-size:10.5px;line-height:1.35;color:var(--text-muted);font-weight:500; }
+.tools-chevron { color:var(--text-light);font-size:11px; }
+html:not([data-theme="light"]) .tools-list {
+  background:rgba(35,37,47,.48);border-color:rgba(255,255,255,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 5px 20px rgba(0,0,0,.10);
+}
+html:not([data-theme="light"]) .tools-row { border-bottom-color:rgba(255,255,255,.08); }
+html[data-theme="light"] .tools-list { background:rgba(255,255,255,.62); }
+
+
+/* Brand badge: retain brand color on the tile, use white glyph for contrast */
+.brand-card-icon,
+.brand-card-icon i,
+.brand-card-icon svg { color:#fff !important; }
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -2149,28 +2221,29 @@ Kembali</button>
 
 
 
+
     <section id="toolsView" style="display:none;">
-      <div class="tools-hero">
-        <div class="tools-eyebrow">PLUKAKANG WORKSPACE</div>
-        <h2>Tools</h2>
-        <p>Alat bantu untuk kebutuhan operasional harian.</p>
+      <div class="tools-head">
+        <div class="tools-head-title">Tools</div>
+        <div class="tools-head-sub">Alat kerja</div>
       </div>
-      <div class="tools-section-label">ALAT OPERASIONAL</div>
-      <div class="tools-grid">
-        <button class="tool-card tool-card-blue" type="button" onclick="openTool('plu')">
-          <span class="tool-icon"><i class="fas fa-calculator"></i></span>
-          <span class="tool-copy"><b>Kalkulator PLU</b><small>Hitung gramasi, biang kopi, dan plastik seal</small><em>Buka kalkulator <i class="fas fa-arrow-right"></i></em></span>
+      <div class="tools-list" role="list">
+        <button class="tools-row" type="button" onclick="openTool('plu')">
+          <span class="tools-badge badge-blue"><i class="fas fa-calculator"></i></span>
+          <span class="tools-row-copy"><b>Kalkulator PC</b><small>Gramasi, biang kopi, plastik seal</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
         </button>
-        <button class="tool-card tool-card-green" type="button" onclick="openTool('so')">
-          <span class="tool-icon"><i class="fas fa-clipboard-check"></i></span>
-          <span class="tool-copy"><b>Kalkulator SO</b><small>Hitung NKL, BA NL, dan SO Kas</small><em>Buka kalkulator <i class="fas fa-arrow-right"></i></em></span>
+        <button class="tools-row" type="button" onclick="openTool('so')">
+          <span class="tools-badge badge-green"><i class="fas fa-clipboard-check"></i></span>
+          <span class="tools-row-copy"><b>Kalkulator SO</b><small>NKL, BA NL, dan SO Kas</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
         </button>
-        <button class="tool-card tool-card-amber" type="button" onclick="openTool('lembur')">
-          <span class="tool-icon"><i class="fas fa-clock"></i></span>
-          <span class="tool-copy"><b>Form Lembur</b><small>Buat dan salin laporan lembur</small><em>Buka form <i class="fas fa-arrow-right"></i></em></span>
+        <button class="tools-row" type="button" onclick="openTool('lembur')">
+          <span class="tools-badge badge-amber"><i class="fas fa-clock"></i></span>
+          <span class="tools-row-copy"><b>Form Lembur</b><small>Pengajuan dan laporan lembur</small></span>
+          <i class="fas fa-chevron-right tools-chevron"></i>
         </button>
       </div>
-      <div class="tools-footnote"><i class="fas fa-lightbulb"></i><span>Pilih alat yang ingin digunakan. Data katalog dan kalkulator tetap terpisah.</span></div>
     </section>
     <!-- ===== BOTTOM SHEET DAFTAR SHEET (KATALOG) ===== -->
     <div class="katsheet-backdrop" id="katsheetBackdrop"></div>
@@ -3483,6 +3556,27 @@ function renderSidebarPlu(filter) {
   /* ================================================================
       DETAIL VIEW
       ================================================================ */
+
+function syncHomeKatHeaderTop() {
+  var detail = document.getElementById('detailView');
+  if (!detail || !detail.classList.contains('active') && detail.style.display === 'none') return;
+  var search = document.getElementById('globalSearchBar');
+  var top = 64;
+  if (search) {
+    var r = search.getBoundingClientRect();
+    var style = window.getComputedStyle(search);
+    if (style.position === 'sticky' || style.position === 'fixed') {
+      top = Math.max(0, Math.round(r.bottom));
+    }
+  }
+  detail.style.setProperty('--home-kat-header-top', top + 'px');
+}
+
+if (!window._homeKatStickyBound) {
+  window.addEventListener('resize', function(){ requestAnimationFrame(syncHomeKatHeaderTop); }, {passive:true});
+  window.addEventListener('scroll', function(){ requestAnimationFrame(syncHomeKatHeaderTop); }, {passive:true});
+  window._homeKatStickyBound = true;
+}
 function setDetailView(mode) {
     detailViewMode = mode;
     $('viewListBtn').classList.toggle('active', mode === 'list');
