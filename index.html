@@ -2117,6 +2117,101 @@ html:not([data-theme="light"]) #lemburView .lb-page-box .lb-card {
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 16px rgba(0,0,0,.12);
 }
 
+
+/* ===== 4.3 FIX: Home table sticky stack =====
+   The previous 4.2 override forced the table header to static, so it could never stick.
+   Keep the search, section title, controls, chips and two-row table header in one stack. */
+#detailView { overflow: visible !important; }
+#detailView .kat-home-groups,
+#detailView .kat-home-groups .kat-group { overflow: visible !important; contain: none !important; }
+#detailView .section-bar {
+  position: sticky !important;
+  top: var(--home-search-h, 66px) !important;
+  z-index: 62 !important;
+  margin-top: 0;
+}
+#detailView .toolbar-row {
+  position: sticky !important;
+  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px)) !important;
+  z-index: 61 !important;
+}
+#detailView #subPillsContainer {
+  position: sticky !important;
+  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px)) !important;
+  z-index: 60 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
+  position: sticky !important;
+  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px)) !important;
+  z-index: 59 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
+  position: sticky !important;
+  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px) + 32px) !important;
+  z-index: 59 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead { position: relative; }
+#detailView .kat-home-groups table.kat-tbl { border-collapse: separate; border-spacing: 0; }
+
+/* Measure real rendered heights instead of relying on hard-coded iPhone dimensions. */
+
+
+.ag-card {
+  background:var(--surface-raised, var(--card-bg, rgba(255,255,255,.92))) !important;
+  color:var(--text-main) !important;
+  border-color:var(--glass-brd) !important;
+  box-shadow:inset 0 1px 0 var(--glass-highlight,rgba(255,255,255,.75)),0 24px 70px rgba(15,23,42,.22) !important;
+}
+.ag-input { background:var(--input-bg,var(--fill)) !important; color:var(--text-main) !important; border-color:var(--glass-brd) !important; }
+.ag-input::placeholder { color:var(--text-muted) !important; opacity:.8; }
+.ag-cancel { background:var(--fill) !important; color:var(--text-main) !important; border:1px solid var(--glass-brd) !important; }
+.ag-sub { color:var(--text-muted) !important; }
+html[data-theme="light"] .ag-card {
+  background:rgba(255,255,255,.94) !important;
+  border:1px solid rgba(35,45,65,.12) !important;
+  color:#20232b !important;
+  box-shadow:0 24px 70px rgba(15,23,42,.18) !important;
+}
+html[data-theme="light"] .ag-input { background:#f2f3f6 !important;color:#20232b !important;border-color:#d9dce3 !important; }
+html[data-theme="light"] .ag-cancel { background:#eef0f4 !important;color:#20232b !important; }
+
+
+/* Tools list: clean icon-only rows, no colored badge tiles */
+.tools-badge {
+  width:34px !important;height:34px !important;flex:0 0 34px !important;
+  border-radius:0 !important;background:transparent !important;
+  box-shadow:none !important;color:var(--text-muted) !important;
+  font-size:19px !important;
+}
+.tools-badge i { color:var(--text-muted) !important; }
+.tools-row { gap:14px !important; }
+.tools-row:active .tools-badge i { color:var(--accent,#2685eb) !important; }
+html:not([data-theme="light"]) .tools-badge i { color:rgba(255,255,255,.82) !important; }
+
+
+/* Form Lembur: progressive disclosure keeps the page short and calm */
+#lemburView .lb-compact-card { padding:0 !important; overflow:hidden; }
+#lemburView .lb-disclosure > summary {
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:54px;padding:13px 15px;font-size:13px;font-weight:800;color:var(--text-main);cursor:pointer;
+}
+#lemburView .lb-disclosure > summary::-webkit-details-marker { display:none; }
+#lemburView .lb-disclosure > summary:after { content:"＋";font-size:17px;color:var(--text-muted);font-weight:500; }
+#lemburView .lb-disclosure[open] > summary:after { content:"−"; }
+#lemburView .lb-disclosure > summary b { margin-left:auto;font-size:11px;color:var(--accent,#2685eb);font-weight:800;white-space:nowrap; }
+#lemburView .lb-disclosure-body { padding:0 14px 14px; }
+#lemburView .lb-disclosure-body .lb-chips { display:flex;flex-wrap:wrap;gap:7px;max-height:220px;overflow:auto;padding:2px 1px 8px; }
+#lemburView .lb-disclosure-body .lchip { font-size:11px;line-height:1.35;padding:9px 11px;border-radius:13px; }
+#lemburView .lb-disclosure-body #lbPList { max-height:300px;overflow:auto;overscroll-behavior:contain;border-top:1px solid var(--glass-brd);margin-top:8px; }
+#lemburView .lb-disclosure-body .lb-searchrow { position:sticky;top:0;z-index:2;background:var(--glass-bg);padding:6px 0; }
+#lemburView .lb-disclosure-body .lb-person,
+#lemburView .lb-disclosure-body .lb-prow { min-height:54px; }
+#lemburView .lb-page-box .lb-prim {
+  position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:8;
+  width:100%;min-height:52px;border-radius:17px;
+}
+#lemburView .lb-page-box { padding-bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -3684,6 +3779,7 @@ function openBrandCategory(key) {
     toggleAlphabetNav();
     animateView($('detailView'));
     updateBarTitle();
+    requestAnimationFrame(syncHomeStickyMetrics);
 }
 
 
@@ -5756,14 +5852,14 @@ function initKcAlpha() {
       } else { h += '<div class="lb-dur off">Durasi otomatis saat jam mulai &amp; selesai terisi</div>'; }
       h += '</div>';
       h += '<div class="lb-card"><div class="lb-lab">Data Unit Kerja</div>' + lbToko('reg', 'Toko Reguler') + lbToko('eks', 'Toko Ekstra') + '</div>';
-      h += '<div class="lb-card"><div class="lb-lab">Kendala Operasional</div><div class="lb-chips">';
+      h += '<div class="lb-card lb-compact-card"><details class="lb-disclosure"><summary><span>Kendala Operasional</span><b>' + d.kendala.length + ' dipilih</b></summary><div class="lb-disclosure-body"><div class="lb-chips">';
       for (i = 0; i < DEFK.length; i++) { var on = d.kendala.indexOf(DEFK[i]) > -1; h += '<button type="button" class="lchip' + (on ? ' on' : '') + '" onclick="LBR.kChip(' + i + ')">' + esc(DEFK[i]) + '</button>'; }
       h += '<button type="button" class="lchip add" onclick="LBR.kCustom()">+ Tulis sendiri</button></div>';
       if (d.kendala.length) {
         for (i = 0; i < d.kendala.length; i++) { h += '<div class="lb-krow"><input class="lb-in" data-lb="kd" data-i="' + i + '" value="' + esc(d.kendala[i]) + '" placeholder="Kendala ' + (i + 1) + '" autocomplete="off"><button class="lb-x" type="button" onclick="LBR.kDel(' + i + ')">✕</button></div>'; }
       } else { h += '<div class="lb-hint">Belum ada kendala - ketuk chip di atas untuk menambah.</div>'; }
-      h += '</div>';
-      h += '<div class="lb-card"><div class="lb-lab">Daftar Personel<span class="lb-cnt" id="lbCnt">' + selected().length + '/' + D.roster.length + ' dipilih</span></div>';
+      h += '</div></div></details></div>';
+      h += '<div class="lb-card lb-compact-card"><details class="lb-disclosure"><summary><span>Daftar Personel</span><b id="lbCnt">' + selected().length + '/' + D.roster.length + ' dipilih</b></summary><div class="lb-disclosure-body">';
       if (D.roster.length) {
         h += '<div class="lb-searchrow"><input class="lb-in" data-lb="q" value="' + esc(q) + '" placeholder="Cari NIK / nama..." autocomplete="off"><button class="lb-mini" type="button" onclick="LBR.pAll()">Semua</button><button class="lb-mini" type="button" onclick="LBR.pNone()">Kosongkan</button></div><div id="lbPList">' + pListHTML() + '</div>';
       }
@@ -5772,7 +5868,7 @@ function initKcAlpha() {
       }
       if (D.roster.length) { h += '<button class="lb-link" type="button" onclick="LBR.impToggle()">' + (impOpen ? 'Tutup impor' : 'Impor / perbarui daftar personel') + '</button>'; }
       h += '<div class="lb-addrow"><input class="lb-in" data-lb="anik" inputmode="numeric" maxlength="14" placeholder="NIK" autocomplete="off" spellcheck="false"><input class="lb-in caps" data-lb="anama" placeholder="NAMA" autocomplete="off" spellcheck="false"><button class="lb-mini acc" type="button" onclick="LBR.pAdd()">+ Tambah</button></div>';
-      h += '</div>';
+      h += '</div></details></div>';
       h += '<div class="lb-card"><div class="lb-lab">Format Salinan</div><div class="lb-tglrow">' + sw('num', 'Nomor urut') + sw('dur', 'Durasi jam') + sw('tot', 'Total lembur') + '</div></div>';
       h += '<div class="lb-card"><div class="lb-lab">Pratinjau Salinan</div><pre class="lb-prev" id="lbPrev"></pre></div>';
       h += '<button class="lb-prim" type="button" onclick="LBR.copy()"><i class="fas fa-clipboard"></i>Salin Form Lembur</button>';
@@ -5816,10 +5912,25 @@ function initKcAlpha() {
     };
   })();
 
+
+function syncHomeStickyMetrics() {
+  var d = $('detailView');
+  if (!d) return;
+  var sb = $('globalSearchBar');
+  var q = function(sel){ return d.querySelector(sel); };
+  var set = function(name,el,fallback){ document.documentElement.style.setProperty(name,((el&&el.getBoundingClientRect().height)||fallback)+'px'); };
+  set('--home-search-h',sb,66);
+  set('--home-section-h',q('.section-bar'),54);
+  set('--home-toolbar-h',q('.toolbar-row'),54);
+  set('--home-pills-h',q('#subPillsContainer'),52);
+}
+window.addEventListener('resize',function(){ requestAnimationFrame(syncHomeStickyMetrics); });
+
   /* ================================================================
       INIT
       ================================================================ */
   renderBrandGrid();
+  syncHomeStickyMetrics();
   positionLens(true);
   clockLoop();
   toggleSapaanCountdown();
