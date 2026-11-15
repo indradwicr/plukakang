@@ -115,12 +115,20 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // Safety lock: this endpoint is for Preview/development only.
-  // Never fall back to main when the variable is missing.
+  // Environment-bound publishing:
+  // Production may write ONLY to main; Preview may write ONLY to development.
+  // Never infer or fall back to a branch when configuration is missing/mismatched.
+  const vercelEnv = process.env.VERCEL_ENV;
   const branch = process.env.GITHUB_BRANCH;
-  if (branch !== DEVELOPMENT_BRANCH || process.env.VERCEL_ENV === 'production') {
+  const expectedBranch = vercelEnv === 'production'
+    ? 'main'
+    : vercelEnv === 'preview'
+      ? DEVELOPMENT_BRANCH
+      : null;
+
+  if (!expectedBranch || branch !== expectedBranch) {
     return send(res, 403, {
-      error: 'Publish V4 saat ini hanya diizinkan ke branch plukakang-2.0 pada Preview.',
+      error: 'Konfigurasi Publish tidak cocok. Production harus memakai GITHUB_BRANCH=main; Preview harus memakai GITHUB_BRANCH=plukakang-2.0.',
     });
   }
 
@@ -146,7 +154,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const base = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
-    const ref = await github(`${base}/git/ref/heads/${encodeURIComponent(DEVELOPMENT_BRANCH)}`, token);
+    const ref = await github(`${base}/git/ref/heads/${encodeURIComponent(branch)}`, token);
     const parentSha = ref.object.sha;
     const parentCommit = await github(`${base}/git/commits/${parentSha}`, token);
     const dataHash = crypto.createHash('sha256').update(dataText).digest('hex');
@@ -191,19 +199,19 @@ module.exports = async function handler(req, res) {
       }),
     });
 
-    await github(`${base}/git/refs/heads/${encodeURIComponent(DEVELOPMENT_BRANCH)}`, token, {
+    await github(`${base}/git/refs/heads/${encodeURIComponent(branch)}`, token, {
       method: 'PATCH',
       body: JSON.stringify({ sha: commit.sha, force: false }),
     });
 
     return send(res, 200, {
       ok: true,
-      branch: DEVELOPMENT_BRANCH,
+      branch,
       commit: commit.sha,
       version: version.version,
       item_count: version.item_count,
       brand_count: version.brand_count,
-      message: 'Database V4 berhasil diterbitkan ke branch development.',
+      message: `Database V4 berhasil diterbitkan ke branch ${branch}.`,
     });
   } catch (error) {
     console.error('Plukakang V4 publish failed:', error.message);
