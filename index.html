@@ -1870,23 +1870,6 @@ html[data-theme="light"] .tool-card{background:#fff;border-color:#E9ECF1;box-sha
 #detailView .kat-home-groups .kat-tbl .kat-band { text-align:center; }
 
 
-/* FIX 4.2: Home brand tables do not have the Catalog sticky hero/chip bars.
-   Keep their two-row table header in normal document flow. */
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th,
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
-  position: static !important;
-  top: auto !important;
-}
-#detailView .kat-home-groups .kat-group {
-  margin-top: 0;
-  contain: none;
-}
-#detailView .kat-home-groups {
-  overflow: visible;
-  gap: 14px;
-}
-
-
 /* plukakang 4.2 — Tools workspace */
 #toolsView { padding-top: 8px; }
 .tools-hero { padding: 12px 4px 22px; }
@@ -1919,38 +1902,6 @@ html[data-theme="light"] .tool-card-green .tool-icon { background:#EDF4EF; color
 html[data-theme="light"] .tool-card-amber .tool-icon { background:#F7F1E8; color:#A27D4B; }
 
 
-/* Home brand detail sticky stack — aligned below the global sticky search */
-#detailView .section-bar {
-  position: sticky;
-  top: 76px;
-  z-index: 44;
-  padding-top: 10px;
-  padding-bottom: 8px;
-  background: var(--frost);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  backdrop-filter: blur(22px) saturate(1.5);
-}
-#detailView .toolbar-row {
-  position: sticky;
-  top: 122px;
-  z-index: 43;
-  margin-top: 0;
-  padding-top: 7px;
-  padding-bottom: 8px;
-  background: var(--frost);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  backdrop-filter: blur(22px) saturate(1.5);
-}
-#detailView #subPillsContainer {
-  position: sticky;
-  top: 174px;
-  z-index: 42;
-  padding-top: 7px;
-  padding-bottom: 9px;
-  background: var(--frost);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  backdrop-filter: blur(22px) saturate(1.5);
-}
 #detailView .detail-header { display:none; }
 /* Hide alphabet rail in table mode; keep it available in List mode only. */
 
@@ -2014,32 +1965,6 @@ html:not([data-theme="light"]) .tool-card {
   box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 5px 18px rgba(0,0,0,.10);
 }
 html:not([data-theme="light"]) .tools-footnote { background:rgba(38,41,52,.40);border-color:rgba(255,255,255,.08); }
-
-
-/* Home brand table: mirror Catalog sticky PLU/Description header without
-   stacking several sticky translucent bars (iOS Safari overlap fix). */
-#detailView .section-bar,
-#detailView .toolbar-row,
-#detailView #subPillsContainer {
-  position: relative !important;
-  top: auto !important;
-  z-index: auto !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
-  position: sticky !important;
-  top: var(--home-kat-header-top, 64px) !important;
-  z-index: 30 !important;
-}
-#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
-  position: sticky !important;
-  top: calc(var(--home-kat-header-top, 64px) + 32px) !important;
-  z-index: 30 !important;
-}
-#detailView .kat-home-groups table.kat-tbl thead th {
-  background-clip: padding-box;
-}
 
 
 /* Tools — compact, native-feeling list inspired by music-library/settings patterns */
@@ -2116,51 +2041,6 @@ html:not([data-theme="light"]) #lemburView .lb-page-box .lb-card {
   background:rgba(35,37,47,.72);border-color:rgba(255,255,255,.10);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 16px rgba(0,0,0,.12);
 }
-
-
-/* ===== 4.3 FIX: Home table sticky stack =====
-   The previous 4.2 override forced the table header to static, so it could never stick.
-   Keep the search, section title, controls, chips and two-row table header in one stack. */
-#detailView { overflow: visible !important; }
-#detailView .kat-home-groups,
-#detailView .kat-home-groups .kat-group { overflow: visible !important; contain: none !important; }
-#detailView .section-bar {
-  position: sticky !important;
-  top: var(--home-search-h, 66px) !important;
-  z-index: 62 !important;
-  margin-top: 0;
-}
-#detailView .toolbar-row {
-  position: sticky !important;
-  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px)) !important;
-  z-index: 61 !important;
-}
-#detailView #subPillsContainer {
-  position: sticky !important;
-  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px)) !important;
-  z-index: 60 !important;
-}
-/* iOS Safari: each category is a separate table. Making every thead sticky
-   causes later category headers to float over product rows. Only the first
-   table owns the sticky PLU header; later category headers stay in flow. */
-#detailView .kat-home-groups .kat-group:first-child table.kat-tbl thead tr.kat-h1 th {
-  position: sticky !important;
-  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px)) !important;
-  z-index: 59 !important;
-}
-#detailView .kat-home-groups .kat-group:first-child table.kat-tbl thead tr.kat-h2 th {
-  position: sticky !important;
-  top: calc(var(--home-search-h, 66px) + var(--home-section-h, 54px) + var(--home-toolbar-h, 54px) + var(--home-pills-h, 52px) + 32px) !important;
-  z-index: 59 !important;
-}
-#detailView .kat-home-groups .kat-group:not(:first-child) table.kat-tbl thead tr.kat-h1 th,
-#detailView .kat-home-groups .kat-group:not(:first-child) table.kat-tbl thead tr.kat-h2 th {
-  position: static !important; top: auto !important; z-index: auto !important;
-}
-#detailView .kat-home-groups table.kat-tbl thead { position: relative; }
-#detailView .kat-home-groups table.kat-tbl { border-collapse: separate; border-spacing: 0; }
-
-/* Measure real rendered heights instead of relying on hard-coded iPhone dimensions. */
 
 
 .ag-card {
@@ -2240,82 +2120,49 @@ html:not([data-theme="light"]) .tools-badge i { color:rgba(255,255,255,.82) !imp
 #lemburView .lb-page-box { padding-bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
 
 
-/* 4.3.2 — Home: one continuous table + one persistent two-row header.
-   The header offset is measured from the visible sticky search bar. */
-#detailView .kat-home-groups { overflow: visible !important; contain: none !important; }
+/* ===== Home brand page: sticky stack persis pola Katalog =====
+   Tumpukan: search bar global (sticky top:0) -> pil sub/kategori (sticky,
+   frosted, seperti .kat-chips) -> header tabel 2 baris (sticky di bawah pil).
+   Offset memakai --home-kat-top / --home-kat-subh / --home-kat-chipsh yang
+   diukur dari TINGGI elemen oleh syncHomeKatSticky() — tidak bergantung
+   posisi scroll, jadi stabil di iOS Safari. */
+#detailView { overflow: visible !important; }
+/* #tableView mewarisi .table-wrapper (overflow:hidden) — overflow selain
+   visible pada ancestor membuat sticky header tabel tidak pernah bisa
+   menempel ke viewport. Tabel lama di dalamnya sudah tidak dipakai
+   (innerHTML ditimpa .kat-home-groups saat render). */
+#detailView #tableView { overflow: visible !important; }
+#detailView .kat-home-groups,
 #detailView .kat-home-groups .kat-group { overflow: visible !important; contain: none !important; }
 #detailView .kat-home-groups table.kat-tbl { border-collapse: separate !important; border-spacing: 0 !important; }
+#detailView .kat-home-groups { margin-top: 10px; }
+#detailView #productGrid { margin-top: 10px; }
+#detailView #subPillsContainer,
+#detailView #kategoriPillsContainer {
+  position: -webkit-sticky; position: sticky;
+  top: var(--home-kat-top, 92px);
+  z-index: 45;
+  margin: 0 -16px;
+  padding: 8px 16px;
+  background: var(--frost);
+  -webkit-backdrop-filter: saturate(1.9) blur(30px);
+  backdrop-filter: saturate(1.9) blur(30px);
+}
+#detailView #kategoriPillsContainer {
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-subh, 0px));
+}
 #detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
-  position: -webkit-sticky !important; position: sticky !important;
-  top: var(--home-kat-header-top, 0px) !important; z-index: 62 !important;
+  position: -webkit-sticky; position: sticky;
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-chipsh, 0px));
+  z-index: 30;
 }
 #detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
-  position: -webkit-sticky !important; position: sticky !important;
-  top: calc(var(--home-kat-header-top, 0px) + 32px) !important; z-index: 62 !important;
+  position: -webkit-sticky; position: sticky;
+  top: calc(var(--home-kat-top, 92px) + var(--home-kat-chipsh, 0px) + 32px);
+  z-index: 30;
 }
 #detailView .kat-home-groups table.kat-tbl thead th { background-clip: padding-box; }
-
-
-
-/* 4.3.3 — Safari-safe Home header: a standalone sticky surface, not sticky TH cells.
-   Native table headers are hidden only in Home; Catalog keeps its original behavior. */
-#detailView #tableView .kat-home-sticky-head {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: var(--home-kat-header-top, 0px) !important;
-  z-index: 80 !important;
-  display: grid !important;
-  grid-template-columns: 21% 21% 58%;
-  grid-template-rows: 34px 27px;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 17px 17px 0 0;
-  background: #c900b8;
-  color: #fff;
-  box-shadow: 0 1px 0 rgba(255,255,255,.12) inset;
-  margin: 0;
-  isolation: isolate;
-}
-#detailView #tableView .kat-home-sticky-top {
-  display: contents;
-}
-#detailView #tableView .kat-home-sticky-top > span:first-child {
-  grid-column: 1 / 3; grid-row: 1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 850; letter-spacing: .18em;
-  border-right: 1px solid rgba(255,255,255,.18);
-  border-bottom: 1px solid rgba(255,255,255,.16);
-}
-#detailView #tableView .kat-home-sticky-desc {
-  grid-column: 3; grid-row: 1 / 3;
-  display: flex; align-items: center; justify-content: flex-start;
-  padding-left: 12px; font-size: 11px; font-weight: 850; letter-spacing: .18em;
-}
-#detailView #tableView .kat-home-sticky-sub {
-  grid-column: 1 / 3; grid-row: 2;
-  display: grid; grid-template-columns: 1fr 1fr;
-  background: #79006f;
-}
-#detailView #tableView .kat-home-sticky-sub span {
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 850; letter-spacing: .16em;
-}
-#detailView #tableView .kat-home-sticky-sub span + span {
-  border-left: 1px solid rgba(255,255,255,.2);
-}
-#detailView #tableView .kat-home-groups table.kat-tbl thead {
-  display: none !important;
-}
-#detailView #tableView .kat-home-groups table.kat-tbl {
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-}
-#detailView #tableView .kat-home-groups .kat-group {
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-}
-
-</style>
+</style></style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
 <body>
@@ -3809,26 +3656,22 @@ function renderSidebarPlu(filter) {
       DETAIL VIEW
       ================================================================ */
 
-function syncHomeKatHeaderTop() {
-  var detail = document.getElementById('detailView');
-  if (!detail || (!detail.classList.contains('active') && detail.style.display === 'none')) return;
-  var search = document.getElementById('globalSearchBar');
-  var top = 0;
-  if (search) {
-    var rect = search.getBoundingClientRect();
-    var style = window.getComputedStyle(search);
-    // Sticky header tabel Home harus tepat di bawah search bar yang benar-benar
-    // terlihat, bukan ditambah tinggi section/toolbar/pills yang tidak sticky.
-    if (style.position === 'sticky' || style.position === 'fixed') {
-      top = Math.max(0, Math.ceil(rect.bottom));
-    }
-  }
-  document.documentElement.style.setProperty('--home-kat-header-top', top + 'px');
+function syncHomeKatSticky() {
+  /* Pola Katalog: offset sticky dihitung dari TINGGI elemen (stabil terhadap
+     scroll), bukan dari posisi elemen saat scroll — cara lama (rect.bottom +
+     listener scroll) membuat header tabel Home nyangkut di tengah layar iOS. */
+  var sb = $('globalSearchBar');
+  if (!sb) return;
+  var top = Math.round(sb.getBoundingClientRect().height) + 4;
+  document.documentElement.style.setProperty('--home-kat-top', top + 'px');
+  var sub = $('subPillsContainer'), kat = $('kategoriPillsContainer');
+  var subh = (sub && sub.style.display !== 'none') ? Math.round(sub.offsetHeight) : 0;
+  var katph = (kat && kat.style.display !== 'none') ? Math.round(kat.offsetHeight) : 0;
+  document.documentElement.style.setProperty('--home-kat-subh', subh + 'px');
+  document.documentElement.style.setProperty('--home-kat-chipsh', (subh + katph) + 'px');
 }
-
 if (!window._homeKatStickyBound) {
-  window.addEventListener('resize', function(){ requestAnimationFrame(syncHomeKatHeaderTop); }, {passive:true});
-  window.addEventListener('scroll', function(){ requestAnimationFrame(syncHomeKatHeaderTop); }, {passive:true});
+  window.addEventListener('resize', function(){ requestAnimationFrame(syncHomeKatSticky); }, {passive:true});
   window._homeKatStickyBound = true;
 }
 function setDetailView(mode) {
@@ -3884,7 +3727,8 @@ function openBrandCategory(key) {
     toggleAlphabetNav();
     animateView($('detailView'));
     updateBarTitle();
-    requestAnimationFrame(syncHomeStickyMetrics);
+    try { window.scrollTo(0, 0); } catch (e) {}
+    requestAnimationFrame(syncHomeKatSticky);
 }
 
 
@@ -3934,6 +3778,7 @@ function renderSubPills() {
 
      if (!labelMap) {
          katContainer.style.display = 'none';
+         syncHomeKatSticky();
          return;
      }
 
@@ -3954,6 +3799,8 @@ function renderSubPills() {
         el.dataset.katId = key;
         katContainer.appendChild(el);
     });
+
+    syncHomeKatSticky();
 }
 
 
@@ -4039,8 +3886,8 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
       var homeBands = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
           .reduce(function(allBands, group) { return allBands.concat(group); }, []);
       var homeTableHtml = katRenderBlock(homeBands, currentBrand || 'all');
-      $('tableView').innerHTML = '<div class="kat-home-sticky-head" aria-hidden="true"><div class="kat-home-sticky-top"><span>PLU</span><span class="kat-home-sticky-desc">DESKRIPSI</span></div><div class="kat-home-sticky-sub"><span>RAW</span><span>KONVERSI</span></div></div><div class="kat-home-groups">' + homeTableHtml + '</div>';
-      requestAnimationFrame(syncHomeKatHeaderTop);
+      $('tableView').innerHTML = '<div class="kat-home-groups">' + homeTableHtml + '</div>';
+      requestAnimationFrame(syncHomeKatSticky);
 
 
       _renderCache.key = cacheKey;
@@ -6022,24 +5869,13 @@ function initKcAlpha() {
   })();
 
 
-function syncHomeStickyMetrics() {
-  var d = $('detailView');
-  if (!d) return;
-  var sb = $('globalSearchBar');
-  var q = function(sel){ return d.querySelector(sel); };
-  var set = function(name,el,fallback){ document.documentElement.style.setProperty(name,((el&&el.getBoundingClientRect().height)||fallback)+'px'); };
-  set('--home-search-h',sb,66);
-  set('--home-section-h',q('.section-bar'),54);
-  set('--home-toolbar-h',q('.toolbar-row'),54);
-  set('--home-pills-h',q('#subPillsContainer'),52);
-}
-window.addEventListener('resize',function(){ requestAnimationFrame(syncHomeStickyMetrics); });
+
 
   /* ================================================================
       INIT
       ================================================================ */
   renderBrandGrid();
-  syncHomeStickyMetrics();
+  syncHomeKatSticky();
   positionLens(true);
   clockLoop();
   toggleSapaanCountdown();
