@@ -2239,6 +2239,22 @@ html:not([data-theme="light"]) .tools-badge i { color:rgba(255,255,255,.82) !imp
 }
 #lemburView .lb-page-box { padding-bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
 
+
+/* 4.3.2 — Home: one continuous table + one persistent two-row header.
+   The header offset is measured from the visible sticky search bar. */
+#detailView .kat-home-groups { overflow: visible !important; contain: none !important; }
+#detailView .kat-home-groups .kat-group { overflow: visible !important; contain: none !important; }
+#detailView .kat-home-groups table.kat-tbl { border-collapse: separate !important; border-spacing: 0 !important; }
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h1 th {
+  position: -webkit-sticky !important; position: sticky !important;
+  top: var(--home-kat-header-top, 0px) !important; z-index: 62 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead tr.kat-h2 th {
+  position: -webkit-sticky !important; position: sticky !important;
+  top: calc(var(--home-kat-header-top, 0px) + 32px) !important; z-index: 62 !important;
+}
+#detailView .kat-home-groups table.kat-tbl thead th { background-clip: padding-box; }
+
 </style>
 <script>try{if(localStorage.getItem('plukakang_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -3735,17 +3751,19 @@ function renderSidebarPlu(filter) {
 
 function syncHomeKatHeaderTop() {
   var detail = document.getElementById('detailView');
-  if (!detail || !detail.classList.contains('active') && detail.style.display === 'none') return;
+  if (!detail || (!detail.classList.contains('active') && detail.style.display === 'none')) return;
   var search = document.getElementById('globalSearchBar');
-  var top = 64;
+  var top = 0;
   if (search) {
-    var r = search.getBoundingClientRect();
+    var rect = search.getBoundingClientRect();
     var style = window.getComputedStyle(search);
+    // Sticky header tabel Home harus tepat di bawah search bar yang benar-benar
+    // terlihat, bukan ditambah tinggi section/toolbar/pills yang tidak sticky.
     if (style.position === 'sticky' || style.position === 'fixed') {
-      top = Math.max(0, Math.round(r.bottom));
+      top = Math.max(0, Math.ceil(rect.bottom));
     }
   }
-  detail.style.setProperty('--home-kat-header-top', top + 'px');
+  document.documentElement.style.setProperty('--home-kat-header-top', top + 'px');
 }
 
 if (!window._homeKatStickyBound) {
@@ -3955,10 +3973,14 @@ escapeHtml(item.konv) + '">' + item.konv + '</button>' : '-';
 
       // Home brand detail reuses the exact grouped table component from Katalog.
       // This keeps header, RAW/KONV columns, category bands, spacing and brand accent consistent.
-      var homeTableHtml = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
-          .map(function(group) { return katRenderBlock(group, currentBrand || 'all'); })
-          .join('');
+      // Home memakai SATU tabel untuk seluruh band kategori. Dengan satu THEAD,
+      // sticky header tidak berhenti di akhir tabel kategori pertama dan tidak
+      // muncul lagi di tengah daftar saat kategori berikutnya dimulai.
+      var homeBands = katPackGroups(katBuildBands(currentBrand || 'all', filtered))
+          .reduce(function(allBands, group) { return allBands.concat(group); }, []);
+      var homeTableHtml = katRenderBlock(homeBands, currentBrand || 'all');
       $('tableView').innerHTML = '<div class="kat-home-groups">' + homeTableHtml + '</div>';
+      requestAnimationFrame(syncHomeKatHeaderTop);
 
 
       _renderCache.key = cacheKey;
@@ -4576,7 +4598,7 @@ now.getFullYear();
       var holidays2026 = new Set(['2026-01-01','2026-01-16','2026-02-17','2026-03-19','2026-03-21','2026-03-22','2026-04-03','2026-04-05','2026-05-01','2026-05-14','2026-05-27','2026-05-31','2026-06-01','2026-06-16','2026-08-17','2026-08-25','2026-12-25']);
       var dateJakarta = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
       var weekdayJakarta = new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',weekday:'short'}).format(now);
-      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'🫵🏽', text:'🫵🏽 gadag? tanggal bereum? 😂' };
+      if (weekdayJakarta === 'Sun' || (dateJakarta.slice(0,4) === '2026' && holidays2026.has(dateJakarta))) return { icon:'', text:'🫵🏽 gadag? tanggal bereum? 😂' };
       var jam = Number(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',hour:'2-digit',hourCycle:'h23'}).format(now));
       if (jam >= 0 && jam < 5) return { icon: '  🌙', text: 'rek naon ente?' };
       if (jam >= 5 && jam < 11) return { icon: '☀️', text: 'gas urang pulcep!' };
