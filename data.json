@@ -13670,6 +13670,36 @@
       "kategori": "powder",
       "raw": "20138185",
       "konv": "20138471"
+    },
+    {
+      "id": "item_0003399703c64961",
+      "brand": "seasonal",
+      "nama": "Pia 100 Kurma Kacang Hijau",
+      "deskripsi": "",
+      "sub": "kuker",
+      "kategori": "",
+      "raw": "20143575",
+      "konv": ""
+    },
+    {
+      "id": "item_9712621f58b04107",
+      "brand": "seasonal",
+      "nama": "Pia 100 Coklat Kacang Hijau",
+      "deskripsi": "",
+      "sub": "kuker",
+      "kategori": "",
+      "raw": "20140953",
+      "konv": ""
+    },
+    {
+      "id": "item_85f3c0d64a5a4db6",
+      "brand": "seasonal",
+      "nama": "Delbis Delica Cookies",
+      "deskripsi": "",
+      "sub": "kuker",
+      "kategori": "",
+      "raw": "20143784",
+      "konv": ""
     }
   ]
 }
